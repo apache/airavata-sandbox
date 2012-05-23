@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title> :: Wokflow Monitoring System :: </title>
+    <script language="JavaScript" src="js/calendar2.js"></script>
+    <script language="javascript" type='text/javascript'>
+
+        function showDiv(showDiv, hideDiv) {
+            if (document.getElementById) { // DOM3 = IE5, NS6
+                document.showLayer = eval('document.getElementById(showDiv)');
+                document.hideLayer = eval('document.getElementById(hideDiv)');
+
+                document.showLayer.style.display = "visible";
+                document.showLayer.style.display = "inline";
+                document.hideLayer.style.display = "hidden";
+                document.hideLayer.style.display = "none";
+            }
+        }
+        function load()
+        {
+            showDiv('findWorkFlowsByTime', 'findWorkFlowsbyUser');
+        }
+
+        function checkFindByUserForm(form)
+        {
+
+            // ** START **
+            if (form.username.value == "") {
+                alert("Please enter a non-empty username");
+                form.username.focus();
+                form.username.borderColor = "#0000FF #00FF00";
+                return false;
+            }
+            // ** END **
+            return true;
+        }
+
+
+    </script>
+</head>
+<body onload="load()">
+<h1>Wokflow Monitoring System</h1>
+
+<p>This will provide basic functionality to monitor the workflows running within LEAD system.</p>
+
+
+<h3>Find Failed Workflows By Id</h3>
+
+<p>This helps you to find information about failed workflows. Enter the workflow id of the failed workflow below.</p>
+
+
+<form action="./jsp/findWorkFlowById.jsp" method="post" name="form1">
+    <table>
+        <tr>
+            <td><label><b>Workflow Id : </b></label></td>
+            <td><input type="text" name="workflowId" id="workflowId"></td>
+        </tr>
+        <tr>
+            <td align="center"><input type="submit" value="Search"></td>
+            <td align="center"><input type="reset"></td>
+        </tr>
+    </table>
+</form>
+
+
+<h3> Find Workflows </h3>
+
+<ul>
+    <li><a href="#" onClick="javascript:showDiv('findWorkFlowsByTime','findWorkFlowsbyUser');">By Time Range</a></li>
+    <li><a href="#" onClick="javascript:showDiv('findWorkFlowsbyUser','findWorkFlowsByTime');">By Username</a></li>
+</ul>
+
+<div id="findWorkFlowsByTime" style="display: inline">
+    <p>This helps you to find information about all the Wokflows that started between a given time range. (If you want
+        to
+        search for workflows that are started since a given time, only select the start range leaving the end range
+        blank.)
+        <br/>
+        The report that will be generated will contain Wokflows which have different states and you can evaluate more
+        on
+        failed workflow by clicking on them.
+    </p>
+
+
+    <form action="./jsp/findWorkFlowByTimes.jsp" method="post" name="form2">
+        <table>
+            <tr>
+                <td><label><b>Start Range : </b></label></td>
+                <td><input type="text" name="startTime" id="startTime" readonly="true"><a
+                        href="javascript:cal1.popup();"><img
+                        src="img/cal.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date"></a>
+                </td>
+            </tr>
+            <tr>
+                <td><label>End Range : </label></td>
+                <td><input type="text" name="endTime" id="endTime" readonly="true"><a
+                        href="javascript:cal2.popup();"><img
+                        src="img/cal.gif"
+                        width="16"
+                        height="16"
+                        border="0"
+                        alt="Click Here to Pick up the date"></a>
+                </td>
+            </tr>
+            <tr>
+                <td align="center"><input type="submit" value="Search"></td>
+                <td align="center"><input type="reset"></td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+
+<div id="findWorkFlowsbyUser" style="display: inline">
+    <p>This helps you to find information about all the Wokflows started by a given user. <br/>
+        The report that will be generated will contain Wokflows which have different states and you can evaluate more
+        on failed workflow by clicking on them.</p>
+
+
+    <form action="./jsp/findWorkFlowByUser.jsp" method="post" name="form4" onsubmit="return checkFindByUserForm(this);">
+        <table>
+            <tr>
+                <td><label><b>Username : </b></label></td>
+                <td><input type="text" name="username" id="username"></td>
+            </tr>
+            <tr>
+                <td align="center"><input type="submit" value="Search"></td>
+                <td align="center"><input type="reset"></td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+
+<h3>Reports</h3>
+
+<p>This will generate a summary report for all the Wokflows. </p>
+
+<form action="./jsp/reportGenerator.jsp" method="post" name="form3">
+    <table>
+        <tr>
+            <td><label><b>Start Time : </b></label></td>
+            <td><input type="text" name="startTime" id="startTime" readonly="true"><a
+                    href="javascript:cal3.popup();"><img
+                    src="img/cal.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date"></a>
+        </tr>
+        <tr>
+            <td><label>End Time : </label></td>
+            <td><input type="text" name="endTime" id="endTime" readonly="true"><a href="javascript:cal4.popup();"><img
+                    src="img/cal.gif" width="16" height="16" border="0" alt="Click Here to Pick up the date"></a></td>
+        </tr>
+
+        <tr>
+            <td><label>Do you want to group by template id ? </label></td>
+            <td><input type="radio" name="groupByTemplateId" value="yes" checked="true">Yes</input>
+                <input type="radio" name="groupByTemplateId" value="no">No</input></td>
+        </tr>
+        <tr>
+            <td align="center"><input type="submit" value="Search"></td>
+            <td align="center"><input type="reset"></td>
+        </tr>
+    </table>
+</form>
+<script language="JavaScript">
+    var cal1 = new calendar2(document.forms['form2'].elements['startTime']);
+    cal1.year_scroll = true;
+    cal1.time_comp = true;
+    var cal2 = new calendar2(document.forms['form2'].elements['endTime']);
+    cal2.year_scroll = true;
+    cal2.time_comp = true;
+    var cal3 = new calendar2(document.forms['form3'].elements['startTime']);
+    cal3.year_scroll = true;
+    cal3.time_comp = true;
+    var cal4 = new calendar2(document.forms['form3'].elements['endTime']);
+    cal4.year_scroll = true;
+    cal4.time_comp = true;
+</script>
+</body>
+</html>
