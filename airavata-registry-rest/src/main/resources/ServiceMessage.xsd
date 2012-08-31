@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="Message">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Header"/>
+        <xs:element ref="Body"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Header">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="experimentid" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="hostname" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="processorcount" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="hostcount" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="queuename" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="walltime" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="gfaclocation" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="user" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="messengerURL" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="serviceName" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="workflowName" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="experimentid" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Host name</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="hostname" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Host name</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="processorcount" type="xs:int">
+    <xs:annotation>
+      <xs:documentation>Process Count</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+   <xs:element name="hostcount" type="xs:int">
+    <xs:annotation>
+      <xs:documentation>Process Count</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="queuename" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Queue Name</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="walltime" type="xs:int">
+    <xs:annotation>
+      <xs:documentation>Walltime</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+   <xs:element name="gfaclocation" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Gfac location</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="user" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>User information</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+   <xs:element name="messengerURL" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Messenger URL information</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+   <xs:element name="serviceName" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Service Name</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="workflowName" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Workflow Name</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="Body">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="inputs" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="inputs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="input" minOccurs="0"  maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="input">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="name" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="param" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="value" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="type" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+   <xs:element name="name" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Input Name</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+   <xs:element name="param" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Input Params</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="value" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Input Value</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="type" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Input Type</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="MessageResponse">
+    <xs:complexType>
+      <xs:sequence>
+       <xs:element ref="experimentid" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="status" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="message" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="inputs" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="outputs" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="stdout" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="stderr" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="status" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Status</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+   <xs:element name="message" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>Message</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+   <xs:element name="outputs">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="output" minOccurs="0"  maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="output">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="name" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="value" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="type" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="stdout" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>stdout </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="stderr" type="xs:string">
+    <xs:annotation>
+      <xs:documentation>stderr</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>
