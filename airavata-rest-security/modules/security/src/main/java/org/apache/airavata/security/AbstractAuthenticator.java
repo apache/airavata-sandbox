@@ -24,12 +24,22 @@ public abstract class AbstractAuthenticator implements Authenticator {
 
     protected boolean enabled = true;
 
+    protected UserStore userStore;
+
     public AbstractAuthenticator() {
 
     }
 
     public AbstractAuthenticator(String name) {
         this.authenticatorName = name;
+    }
+
+    public void setUserStore(UserStore store) {
+        this.userStore = store;
+    }
+
+    public UserStore getUserStore() {
+        return this.userStore;
     }
 
     public int getPriority() {

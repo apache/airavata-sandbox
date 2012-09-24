@@ -38,13 +38,4 @@ public class SessionAuthenticatorTest extends AbstractAuthenticatorTest {
         assertTrue(authenticator.canProcess(servletRequestRequest));
 
     }
-
-    public void testConfigure() throws Exception {
-
-        SessionAuthenticator sessionAuthenticator = (SessionAuthenticator)authenticator;
-
-        assertEquals("Persons", sessionAuthenticator.getSessionTable());
-        assertEquals("sessionId", sessionAuthenticator.getSessionColumn());
-        assertEquals("sessionId", sessionAuthenticator.getComparingColumn());
-    }
 }

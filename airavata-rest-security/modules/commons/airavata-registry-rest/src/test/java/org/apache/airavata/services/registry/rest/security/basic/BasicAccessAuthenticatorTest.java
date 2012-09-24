@@ -56,13 +56,13 @@ public class BasicAccessAuthenticatorTest extends AbstractAuthenticatorTest {
 
     }
 
-    public void testConfigure() throws Exception {
+    /*public void testConfigure() throws Exception {
 
         BasicAccessAuthenticator basicAccessAuthenticator = (BasicAccessAuthenticator)authenticator;
 
         assertEquals("AIRAVATA_USER", basicAccessAuthenticator.getUserTable());
         assertEquals("USERID", basicAccessAuthenticator.getUserNameColumn());
         assertEquals("PASSWORD", basicAccessAuthenticator.getPasswordColumn());
-    }
+    }*/
 
 }

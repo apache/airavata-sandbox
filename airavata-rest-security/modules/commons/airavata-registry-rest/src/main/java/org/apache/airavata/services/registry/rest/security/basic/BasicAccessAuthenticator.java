@@ -1,29 +1,21 @@
 package org.apache.airavata.services.registry.rest.security.basic;
 
-import org.apache.airavata.security.AbstractDatabaseAuthenticator;
+import org.apache.airavata.security.AbstractAuthenticator;
 import org.apache.airavata.security.AuthenticationException;
-import org.apache.airavata.services.registry.rest.security.session.DBLookup;
+import org.apache.airavata.security.UserStoreException;
 import org.apache.commons.codec.binary.Base64;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.sql.SQLException;
 
 /**
  * This authenticator handles basic access authentication requests. In basic access authentication
  * we get user name and password as HTTP headers. The password is encoded with base64.
  * More information @link{http://en.wikipedia.org/wiki/Basic_access_authentication}
  */
-public class BasicAccessAuthenticator extends AbstractDatabaseAuthenticator {
+public class BasicAccessAuthenticator extends AbstractAuthenticator {
 
-    private DBLookup dbLookup;
-
-    private String userTable;
-    private String userNameColumn;
-    private String passwordColumn;
 
     private static final String AUTHENTICATOR_NAME = "BasicAccessAuthenticator";
 
@@ -76,7 +68,7 @@ public class BasicAccessAuthenticator extends AbstractDatabaseAuthenticator {
 
     @Override
     protected boolean doAuthentication(Object credentials) throws AuthenticationException {
-        if (this.dbLookup == null) {
+        if (this.getUserStore() == null) {
             throw new AuthenticationException("Authenticator is not initialized. Error processing request.");
         }
 
@@ -91,12 +83,9 @@ public class BasicAccessAuthenticator extends AbstractDatabaseAuthenticator {
         String password = array[1];
 
         try {
-            String retrievedPassword = dbLookup.getMatchingColumnValue(userTable, passwordColumn, userNameColumn,
-                    userName);
+            return this.getUserStore().authenticate(userName, password);
 
-            return retrievedPassword != null && (retrievedPassword.equals(password));
-
-        } catch (SQLException e) {
+        } catch (UserStoreException e) {
             throw new AuthenticationException("Error querying database for session information.", e);
         }
     }
@@ -180,8 +169,6 @@ public class BasicAccessAuthenticator extends AbstractDatabaseAuthenticator {
     @Override
     public void configure(Node node) throws RuntimeException {
 
-        super.configure(node);
-
         /**
          <specificConfigurations>
          <database>
@@ -196,74 +183,12 @@ public class BasicAccessAuthenticator extends AbstractDatabaseAuthenticator {
          </specificConfigurations>
          */
 
-        NodeList databaseNodeList = node.getChildNodes();
-
-        Node databaseNode = null;
-
-        for (int k = 0; k < databaseNodeList.getLength(); ++k) {
-
-            Node n = databaseNodeList.item(k);
-
-            if (n != null && n.getNodeType() == Node.ELEMENT_NODE) {
-                databaseNode = n;
-            }
-        }
-
-        if (databaseNode != null) {
-            NodeList nodeList = databaseNode.getChildNodes();
-
-            for (int i = 0; i < nodeList.getLength(); ++i) {
-                Node n = nodeList.item(i);
-
-                if (n.getNodeType() == Node.ELEMENT_NODE) {
-
-                    Element element = (Element) n;
-
-                    if (element.getNodeName().equals("userTableName")) {
-                        userTable = element.getFirstChild().getNodeValue();
-                    } else if (element.getNodeName().equals("userNameColumnName")) {
-                        userNameColumn = element.getFirstChild().getNodeValue();
-                    } else if (element.getNodeName().equals("passwordColumnName")) {
-                        passwordColumn = element.getFirstChild().getNodeValue();
-                    }
-                }
-            }
-        }
-
-        initializeDatabaseLookup();
-
-        StringBuilder stringBuilder = new StringBuilder("Configuring DB parameters for authenticator with User name Table - ");
-        stringBuilder.append(userTable).append(" User name column - ").append(userNameColumn).append(" Password column - ").
-                append(passwordColumn);
-
-        log.info(stringBuilder.toString());
-
-    }
-
-    private void initializeDatabaseLookup() throws RuntimeException {
-
-        this.dbLookup = new DBLookup(getDatabaseURL(), getDatabaseUserName(), getDatabasePassword(), getDatabaseDriver());
-
         try {
-            this.dbLookup.init();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Error loading database driver. Driver class not found.", e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException("Error loading database driver. Error instantiating driver object.", e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException("Error loading database driver. Illegal access to driver object.", e);
+            this.getUserStore().configure(node);
+        } catch (UserStoreException e) {
+            throw new RuntimeException("Error while configuring authenticator user store", e);
         }
+
     }
 
-    public String getUserTable() {
-        return userTable;
-    }
-
-    public String getUserNameColumn() {
-        return userNameColumn;
-    }
-
-    public String getPasswordColumn() {
-        return passwordColumn;
-    }
 }

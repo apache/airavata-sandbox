@@ -2,6 +2,7 @@ package org.apache.airavata.security.configurations;
 
 import org.apache.airavata.security.AbstractAuthenticator;
 import org.apache.airavata.security.Authenticator;
+import org.apache.airavata.security.UserStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -13,8 +14,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ import java.util.List;
 /**
  * This class will read authenticators.xml and load all configurations related to authenticators.
  */
-public class AuthenticatorConfigurationReader {
+public class AuthenticatorConfigurationReader extends AbstractConfigurationReader {
 
     private List<Authenticator> authenticatorList = new ArrayList<Authenticator>();
 
@@ -33,23 +32,6 @@ public class AuthenticatorConfigurationReader {
 
     public AuthenticatorConfigurationReader() {
 
-    }
-
-    public void init(String fileName) throws IOException, SAXException, ParserConfigurationException {
-
-        File configurationFile = new File(fileName);
-
-        if (!configurationFile.canRead()) {
-            throw new IOException("Error reading configuration file " + configurationFile.getAbsolutePath());
-        }
-
-        FileInputStream streamIn = new FileInputStream(configurationFile);
-
-        try {
-            init(streamIn);
-        } finally {
-            streamIn.close();
-        }
     }
 
     public void init(InputStream inputStream) throws IOException, ParserConfigurationException, SAXException {
@@ -72,8 +54,18 @@ public class AuthenticatorConfigurationReader {
                 String className = namedNodeMap.getNamedItem("class").getNodeValue();
                 String enabled = namedNodeMap.getNamedItem("enabled").getNodeValue();
                 String priority = namedNodeMap.getNamedItem("priority").getNodeValue();
+                String userStoreClass = namedNodeMap.getNamedItem("userstore").getNodeValue();
 
-                Authenticator authenticator = createAuthenticator(name, className, enabled, priority);
+                if (className == null) {
+                    reportError("class");
+                }
+
+                if (userStoreClass == null) {
+                    reportError("userstore");
+                }
+
+                Authenticator authenticator = createAuthenticator(name, className, enabled,
+                        priority, userStoreClass);
 
                 NodeList configurationNodes = node.getChildNodes();
 
@@ -104,7 +96,13 @@ public class AuthenticatorConfigurationReader {
         }
     }
 
-    protected Authenticator createAuthenticator(String name, String className, String enabled, String priority) {
+    private void reportError(String element) throws ParserConfigurationException {
+        throw new ParserConfigurationException("Error in configuration. Missing mandatory element "
+                + element);
+    }
+
+    protected Authenticator createAuthenticator(String name, String className, String enabled,
+                                                String priority, String userStoreClassName) {
 
         log.info("Loading authenticator class " + className + " and name " + name);
 
@@ -131,6 +129,9 @@ public class AuthenticatorConfigurationReader {
                 authenticatorInstance.setPriority(Integer.parseInt(priority));
             }
 
+            UserStore userStore = createUserStore(userStoreClassName);
+            authenticatorInstance.setUserStore(userStore);
+
             return authenticatorInstance;
 
         } catch (InstantiationException e) {
@@ -140,6 +141,30 @@ public class AuthenticatorConfigurationReader {
 
         } catch (IllegalAccessException e) {
             String error = "Not allowed to instantiate authenticator class " + className;
+            log.error(error);
+            throw new RuntimeException(error, e);
+        }
+
+    }
+
+    protected UserStore createUserStore(String userStoreClassName) {
+
+        try {
+            Class userStoreClass = Class.forName(userStoreClassName, true,
+                    Thread.currentThread().getContextClassLoader());
+
+            return (UserStore)userStoreClass.newInstance();
+        } catch (ClassNotFoundException e) {
+            log.error("Error loading authenticator class " + userStoreClassName);
+            throw new RuntimeException("Error loading authenticator class " + userStoreClassName, e);
+
+        } catch (InstantiationException e) {
+            String error = "Error instantiating authenticator class " + userStoreClassName + " object.";
+            log.error(error);
+            throw new RuntimeException(error, e);
+
+        } catch (IllegalAccessException e) {
+            String error = "Not allowed to instantiate authenticator class " + userStoreClassName;
             log.error(error);
             throw new RuntimeException(error, e);
         }

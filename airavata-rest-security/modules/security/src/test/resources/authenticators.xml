@@ -8,7 +8,8 @@ Those configurations are reside inside &lt;specificConfigurations&gt; tags.
 -->
 
 <authenticators>
-    <authenticator name="dbAuthenticator1" class="org.apache.airavata.security.configurations.TestDBAuthenticator1" enabled="true" priority="6">
+    <authenticator name="dbAuthenticator1" class="org.apache.airavata.security.configurations.TestDBAuthenticator1"
+                   enabled="true" priority="6" userstore="org.apache.airavata.security.userstore.JDBCUserStore">
         <specificConfigurations>
             <database>
                 <jdbcUrl>jdbc:sql:thin:@//myhost:1521/mysql1</jdbcUrl>
@@ -23,7 +24,8 @@ Those configurations are reside inside &lt;specificConfigurations&gt; tags.
         </specificConfigurations>
     </authenticator>
 
-    <authenticator name="dbAuthenticator2" class="org.apache.airavata.security.configurations.TestDBAuthenticator2" enabled="true" priority="7">
+    <authenticator name="dbAuthenticator2" class="org.apache.airavata.security.configurations.TestDBAuthenticator2"
+                   enabled="true" priority="7" userstore="org.apache.airavata.security.userstore.LDAPUserStore">
         <specificConfigurations>
             <database>
                 <jdbcUrl>jdbc:sql:thin:@//myhost:1521/mysql2</jdbcUrl>
@@ -37,7 +39,8 @@ Those configurations are reside inside &lt;specificConfigurations&gt; tags.
         </specificConfigurations>
     </authenticator>
 
-    <authenticator name="dbAuthenticator4" class="org.apache.airavata.security.configurations.TestDBAuthenticator2" enabled="false" priority="7">
+    <authenticator name="dbAuthenticator4" class="org.apache.airavata.security.configurations.TestDBAuthenticator2"
+                   enabled="false" priority="7" userstore="org.apache.airavata.security.userstore.JDBCUserStore">
         <specificConfigurations>
             <database>
                 <jdbcUrl>jdbc:sql:thin:@//myhost:1521/mysql2</jdbcUrl>
@@ -51,7 +54,8 @@ Those configurations are reside inside &lt;specificConfigurations&gt; tags.
         </specificConfigurations>
     </authenticator>
 
-    <authenticator name="dbAuthenticator3" class="org.apache.airavata.security.configurations.TestDBAuthenticator3" enabled="true" priority="8">
+    <authenticator name="dbAuthenticator3" class="org.apache.airavata.security.configurations.TestDBAuthenticator3"
+                   enabled="true" priority="8" userstore="org.apache.airavata.security.userstore.JDBCUserStore">
         <specificConfigurations>
             <database>
                 <jdbcUrl>jdbc:sql:thin:@//myhost:1521/mysql3</jdbcUrl>

@@ -55,4 +55,17 @@ public interface Authenticator {
      */
     boolean isEnabled();
 
+    /**
+     * User store that should be used by this authenticator. When authenticating a request
+     * authenticator should use the user store set by this method.
+     * @param userStore The user store to be used.
+     */
+    void setUserStore(UserStore userStore);
+
+    /**
+     * Gets the user store used by this authenticator.
+     * @return The user store used by this authenticator.
+     */
+    UserStore getUserStore();
+
 }

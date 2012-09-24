@@ -1,6 +1,7 @@
 package org.apache.airavata.services.registry.rest.security.session;
 
 import junit.framework.TestCase;
+import org.apache.airavata.security.util.DBLookup;
 
 import java.io.File;
 
