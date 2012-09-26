@@ -9,6 +9,7 @@ import org.apache.airavata.registry.api.*;
 import org.apache.airavata.registry.api.exception.gateway.*;
 import org.apache.airavata.registry.api.exception.worker.*;
 import org.apache.airavata.registry.api.workflow.*;
+import org.apache.airavata.registry.services.*;
 import org.apache.airavata.services.registry.rest.resourcemappings.*;
 import org.apache.xmlbeans.XmlException;
 import org.slf4j.Logger;
