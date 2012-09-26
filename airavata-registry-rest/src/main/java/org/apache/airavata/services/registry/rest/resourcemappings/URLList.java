@@ -23,7 +23,7 @@ package org.apache.airavata.services.registry.rest.resourcemappings;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class ServiceURLList {
+public class URLList {
     private String[] uris = null;
 
     public String[] getUris() {

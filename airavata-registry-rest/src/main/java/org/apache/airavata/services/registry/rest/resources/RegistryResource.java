@@ -4,1181 +4,72 @@ import org.apache.airavata.common.registry.api.exception.RegistryException;
 import org.apache.airavata.commons.gfac.type.ApplicationDeploymentDescription;
 import org.apache.airavata.commons.gfac.type.HostDescription;
 import org.apache.airavata.commons.gfac.type.ServiceDescription;
-import org.apache.airavata.registry.api.AiravataRegistry;
-import org.apache.airavata.registry.api.Axis2Registry;
-import org.apache.airavata.registry.api.DataRegistry;
-import org.apache.airavata.registry.api.workflow.WorkflowExecution;
-import org.apache.airavata.registry.api.workflow.WorkflowIOData;
-import org.apache.airavata.registry.api.workflow.WorkflowInstanceStatus;
-import org.apache.airavata.registry.api.workflow.WorkflowServiceIOData;
+import org.apache.airavata.persistance.registry.jpa.JPAResourceAccessor;
+import org.apache.airavata.registry.api.*;
+import org.apache.airavata.registry.api.exception.gateway.*;
+import org.apache.airavata.registry.api.exception.worker.*;
+import org.apache.airavata.registry.api.workflow.*;
+import org.apache.airavata.services.registry.rest.resourcemappings.*;
 import org.apache.xmlbeans.XmlException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.jcr.Node;
 import javax.servlet.ServletContext;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.xml.namespace.QName;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
-
-@Path("/airavataRegistry/api")
-public class RegistryResource {
-    private AiravataRegistry airavataRegistry;
-    private Axis2Registry axis2Registry;
-    private DataRegistry dataRegistry;
-
-    @Context
-    ServletContext context;
-
-    @Path("/userName")
-    @GET
-    @Produces("text/plain")
-    public String getUserName() {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        return airavataRegistry.getUsername();
-    //    return "Amila Jayasekara";
-    }
-
-    @Path("/repositoryUrl")
-    @GET
-    @Produces("text/plain")
-    public String getRepositoryURI() {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        return airavataRegistry.getRepositoryURI().toString();
-    }
-
-    @Path("/repositoryName")
-    @GET
-    @Produces("text/plain")
-    public String getName() {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        return airavataRegistry.getName();
-    }
-
-    @Path("/service/wsdl")
-    @GET
-    @Produces("text/xml")
-    public Response getWSDL(@QueryParam("serviceName") String serviceName) {
-        axis2Registry = (Axis2Registry) context.getAttribute("axis2Registry");
-        try {
-            String result = axis2Registry.getWSDL(serviceName);
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (Exception e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-
-    //need to check the name
-    /*@Path("/service/description/wsdl")
-    @GET
-    @Produces("text/xml")
-    public Response getWSDLFromServiceDescription(@FormParam("service") String service) {
-        axis2Registry = (Axis2Registry) context.getAttribute("axis2Registry");
-        try {
-            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
-            String result = axis2Registry.getWSDL(serviceDescription);
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (Exception e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    } */
-
-
-
-    @Path("/service/description")
-    @GET
-    @Produces("text/xml")
-    public String getServiceDescription(@QueryParam("serviceID") String serviceId) throws RegistryException {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        return airavataRegistry.getServiceDescription(serviceId).toXML();
-    }
-
-    @Path("/service/deploymentDescription")
-    @GET
-    @Produces("text/xml")
-    public String getDeploymentDescription(@QueryParam("serviceID") String serviceId,
-                                           @QueryParam("hostId") String hostId)
-            throws RegistryException {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        return airavataRegistry.getDeploymentDescription(serviceId, hostId).toXML();
-    }
-
-    @Path("host/description")
-    @GET
-    @Produces("text/xml")
-    public String getHostDescription(@QueryParam("hostId") String hostId) throws RegistryException {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        return airavataRegistry.getHostDescription(hostId).toXML();
-    }
-
-
-    @POST
-    @Path("save/hostDescription")
-    @Produces("text/plain")
-    public Response saveHostDescription(@FormParam("host") String host) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            HostDescription hostDescription = HostDescription.fromXML(host);
-            String result = airavataRegistry.saveHostDescription(hostDescription);
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (XmlException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            builder.entity("Invalid XML");
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("save/serviceDescription")
-    @Produces("text/plain")
-    public Response saveServiceDescription(@FormParam("service") String service) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
-            String result = airavataRegistry.saveServiceDescription(serviceDescription);
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (XmlException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            builder.entity("Invalid XML");
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("save/deploymentDescription")
-    @Produces("text/plain")
-    public Response saveDeploymentDescription(@FormParam("serviceId") String serviceId,
-                                              @FormParam("hostId") String hostId,
-                                              @FormParam("app") String app) {
-
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            ApplicationDeploymentDescription deploymentDescription =
-                    ApplicationDeploymentDescription.fromXML(app);
-
-            String result = airavataRegistry.saveDeploymentDescription(serviceId, hostId, deploymentDescription);
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (XmlException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("service/deployOnHost")
-    @Produces("text/plain")
-    public Response deployServiceOnHost(@FormParam("serviceName") String serviceName,
-                                        @FormParam("hostName") String hostName) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-
-        boolean state;
-        try {
-            state = airavataRegistry.deployServiceOnHost(serviceName, hostName);
-            if (state) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("True");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    public List<HostDescription> searchHostDescription(String name) throws RegistryException {
-        return null;
-    }
-
-    public List<ServiceDescription> searchServiceDescription(String nameRegEx) throws RegistryException {
-        return null;
-    }
-
-    public List<ApplicationDeploymentDescription> searchDeploymentDescription(String serviceName, String hostName)
-            throws RegistryException {
-        return null;
-    }
-
-    public Map<HostDescription, List<ApplicationDeploymentDescription>> searchDeploymentDescription(String serviceName)
-            throws RegistryException {
-        return null;
-    }
-
-    public List<ApplicationDeploymentDescription> searchDeploymentDescription(String serviceName, String hostName,
-                                                                              String applicationName) throws RegistryException {
-        return null;
-    }
-
-    public Map<ApplicationDeploymentDescription, String> searchDeploymentDescription() throws RegistryException {
-        return null;
-    }
-
-    @POST
-    @Path("save/gfacDescriptor")
-    @Produces("text/plain")
-    public Response saveGFacDescriptor(@FormParam("gfacURL") String gfacURL) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            Boolean result = airavataRegistry.saveGFacDescriptor(gfacURL);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-
-    @DELETE
-    @Path("delete/gfacDescriptor")
-    @Produces("text/plain")
-    public Response deleteGFacDescriptor(@QueryParam("gfacURL") String gfacURL) throws RegistryException {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            Boolean result = airavataRegistry.deleteGFacDescriptor(gfacURL);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    public List<URI> getInterpreterServiceURLList() throws RegistryException {
-        return null;
-    }
-
-
-    @POST
-    @Path("save/interpreterServiceUrl")
-    @Produces("text/plain")
-    public Response saveInterpreterServiceURL(@QueryParam("gfacURL") String gfacURL) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            URI gfacURI = new URI(gfacURL);
-            Boolean result = airavataRegistry.saveInterpreterServiceURL(gfacURI);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (URISyntaxException e) {
-             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        }
-    }
-
-
-    @DELETE
-    @Path("delete/interpreterServiceURL")
-    @Produces("text/plain")
-    public Response deleteInterpreterServiceURL(URI gfacURL) throws RegistryException {
-        return null;
-    }
-
-    public List<URI> getMessageBoxServiceURLList() throws RegistryException {
-        return null;
-    }
-
-    public boolean saveMessageBoxServiceURL(URI gfacURL) throws RegistryException {
-        return true;
-    }
-
-    public boolean deleteMessageBoxServiceURL(URI gfacURL) throws RegistryException {
-        return true;
-    }
-
-    public List<URI> getEventingServiceURLList() throws RegistryException {
-        return null;
-    }
-
-    public boolean saveEventingServiceURL(URI gfacURL) throws RegistryException {
-        return true;
-    }
-
-    public boolean deleteEventingServiceURL(URI gfacURL) throws RegistryException {
-        return true;
-    }
-
-    public List<String> getGFacDescriptorList() throws RegistryException {
-        return null;
-    }
-
-    public boolean saveWorkflow(QName ResourceID, String workflowName, String resourceDesc, String workflowAsaString,
-                                String owner, boolean isMakePublic) throws RegistryException {
-        return true;
-    }
-
-    public Map<QName, Node> getWorkflows(String userName) throws RegistryException {
-        return null;
-    }
-
-    public Node getWorkflow(QName templateID, String userName) throws RegistryException {
-        return null;
-    }
-
-    public boolean deleteWorkflow(QName resourceID, String userName) throws RegistryException {
-        return true;
-    }
-
-    public void deleteServiceDescription(String serviceId) throws RegistryException {
-
-    }
-
-    public void deleteDeploymentDescription(String serviceName, String hostName, String applicationName)
-            throws RegistryException {
-
-    }
-
-    public void deleteHostDescription(String hostId) throws RegistryException {
-
-    }
-
-    public boolean saveWorkflowExecutionServiceInput(WorkflowServiceIOData workflowInputData) throws RegistryException {
-        return true;
-    }
-
-    public boolean saveWorkflowExecutionServiceOutput(WorkflowServiceIOData workflowOutputData) throws RegistryException {
-        return true;
-    }
-
-    public List<WorkflowServiceIOData> searchWorkflowExecutionServiceInput(String experimentIdRegEx, String workflowNameRegEx, String nodeNameRegEx) throws RegistryException {
-        return null;
-    }
-
-    public String getWorkflowExecutionTemplateName(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public List<WorkflowServiceIOData> searchWorkflowExecutionServiceOutput(String experimentIdRegEx, String workflowNameRegEx, String nodeNameRegEx) throws RegistryException {
-        return null;
-    }
-
-    public boolean saveWorkflowExecutionName(String experimentId, String workflowIntanceName) throws RegistryException {
-        return true;
-    }
-
-    public boolean saveWorkflowExecutionStatus(String experimentId, WorkflowInstanceStatus status) throws RegistryException {
-        return true;
-    }
-
-    public boolean saveWorkflowExecutionStatus(String experimentId, WorkflowInstanceStatus.ExecutionStatus status) throws RegistryException {
-        return true;
-    }
-
-    public WorkflowInstanceStatus getWorkflowExecutionStatus(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public boolean saveWorkflowExecutionOutput(String experimentId, String outputNodeName, String output) throws RegistryException {
-        return true;
-    }
-
-    public boolean saveWorkflowExecutionOutput(String experimentId, WorkflowIOData data) throws RegistryException {
-        return true;
-    }
-
-    public WorkflowIOData getWorkflowExecutionOutput(String experimentId, String outputNodeName) throws RegistryException {
-        return null;
-    }
-
-    public List<WorkflowIOData> getWorkflowExecutionOutput(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public String[] getWorkflowExecutionOutputNames(String exeperimentId) throws RegistryException {
-        return null;
-    }
-
-    public boolean saveWorkflowExecutionUser(String experimentId, String user) throws RegistryException {
-        return true;
-    }
-
-    public String getWorkflowExecutionUser(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public String getWorkflowExecutionName(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public WorkflowExecution getWorkflowExecution(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public List<String> getWorkflowExecutionIdByUser(String user) throws RegistryException {
-        return null;
-    }
-
-    public List<WorkflowExecution> getWorkflowExecutionByUser(String user) throws RegistryException {
-        return null;
-    }
-
-    public List<WorkflowExecution> getWorkflowExecutionByUser(String user, int pageSize, int pageNo) throws RegistryException {
-        return null;
-    }
-
-    public String getWorkflowExecutionMetadata(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public boolean saveWorkflowExecutionMetadata(String experimentId, String metadata) throws RegistryException {
-        return true;
-    }
-
-//    public boolean saveWorkflowData(WorkflowRunTimeData workflowData)throws RegistryException{
-//        return true;
-//    }
-
-    public boolean saveWorkflowLastUpdateTime(String experimentId, Timestamp timestamp) throws RegistryException {
-        return true;
-    }
-
-    public boolean saveWorkflowNodeStatus(String workflowInstanceID, String workflowNodeID, WorkflowInstanceStatus.ExecutionStatus status) throws RegistryException {
-        return true;
-    }
-
-    public boolean saveWorkflowNodeLastUpdateTime(String workflowInstanceID, String workflowNodeID, Timestamp lastUpdateTime) throws RegistryException {
-        return true;
-    }
-
-//    public boolean saveWorkflowNodeGramData(WorkflowNodeGramData workflowNodeGramData)throws RegistryException{
-//        return true;
-//    }
-
-    public boolean saveWorkflowNodeGramLocalJobID(String workflowInstanceID, String workflowNodeID, String localJobID) throws RegistryException {
-        return true;
-    }
-
-
-}
-
-/*
- *
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- *
- */
-package org.apache.airavata.services.registry.rest.resources;
-
-import org.apache.airavata.common.registry.api.exception.RegistryException;
-import org.apache.airavata.commons.gfac.type.ApplicationDeploymentDescription;
-import org.apache.airavata.commons.gfac.type.HostDescription;
-import org.apache.airavata.commons.gfac.type.ServiceDescription;
-import org.apache.airavata.registry.api.AiravataRegistry;
-import org.apache.airavata.registry.api.Axis2Registry;
-import org.apache.airavata.registry.api.DataRegistry;
-import org.apache.airavata.registry.api.workflow.WorkflowExecution;
-import org.apache.airavata.registry.api.workflow.WorkflowIOData;
-import org.apache.airavata.registry.api.workflow.WorkflowInstanceStatus;
-import org.apache.airavata.registry.api.workflow.WorkflowServiceIOData;
-import org.apache.xmlbeans.XmlException;
-
-import javax.jcr.Node;
-import javax.servlet.ServletContext;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.xml.namespace.QName;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
-
-@Path("/airavataRegistry/api")
-public class RegistryResource {
-    private AiravataRegistry airavataRegistry;
-    private Axis2Registry axis2Registry;
-    private DataRegistry dataRegistry;
-
-    @Context
-    ServletContext context;
-
-    @Path("/userName")
-    @GET
-    @Produces("text/plain")
-    public String getUserName() {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        return airavataRegistry.getUsername();
-    }
-
-    @Path("/repositoryUrl")
-    @GET
-    @Produces("text/plain")
-    public String getRepositoryURI() {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        return airavataRegistry.getRepositoryURI().toString();
-    }
-
-    @Path("/repositoryName")
-    @GET
-    @Produces("text/plain")
-    public String getName() {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        return airavataRegistry.getName();
-    }
-
-    @Path("/service/wsdl")
-    @GET
-    @Produces("text/xml")
-    public Response getWSDL(@QueryParam("serviceName") String serviceName) {
-        axis2Registry = (Axis2Registry) context.getAttribute("axis2Registry");
-        try {
-            String result = axis2Registry.getWSDL(serviceName);
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (Exception e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-
-    //need to check the name
-    @Path("/service/description/wsdl")
-    @GET
-    @Produces("text/xml")
-    public Response getWSDLFromServiceDescription(@FormParam("service") String service) {
-        axis2Registry = (Axis2Registry) context.getAttribute("axis2Registry");
-        try {
-            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
-            String result = axis2Registry.getWSDL(serviceDescription);
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (Exception e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-
-
-    @Path("/service/description")
-    @GET
-    @Produces("text/xml")
-    public String getServiceDescription(@QueryParam("serviceID") String serviceId) throws RegistryException {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        return airavataRegistry.getServiceDescription(serviceId).toXML();
-    }
-
-    @Path("/service/deploymentDescription")
-    @GET
-    @Produces("text/xml")
-    public String getDeploymentDescription(@QueryParam("serviceID") String serviceId,
-                                           @QueryParam("hostId") String hostId)
-            throws RegistryException {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        return airavataRegistry.getDeploymentDescription(serviceId, hostId).toXML();
-    }
-
-    @Path("host/description")
-    @GET
-    @Produces("text/xml")
-    public String getHostDescription(@QueryParam("hostId") String hostId) throws RegistryException {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        return airavataRegistry.getHostDescription(hostId).toXML();
-    }
-
-
-    @POST
-    @Path("save/hostDescription")
-    @Produces("text/plain")
-    public Response saveHostDescription(@FormParam("host") String host) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            HostDescription hostDescription = HostDescription.fromXML(host);
-            String result = airavataRegistry.saveHostDescription(hostDescription);
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (XmlException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            builder.entity("Invalid XML");
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("save/serviceDescription")
-    @Produces("text/plain")
-    public Response saveServiceDescription(@FormParam("service") String service) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
-            String result = airavataRegistry.saveServiceDescription(serviceDescription);
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (XmlException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            builder.entity("Invalid XML");
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("save/deploymentDescription")
-    @Produces("text/plain")
-    public Response saveDeploymentDescription(@FormParam("serviceId") String serviceId,
-                                              @FormParam("hostId") String hostId,
-                                              @FormParam("app") String app) {
-
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            ApplicationDeploymentDescription deploymentDescription =
-                    ApplicationDeploymentDescription.fromXML(app);
-
-            String result = airavataRegistry.saveDeploymentDescription(serviceId, hostId, deploymentDescription);
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (XmlException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("service/deployOnHost")
-    @Produces("text/plain")
-    public Response deployServiceOnHost(@FormParam("serviceName") String serviceName,
-                                        @FormParam("hostName") String hostName) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-
-        boolean state;
-        try {
-            state = airavataRegistry.deployServiceOnHost(serviceName, hostName);
-            if (state) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("True");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    public List<HostDescription> searchHostDescription(String name) throws RegistryException {
-        return null;
-    }
-
-    public List<ServiceDescription> searchServiceDescription(String nameRegEx) throws RegistryException {
-        return null;
-    }
-
-    public List<ApplicationDeploymentDescription> searchDeploymentDescription(String serviceName, String hostName)
-            throws RegistryException {
-        return null;
-    }
-
-    public Map<HostDescription, List<ApplicationDeploymentDescription>> searchDeploymentDescription(String serviceName)
-            throws RegistryException {
-        return null;
-    }
-
-    public List<ApplicationDeploymentDescription> searchDeploymentDescription(String serviceName, String hostName,
-                                                                              String applicationName) throws RegistryException {
-        return null;
-    }
-
-    public Map<ApplicationDeploymentDescription, String> searchDeploymentDescription() throws RegistryException {
-        return null;
-    }
-
-    @POST
-    @Path("save/gfacDescriptor")
-    @Produces("text/plain")
-    public Response saveGFacDescriptor(@FormParam("gfacURL") String gfacURL) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            Boolean result = airavataRegistry.saveGFacDescriptor(gfacURL);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-
-    @DELETE
-    @Path("delete/gfacDescriptor")
-    @Produces("text/plain")
-    public Response deleteGFacDescriptor(@QueryParam("gfacURL") String gfacURL) throws RegistryException {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            Boolean result = airavataRegistry.deleteGFacDescriptor(gfacURL);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    public List<URI> getInterpreterServiceURLList() throws RegistryException {
-        return null;
-    }
-
-
-    @POST
-    @Path("save/interpreterServiceUrl")
-    @Produces("text/plain")
-    public Response saveInterpreterServiceURL(@QueryParam("gfacURL") String gfacURL) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            URI gfacURI = new URI(gfacURL);
-            Boolean result = airavataRegistry.saveInterpreterServiceURL(gfacURI);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (URISyntaxException e) {
-             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        }
-    }
-
-
-    @DELETE
-    @Path("delete/interpreterServiceURL")
-    @Produces("text/plain")
-    public Response deleteInterpreterServiceURL(URI gfacURL) throws RegistryException {
-        return null;
-    }
-
-    public List<URI> getMessageBoxServiceURLList() throws RegistryException {
-        return null;
-    }
-
-    public boolean saveMessageBoxServiceURL(URI gfacURL) throws RegistryException {
-        return true;
-    }
-
-    public boolean deleteMessageBoxServiceURL(URI gfacURL) throws RegistryException {
-        return true;
-    }
-
-    public List<URI> getEventingServiceURLList() throws RegistryException {
-        return null;
-    }
-
-    public boolean saveEventingServiceURL(URI gfacURL) throws RegistryException {
-        return true;
-    }
-
-    public boolean deleteEventingServiceURL(URI gfacURL) throws RegistryException {
-        return true;
-    }
-
-    public List<String> getGFacDescriptorList() throws RegistryException {
-        return null;
-    }
-
-    public boolean saveWorkflow(QName ResourceID, String workflowName, String resourceDesc, String workflowAsaString,
-                                String owner, boolean isMakePublic) throws RegistryException {
-        return true;
-    }
-
-    public Map<QName, Node> getWorkflows(String userName) throws RegistryException {
-        return null;
-    }
-
-    public Node getWorkflow(QName templateID, String userName) throws RegistryException {
-        return null;
-    }
-
-    public boolean deleteWorkflow(QName resourceID, String userName) throws RegistryException {
-        return true;
-    }
-
-    public void deleteServiceDescription(String serviceId) throws RegistryException {
-
-    }
-
-    public void deleteDeploymentDescription(String serviceName, String hostName, String applicationName)
-            throws RegistryException {
-
-    }
-
-    public void deleteHostDescription(String hostId) throws RegistryException {
-
-    }
-
-    public boolean saveWorkflowExecutionServiceInput(WorkflowServiceIOData workflowInputData) throws RegistryException {
-        return true;
-    }
-
-    public boolean saveWorkflowExecutionServiceOutput(WorkflowServiceIOData workflowOutputData) throws RegistryException {
-        return true;
-    }
-
-    public List<WorkflowServiceIOData> searchWorkflowExecutionServiceInput(String experimentIdRegEx, String workflowNameRegEx, String nodeNameRegEx) throws RegistryException {
-        return null;
-    }
-
-    public String getWorkflowExecutionTemplateName(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public List<WorkflowServiceIOData> searchWorkflowExecutionServiceOutput(String experimentIdRegEx, String workflowNameRegEx, String nodeNameRegEx) throws RegistryException {
-        return null;
-    }
-
-    public boolean saveWorkflowExecutionName(String experimentId, String workflowIntanceName) throws RegistryException {
-        return true;
-    }
-
-    public boolean saveWorkflowExecutionStatus(String experimentId, WorkflowInstanceStatus status) throws RegistryException {
-        return true;
-    }
-
-    public boolean saveWorkflowExecutionStatus(String experimentId, WorkflowInstanceStatus.ExecutionStatus status) throws RegistryException {
-        return true;
-    }
-
-    public WorkflowInstanceStatus getWorkflowExecutionStatus(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public boolean saveWorkflowExecutionOutput(String experimentId, String outputNodeName, String output) throws RegistryException {
-        return true;
-    }
-
-    public boolean saveWorkflowExecutionOutput(String experimentId, WorkflowIOData data) throws RegistryException {
-        return true;
-    }
-
-    public WorkflowIOData getWorkflowExecutionOutput(String experimentId, String outputNodeName) throws RegistryException {
-        return null;
-    }
-
-    public List<WorkflowIOData> getWorkflowExecutionOutput(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public String[] getWorkflowExecutionOutputNames(String exeperimentId) throws RegistryException {
-        return null;
-    }
-
-    public boolean saveWorkflowExecutionUser(String experimentId, String user) throws RegistryException {
-        return true;
-    }
-
-    public String getWorkflowExecutionUser(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public String getWorkflowExecutionName(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public WorkflowExecution getWorkflowExecution(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public List<String> getWorkflowExecutionIdByUser(String user) throws RegistryException {
-        return null;
-    }
-
-    public List<WorkflowExecution> getWorkflowExecutionByUser(String user) throws RegistryException {
-        return null;
-    }
-
-    public List<WorkflowExecution> getWorkflowExecutionByUser(String user, int pageSize, int pageNo) throws RegistryException {
-        return null;
-    }
-
-    public String getWorkflowExecutionMetadata(String experimentId) throws RegistryException {
-        return null;
-    }
-
-    public boolean saveWorkflowExecutionMetadata(String experimentId, String metadata) throws RegistryException {
-        return true;
-    }
-
-//    public boolean saveWorkflowData(WorkflowRunTimeData workflowData)throws RegistryException{
-//        return true;
-//    }
-
-    public boolean saveWorkflowLastUpdateTime(String experimentId, Timestamp timestamp) throws RegistryException {
-        return true;
-    }
-
-    public boolean saveWorkflowNodeStatus(String workflowInstanceID, String workflowNodeID, WorkflowInstanceStatus.ExecutionStatus status) throws RegistryException {
-        return true;
-    }
-
-    public boolean saveWorkflowNodeLastUpdateTime(String workflowInstanceID, String workflowNodeID, Timestamp lastUpdateTime) throws RegistryException {
-        return true;
-    }
-
-//    public boolean saveWorkflowNodeGramData(WorkflowNodeGramData workflowNodeGramData)throws RegistryException{
-//        return true;
-//    }
-
-    public boolean saveWorkflowNodeGramLocalJobID(String workflowInstanceID, String workflowNodeID, String localJobID) throws RegistryException {
-        return true;
-    }
-
-
-}
-
-package org.apache.airavata.services.registry.rest.resources;
-
-import org.apache.airavata.common.registry.api.exception.RegistryException;
-import org.apache.airavata.commons.gfac.type.ApplicationDeploymentDescription;
-import org.apache.airavata.commons.gfac.type.HostDescription;
-import org.apache.airavata.commons.gfac.type.ServiceDescription;
-import org.apache.airavata.registry.api.AiravataRegistry;
-import org.apache.airavata.registry.api.Axis2Registry;
-import org.apache.airavata.registry.api.DataRegistry;
-import org.apache.airavata.registry.api.workflow.WorkflowExecution;
-import org.apache.airavata.registry.api.workflow.WorkflowIOData;
-import org.apache.airavata.registry.api.workflow.WorkflowInstanceStatus;
-import org.apache.airavata.registry.api.workflow.WorkflowServiceIOData;
-import org.apache.airavata.services.registry.rest.resourcemappings.HostDescriptionList;
-import org.apache.airavata.services.registry.rest.resourcemappings.ServiceURLList;
-import org.apache.xmlbeans.XmlException;
-
-import javax.jcr.Node;
-import javax.servlet.ServletContext;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.namespace.QName;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 
 /**
- *  RegistryResource for REST interface of Registry API
- *  Three objects will be retrieved from the servelet context as
- *  airavataRegistry, axis2Registry, dataRegistry which are
- *  analogues to main API interfaces of Airavata
- */
+*  RegistryResource for REST interface of Registry API
+*  Three objects will be retrieved from the servelet context as
+*  airavataRegistry, axis2Registry, dataRegistry which are
+*  analogues to main API interfaces of Airavata
+*/
 @Path("/registry/api")
-public class RegistryResource {
-    private AiravataRegistry airavataRegistry;
-    private Axis2Registry axis2Registry;
-    private DataRegistry dataRegistry;
+public class RegistryResource implements ConfigurationRegistryService,
+        ProjectsRegistryService, ProvenanceRegistryService, UserWorkflowRegistryService,
+        PublishedWorkflowRegistryService, DescriptorRegistryService{
+    private final static Logger logger = LoggerFactory.getLogger(RegistryResource.class);
+    private JPAResourceAccessor jpa;
+    private boolean active=false;
+    private static final String DEFAULT_PROJECT_NAME = "default";
+    private AiravataRegistry2 airavataRegistry;
+    public static final String AIRAVATA_CONTEXT = "airavataRegistry";
 
     @Context
     ServletContext context;
 
-
-    /**
-     *
-     * @return usename of the JCR registry
-     * at the moment, admin username is set
-     * TO-DO - get the user from a configuration file
-     */
-    @Path("/username")
-    @GET
-    @Produces("text/plain")
-    public Response getUserName() {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            String result = airavataRegistry.getUsername();
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-                return builder.build();
-            }
-        } catch (Exception e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
+    public String getVersion(){
+        return  null;
     }
 
-    /**
-     *
-     * @return repository URL
-     */
-    @Path("/repositoryurl")
+    protected void initialize() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        jpa = new JPAResourceAccessor(airavataRegistry);
+        active=true;
+    }
+
+    /**---------------------------------Configuration Registry----------------------------------**/
+
+    @Path("/configuration")
     @GET
     @Produces("text/plain")
-    public Response getRepositoryURI() {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            String result = airavataRegistry.getRepositoryURI().toString();
-            if (result != null) {
+    public Response getConfiguration(@QueryParam("key") String key) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            Object configuration = airavataRegistry.getConfiguration(key);
+            if (configuration != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
+                builder.entity(configuration);
                 return builder.build();
             } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
                 return builder.build();
             }
         } catch (Exception e) {
@@ -1186,50 +77,24 @@ public class RegistryResource {
             return builder.build();
         }
 
-
     }
 
-    /**
-     *
-     * @return repository name
-     */
-    @Path("/repositoryname")
     @GET
-    @Produces("text/plain")
-    public Response getName() {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            String result = airavataRegistry.getName();
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-                return builder.build();
+    @Path("/configurationlist")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getConfigurationList(@QueryParam("key") String key) {
+        try{
+            airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+            List<Object> configurationList = airavataRegistry.getConfigurationList(key);
+            ConfigurationList list = new ConfigurationList();
+            Object[] configValList = new Object[configurationList.size()];
+            for (int i = 0; i < configurationList.size(); i++) {
+                configValList[i] = configurationList.get(i);
             }
-        } catch (Exception e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    /**
-     * service name should be given as a query parameter. This
-     * method will return service wsdl in xml format
-     * @param serviceName
-     * @return
-     */
-    @Path("/service/wsdl")
-    @GET
-    @Produces("text/xml")
-    public Response getWSDL(@QueryParam("serviceName") String serviceName) {
-        axis2Registry = (Axis2Registry) context.getAttribute("axis2Registry");
-        try {
-            String result = axis2Registry.getWSDL(serviceName);
-            if (result != null) {
+            list.setConfigValList(configValList);
+            if (configurationList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
+                builder.entity(list);
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
@@ -1241,23 +106,86 @@ public class RegistryResource {
         }
     }
 
-
-    /**
-     * service should be given as xml.
-     * @param service
-     * @return
-     */
-    @Path("/service/description/wsdl")
     @POST
-    @Consumes("text/xml")
-    public Response getWSDLFromServiceDescription(String service) {
-        axis2Registry = (Axis2Registry) context.getAttribute("axis2Registry");
+    @Path("save/configuration")
+    @Produces("text/plain")
+    public Response setConfiguration(@FormParam("key") String key,
+                                     @FormParam("value") String value,
+                                     @FormParam("date") Date date) {
+        try{
+            airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+            airavataRegistry.setConfiguration(key, value, date);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        }catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("update/configuration")
+    @Produces("text/plain")
+    public Response addConfiguration(@FormParam("key") String key,
+                                     @FormParam("value") String value,
+                                     @FormParam("date") Date date) {
+        try{
+            airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+            airavataRegistry.addConfiguration(key, value, date);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        }catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @DELETE
+    @Path("delete/allconfiguration")
+    @Produces("text/plain")
+    public Response removeAllConfiguration(@QueryParam("key") String key) {
+        try{
+            airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+            airavataRegistry.removeAllConfiguration(key);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        }catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @DELETE
+    @Path("delete/configuration")
+    @Produces("text/plain")
+    public Response removeConfiguration(@QueryParam("key") String key, @QueryParam("value") String value) {
+        try{
+            airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+            airavataRegistry.removeConfiguration(key, value);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        }catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("gfac/urilist")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getGFacURIs() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try {
-            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
-            String result = axis2Registry.getWSDL(serviceDescription);
-            if (result != null) {
+            List<URI> uris = airavataRegistry.getGFacURIs();
+            URLList list = new URLList();
+            String[] urs = new String[uris.size()];
+            for (int i = 0; i < uris.size(); i++) {
+                urs[i] = uris.get(i).toString();
+            }
+            list.setUris(urs);
+            if (urs.length != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
+                builder.entity(list);
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
@@ -1269,210 +197,302 @@ public class RegistryResource {
         }
     }
 
-
-    /**
-     *
-     * @param serviceId
-     * @return
-     */
-    @Path("/service/description")
     @GET
-    @Produces("text/xml")
-    public Response getServiceDescription(@QueryParam("serviceID") String serviceId) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
+    @Path("workflowinterpreter/urilist")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getWorkflowInterpreterURIs() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try {
-            String result = airavataRegistry.getServiceDescription(serviceId).toXML();
-            if (result != null) {
+            List<URI> uris = airavataRegistry.getWorkflowInterpreterURIs();
+            URLList list = new URLList();
+            String[] urs = new String[uris.size()];
+            for (int i = 0; i < uris.size(); i++) {
+                urs[i] = uris.get(i).toString();
+            }
+            list.setUris(urs);
+            if (urs.length != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
+                builder.entity(list);
                 return builder.build();
             } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
                 return builder.build();
             }
-        } catch (RegistryException e) {
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
     }
 
-    /**
-     *
-     * @param serviceId
-     * @param hostId
-     * @return
-     */
-    @Path("/service/deploymentdescription")
     @GET
-    @Produces("text/xml")
-    public Response getDeploymentDescription(@QueryParam("serviceID") String serviceId,
-                                             @QueryParam("hostId") String hostId) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            String result = airavataRegistry.getDeploymentDescription(serviceId, hostId).toXML();
-            if (result != null) {
+    @Path("eventingservice/uri")
+    @Produces("text/plain")
+    public Response getEventingServiceURI() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            URI eventingServiceURI = airavataRegistry.getEventingServiceURI();
+            if (eventingServiceURI != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
+                builder.entity(eventingServiceURI);
                 return builder.build();
             } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
                 return builder.build();
             }
-        } catch (RegistryException e) {
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
-
     }
 
-    /**
-     *
-     * @param hostId
-     * @return
-     */
-    @Path("host/description")
     @GET
-    @Produces("text/xml")
-    public Response getHostDescription(@QueryParam("hostId") String hostId) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            String result = airavataRegistry.getHostDescription(hostId).toXML();
-            if (result != null) {
+    @Path("messagebox/uri")
+    @Produces("text/plain")
+    public Response getMessageBoxURI() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            URI eventingServiceURI = airavataRegistry.getMessageBoxURI();
+            if (eventingServiceURI != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
+                builder.entity(eventingServiceURI);
                 return builder.build();
             } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
                 return builder.build();
             }
-        } catch (RegistryException e) {
+        } catch (Exception e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("add/gfacuri")
+    @Produces("text/plain")
+    public Response addGFacURI(@FormParam("uri") URI uri) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.addGFacURI(uri);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("add/workflowinterpreteruri")
+    @Produces("text/plain")
+    public Response addWorkflowInterpreterURI(@FormParam("uri") URI uri) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.addWorkflowInterpreterURI(uri);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("add/eventinguri")
+    @Produces("text/plain")
+    public Response setEventingURI(@FormParam("uri") URI uri) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.setEventingURI(uri);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("add/msgboxuri")
+    @Produces("text/plain")
+    public Response setMessageBoxURI(@FormParam("uri") URI uri) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.setMessageBoxURI(uri);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("add/gfacuri")
+    @Produces("text/plain")
+    public Response addGFacURI(@FormParam("uri") URI uri, @FormParam("date") Date date) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.addGFacURI(uri, date);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("add/workflowinterpreteruri")
+    @Produces("text/plain")
+    public Response addWorkflowInterpreterURI(@FormParam("uri") URI uri, @FormParam("date") Date date) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.addWorkflowInterpreterURI(uri, date);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("add/eventinguri")
+    @Produces("text/plain")
+    public Response setEventingURI(@FormParam("uri") URI uri, @FormParam("date") Date date) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.setEventingURI(uri, date);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("add/msgboxuri")
+    @Produces("text/plain")
+    public Response setMessageBoxURI(@FormParam("uri") URI uri, @FormParam("date") Date date) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.setMessageBoxURI(uri, date);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @DELETE
+    @Path("delete/gfacuri")
+    @Produces("text/plain")
+    public Response removeGFacURI(@QueryParam("uri") URI uri) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.removeGFacURI(uri);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @DELETE
+    @Path("delete/allgfacuris")
+    @Produces("text/plain")
+    public Response removeAllGFacURI() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.removeAllGFacURI();
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @DELETE
+    @Path("delete/workflowinterpreteruri")
+    @Produces("text/plain")
+    public Response removeWorkflowInterpreterURI(@QueryParam("uri") URI uri) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.removeWorkflowInterpreterURI(uri);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        }catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @DELETE
+    @Path("delete/allworkflowinterpreteruris")
+    @Produces("text/plain")
+    public Response removeAllWorkflowInterpreterURI() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.removeAllWorkflowInterpreterURI();
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @DELETE
+    @Path("delete/eventinguri")
+    @Produces("text/plain")
+    public Response unsetEventingURI() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.unsetEventingURI();
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @DELETE
+    @Path("delete/msgboxuri")
+    @Produces("text/plain")
+    public Response unsetMessageBoxURI() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.unsetMessageBoxURI();
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
     }
 
 
-    /**
-     *
-     * @param host
-     * @return
-     */
-    @POST
-    @Path("save/hostdescription")
+    /**---------------------------------Descriptor Registry----------------------------------**/
+
+    @GET
+    @Path("hostdescriptor/exist")
     @Produces("text/plain")
-    public Response saveHostDescription(@FormParam("host") String host) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            HostDescription hostDescription = HostDescription.fromXML(host);
-            String result = airavataRegistry.saveHostDescription(hostDescription);
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (XmlException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            builder.entity("Invalid XML");
-            return builder.build();
-        }
-    }
-
-    /**
-     *
-     * @param service
-     * @return
-     */
-    @POST
-    @Path("save/servicedescription")
-    @Produces("text/plain")
-    public Response saveServiceDescription(@FormParam("service") String service) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
-            String result = airavataRegistry.saveServiceDescription(serviceDescription);
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (XmlException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            builder.entity("Invalid XML");
-            return builder.build();
-        }
-    }
-
-    /**
-     *
-     * @param serviceId
-     * @param hostId
-     * @param app
-     * @return
-     */
-    @POST
-    @Path("save/deploymentdescription")
-    @Produces("text/plain")
-    public Response saveDeploymentDescription(@FormParam("serviceId") String serviceId,
-                                              @FormParam("hostId") String hostId,
-                                              @FormParam("app") String app) {
-
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            ApplicationDeploymentDescription deploymentDescription =
-                    ApplicationDeploymentDescription.fromXML(app);
-
-            String result = airavataRegistry.saveDeploymentDescription(serviceId, hostId, deploymentDescription);
-            if (result != null) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (XmlException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        }
-    }
-
-    /**
-     *
-     * @param serviceName
-     * @param hostName
-     * @return
-     */
-    @POST
-    @Path("service/deployOnHost")
-    @Produces("text/plain")
-    public Response deployServiceOnHost(@FormParam("serviceName") String serviceName,
-                                        @FormParam("hostName") String hostName) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-
+    public Response isHostDescriptorExists(@QueryParam("descriptorName") String descriptorName){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         boolean state;
-        try {
-            state = airavataRegistry.deployServiceOnHost(serviceName, hostName);
+        try{
+            state = airavataRegistry.isHostDescriptorExists(descriptorName);
             if (state) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity("True");
                 return builder.build();
             } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
                 return builder.build();
             }
         } catch (RegistryException e) {
@@ -1481,18 +501,98 @@ public class RegistryResource {
         }
     }
 
-    /**
-     *
-     * @param name
-     * @return
-     */
+    @POST
+    @Path("hostdescriptor/save")
+    @Produces("text/plain")
+    public Response addHostDescriptor(@FormParam("host") String host) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            HostDescription hostDescription = HostDescription.fromXML(host);
+            airavataRegistry.addHostDescriptor(hostDescription);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (DescriptorAlreadyExistsException e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (XmlException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("hostdescriptor/update")
+    @Produces("text/plain")
+    public Response updateHostDescriptor(@FormParam("host") String host) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            HostDescription hostDescription = HostDescription.fromXML(host);
+            airavataRegistry.updateHostDescriptor(hostDescription);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        }catch (XmlException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (DescriptorDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
     @GET
-    @Path("search/hostdescriptionlist")
+    @Path("host/description")
+    @Produces("text/xml")
+    public Response getHostDescriptor(@QueryParam("hostName") String hostName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            String result = airavataRegistry.getHostDescriptor(hostName).toXML();
+            if (result != null) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(result);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+
+    }
+
+    @DELETE
+    @Path("hostdescriptor/delete")
+    @Produces("text/plain")
+    public Response removeHostDescriptor(@QueryParam("hostName") String hostName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.removeHostDescriptor(hostName);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        }catch (DescriptorDoesNotExistsException e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+
+    @GET
+    @Path("get/hostdescriptors")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response searchHostDescription(@QueryParam("hostname") String name) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
+    public Response getHostDescriptors(){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try {
-            List<HostDescription> hostDescriptionList = airavataRegistry.searchHostDescription(name);
+            List<HostDescription> hostDescriptionList = airavataRegistry.getHostDescriptors();
             HostDescriptionList list = new HostDescriptionList();
             HostDescription[] hostDescriptions = new HostDescription[hostDescriptionList.size()];
             for (int i = 0; i < hostDescriptionList.size(); i++) {
@@ -1513,125 +613,129 @@ public class RegistryResource {
         }
     }
 
-    /**
-     *
-     * @param nameRegEx
-     * @return
-     */
-    public List<ServiceDescription> searchServiceDescription(String nameRegEx) {
+    public Response getHostDescriptorMetadata(String s) {
         return null;
     }
 
-    /**
-     *
-     * @param serviceName
-     * @param hostName
-     * @return
-     */
-    public List<ApplicationDeploymentDescription> searchDeploymentDescription(String serviceName, String hostName) {
-        return null;
-    }
-
-    /**
-     *
-     * @param serviceName
-     * @return
-     */
-    public Map<HostDescription, List<ApplicationDeploymentDescription>> searchDeploymentDescription(String serviceName) {
-        return null;
-    }
-
-    /**
-     *
-     * @param serviceName
-     * @param hostName
-     * @param applicationName
-     * @return
-     */
-    public List<ApplicationDeploymentDescription> searchDeploymentDescription(String serviceName, String hostName,
-                                                                              String applicationName) {
-        return null;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Map<ApplicationDeploymentDescription, String> searchDeploymentDescription() {
-        return null;
-    }
-
-    /**
-     *
-     * @param gfacURL
-     * @return
-     */
-    @POST
-    @Path("save/gfacdescriptor")
-    @Produces("text/plain")
-    public Response saveGFacDescriptor(@FormParam("gfacURL") String gfacURL) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            Boolean result = airavataRegistry.saveGFacDescriptor(gfacURL);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-
-    /**
-     *
-     * @param gfacURL
-     * @return
-     */
-    @DELETE
-    @Path("delete/gfacdescriptor")
-    @Produces("text/plain")
-    public Response deleteGFacDescriptor(@QueryParam("gfacURL") String gfacURL) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            Boolean result = airavataRegistry.deleteGFacDescriptor(gfacURL);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
     @GET
-    @Path("interpreter/serviceurilist")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getInterpreterServiceURLList() {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            List<URI> uris = airavataRegistry.getInterpreterServiceURLList();
-            ServiceURLList list = new ServiceURLList();
-            String[] urs = new String[uris.size()];
-            for (int i = 0; i < uris.size(); i++) {
-                urs[i] = uris.get(i).toString();
+    @Path("servicedescriptor/exist")
+    @Produces("text/plain")
+    public Response isServiceDescriptorExists(@QueryParam("descriptorName") String descriptorName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        boolean state;
+        try{
+            state = airavataRegistry.isServiceDescriptorExists(descriptorName);
+            if (state) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity("True");
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
             }
-            list.setUris(urs);
-            if (urs.length != 0) {
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("servicedescriptor/save")
+    @Produces("text/xml")
+    public Response addServiceDescriptor(@FormParam("service") String service){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
+            airavataRegistry.addServiceDescriptor(serviceDescription);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (DescriptorAlreadyExistsException e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (XmlException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("servicedescriptor/update")
+    @Produces("text/xml")
+    public Response updateServiceDescriptor(@FormParam("service") String service) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
+            airavataRegistry.updateServiceDescriptor(serviceDescription);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (DescriptorAlreadyExistsException e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (XmlException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("service/description")
+    @Produces("text/xml")
+    public Response getServiceDescriptor(@QueryParam("serviceName") String serviceName){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            String result = airavataRegistry.getHostDescriptor(serviceName).toXML();
+            if (result != null) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(result);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @DELETE
+    @Path("servicedescriptor/delete")
+    @Produces("text/plain")
+    public Response removeServiceDescriptor(@QueryParam("serviceName") String serviceName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.removeServiceDescriptor(serviceName);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        }catch (DescriptorDoesNotExistsException e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("get/servicedescriptors")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getServiceDescriptors(){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try {
+            List<ServiceDescription> serviceDescriptors = airavataRegistry.getServiceDescriptors();
+            ServiceDescriptionList list = new ServiceDescriptionList();
+            ServiceDescription[] serviceDescriptions = new ServiceDescription[serviceDescriptors.size()];
+            for (int i = 0; i < serviceDescriptors.size(); i++) {
+                serviceDescriptions[i] = serviceDescriptors.get(i);
+            }
+            list.setServiceDescriptions(serviceDescriptions);
+            if (serviceDescriptors.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(list);
                 return builder.build();
@@ -1642,421 +746,26 @@ public class RegistryResource {
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
-        }
+        }    }
 
-    }
-
-    /**
-     *
-     * @param gfacURL
-     * @return
-     */
-    @POST
-    @Path("save/interpreterserviceurl")
-    @Produces("text/plain")
-    public Response saveInterpreterServiceURL(@FormParam("gfacURL") String gfacURL) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            URI gfacURI = new URI(gfacURL);
-            Boolean result = airavataRegistry.saveInterpreterServiceURL(gfacURI);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (URISyntaxException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        }
-    }
-
-
-    /**
-     *
-     * @param gfacURL
-     * @return
-     */
-    @DELETE
-    @Path("delete/interpreterserviceurl")
-    @Produces("text/plain")
-    public Response deleteInterpreterServiceURL(@QueryParam("gfacURL") String gfacURL) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            URI gfacURI = new URI(gfacURL);
-            Boolean result = airavataRegistry.deleteInterpreterServiceURL(gfacURI);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (URISyntaxException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
-    public List<URI> getMessageBoxServiceURLList() {
-        return null;
-    }
-
-    /**
-     *
-     * @param gfacURL
-     * @return
-     */
-    @POST
-    @Path("save/messageboxserviceurl")
-    @Produces("text/plain")
-    public Response saveMessageBoxServiceURL(@FormParam("gfacURL") String gfacURL) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            URI gfacURI = new URI(gfacURL);
-            Boolean result = airavataRegistry.saveMessageBoxServiceURL(gfacURI);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (URISyntaxException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        }
-    }
-
-    /**
-     *
-     * @param gfacURL
-     * @return
-     */
-    @DELETE
-    @Path("delete/messageboxserviceurl")
-    @Produces("text/plain")
-    public Response deleteMessageBoxServiceURL(@QueryParam("gfacURL") String gfacURL) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            URI gfacURI = new URI(gfacURL);
-            Boolean result = airavataRegistry.deleteMessageBoxServiceURL(gfacURI);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (URISyntaxException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
-    public List<URI> getEventingServiceURLList() {
+    public Response getServiceDescriptorMetadata(String s){
         return null;
     }
 
 
-    /**
-     *
-     * @param gfacURL
-     * @return
-     */
-    @POST
-    @Path("save/eventingserviceurl")
-    @Produces("text/plain")
-    public Response saveEventingServiceURL(@FormParam("gfacURL") String gfacURL) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            URI gfacURI = new URI(gfacURL);
-            Boolean result = airavataRegistry.saveEventingServiceURL(gfacURI);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (URISyntaxException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        }
-    }
-
-    /**
-     *
-     * @param gfacURL
-     * @return
-     */
-    @DELETE
-    @Path("delete/eventingserviceurl")
-    @Produces("text/plain")
-    public Response deleteEventingServiceURL(@QueryParam("gfacURL") String gfacURL) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            URI gfacURI = new URI(gfacURL);
-            Boolean result = airavataRegistry.deleteEventingServiceURL(gfacURI);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (URISyntaxException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
-    public List<String> getGFacDescriptorList() {
-        return null;
-    }
-
-
-    /**
-     *
-     * @param resourceID
-     * @param workflowName
-     * @param resourceDesc
-     * @param workflowAsaString
-     * @param owner
-     * @param isMakePublic
-     * @return
-     */
-    @POST
-    @Path("save/workflow")
-    @Produces("text/plain")
-    public Response saveWorkflow(@FormParam("resourceID") String resourceID,
-                                 @FormParam("workflowName") String workflowName,
-                                 @FormParam("resourceDesc") String resourceDesc,
-                                 @FormParam("workflowAsString") String workflowAsaString,
-                                 @FormParam("owner") String owner,
-                                 @FormParam("isMakePublic") String isMakePublic) {
-        boolean isMakePublicState = false;
-        QName resourceId = null;
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            resourceId = new QName(resourceID);
-            if (isMakePublic == "true") {
-                isMakePublicState = true;
-            }
-            Boolean result = airavataRegistry.saveWorkflow(resourceId, workflowName, resourceDesc, workflowAsaString, owner, isMakePublicState);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    /**
-     *
-     * @param userName
-     * @return
-     */
-    public Map<QName, Node> getWorkflows(String userName) {
-        return null;
-    }
-
-    /**
-     *
-     * @param templateID
-     * @param userName
-     * @return
-     */
-    public Node getWorkflow(QName templateID, String userName) {
-        return null;
-    }
-
-    /**
-     *
-     * @param resourceID
-     * @param userName
-     * @return
-     */
-    @DELETE
-    @Path("delete/workflow")
-    @Produces("text/plain")
-    public Response deleteWorkflow(@QueryParam("resourceID") String resourceID,
-                                   @QueryParam("userName") String userName) {
-        QName resourceId = null;
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            resourceId = new QName(resourceID);
-            Boolean result = airavataRegistry.deleteWorkflow(resourceId, userName);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-
-    }
-
-    /**
-     *
-     * @param serviceId
-     * @return
-     */
-    @DELETE
-    @Path("delete/serviceDescription")
-    @Produces("text/plain")
-    public Response deleteServiceDescription(@QueryParam("serviceID") String serviceId) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            airavataRegistry.deleteServiceDescription(serviceId);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-
-
-    }
-
-    /**
-     *
-     * @param serviceName
-     * @param hostName
-     * @param applicationName
-     * @return
-     */
-    @DELETE
-    @Path("delete/deploymentDescription")
-    @Produces("text/plain")
-    public Response deleteDeploymentDescription(@QueryParam("serviceName") String serviceName,
-                                                @QueryParam("hostName") String hostName,
-                                                @QueryParam("applicationName") String applicationName) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            airavataRegistry.deleteDeploymentDescription(serviceName, hostName, applicationName);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    /**
-     *
-     * @param hostId
-     * @return
-     */
-    @DELETE
-    @Path("delete/hostDescription")
-    @Produces("text/plain")
-    public Response deleteHostDescription(@QueryParam("hostID") String hostId) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            airavataRegistry.deleteHostDescription(hostId);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    /**
-     *
-     * @param workflowInputData
-     * @return
-     */
-    public boolean saveWorkflowExecutionServiceInput(WorkflowServiceIOData workflowInputData) {
-        return true;
-    }
-
-    /**
-     *
-     * @param workflowOutputData
-     * @return
-     */
-    public boolean saveWorkflowExecutionServiceOutput(WorkflowServiceIOData workflowOutputData) {
-        return true;
-    }
-
-    /**
-     *
-     * @param experimentIdRegEx
-     * @param workflowNameRegEx
-     * @param nodeNameRegEx
-     * @return
-     */
-    public List<WorkflowServiceIOData> searchWorkflowExecutionServiceInput(String experimentIdRegEx, String workflowNameRegEx, String nodeNameRegEx) {
-        return null;
-    }
-
-
-    /**
-     *
-     * @param experimentId
-     * @return
-     */
     @GET
-    @Path("workflow/executionTemplate")
+    @Path("applicationdescriptor/exist")
     @Produces("text/plain")
-    public Response getWorkflowExecutionTemplateName(@QueryParam("experimentID") String experimentId) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            String result = airavataRegistry.getWorkflowExecutionTemplateName(experimentId);
-            if (result != null) {
+    public Response isApplicationDescriptorExists(@QueryParam("serviceName")String serviceName,
+                                                  @QueryParam("hostName")String hostName,
+                                                  @QueryParam("descriptorName")String descriptorName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        boolean state;
+        try{
+            state = airavataRegistry.isApplicationDescriptorExists(serviceName, hostName, descriptorName);
+            if (state) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
+                builder.entity("True");
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
@@ -2068,39 +777,52 @@ public class RegistryResource {
         }
     }
 
-    /**
-     *
-     * @param experimentIdRegEx
-     * @param workflowNameRegEx
-     * @param nodeNameRegEx
-     * @return
-     */
-    public List<WorkflowServiceIOData> searchWorkflowExecutionServiceOutput(String experimentIdRegEx, String workflowNameRegEx, String nodeNameRegEx) {
-        return null;
+    @POST
+    @Path("applicationdescriptor/save")
+    @Produces("text/xml")
+    public Response addApplicationDescriptor(@FormParam("service") String service,
+                                         @FormParam("host") String host,
+                                         @FormParam("application") String application){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
+            String serviceName = serviceDescription.getType().getName();
+            HostDescription hostDescription = HostDescription.fromXML(host);
+            String hostName = hostDescription.getType().getHostName();
+            ApplicationDeploymentDescription applicationDeploymentDescription = ApplicationDeploymentDescription.fromXML(application);
+            airavataRegistry.addApplicationDescriptor(serviceName, hostName, applicationDeploymentDescription);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (DescriptorAlreadyExistsException e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (XmlException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param experimentId
-     * @param workflowIntanceName
-     * @return
-     */
     @POST
-    @Path("save/workflowExecutionName")
-    @Produces("text/plain")
-    public Response saveWorkflowExecutionName(@FormParam("experimentID") String experimentId,
-                                              @FormParam("workflowInstanceName") String workflowIntanceName) {
-        airavataRegistry = (AiravataRegistry) context.getAttribute("airavataRegistry");
-        try {
-            Boolean result = airavataRegistry.saveWorkflowExecutionName(experimentId, workflowIntanceName);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("true");
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
+    @Path("applicationdescriptor/save")
+    @Produces("text/xml")
+    public Response addApplicationDesc(@FormParam("serviceName") String serviceName,
+                                       @FormParam("hostName") String hostName,
+                                       @FormParam("application") String application) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            ApplicationDeploymentDescription applicationDeploymentDescription = ApplicationDeploymentDescription.fromXML(application);
+            airavataRegistry.addApplicationDescriptor(serviceName, hostName, applicationDeploymentDescription);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (DescriptorAlreadyExistsException e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (XmlException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
@@ -2108,220 +830,1113 @@ public class RegistryResource {
 
     }
 
-    /**
-     *
-     * @param experimentId
-     * @param status
-     * @return
-     */
-    public boolean saveWorkflowExecutionStatus(String experimentId, WorkflowInstanceStatus status) {
-        return true;
+    @POST
+    @Path("servicedescriptor/update")
+    @Produces("text/xml")
+    public Response udpateApplicationDescriptor(@FormParam("service") String service,
+                                                @FormParam("host") String host,
+                                                @FormParam("application") String application) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
+            HostDescription hostDescription = HostDescription.fromXML(host);
+            ApplicationDeploymentDescription applicationDeploymentDescription = ApplicationDeploymentDescription.fromXML(application);
+            airavataRegistry.udpateApplicationDescriptor(serviceDescription, hostDescription, applicationDeploymentDescription);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (DescriptorAlreadyExistsException e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (XmlException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+
     }
 
-    /**
-     *
-     * @param experimentId
-     * @param status
-     * @return
-     */
-    public boolean saveWorkflowExecutionStatus(String experimentId, WorkflowInstanceStatus.ExecutionStatus status) {
-        return true;
+    @POST
+    @Path("servicedesc/update")
+    @Produces("text/xml")
+    public Response updateApplicationDescriptor(@FormParam("serviceName") String serviceName,
+                                            @FormParam("hostName")String hostName,
+                                            @FormParam("application") String application){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            ApplicationDeploymentDescription applicationDeploymentDescription = ApplicationDeploymentDescription.fromXML(application);
+            airavataRegistry.updateApplicationDescriptor(serviceName, hostName, applicationDeploymentDescription);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (DescriptorAlreadyExistsException e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (XmlException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param experimentId
-     * @return
-     */
-    public WorkflowInstanceStatus getWorkflowExecutionStatus(String experimentId) {
+    @GET
+    @Path("application/description")
+    @Produces("text/xml")
+    public Response getApplicationDescriptor(@QueryParam("serviceName") String serviceName,
+                                             @QueryParam("hostName") String hostName,
+                                             @QueryParam("applicationName") String applicationName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            String result = airavataRegistry.getApplicationDescriptor(serviceName, hostName, applicationName).toXML();
+            if (result != null) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(result);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("application/descriptors")
+    @Produces("text/xml")
+    public Response getApplicationDescriptors(@QueryParam("serviceName")String serviceName,
+                                             @QueryParam("hostName") String hostName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            String result = airavataRegistry.getApplicationDescriptors(serviceName, hostName).toXML();
+            if (result != null) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(result);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("application/descriptors")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getApplicationDescriptors(@QueryParam("serviceName") String serviceName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            Map<String, ApplicationDeploymentDescription> applicationDescriptors = airavataRegistry.getApplicationDescriptors(serviceName);
+            ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
+            applicationDescriptorList.setMap(applicationDescriptors);
+            if(applicationDescriptors.size() != 0){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(applicationDescriptorList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (MalformedDescriptorException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("application/descriptors")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getApplicationDescriptors(){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            Map<String[], ApplicationDeploymentDescription> applicationDescriptors = airavataRegistry.getApplicationDescriptors();
+            ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
+            applicationDescriptorList.setApplicationDeploymentDescriptionMap(applicationDescriptors);
+            if(applicationDescriptors.size() != 0){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(applicationDescriptorList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (MalformedDescriptorException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @DELETE
+    @Path("applicationdescriptor/delete")
+    @Produces("text/plain")
+    public Response removeApplicationDescriptor(@QueryParam("serviceName") String serviceName,
+                                                @QueryParam("hostName") String hostName,
+                                                @QueryParam("appName") String appName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.removeApplicationDescriptor(serviceName, hostName, appName);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (DescriptorDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    public Response getApplicationDescriptorMetadata(String s, String s1, String s2) {
         return null;
     }
 
-    /**
-     *
-     * @param experimentId
-     * @param outputNodeName
-     * @param output
-     * @return
-     */
-    public boolean saveWorkflowExecutionOutput(String experimentId, String outputNodeName, String output) {
-        return true;
+    /**---------------------------------Project Registry----------------------------------**/
+    @GET
+    @Path("project/exist")
+    @Produces("text/plain")
+    public Response isWorkspaceProjectExists(@QueryParam("projectName") String projectName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            boolean result = airavataRegistry.isWorkspaceProjectExists(projectName);
+            if (result) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param experimentId
-     * @param data
-     * @return
-     */
-    public boolean saveWorkflowExecutionOutput(String experimentId, WorkflowIOData data) {
-        return true;
+    @POST
+    @Path("project/exist")
+    @Produces("text/plain")
+    public Response isWorkspaceProjectExists(@FormParam("projectName") String projectName,
+                                             @FormParam("createIfNotExists") String createIfNotExists) {
+        boolean createIfNotExistStatus = false;
+        if(createIfNotExists.equals("true")){
+            createIfNotExistStatus = true;
+        }
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            boolean result = airavataRegistry.isWorkspaceProjectExists(projectName, createIfNotExistStatus);
+            if (result) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param experimentId
-     * @param outputNodeName
-     * @return
-     */
-    public WorkflowIOData getWorkflowExecutionOutput(String experimentId, String outputNodeName) {
-        return null;
+    @POST
+    @Path("add/project")
+    @Produces("text/plain")
+    public Response addWorkspaceProject(@FormParam("projectName") String projectName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            WorkspaceProject workspaceProject = new WorkspaceProject(projectName, airavataRegistry);
+            airavataRegistry.addWorkspaceProject(workspaceProject);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (WorkspaceProjectAlreadyExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param experimentId
-     * @return
-     */
-    public List<WorkflowIOData> getWorkflowExecutionOutput(String experimentId) {
-        return null;
+    @POST
+    @Path("update/project")
+    @Produces("text/plain")
+    public Response updateWorkspaceProject(@FormParam("projectName") String projectName){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            WorkspaceProject workspaceProject = new WorkspaceProject(projectName, airavataRegistry);
+            airavataRegistry.updateWorkspaceProject(workspaceProject);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (WorkspaceProjectDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param exeperimentId
-     * @return
-     */
-    public String[] getWorkflowExecutionOutputNames(String exeperimentId) {
-        return null;
+    @DELETE
+    @Path("delete/project")
+    @Produces("text/plain")
+    public Response deleteWorkspaceProject(@QueryParam("projectName") String projectName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.deleteWorkspaceProject(projectName);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (WorkspaceProjectDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param experimentId
-     * @param user
-     * @return
-     */
-    public boolean saveWorkflowExecutionUser(String experimentId, String user) {
-        return true;
+    @GET
+    @Path("get/project")
+    @Produces("text/plain")
+    public Response getWorkspaceProject(@QueryParam("projectName") String projectName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            WorkspaceProject workspaceProject = airavataRegistry.getWorkspaceProject(projectName);
+            if(workspaceProject != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workspaceProject);
+                return builder.build();
+            } else{
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                return builder.build();
+            }
+        } catch (WorkspaceProjectDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param experimentId
-     * @return
-     */
-    public String getWorkflowExecutionUser(String experimentId) {
-        return null;
+    @GET
+    @Path("get/projects")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getWorkspaceProjects() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            List<WorkspaceProject> workspaceProjects = airavataRegistry.getWorkspaceProjects();
+            WorkspaceProjectList workspaceProjectList = new WorkspaceProjectList();
+            WorkspaceProject[] workspaceProjectSet = new WorkspaceProject[workspaceProjects.size()];
+            for(int i = 0; i < workspaceProjects.size(); i++) {
+                workspaceProjectSet[i] = workspaceProjects.get(i);
+            }
+            workspaceProjectList.setWorkspaceProjects(workspaceProjectSet);
+            if (workspaceProjects.size() != 0) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workspaceProjectList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param experimentId
-     * @return
-     */
-    public String getWorkflowExecutionName(String experimentId) {
-        return null;
+    @DELETE
+    @Path("delete/experiment")
+    @Produces("text/plain")
+    public Response removeExperiment(@QueryParam("experimentId") String experimentId){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.removeExperiment(experimentId);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (ExperimentDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param experimentId
-     * @return
-     */
-    public WorkflowExecution getWorkflowExecution(String experimentId) {
-        return null;
+    @GET
+    @Path("get/experiments")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getExperiments() throws RegistryException {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            List<AiravataExperiment> experiments = airavataRegistry.getExperiments();
+            ExperimentList experimentList = new ExperimentList();
+            AiravataExperiment[] airavataExperiments = new AiravataExperiment[experiments.size()];
+            for (int i =0; i < experiments.size(); i++){
+                airavataExperiments[i] = experiments.get(i);
+            }
+            experimentList.setExperiments(airavataExperiments);
+            if(experiments.size() != 0){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(experimentList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        }catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param user
-     * @return
-     */
-    public List<String> getWorkflowExecutionIdByUser(String user) {
-        return null;
+    @GET
+    @Path("get/experiments")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getExperiments(@QueryParam("projectName") String projectName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            List<AiravataExperiment> experiments = airavataRegistry.getExperiments(projectName);
+            ExperimentList experimentList = new ExperimentList();
+            AiravataExperiment[] airavataExperiments = new AiravataExperiment[experiments.size()];
+            for (int i =0; i < experiments.size(); i++){
+                airavataExperiments[i] = experiments.get(i);
+            }
+            experimentList.setExperiments(airavataExperiments);
+            if(experiments.size() != 0){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(experimentList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param user
-     * @return
-     */
-    public List<WorkflowExecution> getWorkflowExecutionByUser(String user) {
-        return null;
+    @GET
+    @Path("get/experiments")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getExperiments(@QueryParam("fromDate") Date fromDate,
+                                   @QueryParam("toDate") Date toDate) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            List<AiravataExperiment> experiments = airavataRegistry.getExperiments(fromDate, toDate);
+            ExperimentList experimentList = new ExperimentList();
+            AiravataExperiment[] airavataExperiments = new AiravataExperiment[experiments.size()];
+            for (int i =0; i < experiments.size(); i++){
+                airavataExperiments[i] = experiments.get(i);
+            }
+            experimentList.setExperiments(airavataExperiments);
+            if(experiments.size() != 0){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(experimentList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param user
-     * @param pageSize
-     * @param pageNo
-     * @return
-     */
-    public List<WorkflowExecution> getWorkflowExecutionByUser(String user, int pageSize, int pageNo) {
-        return null;
+    @GET
+    @Path("get/experiments")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getExperiments(@QueryParam("projectName") String projectName,
+                                   @QueryParam("fromDate") Date fromDate,
+                                   @QueryParam("toDate") Date toDate) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            List<AiravataExperiment> experiments = airavataRegistry.getExperiments(projectName, fromDate, toDate);
+            ExperimentList experimentList = new ExperimentList();
+            AiravataExperiment[] airavataExperiments = new AiravataExperiment[experiments.size()];
+            for (int i =0; i < experiments.size(); i++){
+                airavataExperiments[i] = experiments.get(i);
+            }
+            experimentList.setExperiments(airavataExperiments);
+            if(experiments.size() != 0){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(experimentList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param experimentId
-     * @return
-     */
-    public String getWorkflowExecutionMetadata(String experimentId) {
-        return null;
+    @POST
+    @Path("add/experiment")
+    @Produces("text/plain")
+    public Response addExperiment(@FormParam("projectName") String projectName,
+                                  @FormParam("experimentID") AiravataExperiment experiment){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.addExperiment(projectName, experiment);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (ExperimentDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        } catch (WorkspaceProjectDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+
     }
 
-    /**
-     *
-     * @param experimentId
-     * @param metadata
-     * @return
-     */
-    public boolean saveWorkflowExecutionMetadata(String experimentId, String metadata) {
-        return true;
+    @GET
+    @Path("experiment/exist")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response isExperimentExists(@QueryParam("experimentId") String experimentId) throws RegistryException {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.isExperimentExists(experimentId);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (ExperimentDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        }
     }
 
-//    public boolean saveWorkflowData(WorkflowRunTimeData workflowData) {
-//        return true;
-//    }
-
-    /**
-     *
-     * @param experimentId
-     * @param timestamp
-     * @return
-     */
-    public boolean saveWorkflowLastUpdateTime(String experimentId, Timestamp timestamp) {
-        return true;
+    @GET
+    @Path("experiment/exist")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response isExperimentExists(@QueryParam("experimentId") String experimentId,
+                                       @QueryParam("createIfNotPresent") boolean createIfNotPresent){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.isExperimentExists(experimentId, createIfNotPresent);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param workflowInstanceID
-     * @param workflowNodeID
-     * @param status
-     * @return
-     */
-    public boolean saveWorkflowNodeStatus(String workflowInstanceID, String workflowNodeID, WorkflowInstanceStatus.ExecutionStatus status) {
-        return true;
+    @POST
+    @Path("update/experiment")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateExperimentExecutionUser(@QueryParam("experimentId") String experimentId,
+                                                  @QueryParam("user") String user) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            Boolean result = airavataRegistry.updateExperimentExecutionUser(experimentId,user);
+            if (result) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        }
     }
 
-    /**
-     *
-     * @param workflowInstanceID
-     * @param workflowNodeID
-     * @param lastUpdateTime
-     * @return
-     */
-    public boolean saveWorkflowNodeLastUpdateTime(String workflowInstanceID, String workflowNodeID, Timestamp lastUpdateTime) {
-        return true;
+    @GET
+    @Path("experiment/executionuser")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getExperimentExecutionUser(@QueryParam("experimentId") String experimentId) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            String user = airavataRegistry.getExperimentExecutionUser(experimentId);
+            if(user != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(user);
+                return builder.build();
+            }else{
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-//    public boolean saveWorkflowNodeGramData(WorkflowNodeGramData workflowNodeGramData){
-//        return true;
-//    }
+    @GET
+    @Path("experiment/name")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getExperimentName(@QueryParam("experimentID") String experimentId) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            String result = airavataRegistry.getExperimentName(experimentId);
+            if(result != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(result);
+                return builder.build();
+            }else{
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-    /**
-     *
-     * @param workflowInstanceID
-     * @param workflowNodeID
-     * @param localJobID
-     * @return
-     */
-    public boolean saveWorkflowNodeGramLocalJobID(String workflowInstanceID, String workflowNodeID, String localJobID) {
-        return true;
+    @POST
+    @Path("update/experimentname")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateExperimentName(@QueryParam("experimentId") String experimentId,
+                                         @QueryParam("experimentName") String experimentName){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            Boolean result = airavataRegistry.updateExperimentName(experimentId, experimentName);
+            if (result) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        }
     }
 
 
+    @GET
+    @Path("get/experimentmetadata")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getExperimentMetadata(@QueryParam("experimentId") String experimentId) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            String result = airavataRegistry.getExperimentMetadata(experimentId);
+            if(result != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(result);
+                return builder.build();
+            }else{
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("update/experimentmetadata")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateExperimentMetadata(@FormParam("experimentId")String experimentId,
+                                             @FormParam("metadata") String metadata) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            Boolean result = airavataRegistry.updateExperimentMetadata(experimentId, metadata);
+            if (result) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("get/workflowtemplatename")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getWorkflowExecutionTemplateName(@QueryParam("workflowInstanceId") String workflowInstanceId) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            String result = airavataRegistry.getWorkflowExecutionTemplateName(workflowInstanceId);
+            if(result != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(result);
+                return builder.build();
+            }else{
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("update/workflowinstancetemplatename")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response setWorkflowInstanceTemplateName(@FormParam("workflowInstanceId") String workflowInstanceId,
+                                                    @FormParam("templateName") String templateName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.setWorkflowInstanceTemplateName(workflowInstanceId, templateName);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("get/experimentworkflowinstances")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getExperimentWorkflowInstances(@QueryParam("experimentId") String experimentId){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            List<WorkflowInstance> experimentWorkflowInstances = airavataRegistry.getExperimentWorkflowInstances(experimentId);
+            WorkflowInstancesList workflowInstancesList = new WorkflowInstancesList();
+            WorkflowInstance[] workflowInstances = new WorkflowInstance[experimentWorkflowInstances.size()];
+            for (int i=0; i<experimentWorkflowInstances.size(); i++){
+                workflowInstances[i] = experimentWorkflowInstances.get(i);
+            }
+            workflowInstancesList.setWorkflowInstances(workflowInstances);
+            if (experimentWorkflowInstances.size() != 0) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowInstancesList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("workflowinstance/exist")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response isWorkflowInstanceExists(@QueryParam("instanceId") String instanceId){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            Boolean result = airavataRegistry.isWorkflowInstanceExists(instanceId);
+            if (result) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        }
+
+    }
+
+    @GET
+    @Path("workflowinstance/exist")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response isWorkflowInstanceExists(@QueryParam("instanceId") String instanceId,
+                                             @QueryParam("createIfNotPresent") boolean createIfNotPresent){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            Boolean result = airavataRegistry.isWorkflowInstanceExists(instanceId, createIfNotPresent);
+            if (result) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("update/workflowinstancestatus")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateWorkflowInstanceStatus(@FormParam("instanceId") String instanceId,
+                                                 @FormParam("executionStatus") String executionStatus) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            WorkflowInstanceStatus.ExecutionStatus status = WorkflowInstanceStatus.ExecutionStatus.valueOf(executionStatus);
+            Boolean result = airavataRegistry.updateWorkflowInstanceStatus(instanceId, status);
+            if (result) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("update/workflowinstancestatus")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateWorkflowInstanceStatus(@FormParam("experimentId") String experimentId,
+                                                 @FormParam("workflowInstanceId") String workflowInstanceId,
+                                                 @FormParam("executionStatus") String executionStatus,
+                                                 @FormParam("statusUpdateTime") Date statusUpdateTime) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            WorkflowInstance workflowInstance =  new WorkflowInstance(experimentId, workflowInstanceId);
+            WorkflowInstanceStatus.ExecutionStatus status = WorkflowInstanceStatus.ExecutionStatus.valueOf(executionStatus);
+            WorkflowInstanceStatus workflowInstanceStatus = new WorkflowInstanceStatus(workflowInstance, status, statusUpdateTime);
+            Boolean result = airavataRegistry.updateWorkflowInstanceStatus(workflowInstanceStatus);
+            if (result) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("get/workflowinstancestatus")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getWorkflowInstanceStatus(@QueryParam("instanceId") String instanceId) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            WorkflowInstanceStatus workflowInstanceStatus = airavataRegistry.getWorkflowInstanceStatus(instanceId);
+            if(workflowInstanceStatus != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowInstanceStatus);
+                return builder.build();
+            }else{
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @POST
+    @Path("update/workflownodeinput")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateWorkflowNodeInput(@FormParam("experimentID") String experimentID,
+                                            @FormParam("nodeID") String nodeID,
+                                            @FormParam("workflowInstanceID") String workflowInstanceID,
+                                            @FormParam("data") String data){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            WorkflowInstance workflowInstance = new WorkflowInstance(experimentID, nodeID);
+            WorkflowInstanceNode workflowInstanceNode = new WorkflowInstanceNode(workflowInstance, nodeID);
+            boolean result = airavataRegistry.updateWorkflowNodeInput(workflowInstanceNode, data);
+            if (result) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        }
+
+    }
+
+    @POST
+    @Path("update/workflownodeoutput")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateWorkflowNodeOutput(@FormParam("experimentID") String experimentID,
+                                             @FormParam("nodeID") String nodeID,
+                                             @FormParam("workflowInstanceID") String workflowInstanceID,
+                                             @FormParam("data") String data) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            WorkflowInstance workflowInstance = new WorkflowInstance(experimentID, nodeID);
+            WorkflowInstanceNode workflowInstanceNode = new WorkflowInstanceNode(workflowInstance, nodeID);
+            boolean result = airavataRegistry.updateWorkflowNodeOutput(workflowInstanceNode, data);
+            if (result) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("search/workflowinstancenodeinput")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response searchWorkflowInstanceNodeInput(@QueryParam("experimentIdRegEx") String experimentIdRegEx,
+                                                    @QueryParam("workflowNameRegEx") String workflowNameRegEx,
+                                                    @QueryParam("nodeNameRegEx") String nodeNameRegEx) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.searchWorkflowInstanceNodeInput(experimentIdRegEx, workflowNameRegEx, nodeNameRegEx);
+            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
+            WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
+            for (int i = 0; i<workflowNodeIODataList.size(); i++){
+                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
+            }
+            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
+            if (workflowNodeIODataList.size() != 0) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowNodeIOData);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("search/workflowinstancenodeoutput")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response searchWorkflowInstanceNodeOutput(@QueryParam("experimentIdRegEx") String experimentIdRegEx,
+                                                     @QueryParam("workflowNameRegEx") String workflowNameRegEx,
+                                                     @QueryParam("nodeNameRegEx") String nodeNameRegEx) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.searchWorkflowInstanceNodeOutput(experimentIdRegEx, workflowNameRegEx, nodeNameRegEx);
+            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
+            WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
+            for (int i = 0; i<workflowNodeIODataList.size(); i++){
+                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
+            }
+            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
+            if (workflowNodeIODataList.size() != 0) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowNodeIOData);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("get/workflowinstancenodeinput")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getWorkflowInstanceNodeInput(@QueryParam("workflowInstanceId") String workflowInstanceId,
+                                                 @QueryParam("nodeType") String nodeType) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.getWorkflowInstanceNodeInput(workflowInstanceId, nodeType);
+            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
+            WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
+            for (int i = 0; i<workflowNodeIODataList.size(); i++){
+                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
+            }
+            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
+            if (workflowNodeIODataList.size() != 0) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowNodeIOData);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("get/workflowinstancenodeoutput")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getWorkflowInstanceNodeOutput(@QueryParam("workflowInstanceId") String workflowInstanceId,
+                                                  @QueryParam("nodeType") String nodeType) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.getWorkflowInstanceNodeOutput(workflowInstanceId, nodeType);
+            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
+            WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
+            for (int i = 0; i<workflowNodeIODataList.size(); i++){
+                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
+            }
+            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
+            if (workflowNodeIODataList.size() != 0) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowNodeIOData);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+    @GET
+    public Response getExperiment(String s) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getExperimentIdByUser(String s) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getExperimentByUser(String s) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getExperimentByUser(String s, int i, int i1) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response updateWorkflowNodeStatus(WorkflowInstanceNodeStatus workflowInstanceNodeStatus) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response updateWorkflowNodeStatus(String s, String s1, String s2) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response updateWorkflowNodeStatus(String s, String s1) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getWorkflowNodeStatus(String s, String s1) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getWorkflowNodeStartTime(String s, String s1) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getWorkflowStartTime(String s) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response updateWorkflowNodeGramData(WorkflowNodeGramData workflowNodeGramData) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getWorkflowInstanceData(String s) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response isWorkflowInstanceNodePresent(String s, String s1) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response isWorkflowInstanceNodePresent(String s, String s1, boolean b) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getWorkflowInstanceNodeData(String s, String s1) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response addWorkflowInstance(String s, String s1, String s2) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response updateWorkflowNodeType(String s, String s1, String s2) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response addWorkflowInstanceNode(String s, String s1) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public Response isWorkflowExists(String s) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response addWorkflow(String s, String s1) throws UserWorkflowAlreadyExistsException, RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response updateWorkflow(String s, String s1) throws UserWorkflowDoesNotExistsException, RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getWorkflowGraphXML(String s) throws UserWorkflowDoesNotExistsException, RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getWorkflows() throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getWorkflowMetadata(String s) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response removeWorkflow(String s) throws UserWorkflowDoesNotExistsException, RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response isPublishedWorkflowExists(String s) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response publishWorkflow(String s, String s1) throws PublishedWorkflowAlreadyExistsException, UserWorkflowDoesNotExistsException, RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response publishWorkflow(String s) throws PublishedWorkflowAlreadyExistsException, UserWorkflowDoesNotExistsException, RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getPublishedWorkflowGraphXML(String s) throws PublishedWorkflowDoesNotExistsException, RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getPublishedWorkflowNames() throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getPublishedWorkflows() throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response getPublishedWorkflowMetadata(String s) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Response removePublishedWorkflow(String s) throws PublishedWorkflowDoesNotExistsException, RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
 
