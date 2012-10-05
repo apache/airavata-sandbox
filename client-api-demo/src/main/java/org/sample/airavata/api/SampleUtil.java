@@ -12,16 +12,16 @@ import java.net.URISyntaxException;
 public class SampleUtil {
 
     public static AiravataAPI getAiravataAPI(String username, String password, String registryRMIURI) {
-        URI jcrRegistryURI = null;
+        URI registryURI = null;
         try {
-            jcrRegistryURI = new URI(registryRMIURI);
+            registryURI = new URI(registryRMIURI);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
 
         AiravataAPI airavataAPI = null;
         try {
-            airavataAPI = AiravataClientUtils.getAPI(jcrRegistryURI, username, password);
+            airavataAPI = AiravataClientUtils.getAPI(registryURI, username, password);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (RepositoryException e) {
