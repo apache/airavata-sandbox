@@ -32,7 +32,7 @@
             ProvenanceManager provenanceManager = airavataAPI.getProvenanceManager();
             List<String> experimentsIDs = null;
             try {
-                experimentsIDs = provenanceManager.getExperiments(airavataAPI.getCurrentUser());
+                experimentsIDs = provenanceManager.getExperimentIdList(airavataAPI.getCurrentUser());
             } catch (AiravataAPIInvocationException e) {
                 e.printStackTrace();
                 // TODO :add alert

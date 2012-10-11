@@ -38,10 +38,10 @@
 
             WorkflowInstanceData workflowInstanceData = provenanceManager.getWorkflowInstanceData(experimentID, experimentID);
             String topicId = workflowInstanceData.getTopicId();
-            String user = workflowInstanceData.getUser();
+//            String user = workflowInstanceData.getUser();
             String workflowName = workflowInstanceData.getWorkflowName();
             String experimentId1 = workflowInstanceData.getExperimentId();
-            String metadata = workflowInstanceData.getMetadata();
+//            String metadata = workflowInstanceData.getMetadata();
             String status = null;
             if(workflowInstanceData.getStatus()!=null) {
                 status = workflowInstanceData.getStatus().toString();
@@ -58,7 +58,7 @@
 
             <table border="1">
                 <tr><td>Topic ID          </td><td> <%=topicId%></td></tr>
-                <tr><td>User              </td><td> <%=user%></td></tr>
+                <%--<tr><td>User              </td><td> <%=user%></td></tr>--%>
                 <%--<tr><td>Workflow Name     </td><td> <%=workflowName%></td></tr>--%>
                 <tr><td>Experiment ID     </td><td> <%=experimentID%></td></tr>
                 <%--<tr><td>Metadata          </td><td> <%=metadata%></td></tr>--%>
