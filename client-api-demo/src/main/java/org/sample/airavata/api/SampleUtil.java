@@ -3,14 +3,10 @@ package org.sample.airavata.api;
 import org.apache.airavata.client.AiravataClient;
 import org.apache.airavata.client.AiravataClientUtils;
 import org.apache.airavata.client.api.AiravataAPI;
-import org.apache.airavata.common.registry.api.exception.RegistryException;
 
-import javax.jcr.RepositoryException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;

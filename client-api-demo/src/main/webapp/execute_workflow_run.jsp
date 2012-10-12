@@ -19,16 +19,7 @@
     <%
         workflowName = request.getParameter("workflowName");
 
-        InputStream stream = application.getResourceAsStream("/deployment.properties");
-        Properties props = new Properties();
-        props.load(stream);
-
-        username = props.getProperty("jcr.username");
-        password = props.getProperty("jcr.password");
-        registryURL = props.getProperty("jcr.url");
-
-        AiravataAPI airavataAPI = SampleUtil.getAiravataAPI(username, password, registryURL);
-
+        AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
         List<WorkflowInput> workflowInputs = null;
         try {
             workflowInputs = airavataAPI.getWorkflowManager().getWorkflow(workflowName).getWorkflowInputs();

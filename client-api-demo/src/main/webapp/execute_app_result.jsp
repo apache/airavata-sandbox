@@ -48,7 +48,7 @@
 //                  TODO alert(e)
             }
 
-            out.print("Job submitted");
+            System.out.println("Job submitted");
 
 
         %>

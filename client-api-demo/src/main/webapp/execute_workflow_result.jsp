@@ -19,10 +19,10 @@
 
         <br>
         <%
-            String  username = request.getParameter("userName");
-            String password = request.getParameter("password");
-            String registryURL = request.getParameter("registryURL");
-            AiravataAPI airavataAPI = SampleUtil.getAiravataAPI(username, password, registryURL);
+//            String  username = request.getParameter("userName");
+//            String password = request.getParameter("password");
+//            String registryURL = request.getParameter("registryURL");
+            AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
 
             String workflowName = request.getParameter("workflowName");
             String arguments = request.getParameter("arguments");
@@ -69,7 +69,7 @@
 //                  TODO alert(e)
             }
             System.out.println("The result is : " + result);
-            out.println("Result : " + result);
+            System.out.println("Result : " + result);
 
         %>
 
