@@ -61,7 +61,9 @@
             String result = null;
             try {
                 // String workflowTemplateId,List<WorkflowInput> inputs, String user, String metadata, String workflowInstanceName
-                result = airavataAPI.getExecutionManager().runExperiment(workflowName, workflowInputs, "admin", "", workflowName);
+                // TODO Check this! NOT WORKING
+                result = airavataAPI.getExecutionManager().runExperiment(workflowName, workflowInputs, "airavata", "", workflowName);
+
             } catch (AiravataAPIInvocationException e) {
                 e.printStackTrace();
 //                  TODO alert(e)

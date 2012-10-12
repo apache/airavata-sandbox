@@ -27,7 +27,7 @@ public class DescriptorRegistrationSample {
 
     // TODO
     public static void registerApplication(AppDescriptorBean appDescriptorBean) throws Exception {
-        AiravataAPI airavataAPI = SampleUtil.getAiravataAPI(appDescriptorBean.getUsername(), appDescriptorBean.getPassword(), appDescriptorBean.getRegistryRMIURI());
+        AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
 
         // Create Host Description
         HostDescription host = new HostDescription();
@@ -114,7 +114,7 @@ public class DescriptorRegistrationSample {
         try {
 
             DefaultInvocationContext ct = new DefaultInvocationContext();
-            AiravataAPI airavataAPI = SampleUtil.getAiravataAPI(username, password, registryRMIURI);
+            AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
             DefaultExecutionContext ec = airavataAPI.getExecutionManager().createDefaultExecutionContext();
             ct.setExecutionContext(ec);
 

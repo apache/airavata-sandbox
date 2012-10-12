@@ -67,7 +67,7 @@
 //                  TODO alert()
             }
 
-            out.print("Registration was successful");
+            System.out.println("Registration was successful");
 
             System.out.println("Registration DONE!");
         %>

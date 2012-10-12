@@ -31,7 +31,7 @@
             String password = props.getProperty("jcr.password");
             String registryURL = props.getProperty("jcr.url");
 
-            AiravataAPI airavataAPI = SampleUtil.getAiravataAPI(username, password, registryURL);
+            AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
             ProvenanceManager provenanceManager = airavataAPI.getProvenanceManager();
 
             String experimentID = request.getParameter("experimentID");
@@ -91,11 +91,12 @@
                                 e.printStackTrace();
                             }
 
+                            if (ioParameterData != null)
                             for (NameValue next : ioParameterData) {
                                 String inputName = next.getName();
                                 String inputValue = next.getValue();
-//                                System.out.println("input name : " + inputName);
-//                                System.out.println("input value : " + inputValue);
+                                System.out.println("input name : " + inputName);
+                                System.out.println("input value : " + inputValue);
 
                 %>
                 <tr>
@@ -106,6 +107,9 @@
                 </tr>
                 <%
 
+                            } else {
+                                // TODO Check
+                                System.out.println("IO parameter Data is null !!!");
                             }
 
                         }
