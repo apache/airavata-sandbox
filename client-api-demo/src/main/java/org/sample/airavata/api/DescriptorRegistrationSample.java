@@ -88,8 +88,6 @@ public class DescriptorRegistrationSample {
                 applicationManager.saveHostDescription(host);
                 applicationManager.saveServiceDescription(serv);
                 applicationManager.saveDeploymentDescription(serv.getType().getName(), host.getType().getHostName(), appDesc);
-
-                applicationManager.deployServiceOnHost(serv.getType().getName(), host.getType().getHostName());
             } catch (AiravataAPIInvocationException e) {
                 e.printStackTrace();
                 throw new Exception(e);
