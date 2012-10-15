@@ -20,20 +20,12 @@
 
         <br>
         <%
-            InputStream stream = application.getResourceAsStream("/deployment.properties");
-            Properties props = new Properties();
-            props.load(stream);
-
-            String username = props.getProperty("jcr.username");
-            String password = props.getProperty("jcr.password");
-            String registryURL = props.getProperty("jcr.url");
-
             try {
-                eventingServiceURL = WorkflowExecutionSample.getEventingServiceURL(username, password, registryURL);
-                messageBoxServiceURL = WorkflowExecutionSample.getMessageBoxServiceURL(username, password, registryURL);
-                registryRMIURI = WorkflowExecutionSample.getRegistryURL(username, password, registryURL);
-                gFaCURL = WorkflowExecutionSample.getGFaCURL(username, password, registryURL);
-                workflowInterpreterServiceURL = WorkflowExecutionSample.getWorkflowInterpreterServiceURL(username, password, registryURL);
+                eventingServiceURL = WorkflowExecutionSample.getEventingServiceURL();
+                messageBoxServiceURL = WorkflowExecutionSample.getMessageBoxServiceURL();
+                registryRMIURI = WorkflowExecutionSample.getRegistryURL();
+                gFaCURL = WorkflowExecutionSample.getGFaCURL();
+                workflowInterpreterServiceURL = WorkflowExecutionSample.getWorkflowInterpreterServiceURL();
 
             } catch (AiravataAPIInvocationException e) {
                 e.printStackTrace();

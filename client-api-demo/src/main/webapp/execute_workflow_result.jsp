@@ -9,6 +9,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 
+<%! String result;%>
+
 <html>
     <head>
         <title>Airavata Server Workflow Execution</title>
@@ -49,16 +51,16 @@
                         value = request.getParameter(name);
                     }
 
-//                    System.out.println("Creating workflow input ...");
-//                    System.out.println("input Name  : " + name);
-//                    System.out.println("input Type : " + type);
-//                    System.out.println("input Value : " + value);
+                    System.out.println("Creating workflow input ...");
+                    System.out.println("input Name  : " + name);
+                    System.out.println("input Type : " + type);
+                    System.out.println("input Value : " + value);
                     WorkflowInput workflowInput = new WorkflowInput(name, type, null, value, false);
                     workflowInputs.add(workflowInput);
                 }
             }
 
-            String result = null;
+            result = null;
             try {
                 // String workflowTemplateId,List<WorkflowInput> inputs, String user, String metadata, String workflowInstanceName
                 // TODO Check this! NOT WORKING
@@ -72,6 +74,8 @@
             System.out.println("Result : " + result);
 
         %>
+
+        Experiment : <%=result%>
 
 
     </body>

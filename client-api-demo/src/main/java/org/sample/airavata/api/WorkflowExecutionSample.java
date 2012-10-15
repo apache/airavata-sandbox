@@ -24,33 +24,32 @@ public class WorkflowExecutionSample {
     public static void main(String[] args) throws Exception {
     }
 
-    public static URI getWorkflowInterpreterServiceURL(String username, String password, String registryRMIURI) throws AiravataAPIInvocationException {
+    public static URI getWorkflowInterpreterServiceURL() throws AiravataAPIInvocationException {
         AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
         return airavataAPI.getAiravataManager().getWorkflowInterpreterServiceURL();
     }
 
-    public static URI getGFaCURL(String username, String password, String registryRMIURI) throws AiravataAPIInvocationException {
+    public static URI getGFaCURL() throws AiravataAPIInvocationException {
         AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
         return airavataAPI.getAiravataManager().getGFaCURL();
     }
 
-    public static URI getRegistryURL(String username, String password, String registryRMIURI) throws AiravataAPIInvocationException {
+    public static URI getRegistryURL() throws AiravataAPIInvocationException {
         AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
         return airavataAPI.getAiravataManager().getRegistryURL();
     }
 
-    public static URI getMessageBoxServiceURL(String username, String password, String registryRMIURI) throws AiravataAPIInvocationException {
+    public static URI getMessageBoxServiceURL() throws AiravataAPIInvocationException {
         AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
         return airavataAPI.getAiravataManager().getMessageBoxServiceURL();
     }
 
-    public static URI getEventingServiceURL(String username, String password, String registryRMIURI) throws AiravataAPIInvocationException {
+    public static URI getEventingServiceURL() throws AiravataAPIInvocationException {
         AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
         return airavataAPI.getAiravataManager().getEventingServiceURL();
     }
 
-    public static String runWorkflow(String username, String password, String registryRMIURI, String workflowTemplateId) {
-
+    public static String runWorkflow(String workflowTemplateId) {
         AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
         List<WorkflowInput> workflowInputs = null;
         try {
@@ -102,10 +101,7 @@ public class WorkflowExecutionSample {
         return null;
     }*/
 
-    public static WorkflowInstance getWorkflowInstanceData(String username,
-                                                           String password,
-                                                           String registryRMIURI,
-                                                           WorkflowInstance workflowInstance) {
+    public static WorkflowInstance getWorkflowInstanceData(WorkflowInstance workflowInstance) {
         AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
         try {
             WorkflowInstanceData workflowInstanceData = airavataAPI.getProvenanceManager().getWorkflowInstanceData(workflowInstance);
@@ -116,9 +112,7 @@ public class WorkflowExecutionSample {
         return null;
     }
 
-    public static List<String> getUserExperimentsList(String username,
-                                                      String password,
-                                                      String registryRMIURI) {
+    public static List<String> getUserExperimentsList() {
         AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
         try {
             List<String> experiments = airavataAPI.getProvenanceManager().getExperimentIdList(airavataAPI.getCurrentUser());

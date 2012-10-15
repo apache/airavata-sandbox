@@ -98,6 +98,27 @@ public class DescriptorRegistrationSample {
 
     }
 
+    public static void registerHost(HostDescriptorBean hostDescriptorBean) {
+        // Create Host Description
+        HostDescription host = new HostDescription();
+        host.getType().changeType(hostDescriptorBean.getHostType());
+        host.getType().setHostName(hostDescriptorBean.getHostName());
+        host.getType().setHostAddress(hostDescriptorBean.getHostAddress());
+        ((GlobusHostType) host.getType()).
+                setGridFTPEndPointArray(new String[]{hostDescriptorBean.getHostEndpoint()});
+        ((GlobusHostType) host.getType()).
+                setGlobusGateKeeperEndPointArray(new String[]{hostDescriptorBean.getGateKeeperEndpoint()});
+
+        AiravataAPI airavataAPI = SampleUtil.getAiravataAPI();
+        ApplicationManager applicationManager = airavataAPI.getApplicationManager();
+        System.out.println("Saving to Registry");
+        try {
+            applicationManager.saveHostDescription(host);
+        } catch (AiravataAPIInvocationException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void execute(String username,
                                String password,
                                String registryRMIURI,

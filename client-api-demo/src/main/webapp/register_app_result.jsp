@@ -69,8 +69,10 @@
 
             System.out.println("Registration was successful");
 
-            System.out.println("Registration DONE!");
+
         %>
+
+        out.print("Registration DONE!");
 
     </body>
 </html>
