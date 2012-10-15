@@ -33,9 +33,10 @@ import java.util.Map;
 *  analogues to main API interfaces of Airavata
 */
 @Path("/registry/api")
-public class RegistryResource implements ConfigurationRegistryService,
-        ProjectsRegistryService, ProvenanceRegistryService, UserWorkflowRegistryService,
-        PublishedWorkflowRegistryService, DescriptorRegistryService{
+//public class RegistryResource implements ConfigurationRegistryService,
+//        ProjectsRegistryService, ProvenanceRegistryService, UserWorkflowRegistryService,
+//        PublishedWorkflowRegistryService, DescriptorRegistryService{
+    public class RegistryResource {
     private final static Logger logger = LoggerFactory.getLogger(RegistryResource.class);
     private JPAResourceAccessor jpa;
     private boolean active=false;
@@ -80,6 +81,7 @@ public class RegistryResource implements ConfigurationRegistryService,
 
     }
 
+    /*
     @GET
     @Path("/configurationlist")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -475,11 +477,12 @@ public class RegistryResource implements ConfigurationRegistryService,
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
-    }
+    }  */
 
 
     /**---------------------------------Descriptor Registry----------------------------------**/
 
+    /*
     @GET
     @Path("hostdescriptor/exist")
     @Produces("text/plain")
@@ -1001,812 +1004,812 @@ public class RegistryResource implements ConfigurationRegistryService,
 
     public Response getApplicationDescriptorMetadata(String s, String s1, String s2) {
         return null;
-    }
+    }   */
 
     /**---------------------------------Project Registry----------------------------------**/
-    @GET
-    @Path("project/exist")
-    @Produces("text/plain")
-    public Response isWorkspaceProjectExists(@QueryParam("projectName") String projectName) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            boolean result = airavataRegistry.isWorkspaceProjectExists(projectName);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("project/exist")
-    @Produces("text/plain")
-    public Response isWorkspaceProjectExists(@FormParam("projectName") String projectName,
-                                             @FormParam("createIfNotExists") String createIfNotExists) {
-        boolean createIfNotExistStatus = false;
-        if(createIfNotExists.equals("true")){
-            createIfNotExistStatus = true;
-        }
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            boolean result = airavataRegistry.isWorkspaceProjectExists(projectName, createIfNotExistStatus);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("add/project")
-    @Produces("text/plain")
-    public Response addWorkspaceProject(@FormParam("projectName") String projectName) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            WorkspaceProject workspaceProject = new WorkspaceProject(projectName, airavataRegistry);
-            airavataRegistry.addWorkspaceProject(workspaceProject);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-        } catch (WorkspaceProjectAlreadyExistsException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("update/project")
-    @Produces("text/plain")
-    public Response updateWorkspaceProject(@FormParam("projectName") String projectName){
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            WorkspaceProject workspaceProject = new WorkspaceProject(projectName, airavataRegistry);
-            airavataRegistry.updateWorkspaceProject(workspaceProject);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-        } catch (WorkspaceProjectDoesNotExistsException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @DELETE
-    @Path("delete/project")
-    @Produces("text/plain")
-    public Response deleteWorkspaceProject(@QueryParam("projectName") String projectName) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            airavataRegistry.deleteWorkspaceProject(projectName);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-        } catch (WorkspaceProjectDoesNotExistsException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("get/project")
-    @Produces("text/plain")
-    public Response getWorkspaceProject(@QueryParam("projectName") String projectName) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            WorkspaceProject workspaceProject = airavataRegistry.getWorkspaceProject(projectName);
-            if(workspaceProject != null){
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(workspaceProject);
-                return builder.build();
-            } else{
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
-        } catch (WorkspaceProjectDoesNotExistsException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("get/projects")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getWorkspaceProjects() {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            List<WorkspaceProject> workspaceProjects = airavataRegistry.getWorkspaceProjects();
-            WorkspaceProjectList workspaceProjectList = new WorkspaceProjectList();
-            WorkspaceProject[] workspaceProjectSet = new WorkspaceProject[workspaceProjects.size()];
-            for(int i = 0; i < workspaceProjects.size(); i++) {
-                workspaceProjectSet[i] = workspaceProjects.get(i);
-            }
-            workspaceProjectList.setWorkspaceProjects(workspaceProjectSet);
-            if (workspaceProjects.size() != 0) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(workspaceProjectList);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @DELETE
-    @Path("delete/experiment")
-    @Produces("text/plain")
-    public Response removeExperiment(@QueryParam("experimentId") String experimentId){
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            airavataRegistry.removeExperiment(experimentId);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-        } catch (ExperimentDoesNotExistsException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("get/experiments")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getExperiments() throws RegistryException {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            List<AiravataExperiment> experiments = airavataRegistry.getExperiments();
-            ExperimentList experimentList = new ExperimentList();
-            AiravataExperiment[] airavataExperiments = new AiravataExperiment[experiments.size()];
-            for (int i =0; i < experiments.size(); i++){
-                airavataExperiments[i] = experiments.get(i);
-            }
-            experimentList.setExperiments(airavataExperiments);
-            if(experiments.size() != 0){
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(experimentList);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        }catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("get/experiments")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getExperiments(@QueryParam("projectName") String projectName) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            List<AiravataExperiment> experiments = airavataRegistry.getExperiments(projectName);
-            ExperimentList experimentList = new ExperimentList();
-            AiravataExperiment[] airavataExperiments = new AiravataExperiment[experiments.size()];
-            for (int i =0; i < experiments.size(); i++){
-                airavataExperiments[i] = experiments.get(i);
-            }
-            experimentList.setExperiments(airavataExperiments);
-            if(experiments.size() != 0){
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(experimentList);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("get/experiments")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getExperiments(@QueryParam("fromDate") Date fromDate,
-                                   @QueryParam("toDate") Date toDate) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            List<AiravataExperiment> experiments = airavataRegistry.getExperiments(fromDate, toDate);
-            ExperimentList experimentList = new ExperimentList();
-            AiravataExperiment[] airavataExperiments = new AiravataExperiment[experiments.size()];
-            for (int i =0; i < experiments.size(); i++){
-                airavataExperiments[i] = experiments.get(i);
-            }
-            experimentList.setExperiments(airavataExperiments);
-            if(experiments.size() != 0){
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(experimentList);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("get/experiments")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getExperiments(@QueryParam("projectName") String projectName,
-                                   @QueryParam("fromDate") Date fromDate,
-                                   @QueryParam("toDate") Date toDate) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            List<AiravataExperiment> experiments = airavataRegistry.getExperiments(projectName, fromDate, toDate);
-            ExperimentList experimentList = new ExperimentList();
-            AiravataExperiment[] airavataExperiments = new AiravataExperiment[experiments.size()];
-            for (int i =0; i < experiments.size(); i++){
-                airavataExperiments[i] = experiments.get(i);
-            }
-            experimentList.setExperiments(airavataExperiments);
-            if(experiments.size() != 0){
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(experimentList);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("add/experiment")
-    @Produces("text/plain")
-    public Response addExperiment(@FormParam("projectName") String projectName,
-                                  @FormParam("experimentID") AiravataExperiment experiment){
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            airavataRegistry.addExperiment(projectName, experiment);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-        } catch (ExperimentDoesNotExistsException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        } catch (WorkspaceProjectDoesNotExistsException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-
-    }
-
-    @GET
-    @Path("experiment/exist")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response isExperimentExists(@QueryParam("experimentId") String experimentId) throws RegistryException {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            airavataRegistry.isExperimentExists(experimentId);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-        } catch (ExperimentDoesNotExistsException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("experiment/exist")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response isExperimentExists(@QueryParam("experimentId") String experimentId,
-                                       @QueryParam("createIfNotPresent") boolean createIfNotPresent){
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            airavataRegistry.isExperimentExists(experimentId, createIfNotPresent);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("update/experiment")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response updateExperimentExecutionUser(@QueryParam("experimentId") String experimentId,
-                                                  @QueryParam("user") String user) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            Boolean result = airavataRegistry.updateExperimentExecutionUser(experimentId,user);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("experiment/executionuser")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response getExperimentExecutionUser(@QueryParam("experimentId") String experimentId) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            String user = airavataRegistry.getExperimentExecutionUser(experimentId);
-            if(user != null){
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(user);
-                return builder.build();
-            }else{
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("experiment/name")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response getExperimentName(@QueryParam("experimentID") String experimentId) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            String result = airavataRegistry.getExperimentName(experimentId);
-            if(result != null){
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            }else{
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("update/experimentname")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response updateExperimentName(@QueryParam("experimentId") String experimentId,
-                                         @QueryParam("experimentName") String experimentName){
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            Boolean result = airavataRegistry.updateExperimentName(experimentId, experimentName);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        }
-    }
-
-
-    @GET
-    @Path("get/experimentmetadata")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response getExperimentMetadata(@QueryParam("experimentId") String experimentId) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            String result = airavataRegistry.getExperimentMetadata(experimentId);
-            if(result != null){
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            }else{
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("update/experimentmetadata")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response updateExperimentMetadata(@FormParam("experimentId")String experimentId,
-                                             @FormParam("metadata") String metadata) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            Boolean result = airavataRegistry.updateExperimentMetadata(experimentId, metadata);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("get/workflowtemplatename")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response getWorkflowExecutionTemplateName(@QueryParam("workflowInstanceId") String workflowInstanceId) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            String result = airavataRegistry.getWorkflowExecutionTemplateName(workflowInstanceId);
-            if(result != null){
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
-                return builder.build();
-            }else{
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("update/workflowinstancetemplatename")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response setWorkflowInstanceTemplateName(@FormParam("workflowInstanceId") String workflowInstanceId,
-                                                    @FormParam("templateName") String templateName) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            airavataRegistry.setWorkflowInstanceTemplateName(workflowInstanceId, templateName);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("get/experimentworkflowinstances")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getExperimentWorkflowInstances(@QueryParam("experimentId") String experimentId){
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            List<WorkflowInstance> experimentWorkflowInstances = airavataRegistry.getExperimentWorkflowInstances(experimentId);
-            WorkflowInstancesList workflowInstancesList = new WorkflowInstancesList();
-            WorkflowInstance[] workflowInstances = new WorkflowInstance[experimentWorkflowInstances.size()];
-            for (int i=0; i<experimentWorkflowInstances.size(); i++){
-                workflowInstances[i] = experimentWorkflowInstances.get(i);
-            }
-            workflowInstancesList.setWorkflowInstances(workflowInstances);
-            if (experimentWorkflowInstances.size() != 0) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(workflowInstancesList);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("workflowinstance/exist")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response isWorkflowInstanceExists(@QueryParam("instanceId") String instanceId){
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            Boolean result = airavataRegistry.isWorkflowInstanceExists(instanceId);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        }
-
-    }
-
-    @GET
-    @Path("workflowinstance/exist")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response isWorkflowInstanceExists(@QueryParam("instanceId") String instanceId,
-                                             @QueryParam("createIfNotPresent") boolean createIfNotPresent){
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            Boolean result = airavataRegistry.isWorkflowInstanceExists(instanceId, createIfNotPresent);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("update/workflowinstancestatus")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response updateWorkflowInstanceStatus(@FormParam("instanceId") String instanceId,
-                                                 @FormParam("executionStatus") String executionStatus) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            WorkflowInstanceStatus.ExecutionStatus status = WorkflowInstanceStatus.ExecutionStatus.valueOf(executionStatus);
-            Boolean result = airavataRegistry.updateWorkflowInstanceStatus(instanceId, status);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("update/workflowinstancestatus")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response updateWorkflowInstanceStatus(@FormParam("experimentId") String experimentId,
-                                                 @FormParam("workflowInstanceId") String workflowInstanceId,
-                                                 @FormParam("executionStatus") String executionStatus,
-                                                 @FormParam("statusUpdateTime") Date statusUpdateTime) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            WorkflowInstance workflowInstance =  new WorkflowInstance(experimentId, workflowInstanceId);
-            WorkflowInstanceStatus.ExecutionStatus status = WorkflowInstanceStatus.ExecutionStatus.valueOf(executionStatus);
-            WorkflowInstanceStatus workflowInstanceStatus = new WorkflowInstanceStatus(workflowInstance, status, statusUpdateTime);
-            Boolean result = airavataRegistry.updateWorkflowInstanceStatus(workflowInstanceStatus);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("get/workflowinstancestatus")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response getWorkflowInstanceStatus(@QueryParam("instanceId") String instanceId) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            WorkflowInstanceStatus workflowInstanceStatus = airavataRegistry.getWorkflowInstanceStatus(instanceId);
-            if(workflowInstanceStatus != null){
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(workflowInstanceStatus);
-                return builder.build();
-            }else{
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @POST
-    @Path("update/workflownodeinput")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response updateWorkflowNodeInput(@FormParam("experimentID") String experimentID,
-                                            @FormParam("nodeID") String nodeID,
-                                            @FormParam("workflowInstanceID") String workflowInstanceID,
-                                            @FormParam("data") String data){
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            WorkflowInstance workflowInstance = new WorkflowInstance(experimentID, nodeID);
-            WorkflowInstanceNode workflowInstanceNode = new WorkflowInstanceNode(workflowInstance, nodeID);
-            boolean result = airavataRegistry.updateWorkflowNodeInput(workflowInstanceNode, data);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        }
-
-    }
-
-    @POST
-    @Path("update/workflownodeoutput")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response updateWorkflowNodeOutput(@FormParam("experimentID") String experimentID,
-                                             @FormParam("nodeID") String nodeID,
-                                             @FormParam("workflowInstanceID") String workflowInstanceID,
-                                             @FormParam("data") String data) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            WorkflowInstance workflowInstance = new WorkflowInstance(experimentID, nodeID);
-            WorkflowInstanceNode workflowInstanceNode = new WorkflowInstanceNode(workflowInstance, nodeID);
-            boolean result = airavataRegistry.updateWorkflowNodeOutput(workflowInstanceNode, data);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("search/workflowinstancenodeinput")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response searchWorkflowInstanceNodeInput(@QueryParam("experimentIdRegEx") String experimentIdRegEx,
-                                                    @QueryParam("workflowNameRegEx") String workflowNameRegEx,
-                                                    @QueryParam("nodeNameRegEx") String nodeNameRegEx) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.searchWorkflowInstanceNodeInput(experimentIdRegEx, workflowNameRegEx, nodeNameRegEx);
-            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
-            WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
-            for (int i = 0; i<workflowNodeIODataList.size(); i++){
-                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
-            }
-            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
-            if (workflowNodeIODataList.size() != 0) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(workflowNodeIOData);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("search/workflowinstancenodeoutput")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response searchWorkflowInstanceNodeOutput(@QueryParam("experimentIdRegEx") String experimentIdRegEx,
-                                                     @QueryParam("workflowNameRegEx") String workflowNameRegEx,
-                                                     @QueryParam("nodeNameRegEx") String nodeNameRegEx) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.searchWorkflowInstanceNodeOutput(experimentIdRegEx, workflowNameRegEx, nodeNameRegEx);
-            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
-            WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
-            for (int i = 0; i<workflowNodeIODataList.size(); i++){
-                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
-            }
-            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
-            if (workflowNodeIODataList.size() != 0) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(workflowNodeIOData);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("get/workflowinstancenodeinput")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getWorkflowInstanceNodeInput(@QueryParam("workflowInstanceId") String workflowInstanceId,
-                                                 @QueryParam("nodeType") String nodeType) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.getWorkflowInstanceNodeInput(workflowInstanceId, nodeType);
-            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
-            WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
-            for (int i = 0; i<workflowNodeIODataList.size(); i++){
-                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
-            }
-            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
-            if (workflowNodeIODataList.size() != 0) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(workflowNodeIOData);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @GET
-    @Path("get/workflowinstancenodeoutput")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getWorkflowInstanceNodeOutput(@QueryParam("workflowInstanceId") String workflowInstanceId,
-                                                  @QueryParam("nodeType") String nodeType) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-        try{
-            List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.getWorkflowInstanceNodeOutput(workflowInstanceId, nodeType);
-            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
-            WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
-            for (int i = 0; i<workflowNodeIODataList.size(); i++){
-                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
-            }
-            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
-            if (workflowNodeIODataList.size() != 0) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(workflowNodeIOData);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
-
-    @GET
-    public Response getExperiment(String s) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
+//    @GET
+//    @Path("project/exist")
+//    @Produces("text/plain")
+//    public Response isWorkspaceProjectExists(@QueryParam("projectName") String projectName) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            boolean result = airavataRegistry.isWorkspaceProjectExists(projectName);
+//            if (result) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @POST
+//    @Path("project/exist")
+//    @Produces("text/plain")
+//    public Response isWorkspaceProjectExists(@FormParam("projectName") String projectName,
+//                                             @FormParam("createIfNotExists") String createIfNotExists) {
+//        boolean createIfNotExistStatus = false;
+//        if(createIfNotExists.equals("true")){
+//            createIfNotExistStatus = true;
+//        }
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            boolean result = airavataRegistry.isWorkspaceProjectExists(projectName, createIfNotExistStatus);
+//            if (result) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @POST
+//    @Path("add/project")
+//    @Produces("text/plain")
+//    public Response addWorkspaceProject(@FormParam("projectName") String projectName) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            WorkspaceProject workspaceProject = new WorkspaceProject(projectName, airavataRegistry);
+//            airavataRegistry.addWorkspaceProject(workspaceProject);
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//            return builder.build();
+//        } catch (WorkspaceProjectAlreadyExistsException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @POST
+//    @Path("update/project")
+//    @Produces("text/plain")
+//    public Response updateWorkspaceProject(@FormParam("projectName") String projectName){
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            WorkspaceProject workspaceProject = new WorkspaceProject(projectName, airavataRegistry);
+//            airavataRegistry.updateWorkspaceProject(workspaceProject);
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//            return builder.build();
+//        } catch (WorkspaceProjectDoesNotExistsException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @DELETE
+//    @Path("delete/project")
+//    @Produces("text/plain")
+//    public Response deleteWorkspaceProject(@QueryParam("projectName") String projectName) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            airavataRegistry.deleteWorkspaceProject(projectName);
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//            return builder.build();
+//        } catch (WorkspaceProjectDoesNotExistsException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("get/project")
+//    @Produces("text/plain")
+//    public Response getWorkspaceProject(@QueryParam("projectName") String projectName) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            WorkspaceProject workspaceProject = airavataRegistry.getWorkspaceProject(projectName);
+//            if(workspaceProject != null){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(workspaceProject);
+//                return builder.build();
+//            } else{
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//                return builder.build();
+//            }
+//        } catch (WorkspaceProjectDoesNotExistsException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("get/projects")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response getWorkspaceProjects() {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            List<WorkspaceProject> workspaceProjects = airavataRegistry.getWorkspaceProjects();
+//            WorkspaceProjectList workspaceProjectList = new WorkspaceProjectList();
+//            WorkspaceProject[] workspaceProjectSet = new WorkspaceProject[workspaceProjects.size()];
+//            for(int i = 0; i < workspaceProjects.size(); i++) {
+//                workspaceProjectSet[i] = workspaceProjects.get(i);
+//            }
+//            workspaceProjectList.setWorkspaceProjects(workspaceProjectSet);
+//            if (workspaceProjects.size() != 0) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(workspaceProjectList);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @DELETE
+//    @Path("delete/experiment")
+//    @Produces("text/plain")
+//    public Response removeExperiment(@QueryParam("experimentId") String experimentId){
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            airavataRegistry.removeExperiment(experimentId);
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//            return builder.build();
+//        } catch (ExperimentDoesNotExistsException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("get/experiments")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response getExperiments() throws RegistryException {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            List<AiravataExperiment> experiments = airavataRegistry.getExperiments();
+//            ExperimentList experimentList = new ExperimentList();
+//            AiravataExperiment[] airavataExperiments = new AiravataExperiment[experiments.size()];
+//            for (int i =0; i < experiments.size(); i++){
+//                airavataExperiments[i] = experiments.get(i);
+//            }
+//            experimentList.setExperiments(airavataExperiments);
+//            if(experiments.size() != 0){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(experimentList);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+//        }catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("get/experiments")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response getExperiments(@QueryParam("projectName") String projectName) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            List<AiravataExperiment> experiments = airavataRegistry.getExperiments(projectName);
+//            ExperimentList experimentList = new ExperimentList();
+//            AiravataExperiment[] airavataExperiments = new AiravataExperiment[experiments.size()];
+//            for (int i =0; i < experiments.size(); i++){
+//                airavataExperiments[i] = experiments.get(i);
+//            }
+//            experimentList.setExperiments(airavataExperiments);
+//            if(experiments.size() != 0){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(experimentList);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("get/experiments")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response getExperiments(@QueryParam("fromDate") Date fromDate,
+//                                   @QueryParam("toDate") Date toDate) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            List<AiravataExperiment> experiments = airavataRegistry.getExperiments(fromDate, toDate);
+//            ExperimentList experimentList = new ExperimentList();
+//            AiravataExperiment[] airavataExperiments = new AiravataExperiment[experiments.size()];
+//            for (int i =0; i < experiments.size(); i++){
+//                airavataExperiments[i] = experiments.get(i);
+//            }
+//            experimentList.setExperiments(airavataExperiments);
+//            if(experiments.size() != 0){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(experimentList);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("get/experiments")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response getExperiments(@QueryParam("projectName") String projectName,
+//                                   @QueryParam("fromDate") Date fromDate,
+//                                   @QueryParam("toDate") Date toDate) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            List<AiravataExperiment> experiments = airavataRegistry.getExperiments(projectName, fromDate, toDate);
+//            ExperimentList experimentList = new ExperimentList();
+//            AiravataExperiment[] airavataExperiments = new AiravataExperiment[experiments.size()];
+//            for (int i =0; i < experiments.size(); i++){
+//                airavataExperiments[i] = experiments.get(i);
+//            }
+//            experimentList.setExperiments(airavataExperiments);
+//            if(experiments.size() != 0){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(experimentList);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @POST
+//    @Path("add/experiment")
+//    @Produces("text/plain")
+//    public Response addExperiment(@FormParam("projectName") String projectName,
+//                                  @FormParam("experimentID") AiravataExperiment experiment){
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            airavataRegistry.addExperiment(projectName, experiment);
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//            return builder.build();
+//        } catch (ExperimentDoesNotExistsException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        } catch (WorkspaceProjectDoesNotExistsException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//
+//    }
+//
+//    @GET
+//    @Path("experiment/exist")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response isExperimentExists(@QueryParam("experimentId") String experimentId) throws RegistryException {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            airavataRegistry.isExperimentExists(experimentId);
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//            return builder.build();
+//        } catch (ExperimentDoesNotExistsException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("experiment/exist")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response isExperimentExists(@QueryParam("experimentId") String experimentId,
+//                                       @QueryParam("createIfNotPresent") boolean createIfNotPresent){
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            airavataRegistry.isExperimentExists(experimentId, createIfNotPresent);
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//            return builder.build();
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        }
+//    }
+//
+//    @POST
+//    @Path("update/experiment")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response updateExperimentExecutionUser(@QueryParam("experimentId") String experimentId,
+//                                                  @QueryParam("user") String user) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            Boolean result = airavataRegistry.updateExperimentExecutionUser(experimentId,user);
+//            if (result) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("experiment/executionuser")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response getExperimentExecutionUser(@QueryParam("experimentId") String experimentId) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            String user = airavataRegistry.getExperimentExecutionUser(experimentId);
+//            if(user != null){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(user);
+//                return builder.build();
+//            }else{
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("experiment/name")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response getExperimentName(@QueryParam("experimentID") String experimentId) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            String result = airavataRegistry.getExperimentName(experimentId);
+//            if(result != null){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(result);
+//                return builder.build();
+//            }else{
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @POST
+//    @Path("update/experimentname")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response updateExperimentName(@QueryParam("experimentId") String experimentId,
+//                                         @QueryParam("experimentName") String experimentName){
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            Boolean result = airavataRegistry.updateExperimentName(experimentId, experimentName);
+//            if (result) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        }
+//    }
+//
+//
+//    @GET
+//    @Path("get/experimentmetadata")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response getExperimentMetadata(@QueryParam("experimentId") String experimentId) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            String result = airavataRegistry.getExperimentMetadata(experimentId);
+//            if(result != null){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(result);
+//                return builder.build();
+//            }else{
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @POST
+//    @Path("update/experimentmetadata")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response updateExperimentMetadata(@FormParam("experimentId")String experimentId,
+//                                             @FormParam("metadata") String metadata) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            Boolean result = airavataRegistry.updateExperimentMetadata(experimentId, metadata);
+//            if (result) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("get/workflowtemplatename")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response getWorkflowExecutionTemplateName(@QueryParam("workflowInstanceId") String workflowInstanceId) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            String result = airavataRegistry.getWorkflowExecutionTemplateName(workflowInstanceId);
+//            if(result != null){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(result);
+//                return builder.build();
+//            }else{
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @POST
+//    @Path("update/workflowinstancetemplatename")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response setWorkflowInstanceTemplateName(@FormParam("workflowInstanceId") String workflowInstanceId,
+//                                                    @FormParam("templateName") String templateName) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            airavataRegistry.setWorkflowInstanceTemplateName(workflowInstanceId, templateName);
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//            return builder.build();
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("get/experimentworkflowinstances")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response getExperimentWorkflowInstances(@QueryParam("experimentId") String experimentId){
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            List<WorkflowInstance> experimentWorkflowInstances = airavataRegistry.getExperimentWorkflowInstances(experimentId);
+//            WorkflowInstancesList workflowInstancesList = new WorkflowInstancesList();
+//            WorkflowInstance[] workflowInstances = new WorkflowInstance[experimentWorkflowInstances.size()];
+//            for (int i=0; i<experimentWorkflowInstances.size(); i++){
+//                workflowInstances[i] = experimentWorkflowInstances.get(i);
+//            }
+//            workflowInstancesList.setWorkflowInstances(workflowInstances);
+//            if (experimentWorkflowInstances.size() != 0) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(workflowInstancesList);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("workflowinstance/exist")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response isWorkflowInstanceExists(@QueryParam("instanceId") String instanceId){
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            Boolean result = airavataRegistry.isWorkflowInstanceExists(instanceId);
+//            if (result) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        }
+//
+//    }
+//
+//    @GET
+//    @Path("workflowinstance/exist")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response isWorkflowInstanceExists(@QueryParam("instanceId") String instanceId,
+//                                             @QueryParam("createIfNotPresent") boolean createIfNotPresent){
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            Boolean result = airavataRegistry.isWorkflowInstanceExists(instanceId, createIfNotPresent);
+//            if (result) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        }
+//    }
+//
+//    @POST
+//    @Path("update/workflowinstancestatus")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response updateWorkflowInstanceStatus(@FormParam("instanceId") String instanceId,
+//                                                 @FormParam("executionStatus") String executionStatus) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            WorkflowInstanceStatus.ExecutionStatus status = WorkflowInstanceStatus.ExecutionStatus.valueOf(executionStatus);
+//            Boolean result = airavataRegistry.updateWorkflowInstanceStatus(instanceId, status);
+//            if (result) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        }
+//    }
+//
+//    @POST
+//    @Path("update/workflowinstancestatus")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response updateWorkflowInstanceStatus(@FormParam("experimentId") String experimentId,
+//                                                 @FormParam("workflowInstanceId") String workflowInstanceId,
+//                                                 @FormParam("executionStatus") String executionStatus,
+//                                                 @FormParam("statusUpdateTime") Date statusUpdateTime) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            WorkflowInstance workflowInstance =  new WorkflowInstance(experimentId, workflowInstanceId);
+//            WorkflowInstanceStatus.ExecutionStatus status = WorkflowInstanceStatus.ExecutionStatus.valueOf(executionStatus);
+//            WorkflowInstanceStatus workflowInstanceStatus = new WorkflowInstanceStatus(workflowInstance, status, statusUpdateTime);
+//            Boolean result = airavataRegistry.updateWorkflowInstanceStatus(workflowInstanceStatus);
+//            if (result) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("get/workflowinstancestatus")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response getWorkflowInstanceStatus(@QueryParam("instanceId") String instanceId) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            WorkflowInstanceStatus workflowInstanceStatus = airavataRegistry.getWorkflowInstanceStatus(instanceId);
+//            if(workflowInstanceStatus != null){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(workflowInstanceStatus);
+//                return builder.build();
+//            }else{
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @POST
+//    @Path("update/workflownodeinput")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response updateWorkflowNodeInput(@FormParam("experimentID") String experimentID,
+//                                            @FormParam("nodeID") String nodeID,
+//                                            @FormParam("workflowInstanceID") String workflowInstanceID,
+//                                            @FormParam("data") String data){
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            WorkflowInstance workflowInstance = new WorkflowInstance(experimentID, nodeID);
+//            WorkflowInstanceNode workflowInstanceNode = new WorkflowInstanceNode(workflowInstance, nodeID);
+//            boolean result = airavataRegistry.updateWorkflowNodeInput(workflowInstanceNode, data);
+//            if (result) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        }
+//
+//    }
+//
+//    @POST
+//    @Path("update/workflownodeoutput")
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response updateWorkflowNodeOutput(@FormParam("experimentID") String experimentID,
+//                                             @FormParam("nodeID") String nodeID,
+//                                             @FormParam("workflowInstanceID") String workflowInstanceID,
+//                                             @FormParam("data") String data) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            WorkflowInstance workflowInstance = new WorkflowInstance(experimentID, nodeID);
+//            WorkflowInstanceNode workflowInstanceNode = new WorkflowInstanceNode(workflowInstance, nodeID);
+//            boolean result = airavataRegistry.updateWorkflowNodeOutput(workflowInstanceNode, data);
+//            if (result) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("search/workflowinstancenodeinput")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response searchWorkflowInstanceNodeInput(@QueryParam("experimentIdRegEx") String experimentIdRegEx,
+//                                                    @QueryParam("workflowNameRegEx") String workflowNameRegEx,
+//                                                    @QueryParam("nodeNameRegEx") String nodeNameRegEx) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.searchWorkflowInstanceNodeInput(experimentIdRegEx, workflowNameRegEx, nodeNameRegEx);
+//            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
+//            WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
+//            for (int i = 0; i<workflowNodeIODataList.size(); i++){
+//                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
+//            }
+//            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
+//            if (workflowNodeIODataList.size() != 0) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(workflowNodeIOData);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("search/workflowinstancenodeoutput")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response searchWorkflowInstanceNodeOutput(@QueryParam("experimentIdRegEx") String experimentIdRegEx,
+//                                                     @QueryParam("workflowNameRegEx") String workflowNameRegEx,
+//                                                     @QueryParam("nodeNameRegEx") String nodeNameRegEx) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.searchWorkflowInstanceNodeOutput(experimentIdRegEx, workflowNameRegEx, nodeNameRegEx);
+//            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
+//            WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
+//            for (int i = 0; i<workflowNodeIODataList.size(); i++){
+//                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
+//            }
+//            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
+//            if (workflowNodeIODataList.size() != 0) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(workflowNodeIOData);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("get/workflowinstancenodeinput")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response getWorkflowInstanceNodeInput(@QueryParam("workflowInstanceId") String workflowInstanceId,
+//                                                 @QueryParam("nodeType") String nodeType) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.getWorkflowInstanceNodeInput(workflowInstanceId, nodeType);
+//            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
+//            WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
+//            for (int i = 0; i<workflowNodeIODataList.size(); i++){
+//                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
+//            }
+//            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
+//            if (workflowNodeIODataList.size() != 0) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(workflowNodeIOData);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    @Path("get/workflowinstancenodeoutput")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response getWorkflowInstanceNodeOutput(@QueryParam("workflowInstanceId") String workflowInstanceId,
+//                                                  @QueryParam("nodeType") String nodeType) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+//        try{
+//            List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.getWorkflowInstanceNodeOutput(workflowInstanceId, nodeType);
+//            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
+//            WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
+//            for (int i = 0; i<workflowNodeIODataList.size(); i++){
+//                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
+//            }
+//            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
+//            if (workflowNodeIODataList.size() != 0) {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(workflowNodeIOData);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
+//
+//    @GET
+//    public Response getExperiment(String s) throws RegistryException {
+//        return null;  //To change body of implemented methods use File | Settings | File Templates.
+//    }
 
     public Response getExperimentIdByUser(String s) throws RegistryException {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
