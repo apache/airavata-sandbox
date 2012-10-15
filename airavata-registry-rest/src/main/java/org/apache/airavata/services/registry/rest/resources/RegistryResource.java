@@ -28,16 +28,16 @@ import java.util.Map;
 
 
 /**
-*  RegistryResource for REST interface of Registry API
-*  Three objects will be retrieved from the servelet context as
-*  airavataRegistry, axis2Registry, dataRegistry which are
-*  analogues to main API interfaces of Airavata
-*/
+ *  RegistryResource for REST interface of Registry API
+ *  Three objects will be retrieved from the servelet context as
+ *  airavataRegistry, axis2Registry, dataRegistry which are
+ *  analogues to main API interfaces of Airavata
+ */
 @Path("/registry/api")
 //public class RegistryResource implements ConfigurationRegistryService,
 //        ProjectsRegistryService, ProvenanceRegistryService, UserWorkflowRegistryService,
 //        PublishedWorkflowRegistryService, DescriptorRegistryService{
-    public class RegistryResource {
+public class RegistryResource {
     private final static Logger logger = LoggerFactory.getLogger(RegistryResource.class);
     private JPAResourceAccessor jpa;
     private boolean active=false;
@@ -203,284 +203,284 @@ import java.util.Map;
     }
 
 
-  @GET
-  @Path("workflowinterpreter/urilist")
-  @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-  public Response getWorkflowInterpreterURIs() {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try {
-          List<URI> uris = airavataRegistry.getWorkflowInterpreterURIs();
-          URLList list = new URLList();
-          String[] urs = new String[uris.size()];
-          for (int i = 0; i < uris.size(); i++) {
-              urs[i] = uris.get(i).toString();
-          }
-          list.setUris(urs);
-          if (urs.length != 0) {
-              Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-              builder.entity(list);
-              return builder.build();
-          } else {
-              Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-              return builder.build();
-          }
-      } catch (Exception e) {
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @GET
+    @Path("workflowinterpreter/urilist")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getWorkflowInterpreterURIs() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try {
+            List<URI> uris = airavataRegistry.getWorkflowInterpreterURIs();
+            URLList list = new URLList();
+            String[] urs = new String[uris.size()];
+            for (int i = 0; i < uris.size(); i++) {
+                urs[i] = uris.get(i).toString();
+            }
+            list.setUris(urs);
+            if (urs.length != 0) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(list);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (Exception e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @GET
-  @Path("eventingservice/uri")
-  @Produces("text/plain")
-  public Response getEventingServiceURI() {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          URI eventingServiceURI = airavataRegistry.getEventingServiceURI();
-          if (eventingServiceURI != null) {
-              Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-              builder.entity(eventingServiceURI);
-              return builder.build();
-          } else {
-              Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-              return builder.build();
-          }
-      } catch (Exception e) {
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @GET
+    @Path("eventingservice/uri")
+    @Produces("text/plain")
+    public Response getEventingServiceURI() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            URI eventingServiceURI = airavataRegistry.getEventingServiceURI();
+            if (eventingServiceURI != null) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(eventingServiceURI);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (Exception e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @GET
-  @Path("messagebox/uri")
-  @Produces("text/plain")
-  public Response getMessageBoxURI() {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          URI eventingServiceURI = airavataRegistry.getMessageBoxURI();
-          if (eventingServiceURI != null) {
-              Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-              builder.entity(eventingServiceURI);
-              return builder.build();
-          } else {
-              Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-              return builder.build();
-          }
-      } catch (Exception e) {
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @GET
+    @Path("messagebox/uri")
+    @Produces("text/plain")
+    public Response getMessageBoxURI() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            URI eventingServiceURI = airavataRegistry.getMessageBoxURI();
+            if (eventingServiceURI != null) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(eventingServiceURI);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (Exception e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @POST
-  @Path("add/gfacuri")
-  @Produces("text/plain")
-  public Response addGFacURI(@FormParam("uri") URI uri) {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.addGFacURI(uri);
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      } catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @POST
+    @Path("add/gfacuri")
+    @Produces("text/plain")
+    public Response addGFacURI(@FormParam("uri") URI uri) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.addGFacURI(uri);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @POST
-  @Path("add/workflowinterpreteruri")
-  @Produces("text/plain")
-  public Response addWorkflowInterpreterURI(@FormParam("uri") URI uri) {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.addWorkflowInterpreterURI(uri);
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      } catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @POST
+    @Path("add/workflowinterpreteruri")
+    @Produces("text/plain")
+    public Response addWorkflowInterpreterURI(@FormParam("uri") URI uri) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.addWorkflowInterpreterURI(uri);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @POST
-  @Path("add/eventinguri")
-  @Produces("text/plain")
-  public Response setEventingURI(@FormParam("uri") URI uri) {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.setEventingURI(uri);
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      } catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @POST
+    @Path("add/eventinguri")
+    @Produces("text/plain")
+    public Response setEventingURI(@FormParam("uri") URI uri) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.setEventingURI(uri);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @POST
-  @Path("add/msgboxuri")
-  @Produces("text/plain")
-  public Response setMessageBoxURI(@FormParam("uri") URI uri) {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.setMessageBoxURI(uri);
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      } catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @POST
+    @Path("add/msgboxuri")
+    @Produces("text/plain")
+    public Response setMessageBoxURI(@FormParam("uri") URI uri) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.setMessageBoxURI(uri);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @POST
-  @Path("add/gfacuri/date")
-  @Produces("text/plain")
-  public Response addGFacURIByDate(@FormParam("uri") URI uri, @FormParam("date") Date date) {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.addGFacURI(uri, date);
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      } catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @POST
+    @Path("add/gfacuri/date")
+    @Produces("text/plain")
+    public Response addGFacURIByDate(@FormParam("uri") URI uri, @FormParam("date") Date date) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.addGFacURI(uri, date);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @POST
-  @Path("add/workflowinterpreteruri/date")
-  @Produces("text/plain")
-  public Response addWorkflowInterpreterURI(@FormParam("uri") URI uri, @FormParam("date") Date date) {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.addWorkflowInterpreterURI(uri, date);
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      } catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @POST
+    @Path("add/workflowinterpreteruri/date")
+    @Produces("text/plain")
+    public Response addWorkflowInterpreterURI(@FormParam("uri") URI uri, @FormParam("date") Date date) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.addWorkflowInterpreterURI(uri, date);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @POST
-  @Path("add/eventinguri/date")
-  @Produces("text/plain")
-  public Response setEventingURIByDate(@FormParam("uri") URI uri, @FormParam("date") Date date) {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.setEventingURI(uri, date);
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      } catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @POST
+    @Path("add/eventinguri/date")
+    @Produces("text/plain")
+    public Response setEventingURIByDate(@FormParam("uri") URI uri, @FormParam("date") Date date) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.setEventingURI(uri, date);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @POST
-  @Path("add/msgboxuri/date")
-  @Produces("text/plain")
-  public Response setMessageBoxURIByDate(@FormParam("uri") URI uri, @FormParam("date") Date date) {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.setMessageBoxURI(uri, date);
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      } catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @POST
+    @Path("add/msgboxuri/date")
+    @Produces("text/plain")
+    public Response setMessageBoxURIByDate(@FormParam("uri") URI uri, @FormParam("date") Date date) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.setMessageBoxURI(uri, date);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @DELETE
-  @Path("delete/gfacuri")
-  @Produces("text/plain")
-  public Response removeGFacURI(@QueryParam("uri") URI uri) {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.removeGFacURI(uri);
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      } catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @DELETE
+    @Path("delete/gfacuri")
+    @Produces("text/plain")
+    public Response removeGFacURI(@QueryParam("uri") URI uri) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.removeGFacURI(uri);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @DELETE
-  @Path("delete/allgfacuris")
-  @Produces("text/plain")
-  public Response removeAllGFacURI() {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.removeAllGFacURI();
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      } catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @DELETE
+    @Path("delete/allgfacuris")
+    @Produces("text/plain")
+    public Response removeAllGFacURI() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.removeAllGFacURI();
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @DELETE
-  @Path("delete/workflowinterpreteruri")
-  @Produces("text/plain")
-  public Response removeWorkflowInterpreterURI(@QueryParam("uri") URI uri) {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.removeWorkflowInterpreterURI(uri);
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      }catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @DELETE
+    @Path("delete/workflowinterpreteruri")
+    @Produces("text/plain")
+    public Response removeWorkflowInterpreterURI(@QueryParam("uri") URI uri) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.removeWorkflowInterpreterURI(uri);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        }catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @DELETE
-  @Path("delete/allworkflowinterpreteruris")
-  @Produces("text/plain")
-  public Response removeAllWorkflowInterpreterURI() {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.removeAllWorkflowInterpreterURI();
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      } catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @DELETE
+    @Path("delete/allworkflowinterpreteruris")
+    @Produces("text/plain")
+    public Response removeAllWorkflowInterpreterURI() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.removeAllWorkflowInterpreterURI();
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @DELETE
-  @Path("delete/eventinguri")
-  @Produces("text/plain")
-  public Response unsetEventingURI() {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.unsetEventingURI();
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      } catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @DELETE
+    @Path("delete/eventinguri")
+    @Produces("text/plain")
+    public Response unsetEventingURI() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.unsetEventingURI();
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-  @DELETE
-  @Path("delete/msgboxuri")
-  @Produces("text/plain")
-  public Response unsetMessageBoxURI() {
-      airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-      try{
-          airavataRegistry.unsetMessageBoxURI();
-          Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-          return builder.build();
-      } catch (Exception e){
-          Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-          return builder.build();
-      }
-  }
+    @DELETE
+    @Path("delete/msgboxuri")
+    @Produces("text/plain")
+    public Response unsetMessageBoxURI() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
+        try{
+            airavataRegistry.unsetMessageBoxURI();
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (Exception e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
 
     /**---------------------------------Descriptor Registry----------------------------------**/
@@ -868,8 +868,8 @@ import java.util.Map;
     @Path("applicationdescriptor/update")
     @Produces("text/xml")
     public Response updateApplicationDescriptor(@FormParam("serviceName") String serviceName,
-                                            @FormParam("hostName")String hostName,
-                                            @FormParam("application") String application){
+                                                @FormParam("hostName")String hostName,
+                                                @FormParam("application") String application){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
             ApplicationDeploymentDescription applicationDeploymentDescription = ApplicationDeploymentDescription.fromXML(application);
@@ -915,7 +915,7 @@ import java.util.Map;
     @Path("applicationdescriptor/host/descriptors")
     @Produces("text/xml")
     public Response getApplicationDescriptors(@QueryParam("serviceName")String serviceName,
-                                             @QueryParam("hostName") String hostName) {
+                                              @QueryParam("hostName") String hostName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
             String result = airavataRegistry.getApplicationDescriptors(serviceName, hostName).toXML();
