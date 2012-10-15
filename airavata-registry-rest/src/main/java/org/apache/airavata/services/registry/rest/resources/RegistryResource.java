@@ -34,10 +34,9 @@ import java.util.Map;
  *  analogues to main API interfaces of Airavata
  */
 @Path("/registry/api")
-//public class RegistryResource implements ConfigurationRegistryService,
-//        ProjectsRegistryService, ProvenanceRegistryService, UserWorkflowRegistryService,
-//        PublishedWorkflowRegistryService, DescriptorRegistryService{
-public class RegistryResource {
+public class RegistryResource implements ConfigurationRegistryService,
+        ProjectsRegistryService, ProvenanceRegistryService, UserWorkflowRegistryService,
+        PublishedWorkflowRegistryService, DescriptorRegistryService{
     private final static Logger logger = LoggerFactory.getLogger(RegistryResource.class);
     private JPAResourceAccessor jpa;
     private boolean active=false;
@@ -784,7 +783,7 @@ public class RegistryResource {
         }
     }
 
-/*    @POST
+    @POST
     @Path("applicationdescriptor/save")
     @Produces("text/xml")
     public Response addApplicationDescriptor(@FormParam("service") String service,
@@ -810,7 +809,7 @@ public class RegistryResource {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
-    }*/
+    }
 
     @POST
     @Path("applicationdescriptor/save")
@@ -1288,7 +1287,7 @@ public class RegistryResource {
         }
     }
 
-/*    @POST
+    @POST
     @Path("add/experiment")
     @Produces("text/plain")
     public Response addExperiment(@FormParam("projectName") String projectName,
@@ -1309,7 +1308,7 @@ public class RegistryResource {
             return builder.build();
         }
 
-    }*/
+    }
 
     @GET
     @Path("experiment/exist/check")
