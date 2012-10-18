@@ -1,6 +1,6 @@
 package org.apache.airavata.services.registry.rest.resources;
 
-import org.apache.airavata.common.registry.api.exception.RegistryException;
+import org.apache.airavata.registry.api.exception.RegistryException;
 import org.apache.airavata.commons.gfac.type.ApplicationDeploymentDescription;
 import org.apache.airavata.commons.gfac.type.HostDescription;
 import org.apache.airavata.commons.gfac.type.ServiceDescription;
@@ -22,6 +22,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -113,13 +116,16 @@ import java.util.Map;
 
     @POST
     @Path("save/configuration")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response setConfiguration(@FormParam("key") String key,
                                      @FormParam("value") String value,
-                                     @FormParam("date") Date date) {
+                                     @FormParam("date") String date) {
         try{
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date formattedDate = dateFormat.parse(date);
             airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-            airavataRegistry.setConfiguration(key, value, date);
+            airavataRegistry.setConfiguration(key, value, formattedDate);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         }catch (Exception e){

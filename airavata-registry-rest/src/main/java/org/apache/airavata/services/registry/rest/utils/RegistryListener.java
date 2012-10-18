@@ -25,7 +25,7 @@ public class RegistryListener implements ServletContextListener {
 //        map.put("org.apache.jackrabbit.repository.uri", url.toString());
 
 
-        airavataRegistry = AiravataRegistryFactory.getRegistry(new Gateway("default"), new AiravataUser("admin"));
+        airavataRegistry = AiravataRegistryFactory.getRegistry(new Gateway("gateway1"), new AiravataUser("admin"));
         servletContext.setAttribute("airavataRegistry", airavataRegistry);
         }catch (Exception e) {
             e.printStackTrace();
