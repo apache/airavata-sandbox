@@ -139,10 +139,12 @@ import java.util.Map;
     @Produces("text/plain")
     public Response addConfiguration(@FormParam("key") String key,
                                      @FormParam("value") String value,
-                                     @FormParam("date") Date date) {
+                                     @FormParam("date") String date) {
         try{
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date formattedDate = dateFormat.parse(date);
             airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
-            airavataRegistry.addConfiguration(key, value, date);
+            airavataRegistry.addConfiguration(key, value, formattedDate);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         }catch (Exception e){
@@ -245,7 +247,7 @@ import java.util.Map;
             URI eventingServiceURI = airavataRegistry.getEventingServiceURI();
             if (eventingServiceURI != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(eventingServiceURI);
+                builder.entity(eventingServiceURI.toString());
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
@@ -266,7 +268,7 @@ import java.util.Map;
             URI eventingServiceURI = airavataRegistry.getMessageBoxURI();
             if (eventingServiceURI != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(eventingServiceURI);
+                builder.entity(eventingServiceURI.toString());
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
@@ -281,10 +283,11 @@ import java.util.Map;
     @POST
     @Path("add/gfacuri")
     @Produces("text/plain")
-    public Response addGFacURI(@FormParam("uri") URI uri) {
+    public Response addGFacURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
-            airavataRegistry.addGFacURI(uri);
+            URI gfacURI = new URI(uri);
+            airavataRegistry.addGFacURI(gfacURI);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (Exception e){
@@ -296,10 +299,11 @@ import java.util.Map;
     @POST
     @Path("add/workflowinterpreteruri")
     @Produces("text/plain")
-    public Response addWorkflowInterpreterURI(@FormParam("uri") URI uri) {
+    public Response addWorkflowInterpreterURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
-            airavataRegistry.addWorkflowInterpreterURI(uri);
+            URI interpreterURI = new URI(uri);
+            airavataRegistry.addWorkflowInterpreterURI(interpreterURI);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (Exception e){
@@ -311,10 +315,11 @@ import java.util.Map;
     @POST
     @Path("add/eventinguri")
     @Produces("text/plain")
-    public Response setEventingURI(@FormParam("uri") URI uri) {
+    public Response setEventingURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
-            airavataRegistry.setEventingURI(uri);
+            URI eventingURI = new URI(uri);
+            airavataRegistry.setEventingURI(eventingURI);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (Exception e){
@@ -326,10 +331,11 @@ import java.util.Map;
     @POST
     @Path("add/msgboxuri")
     @Produces("text/plain")
-    public Response setMessageBoxURI(@FormParam("uri") URI uri) {
+    public Response setMessageBoxURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
-            airavataRegistry.setMessageBoxURI(uri);
+            URI msgBoxURI = new URI(uri);
+            airavataRegistry.setMessageBoxURI(msgBoxURI);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (Exception e){
@@ -341,10 +347,13 @@ import java.util.Map;
     @POST
     @Path("add/gfacuri/date")
     @Produces("text/plain")
-    public Response addGFacURIByDate(@FormParam("uri") URI uri, @FormParam("date") Date date) {
+    public Response addGFacURIByDate(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
-            airavataRegistry.addGFacURI(uri, date);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date formattedDate = dateFormat.parse(date);
+            URI gfacURI = new URI(uri);
+            airavataRegistry.addGFacURI(gfacURI, formattedDate);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (Exception e){
@@ -356,10 +365,13 @@ import java.util.Map;
     @POST
     @Path("add/workflowinterpreteruri/date")
     @Produces("text/plain")
-    public Response addWorkflowInterpreterURI(@FormParam("uri") URI uri, @FormParam("date") Date date) {
+    public Response addWorkflowInterpreterURI(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
-            airavataRegistry.addWorkflowInterpreterURI(uri, date);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date formattedDate = dateFormat.parse(date);
+            URI interpreterURI = new URI(uri);
+            airavataRegistry.addWorkflowInterpreterURI(interpreterURI, formattedDate);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (Exception e){
@@ -371,10 +383,13 @@ import java.util.Map;
     @POST
     @Path("add/eventinguri/date")
     @Produces("text/plain")
-    public Response setEventingURIByDate(@FormParam("uri") URI uri, @FormParam("date") Date date) {
+    public Response setEventingURIByDate(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
-            airavataRegistry.setEventingURI(uri, date);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date formattedDate = dateFormat.parse(date);
+            URI eventingURI = new URI(uri);
+            airavataRegistry.setEventingURI(eventingURI, formattedDate);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (Exception e){
@@ -386,10 +401,13 @@ import java.util.Map;
     @POST
     @Path("add/msgboxuri/date")
     @Produces("text/plain")
-    public Response setMessageBoxURIByDate(@FormParam("uri") URI uri, @FormParam("date") Date date) {
+    public Response setMessageBoxURIByDate(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
-            airavataRegistry.setMessageBoxURI(uri, date);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date formattedDate = dateFormat.parse(date);
+            URI msgBoxURI = new URI(uri);
+            airavataRegistry.setMessageBoxURI(msgBoxURI, formattedDate);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (Exception e){
@@ -401,10 +419,11 @@ import java.util.Map;
     @DELETE
     @Path("delete/gfacuri")
     @Produces("text/plain")
-    public Response removeGFacURI(@QueryParam("uri") URI uri) {
+    public Response removeGFacURI(@QueryParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
-            airavataRegistry.removeGFacURI(uri);
+            URI gfacURI = new URI(uri);
+            airavataRegistry.removeGFacURI(gfacURI);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (Exception e){
@@ -431,10 +450,11 @@ import java.util.Map;
     @DELETE
     @Path("delete/workflowinterpreteruri")
     @Produces("text/plain")
-    public Response removeWorkflowInterpreterURI(@QueryParam("uri") URI uri) {
+    public Response removeWorkflowInterpreterURI(@QueryParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
-            airavataRegistry.removeWorkflowInterpreterURI(uri);
+            URI intURI = new URI(uri);
+            airavataRegistry.removeWorkflowInterpreterURI(intURI);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         }catch (Exception e){
