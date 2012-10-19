@@ -8,24 +8,28 @@ import org.apache.airavata.registry.api.Gateway;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Properties;
 
 public class RegistryListener implements ServletContextListener {
-
+    public static final String AIRAVATA_SERVER_PROPERTIES = "airavata-server.properties";
     private static AiravataRegistry2 airavataRegistry;
-//    private static Axis2Registry axis2Registry;
-//    private static DataRegistry dataRegistry;
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         try{
-        ServletContext servletContext = servletContextEvent.getServletContext();
-//        URI url = new URI("http://localhost:8081/rmi");
-//        String username = "admin";
-//        String password = "admin";
-//        HashMap<String, String> map = new HashMap<String, String>();
-//        map.put("org.apache.jackrabbit.repository.uri", url.toString());
+            ServletContext servletContext = servletContextEvent.getServletContext();
 
+            URL url = this.getClass().getClassLoader().getResource(AIRAVATA_SERVER_PROPERTIES);
+            Properties properties = new Properties();
+            try {
+                properties.load(url.openStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String gatewayID = properties.getProperty("gateway.id");
 
-        airavataRegistry = AiravataRegistryFactory.getRegistry(new Gateway("default"), new AiravataUser("admin"));
+        airavataRegistry = AiravataRegistryFactory.getRegistry(new Gateway(gatewayID), new AiravataUser("admin"));
         servletContext.setAttribute("airavataRegistry", airavataRegistry);
         }catch (Exception e) {
             e.printStackTrace();
