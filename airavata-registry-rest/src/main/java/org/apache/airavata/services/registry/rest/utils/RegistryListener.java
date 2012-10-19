@@ -4,7 +4,6 @@ import org.apache.airavata.registry.api.AiravataRegistry2;
 import org.apache.airavata.registry.api.AiravataRegistryFactory;
 import org.apache.airavata.registry.api.AiravataUser;
 import org.apache.airavata.registry.api.Gateway;
-import org.apache.airavata.services.registry.rest.resources.RestServicesConstants;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;

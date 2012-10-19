@@ -1,4 +1,4 @@
-package org.apache.airavata.services.registry.rest.resources;
+package org.apache.airavata.services.registry.rest.utils;
 
 public class RestServicesConstants {
     public static final String AIRAVATA_SERVER_PROPERTIES = "airavata-server.properties";
