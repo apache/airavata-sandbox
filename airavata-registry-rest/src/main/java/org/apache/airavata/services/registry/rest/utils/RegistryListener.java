@@ -4,6 +4,7 @@ import org.apache.airavata.registry.api.AiravataRegistry2;
 import org.apache.airavata.registry.api.AiravataRegistryFactory;
 import org.apache.airavata.registry.api.AiravataUser;
 import org.apache.airavata.registry.api.Gateway;
+import org.apache.airavata.services.registry.rest.resources.RestServicesConstants;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -13,24 +14,26 @@ import java.net.URL;
 import java.util.Properties;
 
 public class RegistryListener implements ServletContextListener {
-    public static final String AIRAVATA_SERVER_PROPERTIES = "airavata-server.properties";
     private static AiravataRegistry2 airavataRegistry;
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         try{
             ServletContext servletContext = servletContextEvent.getServletContext();
 
-            URL url = this.getClass().getClassLoader().getResource(AIRAVATA_SERVER_PROPERTIES);
+            URL url = this.getClass().getClassLoader().
+                    getResource(RestServicesConstants.AIRAVATA_SERVER_PROPERTIES);
             Properties properties = new Properties();
             try {
                 properties.load(url.openStream());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            String gatewayID = properties.getProperty("gateway.id");
+            String gatewayID = properties.getProperty(RestServicesConstants.GATEWAY_ID);
+            String airavataUser = properties.getProperty(RestServicesConstants.REGISTRY_USER);
 
-        airavataRegistry = AiravataRegistryFactory.getRegistry(new Gateway(gatewayID), new AiravataUser("admin"));
-        servletContext.setAttribute("airavataRegistry", airavataRegistry);
+        airavataRegistry = AiravataRegistryFactory.
+                getRegistry(new Gateway(gatewayID), new AiravataUser(airavataUser));
+        servletContext.setAttribute(RestServicesConstants.AIRAVATA_REGISTRY, airavataRegistry);
         }catch (Exception e) {
             e.printStackTrace();
         }
