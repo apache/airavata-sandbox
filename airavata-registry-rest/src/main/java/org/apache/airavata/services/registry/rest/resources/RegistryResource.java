@@ -536,6 +536,7 @@ import java.util.Map;
 
     @POST
     @Path("hostdescriptor/save")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces("text/plain")
     public Response addHostDescriptor(@FormParam("host") String host) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
@@ -558,6 +559,7 @@ import java.util.Map;
 
     @POST
     @Path("hostdescriptor/update")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces("text/plain")
     public Response updateHostDescriptor(@FormParam("host") String host) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
@@ -674,6 +676,7 @@ import java.util.Map;
 
     @POST
     @Path("servicedescriptor/save")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces("text/xml")
     public Response addServiceDescriptor(@FormParam("service") String service){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
@@ -696,6 +699,7 @@ import java.util.Map;
 
     @POST
     @Path("servicedescriptor/update")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces("text/xml")
     public Response updateServiceDescriptor(@FormParam("service") String service) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
@@ -812,6 +816,7 @@ import java.util.Map;
 
     @POST
     @Path("applicationdescriptor/build/save/")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces("text/xml")
     public Response addApplicationDescriptor(@FormParam("service") String service,
                                          @FormParam("host") String host,
@@ -840,6 +845,7 @@ import java.util.Map;
 
     @POST
     @Path("applicationdescriptor/save")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces("text/xml")
     public Response addApplicationDesc(@FormParam("serviceName") String serviceName,
                                        @FormParam("hostName") String hostName,
@@ -865,6 +871,7 @@ import java.util.Map;
 
     @POST
     @Path("applicationdescriptor/update/descriptor")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces("text/xml")
     public Response udpateApplicationDescriptorByDescriptors(@FormParam("service") String service,
                                                              @FormParam("host") String host,
@@ -892,6 +899,7 @@ import java.util.Map;
 
     @POST
     @Path("applicationdescriptor/update")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces("text/xml")
     public Response updateApplicationDescriptor(@FormParam("serviceName") String serviceName,
                                                 @FormParam("hostName")String hostName,

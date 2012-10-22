@@ -34,7 +34,9 @@ To test
    curl --request DELETE http://localhost:9080/airavata-services/registry/api/delete/msgboxuri
 
 ************For descriptiors*********************************
-
+    curl --request GET http://localhost:9080/airavata-services/registry/api/hostdescriptor/exist?descriptorName=ember
+    curl -H "Accept: text/plain" -X POST -d 'host=<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>testHost1</type:hostName><type:hostAddress>aaaa</type:hostAddress></type:hostDescription>' http://localhost:9080/airavata-services/registry/api/hostdescriptor/save
+    curl -H "Accept: text/plain" -X POST -d 'host=<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>testHost1</type:hostName><type:hostAddress>aaaabbbbbbb</type:hostAddress></type:hostDescription>' http://localhost:9080/airavata-services/registry/api/hostdescriptor/update
 
 
 
