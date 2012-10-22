@@ -72,7 +72,7 @@
 
         %>
 
-        out.print("Registration DONE!");
+        Application Registration DONE!
 
     </body>
 </html>

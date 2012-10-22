@@ -30,7 +30,7 @@
 
     System.out.println("Host Registration was successful");
 %>
-out.print("Registration DONE!");
+    Host Registration DONE!
 
 </body>
 </html>

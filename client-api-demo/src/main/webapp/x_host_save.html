@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+
+Send an HTTP POST
+
+<button>Get Workflow Information</button>
+
+
+<!--curl -H "Accept: text/plain" -X POST -d "key=dummy-key4&value=dummy-value&date=2012-09-21 04:09:56"
+http://localhost:9080/airavata-services/registry/api/save/configuration-->
+
+<!--$.post("test.php", { name: "John", time: "2pm" } );-->
+
+<!--<script src="jquery.js"></script>-->
+<!--<script>-->
+    <!--$(document).ready(function(){-->
+        <!--$("button").click(function(){-->
+            <!--$.post("http://localhost:9080/airavata-services/registry/api/save/configuration",function(data,status){-->
+                <!--alert("Data: " + data + "\nStatus: " + status);-->
+            <!--});-->
+        <!--});-->
+    <!--});-->
+<!--</script>-->
+
+<!--<script src="jquery.js"></script>-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function(){
+        $("button").click(function(){
+//            $.post("http://localhost:9080/airavata-services/registry/api/save/configuration",
+            $.post("http://localhost:7080/airavata-registry-rest-services/airavata-services/registry/api/save/configuration",
+                    { key: "dummy2", value: "date=2012-09-21 04:09:56" } ,function(data,status){
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+        });
+    });
+</script>
+
+
+</body>
+</html>
+

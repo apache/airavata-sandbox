@@ -119,10 +119,7 @@ public class DescriptorRegistrationSample {
         }
     }
 
-    public static void execute(String username,
-                               String password,
-                               String registryRMIURI,
-                               String trustedCertLoc,
+    public static void execute(String trustedCertLoc,
                                String serviceName,
                                String inputName,
                                String inputValue,

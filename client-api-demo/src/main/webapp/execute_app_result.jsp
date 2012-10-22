@@ -21,10 +21,6 @@
 //            System.out.println("My proxy server   : " + myProxyServer);
 //            System.out.println("My proxy username : " + myProxyUsername);
 //            System.out.println("My proxy password : " + myProxyPassword);
-
-            final String username = request.getParameter("userName");
-            final String password = request.getParameter("password");
-            final String registryURL = request.getParameter("registryURL");
             final String trustedCertLoc = request.getParameter("certLocation");
 
 
@@ -37,7 +33,7 @@
 
                 new Thread() {
                     public void run() {
-                        DescriptorRegistrationSample.execute(username, password, registryURL, trustedCertLoc,
+                        DescriptorRegistrationSample.execute(trustedCertLoc,
                         serviceName, inputName, inputValue, outputName, myProxyServer, myProxyUsername, myProxyPassword);
                     }
 
