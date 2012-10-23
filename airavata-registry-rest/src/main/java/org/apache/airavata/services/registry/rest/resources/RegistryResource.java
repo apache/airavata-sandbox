@@ -624,23 +624,22 @@ import java.util.Map;
     @GET
     @Path("get/hostdescriptors")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getHostDescriptors(){
+    public Response getHostDescriptors() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try {
             List<HostDescription> hostDescriptionList = airavataRegistry.getHostDescriptors();
             HostDescriptionList list = new HostDescriptionList();
-            HostDescription[] hostDescriptions = new HostDescription[hostDescriptionList.size()];
+            HostDescriptor[] hostDescriptions = new HostDescriptor[hostDescriptionList.size()];
             for (int i = 0; i < hostDescriptionList.size(); i++) {
-                hostDescriptions[i] = hostDescriptionList.get(i);
+                HostDescriptor hostDescriptor = new HostDescriptor();
+                String document = hostDescriptionList.get(i).toXML();
+                hostDescriptor.setHostDocument(document);
+                hostDescriptions[i] = hostDescriptor;
             }
             list.setHostDescriptions(hostDescriptions);
             if (hostDescriptionList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(list);
-                HostDescription[] descriptions = list.getHostDescriptions();
-                for (int i =0; i < descriptions.length; i++){
-                    System.out.println("*********host[" + i + "] =" + descriptions[i].getType().getHostName() );
-                }
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);

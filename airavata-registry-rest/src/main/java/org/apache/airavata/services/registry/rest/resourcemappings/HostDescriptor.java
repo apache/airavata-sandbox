@@ -23,7 +23,18 @@ package org.apache.airavata.services.registry.rest.resourcemappings;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="stream")
+@XmlRootElement
 public class HostDescriptor {
+    private String hostDocument;
 
+    public HostDescriptor() {
+    }
+
+    public String getHostDocument() {
+        return hostDocument;
+    }
+
+    public void setHostDocument(String hostDocument) {
+        this.hostDocument = hostDocument;
+    }
 }

@@ -20,19 +20,18 @@
  */
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
-import org.apache.airavata.commons.gfac.type.HostDescription;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class HostDescriptionList {
-    private HostDescription[] hostDescriptions = null;
+    private HostDescriptor[] hostDescriptions = null;
 
-    public HostDescription[] getHostDescriptions() {
+    public HostDescriptor[] getHostDescriptions() {
         return hostDescriptions;
     }
 
-    public void setHostDescriptions(HostDescription[] hostDescriptions) {
+    public void setHostDescriptions(HostDescriptor[] hostDescriptions) {
         this.hostDescriptions = hostDescriptions;
     }
 
