@@ -107,11 +107,11 @@
 		</dependency>
 
 		<!-- Airavata -->
-		<!--dependency>
+		<dependency>
 			<groupId>org.apache.airavata</groupId>
-			<artifactId>airavata-client-api</artifactId>
+			<artifactId>airavata-gfac-schema-utils</artifactId>
 			<version>${airavata.version}</version>
-		</dependency-->
+		</dependency>
 		<dependency>
 			<groupId>org.apache.airavata</groupId>
 			<artifactId>airavata-registry-api</artifactId>

@@ -65,7 +65,7 @@ import java.util.Map;
 
     @Path("/configuration")
     @GET
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response getConfiguration(@QueryParam("key") String key) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -136,7 +136,7 @@ import java.util.Map;
 
     @POST
     @Path("update/configuration")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response addConfiguration(@FormParam("key") String key,
                                      @FormParam("value") String value,
                                      @FormParam("date") String date) {
@@ -155,7 +155,7 @@ import java.util.Map;
 
     @DELETE
     @Path("delete/allconfiguration")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response removeAllConfiguration(@QueryParam("key") String key) {
         try{
             airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
@@ -170,7 +170,7 @@ import java.util.Map;
 
     @DELETE
     @Path("delete/configuration")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response removeConfiguration(@QueryParam("key") String key, @QueryParam("value") String value) {
         try{
             airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
@@ -240,7 +240,7 @@ import java.util.Map;
 
     @GET
     @Path("eventingservice/uri")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response getEventingServiceURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -261,7 +261,7 @@ import java.util.Map;
 
     @GET
     @Path("messagebox/uri")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response getMessageBoxURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -282,7 +282,7 @@ import java.util.Map;
 
     @POST
     @Path("add/gfacuri")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response addGFacURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -298,7 +298,7 @@ import java.util.Map;
 
     @POST
     @Path("add/workflowinterpreteruri")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response addWorkflowInterpreterURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -314,7 +314,7 @@ import java.util.Map;
 
     @POST
     @Path("add/eventinguri")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response setEventingURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -330,7 +330,7 @@ import java.util.Map;
 
     @POST
     @Path("add/msgboxuri")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response setMessageBoxURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -346,7 +346,7 @@ import java.util.Map;
 
     @POST
     @Path("add/gfacuri/date")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response addGFacURIByDate(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -364,7 +364,7 @@ import java.util.Map;
 
     @POST
     @Path("add/workflowinterpreteruri/date")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response addWorkflowInterpreterURI(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -382,7 +382,7 @@ import java.util.Map;
 
     @POST
     @Path("add/eventinguri/date")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response setEventingURIByDate(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -400,7 +400,7 @@ import java.util.Map;
 
     @POST
     @Path("add/msgboxuri/date")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response setMessageBoxURIByDate(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -418,7 +418,7 @@ import java.util.Map;
 
     @DELETE
     @Path("delete/gfacuri")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response removeGFacURI(@QueryParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -434,7 +434,7 @@ import java.util.Map;
 
     @DELETE
     @Path("delete/allgfacuris")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response removeAllGFacURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -449,7 +449,7 @@ import java.util.Map;
 
     @DELETE
     @Path("delete/workflowinterpreteruri")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response removeWorkflowInterpreterURI(@QueryParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -465,7 +465,7 @@ import java.util.Map;
 
     @DELETE
     @Path("delete/allworkflowinterpreteruris")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response removeAllWorkflowInterpreterURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -480,7 +480,7 @@ import java.util.Map;
 
     @DELETE
     @Path("delete/eventinguri")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response unsetEventingURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -495,7 +495,7 @@ import java.util.Map;
 
     @DELETE
     @Path("delete/msgboxuri")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response unsetMessageBoxURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -514,7 +514,7 @@ import java.util.Map;
 
     @GET
     @Path("hostdescriptor/exist")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response isHostDescriptorExists(@QueryParam("descriptorName") String descriptorName){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         boolean state;
@@ -537,7 +537,7 @@ import java.util.Map;
     @POST
     @Path("hostdescriptor/save")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response addHostDescriptor(@FormParam("host") String host) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -560,7 +560,7 @@ import java.util.Map;
     @POST
     @Path("hostdescriptor/update")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response updateHostDescriptor(@FormParam("host") String host) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -604,7 +604,7 @@ import java.util.Map;
 
     @DELETE
     @Path("hostdescriptor/delete")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response removeHostDescriptor(@QueryParam("hostName") String hostName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -637,6 +637,10 @@ import java.util.Map;
             if (hostDescriptionList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(list);
+                HostDescription[] descriptions = list.getHostDescriptions();
+                for (int i =0; i < descriptions.length; i++){
+                    System.out.println("*********host[" + i + "] =" + descriptions[i].getType().getHostName() );
+                }
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
@@ -654,7 +658,7 @@ import java.util.Map;
 
     @GET
     @Path("servicedescriptor/exist")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response isServiceDescriptorExists(@QueryParam("descriptorName") String descriptorName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         boolean state;
@@ -677,7 +681,7 @@ import java.util.Map;
     @POST
     @Path("servicedescriptor/save")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces("text/xml")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response addServiceDescriptor(@FormParam("service") String service){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -700,7 +704,7 @@ import java.util.Map;
     @POST
     @Path("servicedescriptor/update")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces("text/xml")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response updateServiceDescriptor(@FormParam("service") String service) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -726,7 +730,7 @@ import java.util.Map;
     public Response getServiceDescriptor(@QueryParam("serviceName") String serviceName){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
-            String result = airavataRegistry.getHostDescriptor(serviceName).toXML();
+            String result = airavataRegistry.getServiceDescriptor(serviceName).toXML();
             if (result != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(result);
@@ -743,7 +747,7 @@ import java.util.Map;
 
     @DELETE
     @Path("servicedescriptor/delete")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response removeServiceDescriptor(@QueryParam("serviceName") String serviceName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -792,7 +796,7 @@ import java.util.Map;
 
     @GET
     @Path("applicationdescriptor/exist")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response isApplicationDescriptorExists(@QueryParam("serviceName")String serviceName,
                                                   @QueryParam("hostName")String hostName,
                                                   @QueryParam("descriptorName")String descriptorName) {
@@ -815,9 +819,9 @@ import java.util.Map;
     }
 
     @POST
-    @Path("applicationdescriptor/build/save/")
+    @Path("applicationdescriptor/build/save")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces("text/xml")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response addApplicationDescriptor(@FormParam("service") String service,
                                          @FormParam("host") String host,
                                          @FormParam("application") String application){
@@ -846,7 +850,7 @@ import java.util.Map;
     @POST
     @Path("applicationdescriptor/save")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces("text/xml")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response addApplicationDesc(@FormParam("serviceName") String serviceName,
                                        @FormParam("hostName") String hostName,
                                        @FormParam("application") String application) {
@@ -872,7 +876,7 @@ import java.util.Map;
     @POST
     @Path("applicationdescriptor/update/descriptor")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces("text/xml")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response udpateApplicationDescriptorByDescriptors(@FormParam("service") String service,
                                                              @FormParam("host") String host,
                                                              @FormParam("application") String application) {
@@ -900,7 +904,7 @@ import java.util.Map;
     @POST
     @Path("applicationdescriptor/update")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces("text/xml")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response updateApplicationDescriptor(@FormParam("serviceName") String serviceName,
                                                 @FormParam("hostName")String hostName,
                                                 @FormParam("application") String application){
@@ -946,7 +950,7 @@ import java.util.Map;
     }
 
     @GET
-    @Path("applicationdescriptor/host/descriptors")
+    @Path("applicationdescriptors/alldescriptors/host/service")
     @Produces("text/xml")
     public Response getApplicationDescriptors(@QueryParam("serviceName")String serviceName,
                                               @QueryParam("hostName") String hostName) {
@@ -968,7 +972,7 @@ import java.util.Map;
     }
 
     @GET
-    @Path("applicationdescriptor/descriptors")
+    @Path("applicationdescriptor/alldescriptors/service")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getApplicationDescriptors(@QueryParam("serviceName") String serviceName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
@@ -994,7 +998,7 @@ import java.util.Map;
     }
 
     @GET
-    @Path("applicationdescriptor/all/descriptors")
+    @Path("applicationdescriptor/alldescriptors")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getApplicationDescriptors(){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
@@ -1021,7 +1025,7 @@ import java.util.Map;
 
     @DELETE
     @Path("applicationdescriptor/delete")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response removeApplicationDescriptor(@QueryParam("serviceName") String serviceName,
                                                 @QueryParam("hostName") String hostName,
                                                 @QueryParam("appName") String appName) {
@@ -1046,7 +1050,7 @@ import java.util.Map;
     /**---------------------------------Project Registry----------------------------------**/
     @GET
     @Path("project/exist")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response isWorkspaceProjectExists(@QueryParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -1066,7 +1070,7 @@ import java.util.Map;
 
     @POST
     @Path("project/exist")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response isWorkspaceProjectExists(@FormParam("projectName") String projectName,
                                              @FormParam("createIfNotExists") String createIfNotExists) {
         boolean createIfNotExistStatus = false;
@@ -1091,7 +1095,7 @@ import java.util.Map;
 
     @POST
     @Path("add/project")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response addWorkspaceProject(@FormParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -1110,7 +1114,7 @@ import java.util.Map;
 
     @POST
     @Path("update/project")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response updateWorkspaceProject(@FormParam("projectName") String projectName){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -1129,7 +1133,7 @@ import java.util.Map;
 
     @DELETE
     @Path("delete/project")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response deleteWorkspaceProject(@QueryParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -1147,7 +1151,7 @@ import java.util.Map;
 
     @GET
     @Path("get/project")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response getWorkspaceProject(@QueryParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -1198,7 +1202,7 @@ import java.util.Map;
 
     @DELETE
     @Path("delete/experiment")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response removeExperiment(@QueryParam("experimentId") String experimentId){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
@@ -1324,7 +1328,7 @@ import java.util.Map;
 
 /*    @POST
     @Path("add/experiment")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public Response addExperiment(@FormParam("projectName") String projectName,
                                   @FormParam("experimentID") AiravataExperiment experiment){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);

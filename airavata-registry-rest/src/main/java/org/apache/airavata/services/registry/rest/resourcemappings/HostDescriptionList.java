@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class HostDescriptionList {
-    private HostDescription [] hostDescriptions = null;
+    private HostDescription[] hostDescriptions = null;
 
     public HostDescription[] getHostDescriptions() {
         return hostDescriptions;
