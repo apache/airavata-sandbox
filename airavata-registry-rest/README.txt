@@ -67,5 +67,11 @@ To test
     curl --request DELETE 'http://localhost:9080/airavata-services/registry/api/applicationdescriptor/delete?serviceName=echo&hostName=LocalHost&appName=LocalHost_application2'
 
 ************ Project Registry *********************************
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/project/exist?projectName=default'
+    curl -H "Accept: text/plain" -X POST -d 'projectName=project1' http://localhost:9080/airavata-services/registry/api/add/project
+    curl -H "Accept: text/plain" -X POST -d 'projectName=project1' http://localhost:9080/airavata-services/registry/api/update/project
+    curl --request DELETE 'http://localhost:9080/airavata-services/registry/api/delete/project?projectName=project1'
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/project?projectName=project1'
+
 
 

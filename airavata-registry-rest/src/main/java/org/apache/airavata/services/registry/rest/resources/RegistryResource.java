@@ -1051,15 +1051,17 @@ import java.util.Map;
     @GET
     @Path("project/exist")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response isWorkspaceProjectExists(@QueryParam("projectName") String projectName) {
+        public Response isWorkspaceProjectExists(@QueryParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
             boolean result = airavataRegistry.isWorkspaceProjectExists(projectName);
             if (result) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity("True");
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                builder.entity("False");
                 return builder.build();
             }
         } catch (RegistryException e) {
@@ -1151,14 +1153,32 @@ import java.util.Map;
 
     @GET
     @Path("get/project")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getWorkspaceProject(@QueryParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
             WorkspaceProject workspaceProject = airavataRegistry.getWorkspaceProject(projectName);
             if(workspaceProject != null){
+                WorkspaceProjectMapping workspaceProjectMapping = new WorkspaceProjectMapping(workspaceProject.getProjectName());
+
+                List<AiravataExperiment> airavataExperimentList = workspaceProject.getProjectsRegistry().getExperiments();
+                Experiment[] experiments = new Experiment[airavataExperimentList.size()];
+                if(airavataExperimentList.size() != 0){
+                    for (int i = 0; i < airavataExperimentList.size(); i++){
+                        Experiment experiment = new Experiment();
+                        AiravataExperiment airavataExperiment = airavataExperimentList.get(i);
+                        experiment.setExperimentId(airavataExperiment.getExperimentId());
+                        experiment.setGatewayName(airavataExperiment.getGateway().getGatewayName());
+                        experiment.setProject(airavataExperiment.getProject().getProjectName());
+                        experiment.setUser(airavataExperiment.getUser().getUserName());
+                        experiment.setDate(airavataExperiment.getSubmittedDate());
+                        experiments[i] = experiment;
+                    }
+                    workspaceProjectMapping.setExperimentsList(experiments);
+                }
+
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(workspaceProject);
+                builder.entity(workspaceProjectMapping);
                 return builder.build();
             } else{
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
