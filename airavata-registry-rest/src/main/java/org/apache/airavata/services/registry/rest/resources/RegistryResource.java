@@ -536,9 +536,9 @@ import java.util.Map;
 
     @POST
     @Path("hostdescriptor/save")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response addHostDescriptor(@FormParam("host") String host) {
+    public Response addHostDescriptor(String host) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             HostDescription hostDescription = HostDescription.fromXML(host);
@@ -559,9 +559,9 @@ import java.util.Map;
 
     @POST
     @Path("hostdescriptor/update")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response updateHostDescriptor(@FormParam("host") String host) {
+    public Response updateHostDescriptor(String host) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             HostDescription hostDescription = HostDescription.fromXML(host);
