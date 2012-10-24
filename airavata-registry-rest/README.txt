@@ -75,6 +75,27 @@ To test
     curl --request DELETE 'http://localhost:9080/airavata-services/registry/api/delete/experiment?experimentId=eb9e67cf-6fe3-46f1-b50b-7b42936d347d
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/experiments/all'
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/experiments/project?projectName=default'
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/experiments/date?fromDate=2012-10-16%2000:00:00&toDate=2012-10-18%2000:00:00'
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/experiments/project/date?projectName=default&fromDate=2012-10-16%2000:00:00&toDate=2012-10-18%2000:00:00'
+    curl -H "Accept: text/plain" -X POST -d 'projectName=project1&experimentID=testexpID1&submittedDate=2012-10-18 00:00:00' http://localhost:9080/airavata-services/registry/api/add/experiment
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/experiment/exist?experimentId=testexpID1'
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/experiment/notexist/create?experimentId=testExpID2&createIfNotPresent=true'
+    curl -H "Accept: text/plain" -X POST -d 'experimentId=testExpID2&user=abc' http://localhost:9080/airavata-services/registry/api/update/experiment
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/experiment/executionuser?experimentId=testExpID2'
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/experiment/name?experimentId=testExpID2'
+    curl -H "Accept: text/plain" -X POST -d 'experimentId=testExpID2&experimentName=ddscsddsss111' http://localhost:9080/airavata-services/registry/api/update/experimentname
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/experimentmetadata?experimentId=testExpID2'
+    curl -H "Accept: text/plain" -X POST -d 'experimentId=testExpID2&metadata=aaaaaaa' http://localhost:9080/airavata-services/registry/api/update/experimentmetadata
+
+************* Workflow Execution *************************************
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/workflowtemplatename?workflowInstanceId=e00ddc5e-f8d5-4492-9eb2-10372efb103c'
+    curl -H "Accept: text/plain" -X POST -d 'workflowInstanceId=e00ddc5e-f8d5-4492-9eb2-10372efb103c&templateName=wftemplate1' http://localhost:9080/airavata-services/registry/api/update/workflowinstancetemplatename
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/experimentworkflowinstances?experimentId=ff7338c9-f9ad-4d86-b486-1e8e9c3a9cc4'
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/workflowinstance/exist/check?instanceId=e00ddc5e-f8d5-4492-9eb2-10372efb103c'
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/workflowinstance/exist/create?instanceId=testWFInstanceID&createIfNotPresent=true'
+    curl -H "Accept: text/plain" -X POST -d 'instanceId=testWFInstanceID&executionStatus=FINISHED' http://localhost:9080/airavata-services/registry/api/update/workflowinstancestatus/instanceid
+    curl -H "Accept: text/plain" -X POST -d 'experimentId=testWFInstanceID&workflowInstanceId=testWFInstanceID&executionStatus=STARTED&statusUpdateTime=2012-10-23 00:00:00' http://localhost:9080/airavata-services/registry/api/update/workflowinstancestatus/experimentid
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/workflowinstancestatus?instanceId=testWFInstanceID'
 
 
 

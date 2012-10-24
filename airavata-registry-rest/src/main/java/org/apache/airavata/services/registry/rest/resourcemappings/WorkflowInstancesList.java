@@ -1,18 +1,16 @@
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
-import org.apache.airavata.registry.api.workflow.WorkflowInstance;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class WorkflowInstancesList {
-    WorkflowInstance[] workflowInstances = null;
+    WorkflowInstanceMapping[] workflowInstanceMappings = null;
 
-    public WorkflowInstance[] getWorkflowInstances() {
-        return workflowInstances;
+    public WorkflowInstanceMapping[] getWorkflowInstanceMappings() {
+        return workflowInstanceMappings;
     }
 
-    public void setWorkflowInstances(WorkflowInstance[] workflowInstances) {
-        this.workflowInstances = workflowInstances;
+    public void setWorkflowInstanceMappings(WorkflowInstanceMapping[] workflowInstanceMappings) {
+        this.workflowInstanceMappings = workflowInstanceMappings;
     }
 }

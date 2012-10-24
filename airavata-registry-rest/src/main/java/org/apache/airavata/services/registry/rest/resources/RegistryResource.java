@@ -9,9 +9,9 @@ import org.apache.airavata.registry.api.*;
 import org.apache.airavata.registry.api.exception.gateway.*;
 import org.apache.airavata.registry.api.exception.worker.*;
 import org.apache.airavata.registry.api.workflow.*;
-import org.apache.airavata.registry.services.*;
 import org.apache.airavata.services.registry.rest.resourcemappings.*;
 import org.apache.airavata.registry.api.AiravataExperiment;
+import org.apache.airavata.services.registry.rest.resourcemappings.WorkflowInstanceMapping;
 import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
 import org.apache.xmlbeans.XmlException;
 import org.slf4j.Logger;
@@ -26,7 +26,6 @@ import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -1349,6 +1348,7 @@ import java.util.Map;
 
     @GET
     @Path("get/experiments/date")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getExperimentsByDate(@QueryParam("fromDate") String fromDate,
                                          @QueryParam("toDate") String toDate) {
@@ -1390,6 +1390,7 @@ import java.util.Map;
 
     @GET
     @Path("get/experiments/project/date")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getExperimentsByProjectDate(@QueryParam("projectName") String projectName,
                                                 @QueryParam("fromDate") String fromDate,
@@ -1432,6 +1433,7 @@ import java.util.Map;
 
     @POST
     @Path("add/experiment")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addExperiment(@FormParam("projectName") String projectName,
                                   @FormParam("experimentID") String experimentID,
@@ -1507,18 +1509,13 @@ import java.util.Map;
     @POST
     @Path("update/experiment")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response updateExperimentExecutionUser(@QueryParam("experimentId") String experimentId,
-                                                  @QueryParam("user") String user) {
+    public Response updateExperimentExecutionUser(@FormParam("experimentId") String experimentId,
+                                                  @FormParam("user") String user) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            Boolean result = airavataRegistry.updateExperimentExecutionUser(experimentId,user);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
+            airavataRegistry.updateExperimentExecutionUser(experimentId,user);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
             return builder.build();
@@ -1549,7 +1546,7 @@ import java.util.Map;
     @GET
     @Path("get/experiment/name")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getExperimentName(@QueryParam("experimentID") String experimentId) {
+    public Response getExperimentName(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             String result = airavataRegistry.getExperimentName(experimentId);
@@ -1570,18 +1567,13 @@ import java.util.Map;
     @POST
     @Path("update/experimentname")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response updateExperimentName(@QueryParam("experimentId") String experimentId,
-                                         @QueryParam("experimentName") String experimentName){
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+    public Response updateExperimentName(@FormParam("experimentId") String experimentId,
+                                         @FormParam("experimentName") String experimentName){
+            airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            Boolean result = airavataRegistry.updateExperimentName(experimentId, experimentName);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
+            airavataRegistry.updateExperimentName(experimentId, experimentName);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
             return builder.build();
@@ -1617,14 +1609,9 @@ import java.util.Map;
                                              @FormParam("metadata") String metadata) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            Boolean result = airavataRegistry.updateExperimentMetadata(experimentId, metadata);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
+            airavataRegistry.updateExperimentMetadata(experimentId, metadata);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
             return builder.build();
@@ -1676,11 +1663,16 @@ import java.util.Map;
         try{
             List<WorkflowInstance> experimentWorkflowInstances = airavataRegistry.getExperimentWorkflowInstances(experimentId);
             WorkflowInstancesList workflowInstancesList = new WorkflowInstancesList();
-            WorkflowInstance[] workflowInstances = new WorkflowInstance[experimentWorkflowInstances.size()];
+            WorkflowInstanceMapping[] workflowInstanceMappings = new WorkflowInstanceMapping[experimentWorkflowInstances.size()];
             for (int i=0; i<experimentWorkflowInstances.size(); i++){
-                workflowInstances[i] = experimentWorkflowInstances.get(i);
+                WorkflowInstanceMapping workflowInstanceMapping = new WorkflowInstanceMapping();
+                WorkflowInstance workflowInstance = experimentWorkflowInstances.get(i);
+                workflowInstanceMapping.setExperimentId(workflowInstance.getExperimentId());
+                workflowInstanceMapping.setTemplateName(workflowInstance.getTemplateName());
+                workflowInstanceMapping.setWorkflowInstanceId(workflowInstance.getWorkflowInstanceId());
+                workflowInstanceMappings[i] = workflowInstanceMapping;
             }
-            workflowInstancesList.setWorkflowInstances(workflowInstances);
+            workflowInstancesList.setWorkflowInstanceMappings(workflowInstanceMappings);
             if (experimentWorkflowInstances.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(workflowInstancesList);
@@ -1704,9 +1696,11 @@ import java.util.Map;
             Boolean result = airavataRegistry.isWorkflowInstanceExists(instanceId);
             if (result) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity("True");
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                builder.entity("False");
                 return builder.build();
             }
         } catch (RegistryException e) {
@@ -1726,6 +1720,7 @@ import java.util.Map;
             Boolean result = airavataRegistry.isWorkflowInstanceExists(instanceId, createIfNotPresent);
             if (result) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity("True");
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
@@ -1745,14 +1740,9 @@ import java.util.Map;
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             WorkflowInstanceStatus.ExecutionStatus status = WorkflowInstanceStatus.ExecutionStatus.valueOf(executionStatus);
-            Boolean result = airavataRegistry.updateWorkflowInstanceStatus(instanceId, status);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
+            airavataRegistry.updateWorkflowInstanceStatus(instanceId, status);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
             return builder.build();
@@ -1760,26 +1750,25 @@ import java.util.Map;
     }
 
     @POST
-    @Path("update/workflowinstancestatus/experimentid")
+    @Path("update/workflowinstancestatus")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response updateWorkflowInstanceStatusByExperiment(@FormParam("experimentId") String experimentId,
-                                                             @FormParam("workflowInstanceId") String workflowInstanceId,
-                                                             @FormParam("executionStatus") String executionStatus,
-                                                             @FormParam("statusUpdateTime") Date statusUpdateTime) {
+    public Response updateWorkflowInstanceStatus(@FormParam("workflowInstanceId") String workflowInstanceId,
+                                                 @FormParam("executionStatus") String executionStatus,
+                                                 @FormParam("statusUpdateTime") String statusUpdateTime) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            WorkflowInstance workflowInstance =  new WorkflowInstance(experimentId, workflowInstanceId);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date formattedDate = dateFormat.parse(statusUpdateTime);
+            WorkflowInstance workflowInstance = airavataRegistry.getWorkflowInstanceData(workflowInstanceId).getWorkflowInstance();
             WorkflowInstanceStatus.ExecutionStatus status = WorkflowInstanceStatus.ExecutionStatus.valueOf(executionStatus);
-            WorkflowInstanceStatus workflowInstanceStatus = new WorkflowInstanceStatus(workflowInstance, status, statusUpdateTime);
-            Boolean result = airavataRegistry.updateWorkflowInstanceStatus(workflowInstanceStatus);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
+            WorkflowInstanceStatus workflowInstanceStatus = new WorkflowInstanceStatus(workflowInstance, status, formattedDate);
+            airavataRegistry.updateWorkflowInstanceStatus(workflowInstanceStatus);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
         } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            return builder.build();
+        } catch (ParseException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
             return builder.build();
         }
@@ -1787,14 +1776,25 @@ import java.util.Map;
 
     @GET
     @Path("get/workflowinstancestatus")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getWorkflowInstanceStatus(@QueryParam("instanceId") String instanceId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             WorkflowInstanceStatus workflowInstanceStatus = airavataRegistry.getWorkflowInstanceStatus(instanceId);
-            if(workflowInstanceStatus != null){
+            WorkflowInstanceStatusMapping workflowInstanceStatusMapping = new WorkflowInstanceStatusMapping();
+            workflowInstanceStatusMapping.setExecutionStatus(workflowInstanceStatus.getExecutionStatus().name());
+            workflowInstanceStatusMapping.setStatusUpdateTime(workflowInstanceStatus.getStatusUpdateTime());
+            WorkflowInstance workflowInstance = workflowInstanceStatus.getWorkflowInstance();
+            WorkflowInstanceMapping workflowInstanceMapping = new WorkflowInstanceMapping();
+            if(workflowInstance != null){
+                workflowInstanceStatusMapping.setExperimentId(workflowInstance.getExperimentId());
+                workflowInstanceStatusMapping.setTemplateName(workflowInstance.getTemplateName());
+                workflowInstanceStatusMapping.setWorkflowInstanceId(workflowInstance.getWorkflowInstanceId());
+            }
+//            workflowInstanceStatusMapping.setWorkflowInstanceMapping(workflowInstanceMapping);
+            if(workflowInstanceStatusMapping != null){
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(workflowInstanceStatus);
+                builder.entity(workflowInstanceStatusMapping);
                 return builder.build();
             }else{
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
@@ -1809,22 +1809,17 @@ import java.util.Map;
     @POST
     @Path("update/workflownodeinput")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response updateWorkflowNodeInput(@FormParam("experimentID") String experimentID,
+    public Response updateWorkflowNodeInput(@FormParam("experimentId") String experimentID,
                                             @FormParam("nodeID") String nodeID,
-                                            @FormParam("workflowInstanceID") String workflowInstanceID,
+                                            @FormParam("workflowInstanceId") String workflowInstanceID,
                                             @FormParam("data") String data){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            WorkflowInstance workflowInstance = new WorkflowInstance(experimentID, nodeID);
-            WorkflowInstanceNode workflowInstanceNode = new WorkflowInstanceNode(workflowInstance, nodeID);
-            boolean result = airavataRegistry.updateWorkflowNodeInput(workflowInstanceNode, data);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
+            WorkflowInstanceData workflowInstanceData = airavataRegistry.getWorkflowInstanceData(workflowInstanceID);
+            WorkflowInstanceNode workflowInstanceNode = workflowInstanceData.getNodeData(nodeID).getWorkflowInstanceNode();
+            airavataRegistry.updateWorkflowNodeInput(workflowInstanceNode, data);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
             return builder.build();
@@ -1841,16 +1836,11 @@ import java.util.Map;
                                              @FormParam("data") String data) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            WorkflowInstance workflowInstance = new WorkflowInstance(experimentID, nodeID);
-            WorkflowInstanceNode workflowInstanceNode = new WorkflowInstanceNode(workflowInstance, nodeID);
-            boolean result = airavataRegistry.updateWorkflowNodeOutput(workflowInstanceNode, data);
-            if (result) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                return builder.build();
-            }
+            WorkflowInstanceData workflowInstanceData = airavataRegistry.getWorkflowInstanceData(workflowInstanceID);
+            WorkflowInstanceNode workflowInstanceNode = workflowInstanceData.getNodeData(nodeID).getWorkflowInstanceNode();
+            airavataRegistry.updateWorkflowNodeOutput(workflowInstanceNode, data);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
             return builder.build();
