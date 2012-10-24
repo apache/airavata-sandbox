@@ -1,18 +1,16 @@
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
-import org.apache.airavata.commons.gfac.type.ServiceDescription;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ServiceDescriptionList {
-    private ServiceDescription[] serviceDescriptions = null;
+    private ServiceDescriptor[] serviceDescriptions = null;
 
-    public ServiceDescription[] getServiceDescriptions() {
+    public ServiceDescriptor[] getServiceDescriptions() {
         return serviceDescriptions;
     }
 
-    public void setServiceDescriptions(ServiceDescription[] serviceDescriptions) {
+    public void setServiceDescriptions(ServiceDescriptor[] serviceDescriptions) {
         this.serviceDescriptions = serviceDescriptions;
     }
 }

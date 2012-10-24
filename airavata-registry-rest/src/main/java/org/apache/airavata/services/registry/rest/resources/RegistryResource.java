@@ -770,9 +770,11 @@ import java.util.Map;
         try {
             List<ServiceDescription> serviceDescriptors = airavataRegistry.getServiceDescriptors();
             ServiceDescriptionList list = new ServiceDescriptionList();
-            ServiceDescription[] serviceDescriptions = new ServiceDescription[serviceDescriptors.size()];
+            ServiceDescriptor[] serviceDescriptions = new ServiceDescriptor[serviceDescriptors.size()];
             for (int i = 0; i < serviceDescriptors.size(); i++) {
-                serviceDescriptions[i] = serviceDescriptors.get(i);
+                ServiceDescriptor serviceDescriptor = new ServiceDescriptor();
+                serviceDescriptor.setServiceDocument(serviceDescriptors.get(i).toXML());
+                serviceDescriptions[i] = serviceDescriptor;
             }
             list.setServiceDescriptions(serviceDescriptions);
             if (serviceDescriptors.size() != 0) {
@@ -976,10 +978,20 @@ import java.util.Map;
     public Response getApplicationDescriptors(@QueryParam("serviceName") String serviceName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
-            Map<String, ApplicationDeploymentDescription> applicationDescriptors = airavataRegistry.getApplicationDescriptors(serviceName);
+            Map<String, ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = airavataRegistry.getApplicationDescriptors(serviceName);
             ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
-            applicationDescriptorList.setMap(applicationDescriptors);
-            if(applicationDescriptors.size() != 0){
+            ApplicationDescriptor[] applicationDescriptors = new ApplicationDescriptor[applicationDeploymentDescriptionMap.size()];
+            int i = 0;
+            for(String hostName : applicationDeploymentDescriptionMap.keySet()){
+                ApplicationDeploymentDescription applicationDeploymentDescription = applicationDeploymentDescriptionMap.get(hostName);
+                ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
+                applicationDescriptor.setHostdescName(hostName);
+                applicationDescriptor.setAppDocument(applicationDeploymentDescription.toXML());
+                applicationDescriptors[i] = applicationDescriptor;
+                i++;
+            }
+            applicationDescriptorList.setApplicationDescriptors(applicationDescriptors);
+            if(applicationDeploymentDescriptionMap.size() != 0){
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(applicationDescriptorList);
                 return builder.build();
@@ -1002,10 +1014,21 @@ import java.util.Map;
     public Response getApplicationDescriptors(){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(AIRAVATA_CONTEXT);
         try{
-            Map<String[], ApplicationDeploymentDescription> applicationDescriptors = airavataRegistry.getApplicationDescriptors();
+            Map<String[], ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = airavataRegistry.getApplicationDescriptors();
             ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
-            applicationDescriptorList.setApplicationDeploymentDescriptionMap(applicationDescriptors);
-            if(applicationDescriptors.size() != 0){
+            ApplicationDescriptor[] applicationDescriptors = new ApplicationDescriptor[applicationDeploymentDescriptionMap.size()];
+            int i = 0;
+            for (String[] descriptors : applicationDeploymentDescriptionMap.keySet()){
+                ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
+                ApplicationDeploymentDescription applicationDeploymentDescription = applicationDeploymentDescriptionMap.get(descriptors);
+                applicationDescriptor.setServiceDescName(descriptors[0]);
+                applicationDescriptor.setHostdescName(descriptors[1]);
+                applicationDescriptor.setAppDocument(applicationDeploymentDescription.toXML());
+                applicationDescriptors[i] = applicationDescriptor;
+                i++;
+            }
+            applicationDescriptorList.setApplicationDescriptors(applicationDescriptors);
+            if(applicationDeploymentDescriptionMap.size() != 0){
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(applicationDescriptorList);
                 return builder.build();

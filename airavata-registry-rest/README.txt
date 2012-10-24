@@ -41,7 +41,6 @@ To test
     curl -H "Accept: text/plain" -X POST -d 'host=<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>testHost1</type:hostName><type:hostAddress>aaaabbbbbbb</type:hostAddress></type:hostDescription>' http://localhost:9080/airavata-services/registry/api/hostdescriptor/update
     curl --request GET http://localhost:9080/airavata-services/registry/api/host/description?hostName=testHost1
     curl --request DELETE http://localhost:9080/airavata-services/registry/api/hostdescriptor/delete?hostName=testHost1
-    //need to test this
     curl --request GET http://localhost:9080/airavata-services/registry/api/get/hostdescriptors
 
     ############## Service descriptrors ##########################
@@ -50,7 +49,6 @@ To test
     curl -H "Accept: text/plain" -X POST -d 'service=<type:serviceDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:name>echo1</type:name><type:inputParameters><type:parameterName>echo11_input</type:parameterName><type:parameterDescription xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/><type:parameterType type="String"><name>String</name></type:parameterType></type:inputParameters><type:outputParameters><type:parameterName>echo11_output</type:parameterName><type:parameterDescription xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/><type:parameterType type="String"><name>String</name></type:parameterType></type:outputParameters></type:serviceDescription>' http://localhost:9080/airavata-services/registry/api/servicedescriptor/update
     curl --request GET http://localhost:9080/airavata-services/registry/api/servicedescriptor/description?serviceName=echo1
     curl --request DELETE http://localhost:9080/airavata-services/registry/api/servicedescriptor/delete?serviceName=echo1
-    //need to test
     curl --request GET http://localhost:9080/airavata-services/registry/api/get/servicedescriptors
 
     ############## Application descriptrors ##########################
@@ -61,7 +59,6 @@ To test
     curl -H "Accept: text/plain" -X POST -d 'serviceName=echo&hostName=LocalHost&application=<type:applicationDeploymentDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:applicationName>LocalHost_application2</type:applicationName><type:executableLocation>xccccccccxc11111</type:executableLocation><type:scratchWorkingDirectory>/sdddsdsds1111</type:scratchWorkingDirectory></type:applicationDeploymentDescription>' http://localhost:9080/airavata-services/registry/api/applicationdescriptor/update
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/applicationdescriptor/description?serviceName=echo&hostName=LocalHost&applicationName=LocalHost_application2'
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/applicationdescriptors/alldescriptors/host/service?serviceName=echo&hostName=LocalHost'
-    //need to find why object is not populated
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/applicationdescriptor/alldescriptors/service?serviceName=echo'
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/applicationdescriptor/alldescriptors'
     curl --request DELETE 'http://localhost:9080/airavata-services/registry/api/applicationdescriptor/delete?serviceName=echo&hostName=LocalHost&appName=LocalHost_application2'
