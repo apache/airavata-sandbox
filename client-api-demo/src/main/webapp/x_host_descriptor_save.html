@@ -46,9 +46,29 @@ Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" id="gatekeepe
         $('[name="btn2"]').click(function(){
             //alert($(this).val());
             alert("button btn2 clicked!");
-            alert("" + "" + "" + "" + "" + "" + "" + "" + "");
+            var hostName = $("#hostName1").val();
+            var hostAddress = $("#hostAddress1").val();
+
+//            var xml = $('<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>mylocalhost</type:hostName><type:hostAddress>127.0.01</type:hostAddress></type:hostDescription>');
+            var xml = $('<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>' + hostName + '</type:hostName><type:hostAddress>' + hostAddress + '</type:hostAddress></type:hostDescription>');
+
+            var xmlData= $(xml);
+            var xmlString;
+            if (window.ActiveXObject){
+                xmlString = xmlData.xml;
+            } else {
+                var oSerializer = new XMLSerializer();
+                xmlString = oSerializer.serializeToString(xmlData[0]);
+            }
+            console.log(xmlString);
+
+            alert(hostName);
+            alert(hostAddress);
+            alert(xmlString);
+
+            var string
             $.post("http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save",
-                    { host: "&lt;type:hostDescription xmlns:type=&quot;http://schemas.airavata.apache.org/gfac/type&quot;&gt;&lt;type:hostName&gt;testHost1&lt;/type:hostName&gt;&lt;type:hostAddress&gt;aaaa&lt;/type:hostAddress&gt;&lt;/type:hostDescription"} ,function(data,status){
+                    { host: xmlString} ,function(data,status){
 // TODO : REST api should send some response back in case of a successful invocation of service.
 //                alert("Data: " + data + "\nStatus: " + status);
                         alert("Button 2 clicked !");
@@ -77,3 +97,14 @@ Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" id="gatekeepe
     <!--<type:hostName>mylocalhost</type:hostName>-->
     <!--<type:hostAddress>127.0.01</type:hostAddress>-->
 <!--</type:hostDescription>-->
+
+<!--<type:hostdescription xmlns:type="http://schemas.airavata.apache.org/gfac/type">-->
+    <!--<type:hostname>gram-99</type:hostname>-->
+    <!--<type:hostaddress>gatekeeper2.ranger.tacc.teragrid.org</type:hostaddress>-->
+<!--</type:hostdescription>-->
+
+
+<!--curl -H "Accept: text/plain" -X POST -d 'host=<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>testHost3</type:hostName><type:hostAddress>aaaa</type:hostAddress></type:hostDescription>' http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save-->
+<!--curl -H "Accept: text/plain" -X POST -d 'host=&lt;type:hostDescription xmlns:type=&quot;http://schemas.airavata.apache.org/gfac/type&quot;&gt;&lt;type:hostName&gt;mylocalhost2&lt;/type:hostName&gt;&lt;type:hostAddress&gt;127.0.01&lt;/type:hostAddress&gt;&lt;/type:hostDescription&gt;' http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save-->
+
+<!--&lt;type:hostDescription xmlns:type=&quot;http://schemas.airavata.apache.org/gfac/type&quot;&gt;&lt;type:hostName&gt;mylocalhost2&lt;/type:hostName&gt;&lt;type:hostAddress&gt;127.0.01&lt;/type:hostAddress&gt;&lt;/type:hostDescription&gt;-->
