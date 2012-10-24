@@ -679,9 +679,9 @@ import java.util.Map;
 
     @POST
     @Path("servicedescriptor/save")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response addServiceDescriptor(@FormParam("service") String service){
+    public Response addServiceDescriptor(String service){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
@@ -702,9 +702,9 @@ import java.util.Map;
 
     @POST
     @Path("servicedescriptor/update")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response updateServiceDescriptor(@FormParam("service") String service) {
+    public Response updateServiceDescriptor(String service) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
