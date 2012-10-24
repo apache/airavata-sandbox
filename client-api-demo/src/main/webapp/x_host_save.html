@@ -15,6 +15,7 @@ Send an HTTP POST
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
 <script>
     $(document).ready(function(){
+
         $('[name="btn1"]').click(function(){
             $.post("http://localhost:7080/airavata-registry-rest-services/registry/api/save/configuration",
                     { key: "dummy3", value: "value3" , date : "2011-10-22 00:00:00"} ,function(data,status){

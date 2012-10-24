@@ -9,9 +9,9 @@
 <b> Register Host Description </b>
 <br/>
 
-Host Name           : <input type="text" name="hostName" value="gram" size="75">
+Host Name           : <input type="text" name="hostName" id="hostName1" value="gram" size="75">
 <br/>
-Host Address        : <input type="text" name="hostAddress" value="gatekeeper2.ranger.tacc.teragrid.org" size="75">
+Host Address        : <input type="text" name="hostAddress" id="hostAddress1" value="gatekeeper2.ranger.tacc.teragrid.org" size="75">
 <br/>
 Host Type           : <select name="drop1">
                          <option selected="true">Local</option>
@@ -19,11 +19,13 @@ Host Type           : <select name="drop1">
                         </select>
 <br/>
 <div id="div">
-Host Endpoint       : <input type="text" name="hostEndpoint" value="gsiftp://gridftp.ranger.tacc.teragrid.org:2811/" size="75">
+Host Endpoint       : <input type="text" name="hostEndpoint" id="hostEndpoint1" value="gsiftp://gridftp.ranger.tacc.teragrid.org:2811/" size="75">
     <br/>
-Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" value="gatekeeper.ranger.tacc.teragrid.org:2119/jobmanager-sge" size="75">
+Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" id="gatekeeperEndpoint1" value="gatekeeper.ranger.tacc.teragrid.org:2119/jobmanager-sge" size="75">
     <br/>
 </div>
+
+<button name="btn2">Save Host</button>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
 <script>
@@ -40,8 +42,38 @@ Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" value="gateke
                 $("div").show();
             }
         });
+
+        $('[name="btn2"]').click(function(){
+            //alert($(this).val());
+            alert("button btn2 clicked!");
+            alert("" + "" + "" + "" + "" + "" + "" + "" + "");
+            $.post("http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save",
+                    { host: "&lt;type:hostDescription xmlns:type=&quot;http://schemas.airavata.apache.org/gfac/type&quot;&gt;&lt;type:hostName&gt;testHost1&lt;/type:hostName&gt;&lt;type:hostAddress&gt;aaaa&lt;/type:hostAddress&gt;&lt;/type:hostDescription"} ,function(data,status){
+// TODO : REST api should send some response back in case of a successful invocation of service.
+//                alert("Data: " + data + "\nStatus: " + status);
+                        alert("Button 2 clicked !");
+                    });
+        });
     });
 </script>
 
 </body>
 </html>
+
+<!--"<type:hostDescription xsi:type="type:globusHostType" xmlns:type="http://schemas.airavata.apache.org/gfac/type" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">-->
+    <!--<type:hostName>trestles</type:hostName>-->
+    <!--<type:hostAddress>trestles.sdsc.edu</type:hostAddress>-->
+    <!--<type:gridFTPEndPoint>gsiftp://trestles-dm1.sdsc.xsede.org:2811/</type:gridFTPEndPoint>-->
+    <!--<type:globusGateKeeperEndPoint>trestles.sdsc.edu:2119/jobmanager-pbs</type:globusGateKeeperEndPoint>-->
+<!--</type:hostDescription>"-->
+
+
+<!--<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type">-->
+    <!--<type:hostName>mylocalhost</type:hostName>-->
+    <!--<type:hostAddress>127.0.01</type:hostAddress>-->
+<!--</type:hostDescription>-->
+
+<!--<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type">-->
+    <!--<type:hostName>mylocalhost</type:hostName>-->
+    <!--<type:hostAddress>127.0.01</type:hostAddress>-->
+<!--</type:hostDescription>-->
