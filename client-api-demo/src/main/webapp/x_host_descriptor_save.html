@@ -6,51 +6,63 @@
 </head>
 <body>
 
+testing4
 
-testing
+Host Name     : <input type="text" name="hostName" value="gram" size="50">
+<br/>
+Host Address  : <input type="text" name="hostAddress" value="gatekeeper2.ranger.tacc.teragrid.org" size="50">
+<br/>
+Host Type     : <select name="drop1">
+    <option selected="true">Local
+    <option>Globus
+</select>
+<br/>
+<!--<div id="div1">-->
+    <!--Host Endpoint : <input type="text" name="hostEndpoint" value="gsiftp://gridftp.ranger.tacc.teragrid.org:2811/" size="50">-->
+    <!--<br/>-->
+    <!--Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" value="gatekeeper.ranger.tacc.teragrid.org:2119/jobmanager-sge" size="50">-->
+    <!--<br/>-->
+<!--</div>-->
 
-<!--<form action="register_host_result.jsp" method="POST">-->
-
-<div id="div1">
-    <!--<tr><td>-->
-        Host Endpoint
-    <label  for="male">Male</label>
-    <!--</td>-->
-        <!--<td>-->
-            <input type="text" name="hostEndpoint" value="gsiftp://gridftp.ranger.tacc.teragrid.org:2811/" size="50">
+<div id="div">
+    Host Endpoint : <input type="text" name="hostEndpoint" value="gsiftp://gridftp.ranger.tacc.teragrid.org:2811/" size="50">
     <br/>
-        <!--</td></tr>-->
-    <!--<tr><td>-->
-        Gatekeeper Endpoint
-    <!--</td>-->
-        <!--<td>-->
-            <input type="text" name="gatekeeperEndpoint" value="gatekeeper.ranger.tacc.teragrid.org:2119/jobmanager-sge" size="50">
-        <!--</td></tr>-->
+    Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" value="gatekeeper.ranger.tacc.teragrid.org:2119/jobmanager-sge" size="50">
+    <br/>
+    <p>If you click on the "Hide" button, I will disappear.</p>
 </div>
 
-
     <table border="0">
-        <b>HOST</b>
-        <tr><td>Host Name           </td>
-            <td> <input type="text" name="hostName" value="gram" size="50"></td></tr>
-        <tr><td>
-            Host Address
-        </td><td>
-            <input type="text" name="hostAddress" value="gatekeeper2.ranger.tacc.teragrid.org" size="50"></td></tr>
-        <tr><td>Host Type           </td><td>
-            <input type="text" name="hostType" value="globus" size="50"></td></tr>
 
-        <div id="div2">
-            <tr><td>Host Endpoint       </td>
-                <td> <input type="text" name="hostEndpoint" value="gsiftp://gridftp.ranger.tacc.teragrid.org:2811/" size="50"></td></tr>
-            <tr><td>Gatekeeper Endpoint </td>
-                <td> <input type="text" name="gatekeeperEndpoint" value="gatekeeper.ranger.tacc.teragrid.org:2119/jobmanager-sge" size="50"></td></tr>
-        </div>
-        <tr><td>Host Type           </td>
-            <td> <select id="drop1">
-                <option selected="true">Local
-                <option>Globus</select></td></tr>
-    </table>
+
+        <!--<b>HOST</b>-->
+        <!--<tbody>-->
+            <!--<tr><td>Host Name           </td>-->
+                <!--<td> <input type="text" name="hostName" value="gram" size="50"></td></tr>-->
+            <!--<tr><td>-->
+                <!--Host Address-->
+            <!--</td><td>-->
+                <!--<input type="text" name="hostAddress" value="gatekeeper2.ranger.tacc.teragrid.org" size="50"></td></tr>-->
+            <!--<tr><td>Host Type           </td><td>-->
+                <!--<input type="text" name="hostType" value="globus" size="50"></td></tr>-->
+
+            <!--<tr><td>Host Type           </td>-->
+                <!--<td> <select id="drop2">-->
+                    <!--<option selected="true">Local-->
+                    <!--<option>Globus</select></td></tr>-->
+            <!--</tbody>-->
+
+            <!--<tbody class="Table_Middle" style="display:none">-->
+
+        <!--&lt;!&ndash;<div id="div2">&ndash;&gt;-->
+            <!--<tr><td>Host Endpoint       </td>-->
+                <!--<td> <input type="text" name="hostEndpoint" value="gsiftp://gridftp.ranger.tacc.teragrid.org:2811/" size="50"></td></tr>-->
+            <!--<tr><td>Gatekeeper Endpoint </td>-->
+                <!--<td> <input type="text" name="gatekeeperEndpoint" value="gatekeeper.ranger.tacc.teragrid.org:2119/jobmanager-sge" size="50"></td></tr>-->
+        <!--</tbody>-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+    <!--</table>-->
     <br>
 
     <!--<input type="SUBMIT" value="Submit"><input type="RESET" value="Reset">-->
@@ -61,13 +73,36 @@ testing
 <script>
     $(document).ready(function(){
         $('#drop1 option:selected').select(function () {
-            console.log();
-            if("Local" == $('#drop1 option:selected').text()) {
-                $("div1").hide();
+            console.log("drop1 selected ");
+//            $("div").hide();
+            if("Local" == $('#drop1 option:selected').val()) {
+//                $('.Table_Middle').hide();
+                $("div").hide();
             } else {
-                $("div1").show();
+//                $('.Table_Middle').show();
+                $("div").show();
             }
         });
+
+
+        $("select[name='drop1']").change(function() {
+            //alert($(this).val());
+            alert("Local" == $(this).val());
+            if("Local" == $(this).val()) {
+                $("div").hide();
+            } else {
+                $("div").show();
+            }
+        });
+
+//        $("#drop1").change(function(){
+//            $value = $(this).val();
+//            if("Local" == value) {
+//                $("div").hide();
+//            } else {
+//                $("div").show();
+//            }
+//        });
 
         $("#hide").click(function(){
             $("div").hide();
@@ -78,9 +113,9 @@ testing
     });
 </script>
 
-<div id="div">
-    <p>If you click on the "Hide" button, I will disappear.</p>
-</div>
+<!--<div id="div">-->
+    <!--<p>If you click on the "Hide" button, I will disappear.</p>-->
+<!--</div>-->
 
 <button id="hide">Hide</button>
 <button id="show">Show</button>
