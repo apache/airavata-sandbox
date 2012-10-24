@@ -31,23 +31,16 @@ public class WorkspaceProjectMapping {
     private String projectName;
     private Experiment[] experimentsList;
 
-//    private ProjectsRegistry projectsRegistry;
-
     public WorkspaceProjectMapping() {
     }
 
     public WorkspaceProjectMapping(String projectName) {
         this.projectName = projectName;
-//        this.projectsRegistry = projectsRegistry;
     }
 
     public String getProjectName() {
         return projectName;
     }
-
-//    public ProjectsRegistry getProjectsRegistry() {
-//        return projectsRegistry;
-//    }
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
@@ -60,8 +53,4 @@ public class WorkspaceProjectMapping {
     public void setExperimentsList(Experiment[] experimentsList) {
         this.experimentsList = experimentsList;
     }
-
-    //    public void setProjectsRegistry(ProjectsRegistry projectsRegistry) {
-//        this.projectsRegistry = projectsRegistry;
-//    }
 }

@@ -69,6 +69,16 @@ To test
     curl -H "Accept: text/plain" -X POST -d 'projectName=project1' http://localhost:9080/airavata-services/registry/api/update/project
     curl --request DELETE 'http://localhost:9080/airavata-services/registry/api/delete/project?projectName=project1'
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/project?projectName=project1'
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/projects'
+
+************* Experiments *************************************
+    curl --request DELETE 'http://localhost:9080/airavata-services/registry/api/delete/experiment?experimentId=eb9e67cf-6fe3-46f1-b50b-7b42936d347d
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/experiments/all'
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/experiments/project?projectName=default'
+
+
+
+
 
 
 

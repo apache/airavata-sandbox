@@ -16,7 +16,7 @@ public class RegistryListener implements ServletContextListener {
     private static AiravataRegistry2 airavataRegistry;
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        try{
+        try {
             ServletContext servletContext = servletContextEvent.getServletContext();
 
             URL url = this.getClass().getClassLoader().
@@ -28,12 +28,16 @@ public class RegistryListener implements ServletContextListener {
                 e.printStackTrace();
             }
             String gatewayID = properties.getProperty(RestServicesConstants.GATEWAY_ID);
-            String airavataUser = properties.getProperty(RestServicesConstants.REGISTRY_USER);
+            String registryUser = properties.getProperty(RestServicesConstants.REGISTRY_USERNAME);
+            Gateway gateway =  new Gateway(gatewayID);
+            AiravataUser airavataUser = new AiravataUser(registryUser) ;
 
-        airavataRegistry = AiravataRegistryFactory.
-                getRegistry(new Gateway(gatewayID), new AiravataUser(airavataUser));
-        servletContext.setAttribute(RestServicesConstants.AIRAVATA_REGISTRY, airavataRegistry);
-        }catch (Exception e) {
+            airavataRegistry = AiravataRegistryFactory.
+                    getRegistry(gateway, airavataUser);
+            servletContext.setAttribute(RestServicesConstants.AIRAVATA_REGISTRY, airavataRegistry);
+            servletContext.setAttribute(RestServicesConstants.GATEWAY, gateway);
+            servletContext.setAttribute(RestServicesConstants.REGISTRY_USER, airavataUser);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
