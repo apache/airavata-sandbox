@@ -79,27 +79,31 @@ Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" id="gatekeepe
             alert(hostAddress);
             alert(xmlString);
 
+
+
             $.ajax({
                 headers: {
                     Accept : "text/plain; charset=utf-8",
-                    "Content-Type" : "text/xml"
+
+//                    "Content-Type": "text/xml",
+                    contentType: "text/xml",
 //                    "Content-Type": "text/plain; charset=utf-8",
-//                    "Accept-Encoding" : ""
+                    "Accept-Encoding" : ""
                 },
+                beforeSend: function(xhr, s) {
+                    xhr.setRequestHeader("Accept-Encoding" ,"");
+                    xhr.setRequestHeader("Content-Type", "text/xml");
+                },
+
                 type: "POST",
 //                contentType : "application/x-www-form-urlencoded",
-                url: "http://localhost:6060/airavata-registry-rest-services/registry/api/hostdescriptor/save",
+                url: "http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save",
                 data: xmlString,
-                dataType: "xml",
-                cache: false,
-                error: function() { alert("No data found."); },
-                success: function(xml) {
-                    alert("it works");
-//                    alert($(xml).find("project")[0].attr("id"));
-                }
+                dataType: "xml"
             }).done(function( msg ) {
                         alert( "Data Saved: " + msg );
                     });
+
 
 //            $.post("http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save",
 

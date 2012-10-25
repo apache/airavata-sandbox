@@ -17,7 +17,8 @@ Send an HTTP POST
     $(document).ready(function(){
 
         $('[name="btn1"]').click(function(){
-            $.post("http://localhost:7080/airavata-registry-rest-services/registry/api/save/configuration",
+//            $.post("http://localhost:7080/airavata-registry-rest-services/registry/api/save/configuration",
+            $.post("http://localhost:6060/airavata-registry-rest-services/registry/api/save/configuration",
                     { key: "dummy3", value: "value3" , date : "2011-10-22 00:00:00"} ,function(data,status){
 // TODO : REST api should send some response back in case of a successful invocation of service.
                         alert("Button 1 clicked !");
@@ -37,7 +38,8 @@ Send an HTTP POST
 <script>
     $(document).ready(function(){
         $('[name="btn2"]').click(function(){
-            $.post("http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save",
+//            $.post("http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save",
+            $.post("http://localhost:6060/airavata-registry-rest-services/registry/api/hostdescriptor/save",
                     { host: "&lt;type:hostDescription xmlns:type=&quot;http://schemas.airavata.apache.org/gfac/type&quot;&gt;&lt;type:hostName&gt;testHost1&lt;/type:hostName&gt;&lt;type:hostAddress&gt;aaaa&lt;/type:hostAddress&gt;&lt;/type:hostDescription"} ,function(data,status){
 // TODO : REST api should send some response back in case of a successful invocation of service.
 //                alert("Data: " + data + "\nStatus: " + status);
