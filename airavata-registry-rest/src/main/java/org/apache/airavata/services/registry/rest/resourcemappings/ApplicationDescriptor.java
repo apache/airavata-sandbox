@@ -23,7 +23,7 @@ package org.apache.airavata.services.registry.rest.resourcemappings;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name = "application")
 public class ApplicationDescriptor {
     private String applicationName;
     private String hostdescName;

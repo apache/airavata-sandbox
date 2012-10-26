@@ -25,7 +25,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name = "service")
 public class ServiceDescriptor {
 
 	private String serviceDocument;

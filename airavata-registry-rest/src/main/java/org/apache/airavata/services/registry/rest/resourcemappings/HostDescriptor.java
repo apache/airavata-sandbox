@@ -25,7 +25,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name = "host")
 public class HostDescriptor {
 
 	private String hostname;
