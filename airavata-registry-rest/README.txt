@@ -97,7 +97,7 @@ To test
     curl -H "Accept: text/plain" -X POST -d 'experimentId=testWFInstanceID&workflowInstanceId=testWFInstanceID&executionStatus=STARTED&statusUpdateTime=2012-10-23 00:00:00' http://localhost:9080/airavata-services/registry/api/update/workflowinstancestatus/experimentid
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/workflowinstancestatus?instanceId=testWFInstanceID'
 
-********* Sample JSON message for Application *****************
+********* Sample JSON message for Application and service *****************
 
 {
    "applicationName":"Tesing",
@@ -139,6 +139,10 @@ To test
       ]
    }
 }
+
+*** Sample XML message to create application and service
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><application><applicationName>Testing</applicationName><cpuCount>0</cpuCount><hostdescName>localhost</hostdescName><maxMemory>0</maxMemory><maxWallTime>0</maxWallTime><minMemory>0</minMemory><nodeCount>0</nodeCount><processorsPerNode>0</processorsPerNode><serviceDesc><inputParams><dataType>input</dataType><description>my input</description><name>myinput</name><type>String</type></inputParams><inputParams><dataType>input</dataType><description>my input</description><name>myinput</name><type>String</type></inputParams><outputParams><dataType>output</dataType><description>my output</description><name>myoutput</name><type>String</type></outputParams><outputParams><dataType>output</dataType><description>my output</description><name>myoutput</name><type>String</type></outputParams></serviceDesc></application>
 
 
 
