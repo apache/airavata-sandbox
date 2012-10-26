@@ -97,7 +97,48 @@ To test
     curl -H "Accept: text/plain" -X POST -d 'experimentId=testWFInstanceID&workflowInstanceId=testWFInstanceID&executionStatus=STARTED&statusUpdateTime=2012-10-23 00:00:00' http://localhost:9080/airavata-services/registry/api/update/workflowinstancestatus/experimentid
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/workflowinstancestatus?instanceId=testWFInstanceID'
 
+********* Sample JSON message for Application *****************
 
+{
+   "applicationName":"Tesing",
+   "cpuCount":"12",
+   "hostdescName":"localhost",
+   "maxMemory":"0",
+   "maxWallTime":"0",
+   "minMemory":"0",
+   "nodeCount":"1",
+   "processorsPerNode":"12",
+   "serviceDesc":{
+      "inputParams":[
+         {
+            "dataType":"input",
+            "description":"my input",
+            "name":"myinput",
+            "type":"String"
+         },
+         {
+            "dataType":"input",
+            "description":"my input",
+            "name":"myinput",
+            "type":"String"
+         }
+      ],
+      "outputParams":[
+         {
+            "dataType":"output",
+            "description":"my output",
+            "name":"myoutput",
+            "type":"String"
+         },
+         {
+            "dataType":"output",
+            "description":"my output",
+            "name":"myoutput",
+            "type":"String"
+         }
+      ]
+   }
+}
 
 
 

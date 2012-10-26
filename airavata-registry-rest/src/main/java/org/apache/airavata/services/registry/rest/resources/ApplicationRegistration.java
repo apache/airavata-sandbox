@@ -1,5 +1,8 @@
 package org.apache.airavata.services.registry.rest.resources;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -11,8 +14,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.airavata.commons.gfac.type.ServiceDescription;
 import org.apache.airavata.registry.api.AiravataRegistry2;
 import org.apache.airavata.services.registry.rest.resourcemappings.ApplicationDescriptor;
+import org.apache.airavata.services.registry.rest.resourcemappings.ServiceDescriptor;
+import org.apache.airavata.services.registry.rest.resourcemappings.ServiceParameters;
 import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
 
 @Path("/api/application")
@@ -49,6 +55,45 @@ public class ApplicationRegistration {
         try{
         	ApplicationDescriptor application = new ApplicationDescriptor();
         	application.setApplicationName(applicationName);
+        	ServiceDescriptor descriptor = new ServiceDescriptor();
+
+        	ServiceParameters parameters = new ServiceParameters();
+        	parameters.setName("myinput");
+        	parameters.setDataType("input");
+        	parameters.setDescription("my input");
+        	parameters.setType("String");
+
+        	ServiceParameters parameters1 = new ServiceParameters();
+        	parameters1.setName("myinput");
+        	parameters1.setDataType("input");
+        	parameters1.setDescription("my input");
+        	parameters1.setType("String");
+
+        	List<ServiceParameters> inputlist = new ArrayList<ServiceParameters>();
+        	inputlist.add(parameters);
+        	inputlist.add(parameters1);
+
+        	ServiceParameters parameters2 = new ServiceParameters();
+        	parameters2.setName("myoutput");
+        	parameters2.setDataType("output");
+        	parameters2.setDescription("my output");
+        	parameters2.setType("String");
+
+        	ServiceParameters parameters3 = new ServiceParameters();
+        	parameters3.setName("myoutput");
+        	parameters3.setDataType("output");
+        	parameters3.setDescription("my output");
+        	parameters3.setType("String");
+
+        	List<ServiceParameters> outputlist = new ArrayList<ServiceParameters>();
+        	outputlist.add(parameters2);
+        	outputlist.add(parameters3);
+
+        	descriptor.setInputParams(inputlist);
+        	descriptor.setOutputParams(outputlist);
+
+        	application.setServiceDesc(descriptor);
+        	application.setHostdescName("localhost");
             return application;
         } catch (Exception e) {
         	throw new WebApplicationException(e,Response.Status.INTERNAL_SERVER_ERROR);
