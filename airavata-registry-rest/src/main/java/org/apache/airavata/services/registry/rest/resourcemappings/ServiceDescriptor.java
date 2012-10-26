@@ -21,20 +21,34 @@
 
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ServiceDescriptor {
-    private String serviceDocument;
 
-    public ServiceDescriptor() {
-    }
+	private String serviceDocument;
+    private List<ServiceParameters> inputParams;
+    private List<ServiceParameters> outputParams;
+	public String getServiceDocument() {
+		return serviceDocument;
+	}
+	public void setServiceDocument(String serviceDocument) {
+		this.serviceDocument = serviceDocument;
+	}
+	public List<ServiceParameters> getInputParams() {
+		return inputParams;
+	}
+	public void setInputParams(List<ServiceParameters> inputParams) {
+		this.inputParams = inputParams;
+	}
+	public List<ServiceParameters> getOutputParams() {
+		return outputParams;
+	}
+	public void setOutputParams(List<ServiceParameters> outputParams) {
+		this.outputParams = outputParams;
+	}
 
-    public String getServiceDocument() {
-        return serviceDocument;
-    }
 
-    public void setServiceDocument(String serviceDocument) {
-        this.serviceDocument = serviceDocument;
-    }
 }

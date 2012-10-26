@@ -21,20 +21,61 @@
 
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class HostDescriptor {
-    private String hostDocument;
 
-    public HostDescriptor() {
-    }
+	private String hostname;
+	private String hostAddress;
+	private List<String> hostType;
+	private List<String> gridFTPEndPoint;
+	private List<String> globusGateKeeperEndPoint;
+	private List<String> imageID;
+	private List<String> instanceID;
+	public String getHostname() {
+		return hostname;
+	}
+	public void setHostname(String hostname) {
+		this.hostname = hostname;
+	}
+	public String getHostAddress() {
+		return hostAddress;
+	}
+	public void setHostAddress(String hostAddress) {
+		this.hostAddress = hostAddress;
+	}
+	public List<String> getHostType() {
+		return hostType;
+	}
+	public void setHostType(List<String> hostType) {
+		this.hostType = hostType;
+	}
+	public List<String> getGridFTPEndPoint() {
+		return gridFTPEndPoint;
+	}
+	public void setGridFTPEndPoint(List<String> gridFTPEndPoint) {
+		this.gridFTPEndPoint = gridFTPEndPoint;
+	}
+	public List<String> getGlobusGateKeeperEndPoint() {
+		return globusGateKeeperEndPoint;
+	}
+	public void setGlobusGateKeeperEndPoint(List<String> globusGateKeeperEndPoint) {
+		this.globusGateKeeperEndPoint = globusGateKeeperEndPoint;
+	}
+	public List<String> getImageID() {
+		return imageID;
+	}
+	public void setImageID(List<String> imageID) {
+		this.imageID = imageID;
+	}
+	public List<String> getInstanceID() {
+		return instanceID;
+	}
+	public void setInstanceID(List<String> instanceID) {
+		this.instanceID = instanceID;
+	}
 
-    public String getHostDocument() {
-        return hostDocument;
-    }
-
-    public void setHostDocument(String hostDocument) {
-        this.hostDocument = hostDocument;
-    }
 }

@@ -27,32 +27,102 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ApplicationDescriptor {
     private String appDocument;
     private String hostdescName;
-    private String serviceDescName;
+    private ServiceDescriptor serviceDesc;
+    private String executablePath;
+    private String workingDir;
+    private String jobType;
+    private String projectNumber;
+    private String queueName;
+    private int maxWallTime;
+    private int cpuCount;
+    private int nodeCount;
+    private int processorsPerNode;
+    private int minMemory;
+    private int maxMemory;
 
-    public ApplicationDescriptor() {
-    }
+	public String getAppDocument() {
+		return appDocument;
+	}
+	public void setAppDocument(String appDocument) {
+		this.appDocument = appDocument;
+	}
+	public String getHostdescName() {
+		return hostdescName;
+	}
+	public void setHostdescName(String hostdescName) {
+		this.hostdescName = hostdescName;
+	}
+	public ServiceDescriptor getServiceDesc() {
+		return serviceDesc;
+	}
+	public void setServiceDesc(ServiceDescriptor serviceDesc) {
+		this.serviceDesc = serviceDesc;
+	}
+	public String getExecutablePath() {
+		return executablePath;
+	}
+	public void setExecutablePath(String executablePath) {
+		this.executablePath = executablePath;
+	}
+	public String getWorkingDir() {
+		return workingDir;
+	}
+	public void setWorkingDir(String workingDir) {
+		this.workingDir = workingDir;
+	}
+	public String getJobType() {
+		return jobType;
+	}
+	public void setJobType(String jobType) {
+		this.jobType = jobType;
+	}
+	public String getProjectNumber() {
+		return projectNumber;
+	}
+	public void setProjectNumber(String projectNumber) {
+		this.projectNumber = projectNumber;
+	}
+	public String getQueueName() {
+		return queueName;
+	}
+	public void setQueueName(String queueName) {
+		this.queueName = queueName;
+	}
+	public int getMaxWallTime() {
+		return maxWallTime;
+	}
+	public void setMaxWallTime(int maxWallTime) {
+		this.maxWallTime = maxWallTime;
+	}
+	public int getCpuCount() {
+		return cpuCount;
+	}
+	public void setCpuCount(int cpuCount) {
+		this.cpuCount = cpuCount;
+	}
+	public int getNodeCount() {
+		return nodeCount;
+	}
+	public void setNodeCount(int nodeCount) {
+		this.nodeCount = nodeCount;
+	}
+	public int getProcessorsPerNode() {
+		return processorsPerNode;
+	}
+	public void setProcessorsPerNode(int processorsPerNode) {
+		this.processorsPerNode = processorsPerNode;
+	}
+	public int getMinMemory() {
+		return minMemory;
+	}
+	public void setMinMemory(int minMemory) {
+		this.minMemory = minMemory;
+	}
+	public int getMaxMemory() {
+		return maxMemory;
+	}
+	public void setMaxMemory(int maxMemory) {
+		this.maxMemory = maxMemory;
+	}
 
-    public String getAppDocument() {
-        return appDocument;
-    }
-
-    public void setAppDocument(String appDocument) {
-        this.appDocument = appDocument;
-    }
-
-    public String getHostdescName() {
-        return hostdescName;
-    }
-
-    public void setHostdescName(String hostdescName) {
-        this.hostdescName = hostdescName;
-    }
-
-    public String getServiceDescName() {
-        return serviceDescName;
-    }
-
-    public void setServiceDescName(String serviceDescName) {
-        this.serviceDescName = serviceDescName;
-    }
 }
