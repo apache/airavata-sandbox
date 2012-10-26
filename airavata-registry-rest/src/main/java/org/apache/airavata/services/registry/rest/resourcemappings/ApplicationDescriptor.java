@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ApplicationDescriptor {
-    private String appDocument;
+    private String applicationName;
     private String hostdescName;
     private ServiceDescriptor serviceDesc;
     private String executablePath;
@@ -40,11 +40,12 @@ public class ApplicationDescriptor {
     private int minMemory;
     private int maxMemory;
 
-	public String getAppDocument() {
-		return appDocument;
+
+	public String getApplicationName() {
+		return applicationName;
 	}
-	public void setAppDocument(String appDocument) {
-		this.appDocument = appDocument;
+	public void setApplicationName(String applicationName) {
+		this.applicationName = applicationName;
 	}
 	public String getHostdescName() {
 		return hostdescName;
