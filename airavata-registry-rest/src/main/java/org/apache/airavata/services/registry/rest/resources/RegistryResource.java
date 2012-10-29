@@ -14,6 +14,7 @@ import org.apache.airavata.schemas.gfac.impl.InputParameterTypeImpl;
 import org.apache.airavata.services.registry.rest.resourcemappings.*;
 import org.apache.airavata.registry.api.AiravataExperiment;
 import org.apache.airavata.services.registry.rest.resourcemappings.WorkflowInstanceMapping;
+import org.apache.airavata.services.registry.rest.utils.DescriptorUtil;
 import org.apache.airavata.services.registry.rest.utils.HostTypes;
 import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
 import org.apache.axiom.om.OMElement;
@@ -540,6 +541,30 @@ import java.util.*;
 
     @POST
     @Path("hostdescriptor/save")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response addHostDescriptor(@FormParam("hostName") String hostName,
+                                      @FormParam("hostAddress") String hostAddress,
+                                      @FormParam("hostEndpoint") String hostEndpoint,
+                                      @FormParam("gatekeeperEndpoint") String gatekeeperEndpoint) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            HostDescription hostDescription = DescriptorUtil.createHostDescription(hostName, hostAddress, hostEndpoint, gatekeeperEndpoint);
+            airavataRegistry.addHostDescriptor(hostDescription);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (DescriptorAlreadyExistsException e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            // TODO : Use WEbapplicationExcpetion
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+/*    @POST
+    @Path("hostdescriptor/save")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response addHostDescriptor(HostDescriptor host) {
@@ -567,7 +592,7 @@ import java.util.*;
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
-    }
+    }*/
 
     @POST
     @Path("hostdescriptor/update")
