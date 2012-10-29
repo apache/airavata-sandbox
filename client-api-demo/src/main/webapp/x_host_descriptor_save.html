@@ -9,9 +9,9 @@
 <b> Register Host Description </b>
 <br/>
 
-Host Name           : <input type="text" name="hostName" id="hostName1" value="gram" size="75">
+Host Name           : <input type="text" name="hostName" id="hostName1" size="75">
 <br/>
-Host Address        : <input type="text" name="hostAddress" id="hostAddress1" value="gatekeeper2.ranger.tacc.teragrid.org" size="75">
+Host Address        : <input type="text" name="hostAddress" id="hostAddress1" size="75">
 <br/>
 Host Type           : <select name="drop1">
                          <option selected="true">Local</option>
@@ -19,9 +19,9 @@ Host Type           : <select name="drop1">
                         </select>
 <br/>
 <div id="div">
-Host Endpoint       : <input type="text" name="hostEndpoint" id="hostEndpoint1" value="gsiftp://gridftp.ranger.tacc.teragrid.org:2811/" size="75">
+Host Endpoint       : <input type="text" name="hostEndpoint" id="hostEndpoint1" size="75">
     <br/>
-Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" id="gatekeeperEndpoint1" value="gatekeeper.ranger.tacc.teragrid.org:2119/jobmanager-sge" size="75">
+Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" id="gatekeeperEndpoint1" size="75">
     <br/>
 </div>
 
@@ -61,6 +61,10 @@ Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" id="gatekeepe
             var hostName = $("#hostName1").val();
             var hostAddress = $("#hostAddress1").val();
             var hostEndpoint = $("#hostEndpoint1").val();
+            alert(hostEndpoint);
+            alert(hostEndpoint);
+            alert("hostEndpoint null  :" + hostEndpoint == null);
+            alert("hostEndpoint empty :" + hostEndpoint == "");
             var gatekeeperEndpoint = $("#gatekeeperEndpoint1").val();
             var xml = $('<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>' + hostName + '</type:hostName><type:hostAddress>' + hostAddress + '</type:hostAddress></type:hostDescription>');
 
@@ -78,26 +82,51 @@ Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" id="gatekeepe
             alert(hostAddress);
             alert(xmlString);
 
-            $.ajax({
-                headers: {
-                    Accept : "text/plain; charset=utf-8"
-                },
-                /*beforeSend: function(xhr, s) {
-                 xhr.setRequestHeader("Accept-Encoding" ,"");
-                 xhr.setRequestHeader("Content-Type", "text/xml");
-                 },*/
+//            if ($("select[name='drop1']").val() == "Local") {
+            if (("" == hostEndpoint) || ("" == gatekeeperEndpoint)) {
+                alert("if Case");
+                $.ajax({
+                    headers: {
+                        Accept : "text/plain; charset=utf-8"
+                    },
+                    /*beforeSend: function(xhr, s) {
+                     xhr.setRequestHeader("Accept-Encoding" ,"");
+                     xhr.setRequestHeader("Content-Type", "text/xml");
+                     },*/
 
-                type: "POST",
-                url: "http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save",
-                data: {
-                    hostName: hostName,
-                    hostAddress: hostAddress,
-                    hostEndpoint : hostEndpoint,
-                    gatekeeperEndpoint : gatekeeperEndpoint
-                }
-            }).done(function( msg ) {
-                        alert( "Data Saved: " + msg );
-                    });
+                    type: "POST",
+                    url: "http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save",
+                    data: {
+                        hostName: hostName,
+                        hostAddress: hostAddress
+                    }
+                }).done(function( msg ) {
+                            alert( "Data Saved: " + msg );
+                        });
+            } else {
+                alert("end Case");
+                $.ajax({
+                    headers: {
+                        Accept : "text/plain; charset=utf-8"
+                    },
+                    /*beforeSend: function(xhr, s) {
+                     xhr.setRequestHeader("Accept-Encoding" ,"");
+                     xhr.setRequestHeader("Content-Type", "text/xml");
+                     },*/
+
+                    type: "POST",
+                    url: "http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save",
+                    data: {
+                        hostName: hostName,
+                        hostAddress: hostAddress,
+                        hostEndpoint : hostEndpoint,
+                        gatekeeperEndpoint : gatekeeperEndpoint
+                    }
+                }).done(function( msg ) {
+                            alert( "Data Saved: " + msg );
+                        });
+            }
+
         });
     });
 </script>
