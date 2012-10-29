@@ -28,27 +28,40 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "service")
 public class ServiceDescriptor {
 
-	private String serviceDocument;
+    private String serviceName;
+    private String description;
     private List<ServiceParameters> inputParams;
     private List<ServiceParameters> outputParams;
-	public String getServiceDocument() {
-		return serviceDocument;
-	}
-	public void setServiceDocument(String serviceDocument) {
-		this.serviceDocument = serviceDocument;
-	}
-	public List<ServiceParameters> getInputParams() {
-		return inputParams;
-	}
-	public void setInputParams(List<ServiceParameters> inputParams) {
-		this.inputParams = inputParams;
-	}
-	public List<ServiceParameters> getOutputParams() {
-		return outputParams;
-	}
-	public void setOutputParams(List<ServiceParameters> outputParams) {
-		this.outputParams = outputParams;
-	}
 
+    public String getServiceName() {
+        return serviceName;
+    }
 
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public List<ServiceParameters> getInputParams() {
+        return inputParams;
+    }
+
+    public void setInputParams(List<ServiceParameters> inputParams) {
+        this.inputParams = inputParams;
+    }
+
+    public List<ServiceParameters> getOutputParams() {
+        return outputParams;
+    }
+
+    public void setOutputParams(List<ServiceParameters> outputParams) {
+        this.outputParams = outputParams;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

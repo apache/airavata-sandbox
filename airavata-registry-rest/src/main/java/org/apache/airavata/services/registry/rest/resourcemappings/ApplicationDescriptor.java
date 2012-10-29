@@ -39,91 +39,126 @@ public class ApplicationDescriptor {
     private int processorsPerNode;
     private int minMemory;
     private int maxMemory;
+    private String applicationDescType;
 
 
-	public String getApplicationName() {
-		return applicationName;
-	}
-	public void setApplicationName(String applicationName) {
-		this.applicationName = applicationName;
-	}
-	public String getHostdescName() {
-		return hostdescName;
-	}
-	public void setHostdescName(String hostdescName) {
-		this.hostdescName = hostdescName;
-	}
-	public ServiceDescriptor getServiceDesc() {
-		return serviceDesc;
-	}
-	public void setServiceDesc(ServiceDescriptor serviceDesc) {
-		this.serviceDesc = serviceDesc;
-	}
-	public String getExecutablePath() {
-		return executablePath;
-	}
-	public void setExecutablePath(String executablePath) {
-		this.executablePath = executablePath;
-	}
-	public String getWorkingDir() {
-		return workingDir;
-	}
-	public void setWorkingDir(String workingDir) {
-		this.workingDir = workingDir;
-	}
-	public String getJobType() {
-		return jobType;
-	}
-	public void setJobType(String jobType) {
-		this.jobType = jobType;
-	}
-	public String getProjectNumber() {
-		return projectNumber;
-	}
-	public void setProjectNumber(String projectNumber) {
-		this.projectNumber = projectNumber;
-	}
-	public String getQueueName() {
-		return queueName;
-	}
-	public void setQueueName(String queueName) {
-		this.queueName = queueName;
-	}
-	public int getMaxWallTime() {
-		return maxWallTime;
-	}
-	public void setMaxWallTime(int maxWallTime) {
-		this.maxWallTime = maxWallTime;
-	}
-	public int getCpuCount() {
-		return cpuCount;
-	}
-	public void setCpuCount(int cpuCount) {
-		this.cpuCount = cpuCount;
-	}
-	public int getNodeCount() {
-		return nodeCount;
-	}
-	public void setNodeCount(int nodeCount) {
-		this.nodeCount = nodeCount;
-	}
-	public int getProcessorsPerNode() {
-		return processorsPerNode;
-	}
-	public void setProcessorsPerNode(int processorsPerNode) {
-		this.processorsPerNode = processorsPerNode;
-	}
-	public int getMinMemory() {
-		return minMemory;
-	}
-	public void setMinMemory(int minMemory) {
-		this.minMemory = minMemory;
-	}
-	public int getMaxMemory() {
-		return maxMemory;
-	}
-	public void setMaxMemory(int maxMemory) {
-		this.maxMemory = maxMemory;
-	}
+    public String getApplicationName() {
+        return applicationName;
+    }
 
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
+
+    public String getHostdescName() {
+        return hostdescName;
+    }
+
+    public void setHostdescName(String hostdescName) {
+        this.hostdescName = hostdescName;
+    }
+
+    public ServiceDescriptor getServiceDesc() {
+        return serviceDesc;
+    }
+
+    public void setServiceDesc(ServiceDescriptor serviceDesc) {
+        this.serviceDesc = serviceDesc;
+    }
+
+    public String getExecutablePath() {
+        return executablePath;
+    }
+
+    public void setExecutablePath(String executablePath) {
+        this.executablePath = executablePath;
+    }
+
+    public String getWorkingDir() {
+        return workingDir;
+    }
+
+    public void setWorkingDir(String workingDir) {
+        this.workingDir = workingDir;
+    }
+
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
+    public String getProjectNumber() {
+        return projectNumber;
+    }
+
+    public void setProjectNumber(String projectNumber) {
+        this.projectNumber = projectNumber;
+    }
+
+    public String getQueueName() {
+        return queueName;
+    }
+
+    public void setQueueName(String queueName) {
+        this.queueName = queueName;
+    }
+
+    public int getMaxWallTime() {
+        return maxWallTime;
+    }
+
+    public void setMaxWallTime(int maxWallTime) {
+        this.maxWallTime = maxWallTime;
+    }
+
+    public int getCpuCount() {
+        return cpuCount;
+    }
+
+    public void setCpuCount(int cpuCount) {
+        this.cpuCount = cpuCount;
+    }
+
+    public int getNodeCount() {
+        return nodeCount;
+    }
+
+    public void setNodeCount(int nodeCount) {
+        this.nodeCount = nodeCount;
+    }
+
+    public int getProcessorsPerNode() {
+        return processorsPerNode;
+    }
+
+    public void setProcessorsPerNode(int processorsPerNode) {
+        this.processorsPerNode = processorsPerNode;
+    }
+
+    public int getMinMemory() {
+        return minMemory;
+    }
+
+    public void setMinMemory(int minMemory) {
+        this.minMemory = minMemory;
+    }
+
+    public int getMaxMemory() {
+        return maxMemory;
+    }
+
+    public void setMaxMemory(int maxMemory) {
+        this.maxMemory = maxMemory;
+    }
+
+    public String getApplicationDescType() {
+        return applicationDescType;
+    }
+
+    public void setApplicationDescType(String applicationDescType) {
+        this.applicationDescType = applicationDescType;
+    }
 }

@@ -9,10 +9,15 @@ import org.apache.airavata.registry.api.*;
 import org.apache.airavata.registry.api.exception.gateway.*;
 import org.apache.airavata.registry.api.exception.worker.*;
 import org.apache.airavata.registry.api.workflow.*;
+import org.apache.airavata.schemas.gfac.*;
+import org.apache.airavata.schemas.gfac.impl.InputParameterTypeImpl;
 import org.apache.airavata.services.registry.rest.resourcemappings.*;
 import org.apache.airavata.registry.api.AiravataExperiment;
 import org.apache.airavata.services.registry.rest.resourcemappings.WorkflowInstanceMapping;
+import org.apache.airavata.services.registry.rest.utils.HostTypes;
 import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.impl.llom.util.AXIOMUtil;
 import org.apache.xmlbeans.XmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +27,12 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.stream.XMLStreamException;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -536,19 +540,27 @@ import java.util.Map;
 
     @POST
     @Path("hostdescriptor/save")
-    @Consumes(MediaType.TEXT_XML)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response addHostDescriptor(String host) {
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response addHostDescriptor(HostDescriptor host) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            HostDescription hostDescription = HostDescription.fromXML(host);
+            HostDescription hostDescription = new HostDescription();
+            hostDescription.getType().setHostAddress(host.getHostAddress());
+            hostDescription.getType().setHostName(host.getHostname());
+            if(host.getHostType().equals(HostTypes.GLOBUS_HOST_TYPE)){
+                ((GlobusHostType)hostDescription.getType()).addGlobusGateKeeperEndPoint(host.getGlobusGateKeeperEndPoint().get(0));
+                ((GlobusHostType)hostDescription.getType()).addGridFTPEndPoint(host.getGridFTPEndPoint().get(0));
+            }else if (host.getHostType().equals(HostTypes.GSISSH_HOST_TYPE)){
+                ((GsisshHostType)hostDescription).addGridFTPEndPoint(host.getGridFTPEndPoint().get(0));
+            } else if (host.getHostType().equals(HostTypes.EC2_HOST_TYPE)){
+                ((Ec2HostType)hostDescription).addImageID(host.getImageID().get(0));
+                ((Ec2HostType)hostDescription).addInstanceID(host.getInstanceID().get(0));
+            }
             airavataRegistry.addHostDescriptor(hostDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (DescriptorAlreadyExistsException e){
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        } catch (XmlException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             return builder.build();
         } catch (RegistryException e) {
@@ -559,17 +571,25 @@ import java.util.Map;
 
     @POST
     @Path("hostdescriptor/update")
-    @Consumes(MediaType.TEXT_XML)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response updateHostDescriptor(String host) {
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response updateHostDescriptor(HostDescriptor host) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            HostDescription hostDescription = HostDescription.fromXML(host);
+            HostDescription hostDescription = new HostDescription();
+            hostDescription.getType().setHostAddress(host.getHostAddress());
+            hostDescription.getType().setHostName(host.getHostname());
+            if(host.getHostType().equals(HostTypes.GLOBUS_HOST_TYPE)){
+                ((GlobusHostType)hostDescription.getType()).addGlobusGateKeeperEndPoint(host.getGlobusGateKeeperEndPoint().get(0));
+                ((GlobusHostType)hostDescription.getType()).addGridFTPEndPoint(host.getGridFTPEndPoint().get(0));
+            }else if (host.getHostType().equals(HostTypes.GSISSH_HOST_TYPE)){
+                ((GsisshHostType)hostDescription).addGridFTPEndPoint(host.getGridFTPEndPoint().get(0));
+            } else if (host.getHostType().equals(HostTypes.EC2_HOST_TYPE)){
+                ((Ec2HostType)hostDescription).addImageID(host.getImageID().get(0));
+                ((Ec2HostType)hostDescription).addInstanceID(host.getInstanceID().get(0));
+            }
             airavataRegistry.updateHostDescriptor(hostDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-        }catch (XmlException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             return builder.build();
         } catch (DescriptorDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
@@ -582,14 +602,68 @@ import java.util.Map;
 
     @GET
     @Path("host/description")
-    @Produces("text/xml")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getHostDescriptor(@QueryParam("hostName") String hostName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            String result = airavataRegistry.getHostDescriptor(hostName).toXML();
-            if (result != null) {
+            List<String> hostType = new ArrayList<String>();
+            List<String> gridFTPEndPoint = new ArrayList<String>();
+            List<String> globusGateKeeperEndPoint  = new ArrayList<String>();
+            List<String> imageID  = new ArrayList<String>();
+            List<String> instanceID  = new ArrayList<String>();
+
+            HostDescription hostDescription = airavataRegistry.getHostDescriptor(hostName);
+            HostDescriptor hostDescriptor = new HostDescriptor();
+            hostDescriptor.setHostname(hostDescription.getType().getHostName());
+            hostDescriptor.setHostAddress(hostDescription.getType().getHostAddress());
+
+            HostDescriptionType hostDescriptionType = hostDescription.getType();
+            if (hostDescriptionType instanceof GlobusHostType){
+                GlobusHostType globusHostType = (GlobusHostType) hostDescriptionType;
+                hostType.add(HostTypes.GLOBUS_HOST_TYPE);
+                String[] globusGateKeeperEndPointArray = globusHostType.getGlobusGateKeeperEndPointArray();
+                for (int i = 0; i < globusGateKeeperEndPointArray.length ; i++){
+                    globusGateKeeperEndPoint.add(globusGateKeeperEndPointArray[i]);
+                }
+
+                String[] gridFTPEndPointArray = globusHostType.getGridFTPEndPointArray();
+                for (int i = 0; i < gridFTPEndPointArray.length ; i++){
+                    gridFTPEndPoint.add(globusGateKeeperEndPointArray[i]);
+                }
+
+            }else if (hostDescriptionType instanceof GsisshHostType){
+                GsisshHostType gsisshHostType = (GsisshHostType) hostDescriptionType;
+                hostType.add(HostTypes.GSISSH_HOST_TYPE);
+
+                String[] gridFTPEndPointArray = gsisshHostType.getGridFTPEndPointArray();
+                for (int i = 0; i < gridFTPEndPointArray.length ; i++){
+                    gridFTPEndPoint.add(gridFTPEndPointArray[i]);
+                }
+            }  else if (hostDescriptionType instanceof  Ec2HostType) {
+                Ec2HostType ec2HostType = (Ec2HostType) hostDescriptionType;
+                hostType.add(HostTypes.EC2_HOST_TYPE);
+
+                String[] imageIDArray = ec2HostType.getImageIDArray();
+                for (int i = 0; i < imageIDArray.length ; i++){
+                    imageID.add(imageIDArray[i]);
+                }
+
+                String[] instanceIDArray = ec2HostType.getInstanceIDArray();
+                for (int i = 0; i < instanceIDArray.length ; i++){
+                    instanceID.add(instanceIDArray[i]);
+                }
+            } else {
+                hostType.add(HostTypes.HOST_DESCRIPTION_TYPE);
+            }
+            hostDescriptor.setGlobusGateKeeperEndPoint(globusGateKeeperEndPoint);
+            hostDescriptor.setGridFTPEndPoint(gridFTPEndPoint);
+            hostDescriptor.setImageID(imageID);
+            hostDescriptor.setInstanceID(instanceID);
+            hostDescriptor.setHostType(hostType);
+            if (hostDescription != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
+                builder.entity(hostDescription);
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
@@ -623,6 +697,7 @@ import java.util.Map;
 
     @GET
     @Path("get/hostdescriptors")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getHostDescriptors() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -631,9 +706,59 @@ import java.util.Map;
             HostDescriptionList list = new HostDescriptionList();
             HostDescriptor[] hostDescriptions = new HostDescriptor[hostDescriptionList.size()];
             for (int i = 0; i < hostDescriptionList.size(); i++) {
+                List<String> hostType = new ArrayList<String>();
+                List<String> gridFTPEndPoint = new ArrayList<String>();
+                List<String> globusGateKeeperEndPoint  = new ArrayList<String>();
+                List<String> imageID  = new ArrayList<String>();
+                List<String> instanceID  = new ArrayList<String>();
                 HostDescriptor hostDescriptor = new HostDescriptor();
-                String document = hostDescriptionList.get(i).toXML();
-                hostDescriptor.setHostDocument(document);
+                hostDescriptor.setHostname(hostDescriptionList.get(i).getType().getHostName());
+                hostDescriptor.setHostAddress(hostDescriptionList.get(i).getType().getHostAddress());
+
+                HostDescriptionType hostDescriptionType = hostDescriptionList.get(i).getType();
+                if (hostDescriptionType instanceof GlobusHostType){
+                    GlobusHostType globusHostType = (GlobusHostType) hostDescriptionType;
+                    hostType.add(HostTypes.GLOBUS_HOST_TYPE);
+                    String[] globusGateKeeperEndPointArray = globusHostType.getGlobusGateKeeperEndPointArray();
+                    for (int j = 0; j < globusGateKeeperEndPointArray.length ; j++){
+                        globusGateKeeperEndPoint.add(globusGateKeeperEndPointArray[j]);
+                    }
+
+                    String[] gridFTPEndPointArray = globusHostType.getGridFTPEndPointArray();
+                    for (int j = 0; j < gridFTPEndPointArray.length ; j++){
+                        gridFTPEndPoint.add(globusGateKeeperEndPointArray[j]);
+                    }
+
+                }else if (hostDescriptionType instanceof GsisshHostType){
+                    GsisshHostType gsisshHostType = (GsisshHostType) hostDescriptionType;
+                    hostType.add(HostTypes.GSISSH_HOST_TYPE);
+
+                    String[] gridFTPEndPointArray = gsisshHostType.getGridFTPEndPointArray();
+                    for (int j = 0; j < gridFTPEndPointArray.length ; j++){
+                        gridFTPEndPoint.add(gridFTPEndPointArray[j]);
+                    }
+                }  else if (hostDescriptionType instanceof  Ec2HostType) {
+                    Ec2HostType ec2HostType = (Ec2HostType) hostDescriptionType;
+                    hostType.add(HostTypes.EC2_HOST_TYPE);
+
+                    String[] imageIDArray = ec2HostType.getImageIDArray();
+                    for (int j = 0; j < imageIDArray.length ; j++){
+                        imageID.add(imageIDArray[j]);
+                    }
+
+                    String[] instanceIDArray = ec2HostType.getInstanceIDArray();
+                    for (int j = 0; j < instanceIDArray.length ; j++){
+                        instanceID.add(instanceIDArray[j]);
+                    }
+                } else {
+                    hostType.add(HostTypes.HOST_DESCRIPTION_TYPE);
+                }
+                hostDescriptor.setGlobusGateKeeperEndPoint(globusGateKeeperEndPoint);
+                hostDescriptor.setGridFTPEndPoint(gridFTPEndPoint);
+                hostDescriptor.setImageID(imageID);
+                hostDescriptor.setInstanceID(instanceID);
+                hostDescriptor.setHostType(hostType);
+
                 hostDescriptions[i] = hostDescriptor;
             }
             list.setHostDescriptions(hostDescriptions);
@@ -679,19 +804,45 @@ import java.util.Map;
 
     @POST
     @Path("servicedescriptor/save")
-    @Consumes(MediaType.TEXT_XML)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response addServiceDescriptor(String service){
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response addServiceDescriptor(ServiceDescriptor service){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
+            ServiceDescription serviceDescription = new ServiceDescription();
+            serviceDescription.getType().setName(service.getServiceName());
+            serviceDescription.getType().setDescription(service.getDescription());
+            List<ServiceParameters> inputParams = service.getInputParams();
+            InputParameterType[] inputParameterTypeArray = new InputParameterType[inputParams.size()];
+            for (int i = 0; i < inputParams.size(); i++){
+                InputParameterType parameter = InputParameterType.Factory.newInstance();
+                parameter.setParameterName(inputParams.get(i).getType());
+                parameter.setParameterValueArray(new String[]{inputParams.get(i).getName()});
+                ParameterType parameterType = parameter.addNewParameterType();
+                parameterType.setType(DataType.Enum.forString(inputParams.get(i).getDataType()));
+                parameterType.setName(inputParams.get(i).getDataType());
+                parameter.setParameterType(parameterType);
+                inputParameterTypeArray[i] = parameter;
+            }
+            serviceDescription.getType().setInputParametersArray(inputParameterTypeArray);
+
+            List<ServiceParameters> outputParams = service.getOutputParams();
+            OutputParameterType[] outputParameterTypeArray = new OutputParameterType[outputParams.size()];
+            for (int i = 0; i < outputParams.size(); i++){
+                OutputParameterType parameter = OutputParameterType.Factory.newInstance();
+                parameter.setParameterName(outputParams.get(i).getType());
+                parameter.setParameterName(outputParams.get(i).getName());
+                ParameterType parameterType = parameter.addNewParameterType();
+                parameterType.setType(DataType.Enum.forString(outputParams.get(i).getDataType()));
+                parameterType.setName(outputParams.get(i).getDataType());
+                parameter.setParameterType(parameterType);
+                outputParameterTypeArray[i] = parameter;
+            }
+            serviceDescription.getType().setOutputParametersArray(outputParameterTypeArray);
             airavataRegistry.addServiceDescriptor(serviceDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (DescriptorAlreadyExistsException e){
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        } catch (XmlException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             return builder.build();
         } catch (RegistryException e) {
@@ -702,19 +853,45 @@ import java.util.Map;
 
     @POST
     @Path("servicedescriptor/update")
-    @Consumes(MediaType.TEXT_XML)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response updateServiceDescriptor(String service) {
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response updateServiceDescriptor(ServiceDescriptor service) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
+            ServiceDescription serviceDescription = new ServiceDescription();
+            serviceDescription.getType().setName(service.getServiceName());
+            serviceDescription.getType().setDescription(service.getDescription());
+            List<ServiceParameters> inputParams = service.getInputParams();
+            InputParameterType[] inputParameterTypeArray = new InputParameterType[inputParams.size()];
+            for (int i = 0; i < inputParams.size(); i++){
+                InputParameterType parameter = InputParameterType.Factory.newInstance();
+                parameter.setParameterName(inputParams.get(i).getType());
+                parameter.setParameterValueArray(new String[]{inputParams.get(i).getName()});
+                ParameterType parameterType = parameter.addNewParameterType();
+                parameterType.setType(DataType.Enum.forString(inputParams.get(i).getDataType()));
+                parameterType.setName(inputParams.get(i).getDataType());
+                parameter.setParameterType(parameterType);
+                inputParameterTypeArray[i] = parameter;
+            }
+            serviceDescription.getType().setInputParametersArray(inputParameterTypeArray);
+
+            List<ServiceParameters> outputParams = service.getOutputParams();
+            OutputParameterType[] outputParameterTypeArray = new OutputParameterType[outputParams.size()];
+            for (int i = 0; i < outputParams.size(); i++){
+                OutputParameterType parameter = OutputParameterType.Factory.newInstance();
+                parameter.setParameterName(outputParams.get(i).getType());
+                parameter.setParameterName(outputParams.get(i).getName());
+                ParameterType parameterType = parameter.addNewParameterType();
+                parameterType.setType(DataType.Enum.forString(outputParams.get(i).getDataType()));
+                parameterType.setName(outputParams.get(i).getDataType());
+                parameter.setParameterType(parameterType);
+                outputParameterTypeArray[i] = parameter;
+            }
+            serviceDescription.getType().setOutputParametersArray(outputParameterTypeArray);
             airavataRegistry.updateServiceDescriptor(serviceDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (DescriptorAlreadyExistsException e){
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        } catch (XmlException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             return builder.build();
         } catch (RegistryException e) {
@@ -725,14 +902,43 @@ import java.util.Map;
 
     @GET
     @Path("servicedescriptor/description")
-    @Produces("text/xml")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getServiceDescriptor(@QueryParam("serviceName") String serviceName){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            String result = airavataRegistry.getServiceDescriptor(serviceName).toXML();
-            if (result != null) {
+            ServiceDescription serviceDescription = airavataRegistry.getServiceDescriptor(serviceName);
+            ServiceDescriptor serviceDescriptor = new ServiceDescriptor();
+            serviceDescriptor.setServiceName(serviceDescription.getType().getName());
+            serviceDescriptor.setDescription(serviceDescription.getType().getDescription());
+            InputParameterType[] inputParametersArray = serviceDescription.getType().getInputParametersArray();
+            OutputParameterType[] outputParametersArray = serviceDescription.getType().getOutputParametersArray();
+            List<ServiceParameters> inputParams = new ArrayList<ServiceParameters>();
+            List<ServiceParameters> outputParams = new ArrayList<ServiceParameters>();
+
+            for (int i = 0; i < inputParametersArray.length; i++){
+                ServiceParameters serviceParameters = new ServiceParameters();
+                serviceParameters.setType(inputParametersArray[i].getParameterName());
+                serviceParameters.setName(inputParametersArray[i].getParameterValueArray().toString());
+                serviceParameters.setDescription(inputParametersArray[i].getParameterDescription());
+                serviceParameters.setDataType(inputParametersArray[i].getParameterType().getType().toString());
+                inputParams.add(serviceParameters);
+            }
+            serviceDescriptor.setInputParams(inputParams);
+
+            for (int i = 0; i < outputParametersArray.length; i++){
+                ServiceParameters serviceParameters = new ServiceParameters();
+                serviceParameters.setType(outputParametersArray[i].getParameterName());
+                serviceParameters.setName(outputParametersArray[i].getParameterName());
+                serviceParameters.setDescription(outputParametersArray[i].getParameterDescription());
+                serviceParameters.setDataType(outputParametersArray[i].getParameterType().getType().toString());
+                inputParams.add(serviceParameters);
+            }
+            serviceDescriptor.setOutputParams(outputParams);
+
+            if (serviceDescription != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
+                builder.entity(serviceDescription);
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
@@ -764,6 +970,7 @@ import java.util.Map;
 
     @GET
     @Path("get/servicedescriptors")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getServiceDescriptors(){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -773,7 +980,32 @@ import java.util.Map;
             ServiceDescriptor[] serviceDescriptions = new ServiceDescriptor[serviceDescriptors.size()];
             for (int i = 0; i < serviceDescriptors.size(); i++) {
                 ServiceDescriptor serviceDescriptor = new ServiceDescriptor();
-                serviceDescriptor.setServiceDocument(serviceDescriptors.get(i).toXML());
+                serviceDescriptor.setServiceName(serviceDescriptors.get(i).getType().getName());
+                serviceDescriptor.setDescription(serviceDescriptors.get(i).getType().getDescription());
+                InputParameterType[] inputParametersArray = serviceDescriptors.get(i).getType().getInputParametersArray();
+                OutputParameterType[] outputParametersArray = serviceDescriptors.get(i).getType().getOutputParametersArray();
+                List<ServiceParameters> inputParams = new ArrayList<ServiceParameters>();
+                List<ServiceParameters> outputParams = new ArrayList<ServiceParameters>();
+
+                for (int j = 0; j < inputParametersArray.length; j++){
+                    ServiceParameters serviceParameters = new ServiceParameters();
+                    serviceParameters.setType(inputParametersArray[j].getParameterName());
+                    serviceParameters.setName(inputParametersArray[j].getParameterValueArray().toString());
+                    serviceParameters.setDescription(inputParametersArray[j].getParameterDescription());
+                    serviceParameters.setDataType(inputParametersArray[j].getParameterType().getType().toString());
+                    inputParams.add(serviceParameters);
+                }
+                serviceDescriptor.setInputParams(inputParams);
+
+                for (int j = 0; j < outputParametersArray.length; j++){
+                    ServiceParameters serviceParameters = new ServiceParameters();
+                    serviceParameters.setType(outputParametersArray[j].getParameterName());
+                    serviceParameters.setName(outputParametersArray[j].getParameterName());
+                    serviceParameters.setDescription(outputParametersArray[j].getParameterDescription());
+                    serviceParameters.setDataType(outputParametersArray[j].getParameterType().getType().toString());
+                    inputParams.add(serviceParameters);
+                }
+                serviceDescriptor.setOutputParams(outputParams);
                 serviceDescriptions[i] = serviceDescriptor;
             }
             list.setServiceDescriptions(serviceDescriptions);
@@ -821,25 +1053,29 @@ import java.util.Map;
 
     @POST
     @Path("applicationdescriptor/build/save")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response addApplicationDescriptor(@FormParam("service") String service,
-                                         @FormParam("host") String host,
-                                         @FormParam("application") String application){
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response addApplicationDescriptor(ApplicationDescriptor applicationDescriptor){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
-            String serviceName = serviceDescription.getType().getName();
-            HostDescription hostDescription = HostDescription.fromXML(host);
-            String hostName = hostDescription.getType().getHostName();
-            ApplicationDeploymentDescription applicationDeploymentDescription = ApplicationDeploymentDescription.fromXML(application);
-            airavataRegistry.addApplicationDescriptor(serviceName, hostName, applicationDeploymentDescription);
+            String hostdescName = applicationDescriptor.getHostdescName();
+            if(!airavataRegistry.isHostDescriptorExists(hostdescName)){
+                Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                return builder.build();
+            }
+            ApplicationDeploymentDescription applicationDeploymentDescription = new ApplicationDeploymentDescription();
+            applicationDeploymentDescription.getType().getApplicationName().setStringValue(applicationDescriptor.getApplicationName());
+            applicationDeploymentDescription.getType().setExecutableLocation(applicationDescriptor.getExecutablePath());
+            applicationDeploymentDescription.getType().setOutputDataDirectory(applicationDescriptor.getWorkingDir());
+
+            //set advanced options according app desc type
+
+
+            String serviceName = applicationDescriptor.getServiceDesc().getServiceName();
+            airavataRegistry.addApplicationDescriptor(serviceName, hostdescName, applicationDeploymentDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (DescriptorAlreadyExistsException e){
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        } catch (XmlException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             return builder.build();
         } catch (RegistryException e) {
@@ -848,13 +1084,15 @@ import java.util.Map;
         }
     }
 
+
+
     @POST
     @Path("applicationdescriptor/save")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addApplicationDesc(@FormParam("serviceName") String serviceName,
                                        @FormParam("hostName") String hostName,
-                                       @FormParam("application") String application) {
+                                       String application) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             ApplicationDeploymentDescription applicationDeploymentDescription = ApplicationDeploymentDescription.fromXML(application);
@@ -876,11 +1114,11 @@ import java.util.Map;
 
     @POST
     @Path("applicationdescriptor/update/descriptor")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response udpateApplicationDescriptorByDescriptors(@FormParam("service") String service,
-                                                             @FormParam("host") String host,
-                                                             @FormParam("application") String application) {
+    public Response udpateApplicationDescriptorByDescriptors(String service,
+                                                             String host,
+                                                             String application) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
@@ -904,11 +1142,11 @@ import java.util.Map;
 
     @POST
     @Path("applicationdescriptor/update")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.TEXT_XML)
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateApplicationDescriptor(@FormParam("serviceName") String serviceName,
                                                 @FormParam("hostName")String hostName,
-                                                @FormParam("application") String application){
+                                                String application){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             ApplicationDeploymentDescription applicationDeploymentDescription = ApplicationDeploymentDescription.fromXML(application);
@@ -972,78 +1210,78 @@ import java.util.Map;
         }
     }
 
-    @GET
-    @Path("applicationdescriptor/alldescriptors/service")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getApplicationDescriptors(@QueryParam("serviceName") String serviceName) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
-            Map<String, ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = airavataRegistry.getApplicationDescriptors(serviceName);
-            ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
-            ApplicationDescriptor[] applicationDescriptors = new ApplicationDescriptor[applicationDeploymentDescriptionMap.size()];
-            int i = 0;
-            for(String hostName : applicationDeploymentDescriptionMap.keySet()){
-                ApplicationDeploymentDescription applicationDeploymentDescription = applicationDeploymentDescriptionMap.get(hostName);
-                ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
-                applicationDescriptor.setHostdescName(hostName);
-                applicationDescriptor.setAppDocument(applicationDeploymentDescription.toXML());
-                applicationDescriptors[i] = applicationDescriptor;
-                i++;
-            }
-            applicationDescriptorList.setApplicationDescriptors(applicationDescriptors);
-            if(applicationDeploymentDescriptionMap.size() != 0){
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(applicationDescriptorList);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (MalformedDescriptorException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
+//    @GET
+//    @Path("applicationdescriptor/alldescriptors/service")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response getApplicationDescriptors(@QueryParam("serviceName") String serviceName) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+//        try{
+//            Map<String, ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = airavataRegistry.getApplicationDescriptors(serviceName);
+//            ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
+//            ApplicationDescriptor[] applicationDescriptors = new ApplicationDescriptor[applicationDeploymentDescriptionMap.size()];
+//            int i = 0;
+//            for(String hostName : applicationDeploymentDescriptionMap.keySet()){
+//                ApplicationDeploymentDescription applicationDeploymentDescription = applicationDeploymentDescriptionMap.get(hostName);
+//                ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
+//                applicationDescriptor.setHostdescName(hostName);
+//                applicationDescriptor.setAppDocument(applicationDeploymentDescription.toXML());
+//                applicationDescriptors[i] = applicationDescriptor;
+//                i++;
+//            }
+//            applicationDescriptorList.setApplicationDescriptors(applicationDescriptors);
+//            if(applicationDeploymentDescriptionMap.size() != 0){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(applicationDescriptorList);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+//        } catch (MalformedDescriptorException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
 
-    @GET
-    @Path("applicationdescriptor/alldescriptors")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getApplicationDescriptors(){
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
-            Map<String[], ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = airavataRegistry.getApplicationDescriptors();
-            ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
-            ApplicationDescriptor[] applicationDescriptors = new ApplicationDescriptor[applicationDeploymentDescriptionMap.size()];
-            int i = 0;
-            for (String[] descriptors : applicationDeploymentDescriptionMap.keySet()){
-                ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
-                ApplicationDeploymentDescription applicationDeploymentDescription = applicationDeploymentDescriptionMap.get(descriptors);
-                applicationDescriptor.setServiceDescName(descriptors[0]);
-                applicationDescriptor.setHostdescName(descriptors[1]);
-                applicationDescriptor.setAppDocument(applicationDeploymentDescription.toXML());
-                applicationDescriptors[i] = applicationDescriptor;
-                i++;
-            }
-            applicationDescriptorList.setApplicationDescriptors(applicationDescriptors);
-            if(applicationDeploymentDescriptionMap.size() != 0){
-                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(applicationDescriptorList);
-                return builder.build();
-            } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                return builder.build();
-            }
-        } catch (MalformedDescriptorException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-    }
+//    @GET
+//    @Path("applicationdescriptor/alldescriptors")
+//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    public Response getApplicationDescriptors(){
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+//        try{
+//            Map<String[], ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = airavataRegistry.getApplicationDescriptors();
+//            ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
+//            ApplicationDescriptor[] applicationDescriptors = new ApplicationDescriptor[applicationDeploymentDescriptionMap.size()];
+//            int i = 0;
+//            for (String[] descriptors : applicationDeploymentDescriptionMap.keySet()){
+//                ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
+//                ApplicationDeploymentDescription applicationDeploymentDescription = applicationDeploymentDescriptionMap.get(descriptors);
+//                applicationDescriptor.setServiceDescName(descriptors[0]);
+//                applicationDescriptor.setHostdescName(descriptors[1]);
+//                applicationDescriptor.setAppDocument(applicationDeploymentDescription.toXML());
+//                applicationDescriptors[i] = applicationDescriptor;
+//                i++;
+//            }
+//            applicationDescriptorList.setApplicationDescriptors(applicationDescriptors);
+//            if(applicationDeploymentDescriptionMap.size() != 0){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(applicationDescriptorList);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+//        } catch (MalformedDescriptorException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
 
     @DELETE
     @Path("applicationdescriptor/delete")
@@ -1830,8 +2068,7 @@ import java.util.Map;
     @POST
     @Path("update/workflownodeoutput")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response updateWorkflowNodeOutput(@FormParam("experimentID") String experimentID,
-                                             @FormParam("nodeID") String nodeID,
+    public Response updateWorkflowNodeOutput(@FormParam("nodeID") String nodeID,
                                              @FormParam("workflowInstanceID") String workflowInstanceID,
                                              @FormParam("data") String data) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -1856,12 +2093,20 @@ import java.util.Map;
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.searchWorkflowInstanceNodeInput(experimentIdRegEx, workflowNameRegEx, nodeNameRegEx);
-            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
+            WorkflowNodeIODataMapping[] workflowNodeIODataCollection = new WorkflowNodeIODataMapping[workflowNodeIODataList.size()];
             WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
             for (int i = 0; i<workflowNodeIODataList.size(); i++){
-                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
+                WorkflowNodeIOData nodeIOData = workflowNodeIODataList.get(i);
+                WorkflowNodeIODataMapping workflowNodeIODataMapping = new WorkflowNodeIODataMapping();
+
+                workflowNodeIODataMapping.setExperimentId(nodeIOData.getExperimentId());
+                workflowNodeIODataMapping.setWorkflowId(nodeIOData.getWorkflowId());
+                workflowNodeIODataMapping.setWorkflowInstanceId(nodeIOData.getWorkflowInstanceId());
+                workflowNodeIODataMapping.setWorkflowName(nodeIOData.getWorkflowName());
+                workflowNodeIODataMapping.setWorkflowNodeType(nodeIOData.getNodeType().toString());
+                workflowNodeIODataCollection[i] = workflowNodeIODataMapping;
             }
-            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
+            workflowNodeIOData.setWorkflowNodeIODataMappings(workflowNodeIODataCollection);
             if (workflowNodeIODataList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(workflowNodeIOData);
@@ -1885,12 +2130,20 @@ import java.util.Map;
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.searchWorkflowInstanceNodeOutput(experimentIdRegEx, workflowNameRegEx, nodeNameRegEx);
-            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
+            WorkflowNodeIODataMapping[] workflowNodeIODataCollection = new WorkflowNodeIODataMapping[workflowNodeIODataList.size()];
             WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
             for (int i = 0; i<workflowNodeIODataList.size(); i++){
-                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
+                WorkflowNodeIOData nodeIOData = workflowNodeIODataList.get(i);
+                WorkflowNodeIODataMapping workflowNodeIODataMapping = new WorkflowNodeIODataMapping();
+
+                workflowNodeIODataMapping.setExperimentId(nodeIOData.getExperimentId());
+                workflowNodeIODataMapping.setWorkflowId(nodeIOData.getWorkflowId());
+                workflowNodeIODataMapping.setWorkflowInstanceId(nodeIOData.getWorkflowInstanceId());
+                workflowNodeIODataMapping.setWorkflowName(nodeIOData.getWorkflowName());
+                workflowNodeIODataMapping.setWorkflowNodeType(nodeIOData.getNodeType().toString());
+                workflowNodeIODataCollection[i] = workflowNodeIODataMapping;
             }
-            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
+            workflowNodeIOData.setWorkflowNodeIODataMappings(workflowNodeIODataCollection);
             if (workflowNodeIODataList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(workflowNodeIOData);
@@ -1913,12 +2166,20 @@ import java.util.Map;
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.getWorkflowInstanceNodeInput(workflowInstanceId, nodeType);
-            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
+            WorkflowNodeIODataMapping[] workflowNodeIODataCollection = new WorkflowNodeIODataMapping[workflowNodeIODataList.size()];
             WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
             for (int i = 0; i<workflowNodeIODataList.size(); i++){
-                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
+                WorkflowNodeIOData nodeIOData = workflowNodeIODataList.get(i);
+                WorkflowNodeIODataMapping workflowNodeIODataMapping = new WorkflowNodeIODataMapping();
+
+                workflowNodeIODataMapping.setExperimentId(nodeIOData.getExperimentId());
+                workflowNodeIODataMapping.setWorkflowId(nodeIOData.getWorkflowId());
+                workflowNodeIODataMapping.setWorkflowInstanceId(nodeIOData.getWorkflowInstanceId());
+                workflowNodeIODataMapping.setWorkflowName(nodeIOData.getWorkflowName());
+                workflowNodeIODataMapping.setWorkflowNodeType(nodeIOData.getNodeType().toString());
+                workflowNodeIODataCollection[i] = workflowNodeIODataMapping;
             }
-            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
+            workflowNodeIOData.setWorkflowNodeIODataMappings(workflowNodeIODataCollection);
             if (workflowNodeIODataList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(workflowNodeIOData);
@@ -1941,12 +2202,19 @@ import java.util.Map;
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.getWorkflowInstanceNodeOutput(workflowInstanceId, nodeType);
-            WorkflowNodeIOData[] workflowNodeIODataCollection = new WorkflowNodeIOData[workflowNodeIODataList.size()];
+            WorkflowNodeIODataMapping[] workflowNodeIODataCollection = new WorkflowNodeIODataMapping[workflowNodeIODataList.size()];
             WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
             for (int i = 0; i<workflowNodeIODataList.size(); i++){
-                workflowNodeIODataCollection[i] = workflowNodeIODataList.get(i);
-            }
-            workflowNodeIOData.setWorkflowNodeIODatas(workflowNodeIODataCollection);
+                WorkflowNodeIOData nodeIOData = workflowNodeIODataList.get(i);
+                WorkflowNodeIODataMapping workflowNodeIODataMapping = new WorkflowNodeIODataMapping();
+
+                workflowNodeIODataMapping.setExperimentId(nodeIOData.getExperimentId());
+                workflowNodeIODataMapping.setWorkflowId(nodeIOData.getWorkflowId());
+                workflowNodeIODataMapping.setWorkflowInstanceId(nodeIOData.getWorkflowInstanceId());
+                workflowNodeIODataMapping.setWorkflowName(nodeIOData.getWorkflowName());
+                workflowNodeIODataMapping.setWorkflowNodeType(nodeIOData.getNodeType().toString());
+                workflowNodeIODataCollection[i] = workflowNodeIODataMapping;            }
+            workflowNodeIOData.setWorkflowNodeIODataMappings(workflowNodeIODataCollection);
             if (workflowNodeIODataList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(workflowNodeIOData);

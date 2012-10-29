@@ -1,19 +1,18 @@
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
 
-import org.apache.airavata.registry.api.workflow.WorkflowNodeIOData;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class WorkflowNodeIODataList {
-    WorkflowNodeIOData[] workflowNodeIODatas = null;
+    WorkflowNodeIODataMapping[] workflowNodeIODataMappings = null;
 
-    public WorkflowNodeIOData[] getWorkflowNodeIODatas() {
-        return workflowNodeIODatas;
+    public WorkflowNodeIODataMapping[] getWorkflowNodeIODataMappings() {
+        return workflowNodeIODataMappings;
     }
 
-    public void setWorkflowNodeIODatas(WorkflowNodeIOData[] workflowNodeIODatas) {
-        this.workflowNodeIODatas = workflowNodeIODatas;
+    public void setWorkflowNodeIODataMappings(WorkflowNodeIODataMapping[] workflowNodeIODataMappings) {
+        this.workflowNodeIODataMappings = workflowNodeIODataMappings;
     }
 }
