@@ -61,6 +61,8 @@ Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" id="gatekeepe
             alert("button btn2 clicked!");
             var hostName = $("#hostName1").val();
             var hostAddress = $("#hostAddress1").val();
+            var hostEndpoint = $("#hostEndpoint1").val();
+            var gatekeeperEndpoint = $("#gatekeeperEndpoint1").val();
 
 //            var xml = $('<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>mylocalhost</type:hostName><type:hostAddress>127.0.01</type:hostAddress></type:hostDescription>');
             var xml = $('<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>' + hostName + '</type:hostName><type:hostAddress>' + hostAddress + '</type:hostAddress></type:hostDescription>');
@@ -83,23 +85,40 @@ Gatekeeper Endpoint : <input type="text" name="gatekeeperEndpoint" id="gatekeepe
 
             $.ajax({
                 headers: {
-                    Accept : "text/plain; charset=utf-8",
+                    Accept : "text/plain; charset=utf-8"
 
 //                    "Content-Type": "text/xml",
-                    contentType: "text/xml",
+//                    contentType: "text/xml",
 //                    "Content-Type": "text/plain; charset=utf-8",
-                    "Accept-Encoding" : ""
+//                    "Accept-Encoding" : ""
                 },
-                beforeSend: function(xhr, s) {
-                    xhr.setRequestHeader("Accept-Encoding" ,"");
-                    xhr.setRequestHeader("Content-Type", "text/xml");
-                },
+//                beforeSend: function(xhr, s) {
+//                    xhr.setRequestHeader("Accept-Encoding" ,"");
+//                    xhr.setRequestHeader("Content-Type", "text/xml");
+//                },
 
                 type: "POST",
 //                contentType : "application/x-www-form-urlencoded",
                 url: "http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save",
-                data: xmlString,
-                dataType: "xml"
+                data: {
+                    hostName: hostName,
+                    hostAddress: hostAddress,
+                    hostEndpoint : hostEndpoint,
+                    gatekeeperEndpoint : gatekeeperEndpoint
+                }
+//                dataType: "xml"
+
+
+                /*type: "POST",
+                 url: "http://localhost:6060/airavata-registry-rest-services/registry/api/hostdescriptor/save",
+                data: {name: "amit", id:"1" },
+                dataType: "json",
+                beforeSend: function(x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                }*/
+
             }).done(function( msg ) {
                         alert( "Data Saved: " + msg );
                     });
