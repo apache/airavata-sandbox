@@ -563,11 +563,11 @@ import java.util.*;
         }
     }
 
-/*    @POST
-    @Path("hostdescriptor/save")
+    @POST
+    @Path("hostdescriptor/save/jason")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response addHostDescriptor(HostDescriptor host) {
+    public Response addJasonHostDescriptor(HostDescriptor host) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             HostDescription hostDescription = new HostDescription();
@@ -592,7 +592,7 @@ import java.util.*;
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
-    }*/
+    }
 
     @POST
     @Path("hostdescriptor/update")
