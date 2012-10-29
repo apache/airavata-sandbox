@@ -5,6 +5,10 @@ import org.apache.airavata.registry.api.AiravataRegistryFactory;
 import org.apache.airavata.registry.api.AiravataUser;
 import org.apache.airavata.registry.api.Gateway;
 
+import org.apache.airavata.client.AiravataClient;
+import org.apache.airavata.client.AiravataClientUtils;
+import org.apache.airavata.client.api.AiravataAPI;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -32,11 +36,13 @@ public class RegistryListener implements ServletContextListener {
             Gateway gateway =  new Gateway(gatewayID);
             AiravataUser airavataUser = new AiravataUser(registryUser) ;
 
-            airavataRegistry = AiravataRegistryFactory.
-                    getRegistry(gateway, airavataUser);
+            airavataRegistry = AiravataRegistryFactory.getRegistry(gateway, airavataUser);
             servletContext.setAttribute(RestServicesConstants.AIRAVATA_REGISTRY, airavataRegistry);
             servletContext.setAttribute(RestServicesConstants.GATEWAY, gateway);
             servletContext.setAttribute(RestServicesConstants.REGISTRY_USER, airavataUser);
+
+            AiravataAPI airavataAPI = AiravataClientUtils.getAPI(url.getPath());
+            servletContext.setAttribute(RestServicesConstants.AIRAVATA_API, airavataAPI);
         } catch (Exception e) {
             e.printStackTrace();
         }

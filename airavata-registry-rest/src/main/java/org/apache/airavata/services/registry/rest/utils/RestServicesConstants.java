@@ -7,4 +7,5 @@ public class RestServicesConstants {
     public static final String REGISTRY_USERNAME = "registry.user";
     public static final String REGISTRY_USER = "airavata.user";
     public static final String AIRAVATA_REGISTRY = "airavataRegistry";
+    public static final String AIRAVATA_API = "airavataAPI";
 }
