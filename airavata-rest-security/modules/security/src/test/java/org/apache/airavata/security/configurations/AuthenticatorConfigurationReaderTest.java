@@ -35,6 +35,8 @@ public class AuthenticatorConfigurationReaderTest extends TestCase {
                 = new AuthenticatorConfigurationReader();
         authenticatorConfigurationReader.init(configurationFile);
 
+        assertTrue(AuthenticatorConfigurationReader.isAuthenticationEnabled());
+
         List<Authenticator> authenticators = authenticatorConfigurationReader.getAuthenticatorList();
 
         assertEquals(authenticators.size(), 3);
@@ -76,6 +78,20 @@ public class AuthenticatorConfigurationReaderTest extends TestCase {
         assertEquals(8, authenticators.get(0).getPriority());
         assertEquals(7, authenticators.get(1).getPriority());
         assertEquals(6, authenticators.get(2).getPriority());
+
+    }
+
+    public void testDisabledAuthenticator() throws Exception {
+
+        String disabledConfiguration
+                = this.getClass().getClassLoader().getResource("disabled-authenticator.xml").getFile();
+
+
+        AuthenticatorConfigurationReader authenticatorConfigurationReader
+                = new AuthenticatorConfigurationReader();
+        authenticatorConfigurationReader.init(disabledConfiguration);
+
+        assertFalse(AuthenticatorConfigurationReader.isAuthenticationEnabled());
 
     }
 }

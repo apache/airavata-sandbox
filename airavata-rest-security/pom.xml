@@ -596,6 +596,7 @@
             <modules>
                 <module>modules/security</module>
                 <module>modules/commons</module>
+                <module>modules/credential-store</module>
             </modules>
         </profile>
         <profile>

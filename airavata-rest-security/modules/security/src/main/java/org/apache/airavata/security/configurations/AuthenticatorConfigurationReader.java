@@ -30,6 +30,8 @@ public class AuthenticatorConfigurationReader extends AbstractConfigurationReade
 
     protected static Logger log = LoggerFactory.getLogger(AuthenticatorConfigurationReader.class);
 
+    protected static boolean authenticationEnabled = true;
+
     public AuthenticatorConfigurationReader() {
 
     }
@@ -40,6 +42,27 @@ public class AuthenticatorConfigurationReader extends AbstractConfigurationReade
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document doc = dBuilder.parse(inputStream);
         doc.getDocumentElement().normalize();
+
+        NodeList rootNodeList = doc.getElementsByTagName("authenticators");
+
+        if (rootNodeList == null || rootNodeList.getLength() == 0) {
+            throw new ParserConfigurationException("authenticators.xml should have authenticators root element.");
+        }
+
+        Node authenticatorsNode = rootNodeList.item(0);
+        NamedNodeMap rootAttributes = authenticatorsNode.getAttributes();
+
+        if (rootAttributes != null && rootAttributes.getNamedItem("enabled") != null) {
+
+            String enabledAttribute = rootAttributes.getNamedItem("enabled").getNodeValue();
+            if ( enabledAttribute != null) {
+
+                if (enabledAttribute.equals("false")) {
+                    authenticationEnabled = false;
+                }
+            }
+        }
+
 
         NodeList authenticators = doc.getElementsByTagName("authenticator");
 
@@ -173,6 +196,17 @@ public class AuthenticatorConfigurationReader extends AbstractConfigurationReade
 
     public List<Authenticator> getAuthenticatorList() {
         return Collections.unmodifiableList(authenticatorList);
+    }
+
+    /**
+     * We can specify whether authentication is enabled in the system for all request or not.
+     * This we can state in the configuration. AuthenticatorConfigurationReader will read that information
+     * and will populate that to static boolean authenticationEnabled. This method will say whether
+     * authentication is enabled in the system or disabled in the system.
+     * @return <code>true</code> if authentication is enabled. Else <code>false</code>.
+     */
+    public static boolean isAuthenticationEnabled() {
+        return authenticationEnabled;
     }
 
 

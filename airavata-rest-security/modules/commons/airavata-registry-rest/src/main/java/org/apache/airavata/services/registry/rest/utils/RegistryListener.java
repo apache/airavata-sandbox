@@ -1,5 +1,8 @@
 package org.apache.airavata.services.registry.rest.utils;
 
+import org.apache.airavata.credential.store.CredentialStore;
+import org.apache.airavata.credential.store.impl.CredentialStoreImpl;
+import org.apache.airavata.credential.store.util.DBUtil;
 import org.apache.airavata.registry.api.AiravataRegistry;
 import org.apache.airavata.registry.api.Axis2Registry;
 import org.apache.airavata.registry.api.DataRegistry;
@@ -18,6 +21,8 @@ public class RegistryListener implements ServletContextListener {
     private static AiravataRegistry airavataRegistry;
     private static Axis2Registry axis2Registry;
     private static DataRegistry dataRegistry;
+
+    public static final String CREDENTIAL_STORE = "credentialStore";
 
 
     protected static Logger log = LoggerFactory.getLogger(RegistryListener.class);
@@ -45,9 +50,19 @@ public class RegistryListener implements ServletContextListener {
             servletContext.setAttribute("airavataRegistry", airavataRegistry);
             servletContext.setAttribute("axis2Registry", axis2Registry);
             servletContext.setAttribute("dataRegistry", dataRegistry);
+
+            initializeCredentialStoreAPI(servletContext);
+
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+    }
+
+    private void initializeCredentialStoreAPI(ServletContext servletContext) throws Exception {
+
+        CredentialStore credentialStore = new CredentialStoreImpl(DBUtil.getDBUtil(servletContext));
+        servletContext.setAttribute(CREDENTIAL_STORE, credentialStore);
+
     }
 
 

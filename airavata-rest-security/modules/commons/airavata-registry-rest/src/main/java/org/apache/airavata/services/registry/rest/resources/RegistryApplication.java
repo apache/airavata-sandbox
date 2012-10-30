@@ -10,6 +10,7 @@ public class RegistryApplication extends Application {
         final Set<Class<?>> classes = new HashSet<Class<?>>();
         // register root resource
         classes.add(RegistryResource.class);
+        classes.add(CredentialStoreAPI.class);
         return classes;
     }
 

@@ -1,0 +1,13 @@
+<config>
+    <client name="sample">
+        <id>myproxy:oa4mp,2012:/client/24c45c2eb65d93231d02d423e94d0362</id>
+        <serviceUri>https://portal.xsede.org/oauth</serviceUri>
+        <!--callbackUri>https://156.56.179.104:8443/client/pages/client-success.jsp</callbackUri-->
+        <callbackUri>https://140.182.131.37:8443/airavata-registry-rest-services/callback</callbackUri>
+        <lifetime>864000</lifetime>
+        <!--publicKeyFile>/home/amila/development/tools/apache-tomcat-7.0.29/webapps/airavata-registry-rest-services/WEB-INF/classes/credential-store/oauth-pubkey.pem</publicKeyFile-->
+        <publicKeyFile>webapps/airavata-registry-rest-services/WEB-INF/classes/credential-store/oauth-pubkey.pem</publicKeyFile>
+        <!--privateKeyFile>/home/amila/development/tools/apache-tomcat-7.0.29/webapps/airavata-registry-rest-services/WEB-INF/classes/credential-store/oauth-privkey.pk8</privateKeyFile-->
+        <privateKeyFile>webapps/airavata-registry-rest-services/WEB-INF/classes/credential-store/oauth-privkey.pk8</privateKeyFile>
+    </client>
+</config>

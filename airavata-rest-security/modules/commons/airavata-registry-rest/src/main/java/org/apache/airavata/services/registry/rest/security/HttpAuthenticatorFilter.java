@@ -11,10 +11,8 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -82,6 +80,12 @@ public class HttpAuthenticatorFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
+        // Firs check whether authenticators are disabled
+        if (! AuthenticatorConfigurationReader.isAuthenticationEnabled()) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
 

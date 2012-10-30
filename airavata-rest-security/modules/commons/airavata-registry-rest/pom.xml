@@ -67,6 +67,11 @@
             <artifactId>commons-codec</artifactId>
             <version>1.6</version>
         </dependency>
+        <dependency>
+            <groupId>edu.uiuc.ncsa.myproxy</groupId>
+            <artifactId>oa4mp-client-oauth1</artifactId>
+            <version>1.0.5</version>
+        </dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-servlet</artifactId>
@@ -128,6 +133,12 @@
 			<artifactId>airavata-client-api</artifactId>
 			<version>${airavata.version}</version>
 		</dependency-->
+
+        <dependency>
+            <groupId>org.apache.airavata</groupId>
+            <artifactId>credential-store</artifactId>
+            <version>0.5-incubating-SNAPSHOT</version>
+        </dependency>
         <dependency>
 			<groupId>org.apache.airavata</groupId>
 			<artifactId>airavata-registry-api</artifactId>
@@ -150,21 +161,21 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${org.slf4j.version}</version>
 		</dependency>
-		<dependency>
+		<!--dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>${org.slf4j.version}</version>
-		</dependency>
-		<dependency>
+		</dependency-->
+		<!--dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${org.slf4j.version}</version>
-		</dependency>
-		<dependency>
+		</dependency-->
+		<!--dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${org.slf4j.version}</version>
-		</dependency>
+		</dependency-->
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -189,7 +200,7 @@
 		<cargo.debug.address>8000</cargo.debug.address>
 		<!-- if you want to start remote debugging session suspended override on
 			command line with -Dcargo.debug.suspend=y -->
-		<cargo.debug.suspend>n</cargo.debug.suspend>
+		<cargo.debug.suspend>y</cargo.debug.suspend>
 		<javaagent />
 	</properties>
 	  <repositories>
