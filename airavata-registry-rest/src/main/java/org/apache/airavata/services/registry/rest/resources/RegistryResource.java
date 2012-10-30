@@ -1073,6 +1073,51 @@ import java.util.*;
     }
 
     @POST
+    @Path("applicationdescriptor/build/save/test")
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response addApplicationDescriptorTest(@FormParam("appName") String appName, @FormParam("exeuctableLocation") String exeuctableLocation, @FormParam("scratchWorkingDirectory") String scratchWorkingDirectory, @FormParam("hostName") String hostName,
+                                                 @FormParam("projAccNumber") String projAccNumber, @FormParam("queueName") String queueName, @FormParam("cpuCount") String cpuCount, @FormParam("nodeCount") String nodeCount, @FormParam("maxMemory") String maxMemory,
+                                                 @FormParam("serviceName") String serviceName, @FormParam("inputName1") String inputName1, @FormParam("inputType1") String inputType1, @FormParam("outputName") String outputName, @FormParam("outputType") String outputType) throws Exception {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+
+        ServiceDescription serv = DescriptorUtil.getServiceDescription(serviceName, inputName1, inputType1, outputName, outputType);
+        // Creating the descriptor as a temporary measure.
+        ApplicationDeploymentDescription app = DescriptorUtil.registerApplication(appName, exeuctableLocation, scratchWorkingDirectory,
+                hostName, projAccNumber, queueName, cpuCount, nodeCount, maxMemory);
+        try{
+            if(!airavataRegistry.isHostDescriptorExists(hostName)){
+                Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                return builder.build();
+            }
+
+            if (!airavataRegistry.isServiceDescriptorExists(serv.getType().getName())) {
+                airavataRegistry.addServiceDescriptor(serv);
+            } else {
+                airavataRegistry.updateServiceDescriptor(serv);
+            }
+
+            if (!airavataRegistry.isApplicationDescriptorExists(serv.getType().getName(), hostName, app.getType().getApplicationName().getStringValue())) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                return builder.build();
+            } else {
+                airavataRegistry.addApplicationDescriptor(serv.getType().getName(), hostName, app);
+            }
+
+            airavataRegistry.addApplicationDescriptor(serviceName, hostName, app);
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            return builder.build();
+        } catch (DescriptorAlreadyExistsException e){
+            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
+
+
+    @POST
     @Path("applicationdescriptor/build/save")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
