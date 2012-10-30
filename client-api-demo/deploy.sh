@@ -25,3 +25,4 @@ cp /home/heshan/Dev/sc12/demo1/deployment.properties /home/heshan/Dev/sc12/demo1
 echo "Copying jars from airavata/lib to webapps.../lib"
 cp /home/heshan/Dev/apache/trunk/airavata/trunk/modules/distribution/target/apache-airavata-0.5-SNAPSHOT/standalone-server/lib/*.jar /home/heshan/Dev/sc12/demo1/apache-tomcat-7.0.28/webapps/client-api-demo/WEB-INF/lib
 
+#chromium-browser http://localhost:7080/client-api-demo/x_host_descriptor_save.html
