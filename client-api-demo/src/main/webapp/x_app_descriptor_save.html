@@ -49,18 +49,18 @@ Output Type         *: <input type="text" id="outputType1" name="outputType" val
     }
 
     $(document).ready(function(){
-        $(window).load(function () {
-            $("div").hide();
-        });
-
-        $("select[name='drop1']").change(function() {
-            //alert($(this).val());
-            if("Local" == $(this).val()) {
-                $("div").hide();
-            } else {
-                $("div").show();
-            }
-        });
+//        $(window).load(function () {
+//            $("div").hide();
+//        });
+//
+//        $("select[name='drop1']").change(function() {
+//            //alert($(this).val());
+//            if("Local" == $(this).val()) {
+//                $("div").hide();
+//            } else {
+//                $("div").show();
+//            }
+//        });
 
         $('[name="btn2"]').click(function(){
             var appName = $("#appName1").val();
