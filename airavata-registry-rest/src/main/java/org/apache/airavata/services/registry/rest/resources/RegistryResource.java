@@ -10,16 +10,13 @@ import org.apache.airavata.registry.api.exception.gateway.*;
 import org.apache.airavata.registry.api.exception.worker.*;
 import org.apache.airavata.registry.api.workflow.*;
 import org.apache.airavata.schemas.gfac.*;
-import org.apache.airavata.schemas.gfac.impl.InputParameterTypeImpl;
 import org.apache.airavata.services.registry.rest.resourcemappings.*;
 import org.apache.airavata.registry.api.AiravataExperiment;
 import org.apache.airavata.services.registry.rest.resourcemappings.WorkflowInstanceMapping;
+import org.apache.airavata.services.registry.rest.utils.ApplicationDescriptorTypes;
 import org.apache.airavata.services.registry.rest.utils.DescriptorUtil;
 import org.apache.airavata.services.registry.rest.utils.HostTypes;
 import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.impl.llom.util.AXIOMUtil;
-import org.apache.xmlbeans.XmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +25,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.stream.XMLStreamException;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -540,7 +536,7 @@ import java.util.*;
     }
 
     @POST
-    @Path("hostdescriptor/save")
+    @Path("hostdescriptor/save/test")
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response addHostDescriptor(@FormParam("hostName") String hostName,
@@ -564,10 +560,10 @@ import java.util.*;
     }
 
     @POST
-    @Path("hostdescriptor/save/jason")
+    @Path("hostdescriptor/save")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response addJasonHostDescriptor(HostDescriptor host) {
+    public Response addJSONHostDescriptor(HostDescriptor host) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             HostDescription hostDescription = new HostDescription();
@@ -831,7 +827,7 @@ import java.util.*;
     @Path("servicedescriptor/save")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response addServiceDescriptor(ServiceDescriptor service){
+    public Response addJSONServiceDescriptor(ServiceDescriptor service){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             ServiceDescription serviceDescription = new ServiceDescription();
@@ -1080,7 +1076,7 @@ import java.util.*;
     @Path("applicationdescriptor/build/save")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response addApplicationDescriptor(ApplicationDescriptor applicationDescriptor){
+    public Response addJSONApplicationDescriptor(ApplicationDescriptor applicationDescriptor){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             String hostdescName = applicationDescriptor.getHostdescName();
@@ -1094,9 +1090,27 @@ import java.util.*;
             applicationDeploymentDescription.getType().setOutputDataDirectory(applicationDescriptor.getWorkingDir());
 
             //set advanced options according app desc type
+            if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
+                GramApplicationDeploymentType applicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
+                applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
+                applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
+                applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
+                applicationDeploymentType.setMinMemory(applicationDescriptor.getMinMemory());
+                applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
+                applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
+                applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
+            } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
+               BatchApplicationDeploymentDescriptionType applicationDeploymentType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
+                applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
+                applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
+                applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
+                applicationDeploymentType.setMinMemory(applicationDescriptor.getMinMemory());
+                applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
+                applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
+                applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
+            }
 
-
-            String serviceName = applicationDescriptor.getServiceDesc().getServiceName();
+            String serviceName = applicationDescriptor.getServiceName();
             airavataRegistry.addApplicationDescriptor(serviceName, hostdescName, applicationDeploymentDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
@@ -1110,85 +1124,109 @@ import java.util.*;
     }
 
 
-
-    @POST
-    @Path("applicationdescriptor/save")
-    @Consumes(MediaType.TEXT_XML)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response addApplicationDesc(@FormParam("serviceName") String serviceName,
-                                       @FormParam("hostName") String hostName,
-                                       String application) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
-            ApplicationDeploymentDescription applicationDeploymentDescription = ApplicationDeploymentDescription.fromXML(application);
-            airavataRegistry.addApplicationDescriptor(serviceName, hostName, applicationDeploymentDescription);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-        } catch (DescriptorAlreadyExistsException e){
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        } catch (XmlException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-
-    }
-
-    @POST
-    @Path("applicationdescriptor/update/descriptor")
-    @Consumes(MediaType.TEXT_XML)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response udpateApplicationDescriptorByDescriptors(String service,
-                                                             String host,
-                                                             String application) {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
-            ServiceDescription serviceDescription = ServiceDescription.fromXML(service);
-            HostDescription hostDescription = HostDescription.fromXML(host);
-            ApplicationDeploymentDescription applicationDeploymentDescription = ApplicationDeploymentDescription.fromXML(application);
-            airavataRegistry.udpateApplicationDescriptor(serviceDescription, hostDescription, applicationDeploymentDescription);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-            return builder.build();
-        } catch (DescriptorAlreadyExistsException e){
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        } catch (XmlException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            return builder.build();
-        }
-
-    }
+//
+//    @POST
+//    @Path("applicationdescriptor/save")
+//    @Consumes(MediaType.TEXT_XML)
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response addApplicationDesc(@FormParam("serviceName") String serviceName,
+//                                       @FormParam("hostName") String hostName,
+//                                       String application) {
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+//        try{
+//            ApplicationDeploymentDescription applicationDeploymentDescription = ApplicationDeploymentDescription.fromXML(application);
+//            airavataRegistry.addApplicationDescriptor(serviceName, hostName, applicationDeploymentDescription);
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//            return builder.build();
+//        } catch (DescriptorAlreadyExistsException e){
+//            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+//            return builder.build();
+//        } catch (XmlException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+//            return builder.build();
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//
+//    }
 
     @POST
     @Path("applicationdescriptor/update")
-    @Consumes(MediaType.TEXT_XML)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response updateApplicationDescriptor(@FormParam("serviceName") String serviceName,
-                                                @FormParam("hostName")String hostName,
-                                                String application){
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response udpateApplicationDescriptorByDescriptors(ApplicationDescriptor applicationDescriptor) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            ApplicationDeploymentDescription applicationDeploymentDescription = ApplicationDeploymentDescription.fromXML(application);
-            airavataRegistry.updateApplicationDescriptor(serviceName, hostName, applicationDeploymentDescription);
+            String hostdescName = applicationDescriptor.getHostdescName();
+            if(!airavataRegistry.isHostDescriptorExists(hostdescName)){
+                Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                return builder.build();
+            }
+            ApplicationDeploymentDescription applicationDeploymentDescription = new ApplicationDeploymentDescription();
+            applicationDeploymentDescription.getType().getApplicationName().setStringValue(applicationDescriptor.getApplicationName());
+            applicationDeploymentDescription.getType().setExecutableLocation(applicationDescriptor.getExecutablePath());
+            applicationDeploymentDescription.getType().setOutputDataDirectory(applicationDescriptor.getWorkingDir());
+
+            //set advanced options according app desc type
+            if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
+                GramApplicationDeploymentType applicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
+                applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
+                applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
+                applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
+                applicationDeploymentType.setMinMemory(applicationDescriptor.getMinMemory());
+                applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
+                applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
+                applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
+            } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
+                BatchApplicationDeploymentDescriptionType applicationDeploymentType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
+                applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
+                applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
+                applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
+                applicationDeploymentType.setMinMemory(applicationDescriptor.getMinMemory());
+                applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
+                applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
+                applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
+            }
+
+            String serviceName = applicationDescriptor.getServiceName();
+            airavataRegistry.updateApplicationDescriptor(serviceName, hostdescName, applicationDeploymentDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (DescriptorAlreadyExistsException e){
-            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
-            return builder.build();
-        } catch (XmlException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
+
     }
+
+//    @POST
+//    @Path("applicationdescriptor/update")
+//    @Consumes(MediaType.TEXT_XML)
+//    @Produces(MediaType.TEXT_PLAIN)
+//    public Response updateApplicationDescriptor(@FormParam("serviceName") String serviceName,
+//                                                @FormParam("hostName")String hostName,
+//                                                String application){
+//        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+//        try{
+//            ApplicationDeploymentDescription applicationDeploymentDescription = ApplicationDeploymentDescription.fromXML(application);
+//            airavataRegistry.updateApplicationDescriptor(serviceName, hostName, applicationDeploymentDescription);
+//            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//            return builder.build();
+//        } catch (DescriptorAlreadyExistsException e){
+//            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+//            return builder.build();
+//        } catch (XmlException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+//            return builder.build();
+//        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//            return builder.build();
+//        }
+//    }
 
     @GET
     @Path("applicationdescriptor/description")
@@ -1198,10 +1236,31 @@ import java.util.*;
                                              @QueryParam("applicationName") String applicationName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            String result = airavataRegistry.getApplicationDescriptor(serviceName, hostName, applicationName).toXML();
-            if (result != null) {
+            ApplicationDeploymentDescription applicationDeploymentDescription = airavataRegistry.getApplicationDescriptor(serviceName, hostName, applicationName);
+            ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
+            applicationDescriptor.setApplicationName(applicationDeploymentDescription.getType().getApplicationName().getStringValue());
+            applicationDescriptor.setExecutablePath(applicationDeploymentDescription.getType().getExecutableLocation());
+            applicationDescriptor.setWorkingDir(applicationDeploymentDescription.getType().getOutputDataDirectory());
+            if(applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
+                GramApplicationDeploymentType gramApplicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
+                applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
+                applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
+                applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
+                applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
+                applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
+                applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
+            } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
+                BatchApplicationDeploymentDescriptionType batchApplicationDeploymentDescriptionType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
+                applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
+                applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
+                applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
+                applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
+                applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
+                applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+            }
+            if (applicationDescriptor != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
+                builder.entity(applicationDescriptor);
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
@@ -1220,10 +1279,31 @@ import java.util.*;
                                               @QueryParam("hostName") String hostName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
-            String result = airavataRegistry.getApplicationDescriptors(serviceName, hostName).toXML();
-            if (result != null) {
+            ApplicationDeploymentDescription applicationDeploymentDescription = airavataRegistry.getApplicationDescriptors(serviceName, hostName);
+            ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
+            applicationDescriptor.setApplicationName(applicationDeploymentDescription.getType().getApplicationName().getStringValue());
+            applicationDescriptor.setExecutablePath(applicationDeploymentDescription.getType().getExecutableLocation());
+            applicationDescriptor.setWorkingDir(applicationDeploymentDescription.getType().getOutputDataDirectory());
+            if(applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
+                GramApplicationDeploymentType gramApplicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
+                applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
+                applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
+                applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
+                applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
+                applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
+                applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
+            } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
+                BatchApplicationDeploymentDescriptionType batchApplicationDeploymentDescriptionType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
+                applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
+                applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
+                applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
+                applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
+                applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
+                applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+            }
+            if (applicationDescriptor != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(result);
+                builder.entity(applicationDescriptor);
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
@@ -1235,78 +1315,116 @@ import java.util.*;
         }
     }
 
-//    @GET
-//    @Path("applicationdescriptor/alldescriptors/service")
-//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-//    public Response getApplicationDescriptors(@QueryParam("serviceName") String serviceName) {
-//        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-//        try{
-//            Map<String, ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = airavataRegistry.getApplicationDescriptors(serviceName);
-//            ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
-//            ApplicationDescriptor[] applicationDescriptors = new ApplicationDescriptor[applicationDeploymentDescriptionMap.size()];
-//            int i = 0;
-//            for(String hostName : applicationDeploymentDescriptionMap.keySet()){
-//                ApplicationDeploymentDescription applicationDeploymentDescription = applicationDeploymentDescriptionMap.get(hostName);
-//                ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
-//                applicationDescriptor.setHostdescName(hostName);
-//                applicationDescriptor.setAppDocument(applicationDeploymentDescription.toXML());
-//                applicationDescriptors[i] = applicationDescriptor;
-//                i++;
-//            }
-//            applicationDescriptorList.setApplicationDescriptors(applicationDescriptors);
-//            if(applicationDeploymentDescriptionMap.size() != 0){
-//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-//                builder.entity(applicationDescriptorList);
-//                return builder.build();
-//            } else {
-//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-//                return builder.build();
-//            }
-//        } catch (MalformedDescriptorException e) {
-//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-//            return builder.build();
-//        } catch (RegistryException e) {
-//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-//            return builder.build();
-//        }
-//    }
+    @GET
+    @Path("applicationdescriptor/alldescriptors/service")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getApplicationDescriptors(@QueryParam("serviceName") String serviceName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            Map<String, ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = airavataRegistry.getApplicationDescriptors(serviceName);
+            ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
+            ApplicationDescriptor[] applicationDescriptors = new ApplicationDescriptor[applicationDeploymentDescriptionMap.size()];
+            int i = 0;
+            for(String hostName : applicationDeploymentDescriptionMap.keySet()){
+                ApplicationDeploymentDescription applicationDeploymentDescription = applicationDeploymentDescriptionMap.get(hostName);
+                ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
+                applicationDescriptor.setHostdescName(hostName);
+                applicationDescriptor.setApplicationName(applicationDeploymentDescription.getType().getApplicationName().getStringValue());
+                applicationDescriptor.setExecutablePath(applicationDeploymentDescription.getType().getExecutableLocation());
+                applicationDescriptor.setWorkingDir(applicationDeploymentDescription.getType().getOutputDataDirectory());
+                if(applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
+                    GramApplicationDeploymentType gramApplicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
+                    applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
+                    applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
+                    applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
+                    applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
+                    applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
+                    applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
+                } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
+                    BatchApplicationDeploymentDescriptionType batchApplicationDeploymentDescriptionType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
+                    applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
+                    applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
+                    applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
+                    applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
+                    applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
+                    applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+                }
+                applicationDescriptors[i] = applicationDescriptor;
+                i++;
+            }
+            applicationDescriptorList.setApplicationDescriptors(applicationDescriptors);
+            if(applicationDeploymentDescriptionMap.size() != 0){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(applicationDescriptorList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (MalformedDescriptorException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
-//    @GET
-//    @Path("applicationdescriptor/alldescriptors")
-//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-//    public Response getApplicationDescriptors(){
-//        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-//        try{
-//            Map<String[], ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = airavataRegistry.getApplicationDescriptors();
-//            ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
-//            ApplicationDescriptor[] applicationDescriptors = new ApplicationDescriptor[applicationDeploymentDescriptionMap.size()];
-//            int i = 0;
-//            for (String[] descriptors : applicationDeploymentDescriptionMap.keySet()){
-//                ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
-//                ApplicationDeploymentDescription applicationDeploymentDescription = applicationDeploymentDescriptionMap.get(descriptors);
-//                applicationDescriptor.setServiceDescName(descriptors[0]);
-//                applicationDescriptor.setHostdescName(descriptors[1]);
-//                applicationDescriptor.setAppDocument(applicationDeploymentDescription.toXML());
-//                applicationDescriptors[i] = applicationDescriptor;
-//                i++;
-//            }
-//            applicationDescriptorList.setApplicationDescriptors(applicationDescriptors);
-//            if(applicationDeploymentDescriptionMap.size() != 0){
-//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-//                builder.entity(applicationDescriptorList);
-//                return builder.build();
-//            } else {
-//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-//                return builder.build();
-//            }
-//        } catch (MalformedDescriptorException e) {
-//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-//            return builder.build();
-//        } catch (RegistryException e) {
-//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-//            return builder.build();
-//        }
-//    }
+    @GET
+    @Path("applicationdescriptor/alldescriptors")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getApplicationDescriptors(){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            Map<String[], ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = airavataRegistry.getApplicationDescriptors();
+            ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
+            ApplicationDescriptor[] applicationDescriptors = new ApplicationDescriptor[applicationDeploymentDescriptionMap.size()];
+            int i = 0;
+            for (String[] descriptors : applicationDeploymentDescriptionMap.keySet()){
+                ApplicationDescriptor applicationDescriptor = new ApplicationDescriptor();
+                ApplicationDeploymentDescription applicationDeploymentDescription = applicationDeploymentDescriptionMap.get(descriptors);
+                applicationDescriptor.setServiceName(descriptors[0]);
+                applicationDescriptor.setHostdescName(descriptors[1]);
+                applicationDescriptor.setApplicationName(applicationDeploymentDescription.getType().getApplicationName().getStringValue());
+                applicationDescriptor.setExecutablePath(applicationDeploymentDescription.getType().getExecutableLocation());
+                applicationDescriptor.setWorkingDir(applicationDeploymentDescription.getType().getOutputDataDirectory());
+                if(applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
+                    GramApplicationDeploymentType gramApplicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
+                    applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
+                    applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
+                    applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
+                    applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
+                    applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
+                    applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
+                } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
+                    BatchApplicationDeploymentDescriptionType batchApplicationDeploymentDescriptionType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
+                    applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
+                    applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
+                    applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
+                    applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
+                    applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
+                    applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+                }
+                applicationDescriptors[i] = applicationDescriptor;
+                i++;
+            }
+            applicationDescriptorList.setApplicationDescriptors(applicationDescriptors);
+            if(applicationDeploymentDescriptionMap.size() != 0){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(applicationDescriptorList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (MalformedDescriptorException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+    }
 
     @DELETE
     @Path("applicationdescriptor/delete")

@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ApplicationDescriptor {
     private String applicationName;
     private String hostdescName;
-    private ServiceDescriptor serviceDesc;
+    private String serviceName;
     private String executablePath;
     private String workingDir;
     private String jobType;
@@ -58,12 +58,12 @@ public class ApplicationDescriptor {
         this.hostdescName = hostdescName;
     }
 
-    public ServiceDescriptor getServiceDesc() {
-        return serviceDesc;
+    public String getServiceName() {
+        return serviceName;
     }
 
-    public void setServiceDesc(ServiceDescriptor serviceDesc) {
-        this.serviceDesc = serviceDesc;
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
     public String getExecutablePath() {

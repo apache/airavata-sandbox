@@ -14,12 +14,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.airavata.commons.gfac.type.ServiceDescription;
 import org.apache.airavata.registry.api.AiravataRegistry2;
 import org.apache.airavata.services.registry.rest.resourcemappings.ApplicationDescriptor;
 import org.apache.airavata.services.registry.rest.resourcemappings.ServiceDescriptor;
 import org.apache.airavata.services.registry.rest.resourcemappings.ServiceParameters;
-import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
 
 @Path("/api/application")
 public class ApplicationRegistration {
@@ -92,7 +90,7 @@ public class ApplicationRegistration {
         	descriptor.setInputParams(inputlist);
         	descriptor.setOutputParams(outputlist);
 
-        	application.setServiceDesc(descriptor);
+        	application.setServiceName(descriptor);
         	application.setHostdescName("localhost");
             return application;
         } catch (Exception e) {
