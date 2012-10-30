@@ -90,7 +90,7 @@ public class ApplicationRegistration {
         	descriptor.setInputParams(inputlist);
         	descriptor.setOutputParams(outputlist);
 
-        	application.setServiceName(descriptor);
+        	application.setServiceName("service1");
         	application.setHostdescName("localhost");
             return application;
         } catch (Exception e) {
