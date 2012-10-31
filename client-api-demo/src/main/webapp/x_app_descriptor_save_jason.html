@@ -22,12 +22,13 @@ Max memory           : <input type="text" id="maxMemory1" name="maxMemory" value
 
 <b>SERVICE</b><br/>
 Service Name        *: <input type="text" id="serviceName1" name="serviceName" value="SimpleEcho" size="50"><br/>
-Input Name          *: <input type="text" id="inputName1" name="inputName" value="echo_input" size="50"><br/>
+Input Name          *: <input type="text" id="inputName1" name="inputName1" value="echo_input" size="50"><br/>
+Input Type          *: <input type="text" id="inputType1" name="inputType1" value="String" size="50"><br/>
+<p1>Add inputs</p1><br/>
 
-Input Type          *: <input type="text" id="inputType1" name="inputType" value="String" size="50"><br/>
-Output Name         *: <input type="text" id="outputName1" name="outputName" value="echo_output" size="50"><br/>
-
-Output Type         *: <input type="text" id="outputType1" name="outputType" value="String" size="50"><br/>
+Output Name         *: <input type="text" id="outputName1" name="outputName1" value="echo_output" size="50"><br/>
+Output Type         *: <input type="text" id="outputType1" name="outputType1" value="String" size="50"><br/>
+<p2>Add outputs</p2><br/>
 
 
 <button name="btn2">Save Application</button>
@@ -48,6 +49,40 @@ Output Type         *: <input type="text" id="outputType1" name="outputType" val
     }
 
     $(document).ready(function(){
+        var inputCount = 0;
+        var outputCount = 0;
+
+        $("p2").click(function(){
+            $(this).hide();
+            $(this).after("<p>Another paragraph!</p>");
+        });
+
+        $("p1").live("click", function(){
+            inputCount++;
+            alert("p1 clicked");
+            alert(inputCount);
+            $(this).after("Input Name         *:");
+//            $(this).after("<input type="text" id="inputName1" name="inputName" value="echo_input" size="50"><br/>");
+            $(this).after("&lt;input type=&quot;text&quot; id=&quot;inputName" + inputCount + "&quot; name=&quot;inputName" + inputCount + "&quot; value=&quot;echo_input&quot; size=&quot;50&quot;&gt;&lt;br/&gt;");
+
+            $(this).after("Input Type         *:");
+//            $(this).after("<input type="text" id="inputType1" name="inputType" value="String" size="50"><br/>");
+            $(this).after("&lt;input type=&quot;text&quot; id=&quot;inputType" + inputCount + "&quot; name=&quot;inputType" + inputCount + "&quot; value=&quot;String&quot; size=&quot;50&quot;&gt;&lt;br/&gt;");
+        });
+
+        $("p2").live("click", function(){
+            outputCount++;
+            alert("p2 clicked");
+            alert(outputCount);
+            $(this).after("Output Name         *:");
+//            $(this).after("<input type="text" id="outputName1" name="outputName1" value="echo_output" size="50"><br/>");
+            $(this).after("&lt;input type=&quot;text&quot; id=&quot;outputName" + outputCount + "&quot; name=&quot;outputName" + outputCount + "&quot; value=&quot;echo_output&quot; size=&quot;50&quot;&gt;&lt;br/&gt;");
+
+            $(this).after("Output Type         *:");
+//            $(this).after("<input type="text" id="outputType1" name="outputType1" value="String" size="50"><br/>");
+            $(this).after("&lt;input type=&quot;text&quot; id=&quot;outputType" + outputCount + "&quot; name=&quot;outputType" + outputCount + "&quot; value=&quot;String&quot; size=&quot;50&quot;&gt;&lt;br/&gt;");
+        });
+
 //        $(window).load(function () {
 //            $("div").hide();
 //        });
@@ -127,6 +162,13 @@ Output Type         *: <input type="text" id="outputType1" name="outputType" val
         });
     });
 </script>
+
+<style>
+    p { background:#b0c4de; font-weight:bold; cursor:pointer;
+        padding:5px; }
+    p.over { background: #ccc; }
+    span { color:red; }
+</style>
 
 </body>
 </html>
