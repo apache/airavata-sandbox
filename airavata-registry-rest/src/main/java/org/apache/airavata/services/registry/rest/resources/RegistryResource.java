@@ -565,23 +565,26 @@ import java.util.*;
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response addJSONHostDescriptor(HostDescriptor host) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             HostDescription hostDescription = new HostDescription();
             hostDescription.getType().setHostAddress(host.getHostAddress());
             hostDescription.getType().setHostName(host.getHostname());
-            if(host.getHostType().equals(HostTypes.GLOBUS_HOST_TYPE)){
-                ((GlobusHostType)hostDescription.getType()).addGlobusGateKeeperEndPoint(host.getGlobusGateKeeperEndPoint().get(0));
-                ((GlobusHostType)hostDescription.getType()).addGridFTPEndPoint(host.getGridFTPEndPoint().get(0));
-            }else if (host.getHostType().equals(HostTypes.GSISSH_HOST_TYPE)){
-                ((GsisshHostType)hostDescription).addGridFTPEndPoint(host.getGridFTPEndPoint().get(0));
-            } else if (host.getHostType().equals(HostTypes.EC2_HOST_TYPE)){
-                ((Ec2HostType)hostDescription).addImageID(host.getImageID().get(0));
-                ((Ec2HostType)hostDescription).addInstanceID(host.getInstanceID().get(0));
+
+            if (host.getHostType() != null && !host.getHostType().isEmpty()) {
+                if (host.getHostType().equals(HostTypes.GLOBUS_HOST_TYPE)) {
+                    ((GlobusHostType) hostDescription.getType()).addGlobusGateKeeperEndPoint(host.getGlobusGateKeeperEndPoint().get(0));
+                    ((GlobusHostType) hostDescription.getType()).addGridFTPEndPoint(host.getGridFTPEndPoint().get(0));
+                } else if (host.getHostType().equals(HostTypes.GSISSH_HOST_TYPE)) {
+                    ((GsisshHostType) hostDescription).addGridFTPEndPoint(host.getGridFTPEndPoint().get(0));
+                } else if (host.getHostType().equals(HostTypes.EC2_HOST_TYPE)) {
+                    ((Ec2HostType) hostDescription).addImageID(host.getImageID().get(0));
+                    ((Ec2HostType) hostDescription).addInstanceID(host.getInstanceID().get(0));
+                }
             }
             airavataRegistry.addHostDescriptor(hostDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (DescriptorAlreadyExistsException e){
+        } catch (DescriptorAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             return builder.build();
         } catch (RegistryException e) {
@@ -600,15 +603,18 @@ import java.util.*;
             HostDescription hostDescription = new HostDescription();
             hostDescription.getType().setHostAddress(host.getHostAddress());
             hostDescription.getType().setHostName(host.getHostname());
-            if(host.getHostType().equals(HostTypes.GLOBUS_HOST_TYPE)){
-                ((GlobusHostType)hostDescription.getType()).addGlobusGateKeeperEndPoint(host.getGlobusGateKeeperEndPoint().get(0));
-                ((GlobusHostType)hostDescription.getType()).addGridFTPEndPoint(host.getGridFTPEndPoint().get(0));
-            }else if (host.getHostType().equals(HostTypes.GSISSH_HOST_TYPE)){
-                ((GsisshHostType)hostDescription).addGridFTPEndPoint(host.getGridFTPEndPoint().get(0));
-            } else if (host.getHostType().equals(HostTypes.EC2_HOST_TYPE)){
-                ((Ec2HostType)hostDescription).addImageID(host.getImageID().get(0));
-                ((Ec2HostType)hostDescription).addInstanceID(host.getInstanceID().get(0));
+            if (host.getHostType() != null && !host.getHostType().isEmpty()) {
+                if(host.getHostType().equals(HostTypes.GLOBUS_HOST_TYPE)){
+                    ((GlobusHostType)hostDescription.getType()).addGlobusGateKeeperEndPoint(host.getGlobusGateKeeperEndPoint().get(0));
+                    ((GlobusHostType)hostDescription.getType()).addGridFTPEndPoint(host.getGridFTPEndPoint().get(0));
+                }else if (host.getHostType().equals(HostTypes.GSISSH_HOST_TYPE)){
+                    ((GsisshHostType)hostDescription).addGridFTPEndPoint(host.getGridFTPEndPoint().get(0));
+                } else if (host.getHostType().equals(HostTypes.EC2_HOST_TYPE)){
+                    ((Ec2HostType)hostDescription).addImageID(host.getImageID().get(0));
+                    ((Ec2HostType)hostDescription).addInstanceID(host.getInstanceID().get(0));
+                }
             }
+
             airavataRegistry.updateHostDescriptor(hostDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
@@ -1136,31 +1142,34 @@ import java.util.*;
                 return builder.build();
             }
             ApplicationDeploymentDescription applicationDeploymentDescription = new ApplicationDeploymentDescription();
-            applicationDeploymentDescription.getType().getApplicationName().setStringValue(applicationDescriptor.getApplicationName());
+            ApplicationDeploymentDescriptionType.ApplicationName name = ApplicationDeploymentDescriptionType.ApplicationName.Factory.newInstance();
+            name.setStringValue(applicationDescriptor.getApplicationName());
+            applicationDeploymentDescription.getType().setApplicationName(name);
             applicationDeploymentDescription.getType().setExecutableLocation(applicationDescriptor.getExecutablePath());
             applicationDeploymentDescription.getType().setOutputDataDirectory(applicationDescriptor.getWorkingDir());
 
             //set advanced options according app desc type
-            if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
-                GramApplicationDeploymentType applicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
-                applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
-                applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
-                applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
-                applicationDeploymentType.setMinMemory(applicationDescriptor.getMinMemory());
-                applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
-                applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
-                applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
-            } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
-               BatchApplicationDeploymentDescriptionType applicationDeploymentType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
-                applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
-                applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
-                applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
-                applicationDeploymentType.setMinMemory(applicationDescriptor.getMinMemory());
-                applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
-                applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
-                applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
+            if(applicationDescriptor.getApplicationDescType() != null && !applicationDescriptor.getApplicationDescType().isEmpty()){
+                if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
+                    GramApplicationDeploymentType applicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
+                    applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
+                    applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
+                    applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
+                    applicationDeploymentType.setMinMemory(applicationDescriptor.getMinMemory());
+                    applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
+                    applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
+                    applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
+                } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
+                    BatchApplicationDeploymentDescriptionType applicationDeploymentType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
+                    applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
+                    applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
+                    applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
+                    applicationDeploymentType.setMinMemory(applicationDescriptor.getMinMemory());
+                    applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
+                    applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
+                    applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
+                }
             }
-
             String serviceName = applicationDescriptor.getServiceName();
             airavataRegistry.addApplicationDescriptor(serviceName, hostdescName, applicationDeploymentDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
@@ -1215,30 +1224,35 @@ import java.util.*;
                 return builder.build();
             }
             ApplicationDeploymentDescription applicationDeploymentDescription = new ApplicationDeploymentDescription();
-            applicationDeploymentDescription.getType().getApplicationName().setStringValue(applicationDescriptor.getApplicationName());
+            ApplicationDeploymentDescriptionType.ApplicationName name = ApplicationDeploymentDescriptionType.ApplicationName.Factory.newInstance();
+            name.setStringValue(applicationDescriptor.getApplicationName());
+            applicationDeploymentDescription.getType().setApplicationName(name);
             applicationDeploymentDescription.getType().setExecutableLocation(applicationDescriptor.getExecutablePath());
             applicationDeploymentDescription.getType().setOutputDataDirectory(applicationDescriptor.getWorkingDir());
 
             //set advanced options according app desc type
-            if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
-                GramApplicationDeploymentType applicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
-                applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
-                applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
-                applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
-                applicationDeploymentType.setMinMemory(applicationDescriptor.getMinMemory());
-                applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
-                applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
-                applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
-            } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
-                BatchApplicationDeploymentDescriptionType applicationDeploymentType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
-                applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
-                applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
-                applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
-                applicationDeploymentType.setMinMemory(applicationDescriptor.getMinMemory());
-                applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
-                applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
-                applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
+            if(applicationDescriptor.getApplicationDescType() != null && !applicationDescriptor.getApplicationDescType().isEmpty()){
+                if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
+                    GramApplicationDeploymentType applicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
+                    applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
+                    applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
+                    applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
+                    applicationDeploymentType.setMinMemory(applicationDescriptor.getMinMemory());
+                    applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
+                    applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
+                    applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
+                } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
+                    BatchApplicationDeploymentDescriptionType applicationDeploymentType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
+                    applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
+                    applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
+                    applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
+                    applicationDeploymentType.setMinMemory(applicationDescriptor.getMinMemory());
+                    applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
+                    applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
+                    applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
+                }
             }
+
 
             String serviceName = applicationDescriptor.getServiceName();
             airavataRegistry.updateApplicationDescriptor(serviceName, hostdescName, applicationDeploymentDescription);
@@ -1292,23 +1306,26 @@ import java.util.*;
             applicationDescriptor.setApplicationName(applicationDeploymentDescription.getType().getApplicationName().getStringValue());
             applicationDescriptor.setExecutablePath(applicationDeploymentDescription.getType().getExecutableLocation());
             applicationDescriptor.setWorkingDir(applicationDeploymentDescription.getType().getOutputDataDirectory());
-            if(applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
-                GramApplicationDeploymentType gramApplicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
-                applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
-                applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
-                applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
-                applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
-                applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
-                applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
-            } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
-                BatchApplicationDeploymentDescriptionType batchApplicationDeploymentDescriptionType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
-                applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
-                applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
-                applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
-                applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
-                applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
-                applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+            if(applicationDeploymentDescription.getType() != null){
+                if(applicationDeploymentDescription.getType() instanceof GramApplicationDeploymentType){
+                    GramApplicationDeploymentType gramApplicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
+                    applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
+                    applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
+                    applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
+                    applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
+                    applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
+                    applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
+                } else if (applicationDeploymentDescription.getType() instanceof BatchApplicationDeploymentDescriptionType){
+                    BatchApplicationDeploymentDescriptionType batchApplicationDeploymentDescriptionType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
+                    applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
+                    applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
+                    applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
+                    applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
+                    applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
+                    applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+                }
             }
+
             if (applicationDescriptor != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(applicationDescriptor);
@@ -1335,23 +1352,26 @@ import java.util.*;
             applicationDescriptor.setApplicationName(applicationDeploymentDescription.getType().getApplicationName().getStringValue());
             applicationDescriptor.setExecutablePath(applicationDeploymentDescription.getType().getExecutableLocation());
             applicationDescriptor.setWorkingDir(applicationDeploymentDescription.getType().getOutputDataDirectory());
-            if(applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
-                GramApplicationDeploymentType gramApplicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
-                applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
-                applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
-                applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
-                applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
-                applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
-                applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
-            } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
-                BatchApplicationDeploymentDescriptionType batchApplicationDeploymentDescriptionType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
-                applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
-                applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
-                applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
-                applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
-                applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
-                applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+            if(applicationDeploymentDescription.getType() != null){
+                if(applicationDeploymentDescription.getType() instanceof GramApplicationDeploymentType){
+                    GramApplicationDeploymentType gramApplicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
+                    applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
+                    applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
+                    applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
+                    applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
+                    applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
+                    applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
+                } else if (applicationDeploymentDescription.getType() instanceof BatchApplicationDeploymentDescriptionType){
+                    BatchApplicationDeploymentDescriptionType batchApplicationDeploymentDescriptionType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
+                    applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
+                    applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
+                    applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
+                    applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
+                    applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
+                    applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+                }
             }
+
             if (applicationDescriptor != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(applicationDescriptor);
@@ -1383,23 +1403,26 @@ import java.util.*;
                 applicationDescriptor.setApplicationName(applicationDeploymentDescription.getType().getApplicationName().getStringValue());
                 applicationDescriptor.setExecutablePath(applicationDeploymentDescription.getType().getExecutableLocation());
                 applicationDescriptor.setWorkingDir(applicationDeploymentDescription.getType().getOutputDataDirectory());
-                if(applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
-                    GramApplicationDeploymentType gramApplicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
-                    applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
-                    applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
-                    applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
-                    applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
-                    applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
-                    applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
-                } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
-                    BatchApplicationDeploymentDescriptionType batchApplicationDeploymentDescriptionType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
-                    applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
-                    applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
-                    applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
-                    applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
-                    applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
-                    applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+                if(applicationDeploymentDescription.getType() != null){
+                    if(applicationDeploymentDescription.getType() instanceof GramApplicationDeploymentType){
+                        GramApplicationDeploymentType gramApplicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
+                        applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
+                        applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
+                        applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
+                        applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
+                        applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
+                        applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
+                    } else if (applicationDeploymentDescription.getType() instanceof BatchApplicationDeploymentDescriptionType){
+                        BatchApplicationDeploymentDescriptionType batchApplicationDeploymentDescriptionType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
+                        applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
+                        applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
+                        applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
+                        applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
+                        applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
+                        applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+                    }
                 }
+
                 applicationDescriptors[i] = applicationDescriptor;
                 i++;
             }
@@ -1439,23 +1462,26 @@ import java.util.*;
                 applicationDescriptor.setApplicationName(applicationDeploymentDescription.getType().getApplicationName().getStringValue());
                 applicationDescriptor.setExecutablePath(applicationDeploymentDescription.getType().getExecutableLocation());
                 applicationDescriptor.setWorkingDir(applicationDeploymentDescription.getType().getOutputDataDirectory());
-                if(applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
-                    GramApplicationDeploymentType gramApplicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
-                    applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
-                    applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
-                    applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
-                    applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
-                    applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
-                    applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
-                } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
-                    BatchApplicationDeploymentDescriptionType batchApplicationDeploymentDescriptionType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
-                    applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
-                    applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
-                    applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
-                    applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
-                    applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
-                    applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+                if(applicationDeploymentDescription.getType() != null){
+                    if(applicationDeploymentDescription.getType() instanceof GramApplicationDeploymentType){
+                        GramApplicationDeploymentType gramApplicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
+                        applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
+                        applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
+                        applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
+                        applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
+                        applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
+                        applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
+                    } else if (applicationDeploymentDescription.getType() instanceof BatchApplicationDeploymentDescriptionType){
+                        BatchApplicationDeploymentDescriptionType batchApplicationDeploymentDescriptionType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
+                        applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
+                        applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
+                        applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
+                        applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
+                        applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
+                        applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+                    }
                 }
+
                 applicationDescriptors[i] = applicationDescriptor;
                 i++;
             }
