@@ -24,11 +24,11 @@ Max memory           : <input type="text" id="maxMemory1" name="maxMemory" value
 Service Name        *: <input type="text" id="serviceName1" name="serviceName" value="SimpleEcho" size="50"><br/>
 Input Name          *: <input type="text" id="inputName1" name="inputName1" value="echo_input" size="50"><br/>
 Input Type          *: <input type="text" id="inputType1" name="inputType1" value="String" size="50"><br/>
-<p1>Add inputs</p1><br/>
+<p1><b><i>Add inputs</i></b></p1><br/>
 
 Output Name         *: <input type="text" id="outputName1" name="outputName1" value="echo_output" size="50"><br/>
 Output Type         *: <input type="text" id="outputType1" name="outputType1" value="String" size="50"><br/>
-<p2>Add outputs</p2><br/>
+<p2><b><i>Add outputs</i></b></p2><br/>
 
 
 <button name="btn2">Save Application</button>
@@ -52,49 +52,34 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
         var inputCount = 0;
         var outputCount = 0;
 
-        $("p2").click(function(){
-            $(this).hide();
-            $(this).after("<p>Another paragraph!</p>");
-        });
+//        $("p2").click(function(){
+//            $(this).hide();
+//            $(this).after("<p>Another paragraph!</p>");
+//        });
 
         $("p1").live("click", function(){
             inputCount++;
-            alert("p1 clicked");
-            alert(inputCount);
-            $(this).after("Input Name         *:");
-//            $(this).after("<input type="text" id="inputName1" name="inputName" value="echo_input" size="50"><br/>");
-            $(this).after("&lt;input type=&quot;text&quot; id=&quot;inputName" + inputCount + "&quot; name=&quot;inputName" + inputCount + "&quot; value=&quot;echo_input&quot; size=&quot;50&quot;&gt;&lt;br/&gt;");
+//            alert("p1 clicked");
+//            alert(inputCount);
+            $(this).after("<br/>");
+            $(this).after("Input Name         *:" +
+                    "<input type=&quot;text&quot; id=&quot;inputName" + inputCount + "&quot; name=&quot;inputName" + inputCount + "&quot; value=&quot;echo_input&quot; size=&quot;50&quot;><br/>");
 
-            $(this).after("Input Type         *:");
-//            $(this).after("<input type="text" id="inputType1" name="inputType" value="String" size="50"><br/>");
-            $(this).after("&lt;input type=&quot;text&quot; id=&quot;inputType" + inputCount + "&quot; name=&quot;inputType" + inputCount + "&quot; value=&quot;String&quot; size=&quot;50&quot;&gt;&lt;br/&gt;");
+            $(this).after("Input Type         *:" +
+                    "<input type=&quot;text&quot; id=&quot;inputType" + inputCount + "&quot; name=&quot;inputType" + inputCount + "&quot; value=&quot;String&quot; size=&quot;50&quot;><br/>");
         });
 
         $("p2").live("click", function(){
-            outputCount++;
-            alert("p2 clicked");
-            alert(outputCount);
-            $(this).after("Output Name         *:");
-//            $(this).after("<input type="text" id="outputName1" name="outputName1" value="echo_output" size="50"><br/>");
-            $(this).after("&lt;input type=&quot;text&quot; id=&quot;outputName" + outputCount + "&quot; name=&quot;outputName" + outputCount + "&quot; value=&quot;echo_output&quot; size=&quot;50&quot;&gt;&lt;br/&gt;");
+//            outputCount++;
+//            alert("p2 clicked");
+//            alert(outputCount);
+            $(this).after("Output Name         *:" +
+                    "<input type=&quot;text&quot; id=&quot;outputName" + outputCount + "&quot; name=&quot;outputName" + outputCount + "&quot; value=&quot;echo_output&quot; size=&quot;50&quot;><br/>");
+            $(this).after();
 
-            $(this).after("Output Type         *:");
-//            $(this).after("<input type="text" id="outputType1" name="outputType1" value="String" size="50"><br/>");
-            $(this).after("&lt;input type=&quot;text&quot; id=&quot;outputType" + outputCount + "&quot; name=&quot;outputType" + outputCount + "&quot; value=&quot;String&quot; size=&quot;50&quot;&gt;&lt;br/&gt;");
+            $(this).after("Output Type         *:" +
+                    "<input type=&quot;text&quot; id=&quot;outputType" + outputCount + "&quot; name=&quot;outputType" + outputCount + "&quot; value=&quot;String&quot; size=&quot;50&quot;><br/>");
         });
-
-//        $(window).load(function () {
-//            $("div").hide();
-//        });
-//
-//        $("select[name='drop1']").change(function() {
-//            //alert($(this).val());
-//            if("Local" == $(this).val()) {
-//                $("div").hide();
-//            } else {
-//                $("div").show();
-//            }
-//        });
 
         $('[name="btn2"]').click(function(){
             alert($(this).val());
@@ -116,17 +101,6 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
             var inputType1 = $("#inputType1").val();
             var outputName = $("#outputName1").val();
             var outputType = $("#outputType1").val();
-
-//            var xml = $('<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>' + hostName + '</type:hostName><type:hostAddress>' + hostAddress + '</type:hostAddress></type:hostDescription>');
-//            var xmlData= $(xml);
-//            var xmlString;
-//            if (window.ActiveXObject){
-//                xmlString = xmlData.xml;
-//            } else {
-//                var oSerializer = new XMLSerializer();
-//                xmlString = oSerializer.serializeToString(xmlData[0]);
-//            }
-//            console.log(xmlString);
 
             $.ajax({
                 headers: {
