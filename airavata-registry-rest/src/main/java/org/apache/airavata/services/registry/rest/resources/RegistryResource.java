@@ -1081,30 +1081,36 @@ import java.util.*;
                                                  @FormParam("serviceName") String serviceName, @FormParam("inputName1") String inputName1, @FormParam("inputType1") String inputType1, @FormParam("outputName") String outputName, @FormParam("outputType") String outputType) throws Exception {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
 
+        System.out.println("application descriptor save started ...");
         ServiceDescription serv = DescriptorUtil.getServiceDescription(serviceName, inputName1, inputType1, outputName, outputType);
         // Creating the descriptor as a temporary measure.
         ApplicationDeploymentDescription app = DescriptorUtil.registerApplication(appName, exeuctableLocation, scratchWorkingDirectory,
                 hostName, projAccNumber, queueName, cpuCount, nodeCount, maxMemory);
         try{
             if(!airavataRegistry.isHostDescriptorExists(hostName)){
-                Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-                return builder.build();
+                System.out.println(hostName + " host not exist");
+//                Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//                return builder.build();
             }
 
-            if (!airavataRegistry.isServiceDescriptorExists(serv.getType().getName())) {
-                airavataRegistry.addServiceDescriptor(serv);
-            } else {
+            if (airavataRegistry.isServiceDescriptorExists(serv.getType().getName())) {
+                System.out.println(serviceName + " service updated ");
                 airavataRegistry.updateServiceDescriptor(serv);
+            } else {
+                System.out.println(serviceName + " service created ");
+                airavataRegistry.addServiceDescriptor(serv);
             }
 
-            if (!airavataRegistry.isApplicationDescriptorExists(serv.getType().getName(), hostName, app.getType().getApplicationName().getStringValue())) {
-                Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-                return builder.build();
+            if (airavataRegistry.isApplicationDescriptorExists(serv.getType().getName(), hostName, app.getType().getApplicationName().getStringValue())) {
+                System.out.println(appName + " app already exists. retruning an error");
+//                Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+//                return builder.build();
             } else {
+                System.out.println(appName + " adding the app");
                 airavataRegistry.addApplicationDescriptor(serv.getType().getName(), hostName, app);
             }
 
-            airavataRegistry.addApplicationDescriptor(serviceName, hostName, app);
+//            airavataRegistry.addApplicationDescriptor(serviceName, hostName, app);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (DescriptorAlreadyExistsException e){
