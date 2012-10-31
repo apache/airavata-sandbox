@@ -6,13 +6,12 @@
 </head>
 <body>
 
-<b> Register Host Description </b>
-<br/>
+<b> Register Host Description </b><br/>
 
 Application Name    *: <input type="text" id="appName1" name="appName" value="EchoLocal" size="50"><br/>
 Executable location *: <input type="text" id="exeuctableLocation1" name="exeuctableLocation" value="/bin/echo" size="50"><br/>
 Scratch Working Dir.*: <input type="text" id="scratchWorkingDirectory1" name="scratchWorkingDirectory" value="/scratch/01437/ogce/test" size="50"><br/>
-//TODO: Add drop down
+
 Host Name           *: <input type="text" name="hostName" id="hostName1" size="75"><br/>
 
 Project Acc. number  : <input type="text" id="projAccNumber1" name="projAccNumber" value="TG-STA110014S" size="50"><br/>
@@ -21,13 +20,13 @@ CPU count            : <input type="text" id="cpuCount1" name="cpuCount" value="
 Node count           : <input type="text" id="nodeCount1" name="nodeCount" value="1" size="50"><br/>
 Max memory           : <input type="text" id="maxMemory1" name="maxMemory" value="100" size="50"><br/>
 
-<b>SERVICE</b>
+<b>SERVICE</b><br/>
 Service Name        *: <input type="text" id="serviceName1" name="serviceName" value="SimpleEcho" size="50"><br/>
 Input Name          *: <input type="text" id="inputName1" name="inputName" value="echo_input" size="50"><br/>
-//TODO: Add drop down
+
 Input Type          *: <input type="text" id="inputType1" name="inputType" value="String" size="50"><br/>
 Output Name         *: <input type="text" id="outputName1" name="outputName" value="echo_output" size="50"><br/>
-//TODO: Add drop down
+
 Output Type         *: <input type="text" id="outputType1" name="outputType" value="String" size="50"><br/>
 
 
@@ -63,6 +62,8 @@ Output Type         *: <input type="text" id="outputType1" name="outputType" val
 //        });
 
         $('[name="btn2"]').click(function(){
+            alert($(this).val());
+            alert("btn2 clicked");
             var appName = $("#appName1").val();
             var exeuctableLocation = $("#exeuctableLocation1").val();
             var scratchWorkingDirectory = $("#scratchWorkingDirectory1").val();
@@ -81,16 +82,16 @@ Output Type         *: <input type="text" id="outputType1" name="outputType" val
             var outputName = $("#outputName1").val();
             var outputType = $("#outputType1").val();
 
-            var xml = $('<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>' + hostName + '</type:hostName><type:hostAddress>' + hostAddress + '</type:hostAddress></type:hostDescription>');
-            var xmlData= $(xml);
-            var xmlString;
-            if (window.ActiveXObject){
-                xmlString = xmlData.xml;
-            } else {
-                var oSerializer = new XMLSerializer();
-                xmlString = oSerializer.serializeToString(xmlData[0]);
-            }
-            console.log(xmlString);
+//            var xml = $('<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>' + hostName + '</type:hostName><type:hostAddress>' + hostAddress + '</type:hostAddress></type:hostDescription>');
+//            var xmlData= $(xml);
+//            var xmlString;
+//            if (window.ActiveXObject){
+//                xmlString = xmlData.xml;
+//            } else {
+//                var oSerializer = new XMLSerializer();
+//                xmlString = oSerializer.serializeToString(xmlData[0]);
+//            }
+//            console.log(xmlString);
 
             $.ajax({
                 headers: {
@@ -108,13 +109,11 @@ Output Type         *: <input type="text" id="outputType1" name="outputType" val
                     exeuctableLocation : exeuctableLocation,
                     scratchWorkingDirectory : scratchWorkingDirectory,
                     hostName: hostName,
-
                     projAccNumber : projAccNumber,
                     queueName : queueName,
                     cpuCount : cpuCount,
                     nodeCount : nodeCount,
                     maxMemory : maxMemory,
-
                     serviceName : serviceName,
                     inputName1 : inputName1,
                     inputType1 : inputType1,
