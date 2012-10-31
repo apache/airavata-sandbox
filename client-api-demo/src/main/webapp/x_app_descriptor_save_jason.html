@@ -103,17 +103,19 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
             var outputType = $("#outputType1").val();
 
             $.ajax({
-                headers: {
+                /*headers: {
                     Accept : "text/plain; charset=utf-8"
+                },*/
+                beforeSend: function(x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
                 },
-                /*beforeSend: function(xhr, s) {
-                 xhr.setRequestHeader("Accept-Encoding" ,"");
-                 xhr.setRequestHeader("Content-Type", "text/xml");
-                 },*/
-
                 type: "POST",
+                dataType: "json",
+                contentType: "application/json;charset=utf-8",
                 url: "http://localhost:7080/airavata-registry-rest-services/registry/api/applicationdescriptor/build/save/test",
-                data: {
+                data: JSON.stringify({
                     appName : appName,
                     exeuctableLocation : exeuctableLocation,
                     scratchWorkingDirectory : scratchWorkingDirectory,
@@ -128,7 +130,7 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
                     inputType1 : inputType1,
                     outputName : outputName,
                     outputType : outputType
-                }
+                })
             }).done(function( msg ) {
                         alert( "Data Saved: " + msg );
                     });
