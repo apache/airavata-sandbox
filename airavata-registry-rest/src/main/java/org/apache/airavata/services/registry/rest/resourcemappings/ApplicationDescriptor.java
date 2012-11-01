@@ -25,9 +25,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "application")
 public class ApplicationDescriptor {
-    private String applicationName;
+    private String name;
     private String hostdescName;
-    private String serviceName;
+//    private String serviceName;
     private String executablePath;
     private String workingDir;
     private String jobType;
@@ -40,14 +40,15 @@ public class ApplicationDescriptor {
     private int minMemory;
     private int maxMemory;
     private String applicationDescType;
+    private ServiceDescriptor serviceDescriptor;
 
 
-    public String getApplicationName() {
-        return applicationName;
+    public String getName() {
+        return name;
     }
 
-    public void setApplicationName(String applicationName) {
-        this.applicationName = applicationName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getHostdescName() {
@@ -58,13 +59,13 @@ public class ApplicationDescriptor {
         this.hostdescName = hostdescName;
     }
 
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
-    }
+//    public String getServiceName() {
+//        return serviceName;
+//    }
+//
+//    public void setServiceName(String serviceName) {
+//        this.serviceName = serviceName;
+//    }
 
     public String getExecutablePath() {
         return executablePath;
@@ -160,5 +161,13 @@ public class ApplicationDescriptor {
 
     public void setApplicationDescType(String applicationDescType) {
         this.applicationDescType = applicationDescType;
+    }
+
+    public ServiceDescriptor getServiceDescriptor() {
+        return serviceDescriptor;
+    }
+
+    public void setServiceDescriptor(ServiceDescriptor serviceDescriptor) {
+        this.serviceDescriptor = serviceDescriptor;
     }
 }

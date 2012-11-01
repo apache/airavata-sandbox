@@ -6,8 +6,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ServiceParameters {
 
+    // whether string or other type
 	String type;
 	String name;
+
+    //whether it is input or output
 	String dataType;
 	String description;
 

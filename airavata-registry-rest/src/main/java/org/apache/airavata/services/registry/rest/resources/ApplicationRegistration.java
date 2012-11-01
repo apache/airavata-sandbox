@@ -37,7 +37,7 @@ public class ApplicationRegistration {
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response addServiceDescriptor(ApplicationDescriptor application){
         try{
-        	application.getApplicationName();
+        	application.getName();
         	Response.ResponseBuilder builder = Response.status(Response.Status.ACCEPTED);
             return builder.build();
         } catch (Exception e) {
@@ -52,7 +52,7 @@ public class ApplicationRegistration {
     public ApplicationDescriptor getServiceDescriptor(String applicationName){
         try{
         	ApplicationDescriptor application = new ApplicationDescriptor();
-        	application.setApplicationName(applicationName);
+        	application.setName(applicationName);
         	ServiceDescriptor descriptor = new ServiceDescriptor();
 
         	ServiceParameters parameters = new ServiceParameters();
@@ -90,7 +90,7 @@ public class ApplicationRegistration {
         	descriptor.setInputParams(inputlist);
         	descriptor.setOutputParams(outputlist);
 
-        	application.setServiceName("service1");
+        	application.setName("service1");
         	application.setHostdescName("localhost");
             return application;
         } catch (Exception e) {
