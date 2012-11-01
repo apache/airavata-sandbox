@@ -37,24 +37,24 @@ To test
     ############## Host descriptrors ##########################
 
     curl --request GET http://localhost:9080/airavata-services/registry/api/hostdescriptor/exist?descriptorName=ember
-    curl -H "Accept:application/json"  -X POST -H "Content-Type:application/json" -d '{"hostname":"testHost1", "hostAddress":"testHostAddress" }' http://localhost:9080/airavata-services/registry/api/hostdescriptor/save    curl -H "Accept: text/plain" -X POST -H "Content-Type: text/xml" -d '<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>aaaaa</type:hostName><type:hostAddress>dsdddssdd</type:hostAddress></type:hostDescription>' http://localhost:9080/airavata-services/registry/api/hostdescriptor/update    curl --request GET http://localhost:9080/airavata-services/registry/api/host/description?hostName=testHost1
+    curl -H "Accept:application/json"  -X POST -H "Content-Type:application/json" -d '{"hostname":"testHost1", "hostAddress":"testHostAddress" }' http://localhost:9080/airavata-services/registry/api/hostdescriptor/save
+    curl -H "Accept:application/json"  -X POST -H "Content-Type:application/json" -d '{"hostname":"testHost1", "hostAddress":"testHostAddress2" }' http://localhost:9080/airavata-services/registry/api/hostdescriptor/update
+    curl --request GET http://localhost:9080/airavata-services/registry/api/host/description?hostName=testHost1
     curl --request DELETE http://localhost:9080/airavata-services/registry/api/hostdescriptor/delete?hostName=testHost1
     curl --request GET http://localhost:9080/airavata-services/registry/api/get/hostdescriptors
 
     ############## Service descriptrors ##########################
     curl --request GET http://localhost:9080/airavata-services/registry/api/servicedescriptor/exist?descriptorName=echo
-    curl -H "Accept: text/plain" -X POST -H "Content-Type: text/xml" -d '<type:serviceDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:name>echo1</type:name><type:inputParameters><type:parameterName>echo1_input</type:parameterName><type:parameterDescription xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/><type:parameterType type="String"><name>String</name></type:parameterType></type:inputParameters><type:outputParameters><type:parameterName>echo1_output</type:parameterName><type:parameterDescription xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/><type:parameterType type="String"><name>String</name></type:parameterType></type:outputParameters></type:serviceDescription>' http://localhost:9080/airavata-services/registry/api/servicedescriptor/save
-    curl -H "Accept: text/plain" -X POST -H "Content-Type: text/xml" -d '<type:serviceDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:name>echo1</type:name><type:inputParameters><type:parameterName>echo11_input</type:parameterName><type:parameterDescription xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/><type:parameterType type="String"><name>String</name></type:parameterType></type:inputParameters><type:outputParameters><type:parameterName>echo11_output</type:parameterName><type:parameterDescription xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/><type:parameterType type="String"><name>String</name></type:parameterType></type:outputParameters></type:serviceDescription>' http://localhost:9080/airavata-services/registry/api/servicedescriptor/update
+    curl -H "Accept:application/json"  -X POST -H "Content-Type:application/json" -d '{"serviceName":"testService1", "description":"test description","inputParams":{"dataType":"input", "description":"myinput","name":"myinput","type":"String"},"outputParams":{"dataType":"output","description":"myoutput","name":"myoutput","type":"String"}}' http://localhost:9080/airavata-services/registry/api/servicedescriptor/save
+    curl -H "Accept:application/json"  -X POST -H "Content-Type:application/json" -d '{"serviceName":"testService2", "description":"test description2","inputParams":{"dataType":"input", "description":"myinput2","name":"myinput2","type":"String"},"outputParams":{"dataType":"output","description":"myoutput2","name":"myoutput2","type":"String"}}' http://localhost:9080/airavata-services/registry/api/servicedescriptor/update
     curl --request GET http://localhost:9080/airavata-services/registry/api/servicedescriptor/description?serviceName=echo1
     curl --request DELETE http://localhost:9080/airavata-services/registry/api/servicedescriptor/delete?serviceName=echo1
     curl --request GET http://localhost:9080/airavata-services/registry/api/get/servicedescriptors
 
     ############## Application descriptrors ##########################
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/applicationdescriptor/exist?serviceName=echo&hostName=LocalHost&descriptorName=LocalHost_application'
-    curl -H "Accept:application/json"  -X POST -H "Content-Type:application/json" -d '{"applicationName":"abc", "hostdescName":"LocalHost", "serviceName":"echo", "executablePath":"cccc", "workingDir":"dddd" }' http://localhost:9080/airavata-services/registry/api/applicationdescriptor/build/save
-    curl -H "Accept: text/plain" -X POST -H "Content-Type: text/xml" -d 'serviceName=echo&hostName=LocalHost&<type:applicationDeploymentDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:applicationName>LocalHost_application2</type:applicationName><type:executableLocation>/Users/chathuri/airavata/source/trunk_new/samples/echo.sh</type:executableLocation><type:scratchWorkingDirectory>/tmp1</type:scratchWorkingDirectory></type:applicationDeploymentDescription>' http://localhost:9080/airavata-services/registry/api/applicationdescriptor/save
-    curl -H "Accept: text/plain" -X POST -H "Content-Type: text/xml" -d 'service=<type:serviceDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:name>echo</type:name><type:inputParameters><type:parameterName>echo_input</type:parameterName><type:parameterDescription xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/><type:parameterType type="String"><name>String</name></type:parameterType></type:inputParameters><type:outputParameters><type:parameterName>echo_output</type:parameterName><type:parameterDescription xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/><type:parameterType type="String"><name>String</name></type:parameterType></type:outputParameters></type:serviceDescription>&host=<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>LocalHost</type:hostName><type:hostAddress>127.0.0.1</type:hostAddress></type:hostDescription>&application=<type:applicationDeploymentDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:applicationName>LocalHost_application2</type:applicationName><type:executableLocation>xccccccccxc</type:executableLocation><type:scratchWorkingDirectory>/sdddsdsds</type:scratchWorkingDirectory></type:applicationDeploymentDescription>' http://localhost:9080/airavata-services/registry/api/applicationdescriptor/update/descriptor
-    curl -H "Accept: text/plain" -X POST -H "Content-Type: text/xml" -d 'serviceName=echo&hostName=LocalHost&application=<type:applicationDeploymentDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:applicationName>LocalHost_application2</type:applicationName><type:executableLocation>xccccccccxc11111</type:executableLocation><type:scratchWorkingDirectory>/sdddsdsds1111</type:scratchWorkingDirectory></type:applicationDeploymentDescription>' http://localhost:9080/airavata-services/registry/api/applicationdescriptor/update
+    curl -H "Accept:application/json"  -X POST -H "Content-Type:application/json" -d '{"name":"abc1", "hostdescName":"LocalHost", "executablePath":"cccc", "workingDir":"dddd" , "serviceDescriptor":{"inputParams":{"dataType":"input", "description":"myinput","name":"myinput","type":"String"},"outputParams":{"dataType":"output","description":"myoutput","name":"myoutput","type":"String"}}}' http://localhost:9080/airavata-services/registry/api/applicationdescriptor/build/save
+     curl -H "Accept:application/json"  -X POST -H "Content-Type:application/json" -d '{"name":"abc1", "hostdescName":"LocalHost", "executablePath":"cccc111", "workingDir":"dddd1111" , "serviceDescriptor":{"inputParams":{"dataType":"input", "description":"myinput11","name":"myinput11","type":"String"},"outputParams":{"dataType":"output","description":"myoutput11","name":"myoutput11","type":"String"}}}' http://localhost:9080/airavata-services/registry/api/applicationdescriptor/update
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/applicationdescriptor/description?serviceName=echo&hostName=LocalHost&applicationName=LocalHost_application2'
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/applicationdescriptors/alldescriptors/host/service?serviceName=echo&hostName=LocalHost'
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/applicationdescriptor/alldescriptors/service?serviceName=echo'
@@ -94,35 +94,35 @@ To test
     curl -H "Accept: text/plain" -X POST -d 'instanceId=testWFInstanceID&executionStatus=FINISHED' http://localhost:9080/airavata-services/registry/api/update/workflowinstancestatus/instanceid
     curl -H "Accept: text/plain" -X POST -d 'experimentId=testWFInstanceID&workflowInstanceId=testWFInstanceID&executionStatus=STARTED&statusUpdateTime=2012-10-23 00:00:00' http://localhost:9080/airavata-services/registry/api/update/workflowinstancestatus/experimentid
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/workflowinstancestatus?instanceId=testWFInstanceID'
-    curl -H "Accept: text/plain" -X POST -d 'experimentID=ff7338c9-f9ad-4d86-b486-1e8e9c3a9cc4&nodeID=TempConvertSoap_FahrenheitToCelsius&workflowInstanceId=ff7338c9-f9ad-4d86-b486-1e8e9c3a9cc4&data=testInputdata' http://localhost:9080/airavata-services/registry/api/update/workflownodeinput
+    curl -H "Accept: text/plain" -X POST -d 'nodeID=TempConvertSoap_FahrenheitToCelsius&workflowInstanceId=ff7338c9-f9ad-4d86-b486-1e8e9c3a9cc4&data=testInputdata' http://localhost:9080/airavata-services/registry/api/update/workflownodeinput
+    curl -H "Accept: text/plain" -X POST -d 'nodeID=TempConvertSoap_FahrenheitToCelsius&workflowInstanceId=ff7338c9-f9ad-4d86-b486-1e8e9c3a9cc4&data=testOutputdata' http://localhost:9080/airavata-services/registry/api/update/workflownodeoutput
+
 
 ********* Sample JSON message for Application and service *****************
 
 {
-   "applicationName":"Tesing",
-   "projAccNumber" : "TG",                 // Update
-   "queueName" : "development",            // Update
-   "exeuctableLocation" : "/bin/echo",     // Update
-   "scratchWorkingDirectory" : "/tmp",     // Update
+   "name":"Tesing",
    "cpuCount":"12",
    "hostdescName":"localhost",
+   "executablePath":"cccc",
+   "workingDir":"dddd"
    "maxMemory":"0",
    "maxWallTime":"0",
    "minMemory":"0",
    "nodeCount":"1",
    "processorsPerNode":"12",
-   "serviceDesc":{
-      "serviceName" : "service1",          // Update
+   "serviceDescriptor":{
+      "serviceName":"service1",
       "inputParams":[
          {
             "dataType":"input",
-            "description":"my input",
+            "description":"myinput",
             "name":"myinput",
             "type":"String"
          },
          {
             "dataType":"input",
-            "description":"my input",
+            "description":"myinput",
             "name":"myinput",
             "type":"String"
          }
@@ -130,7 +130,7 @@ To test
       "outputParams":[
          {
             "dataType":"output",
-            "description":"my output",
+            "description":"myoutput",
             "name":"myoutput",
             "type":"String"
          },

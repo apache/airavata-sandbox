@@ -32,43 +32,45 @@ import java.util.*;
 
 
 /**
- *  RegistryResource for REST interface of Registry API
- *  Three objects will be retrieved from the servelet context as
- *  airavataRegistry, axis2Registry, dataRegistry which are
- *  analogues to main API interfaces of Airavata
+ * RegistryResource for REST interface of Registry API
+ * Three objects will be retrieved from the servelet context as
+ * airavataRegistry, axis2Registry, dataRegistry which are
+ * analogues to main API interfaces of Airavata
  */
 @Path("/registry/api")
 //public class RegistryResource implements ConfigurationRegistryService,
 //        ProjectsRegistryService, ProvenanceRegistryService, UserWorkflowRegistryService,
 //        PublishedWorkflowRegistryService, DescriptorRegistryService{
-    public class RegistryResource {
+public class RegistryResource {
     private final static Logger logger = LoggerFactory.getLogger(RegistryResource.class);
     private JPAResourceAccessor jpa;
-    private boolean active=false;
+    private boolean active = false;
     private static final String DEFAULT_PROJECT_NAME = "default";
     private AiravataRegistry2 airavataRegistry;
 
     @Context
     ServletContext context;
 
-    public String getVersion(){
-        return  null;
+    public String getVersion() {
+        return null;
     }
 
     protected void initialize() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         jpa = new JPAResourceAccessor(airavataRegistry);
-        active=true;
+        active = true;
     }
 
-    /**---------------------------------Configuration Registry----------------------------------**/
+    /**
+     * ---------------------------------Configuration Registry----------------------------------*
+     */
 
     @Path("/configuration")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response getConfiguration(@QueryParam("key") String key) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             Object configuration = airavataRegistry.getConfiguration(key);
             if (configuration != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
@@ -90,7 +92,7 @@ import java.util.*;
     @Path("/configurationlist")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getConfigurationList(@QueryParam("key") String key) {
-        try{
+        try {
             airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
             List<Object> configurationList = airavataRegistry.getConfigurationList(key);
             ConfigurationList list = new ConfigurationList();
@@ -121,14 +123,14 @@ import java.util.*;
     public Response setConfiguration(@FormParam("key") String key,
                                      @FormParam("value") String value,
                                      @FormParam("date") String date) {
-        try{
+        try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date formattedDate = dateFormat.parse(date);
             airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
             airavataRegistry.setConfiguration(key, value, formattedDate);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        }catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -140,14 +142,14 @@ import java.util.*;
     public Response addConfiguration(@FormParam("key") String key,
                                      @FormParam("value") String value,
                                      @FormParam("date") String date) {
-        try{
+        try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date formattedDate = dateFormat.parse(date);
             airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
             airavataRegistry.addConfiguration(key, value, formattedDate);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        }catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -157,12 +159,12 @@ import java.util.*;
     @Path("delete/allconfiguration")
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeAllConfiguration(@QueryParam("key") String key) {
-        try{
+        try {
             airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
             airavataRegistry.removeAllConfiguration(key);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        }catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -172,12 +174,12 @@ import java.util.*;
     @Path("delete/configuration")
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeConfiguration(@QueryParam("key") String key, @QueryParam("value") String value) {
-        try{
+        try {
             airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
             airavataRegistry.removeConfiguration(key, value);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        }catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -243,7 +245,7 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response getEventingServiceURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             URI eventingServiceURI = airavataRegistry.getEventingServiceURI();
             if (eventingServiceURI != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
@@ -264,7 +266,7 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response getMessageBoxURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             URI eventingServiceURI = airavataRegistry.getMessageBoxURI();
             if (eventingServiceURI != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
@@ -285,12 +287,12 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response addGFacURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             URI gfacURI = new URI(uri);
             airavataRegistry.addGFacURI(gfacURI);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -301,12 +303,12 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response addWorkflowInterpreterURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             URI interpreterURI = new URI(uri);
             airavataRegistry.addWorkflowInterpreterURI(interpreterURI);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -317,12 +319,12 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response setEventingURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             URI eventingURI = new URI(uri);
             airavataRegistry.setEventingURI(eventingURI);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -333,12 +335,12 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response setMessageBoxURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             URI msgBoxURI = new URI(uri);
             airavataRegistry.setMessageBoxURI(msgBoxURI);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -349,14 +351,14 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response addGFacURIByDate(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date formattedDate = dateFormat.parse(date);
             URI gfacURI = new URI(uri);
             airavataRegistry.addGFacURI(gfacURI, formattedDate);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -367,14 +369,14 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response addWorkflowInterpreterURI(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date formattedDate = dateFormat.parse(date);
             URI interpreterURI = new URI(uri);
             airavataRegistry.addWorkflowInterpreterURI(interpreterURI, formattedDate);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -385,14 +387,14 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response setEventingURIByDate(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date formattedDate = dateFormat.parse(date);
             URI eventingURI = new URI(uri);
             airavataRegistry.setEventingURI(eventingURI, formattedDate);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -403,14 +405,14 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response setMessageBoxURIByDate(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date formattedDate = dateFormat.parse(date);
             URI msgBoxURI = new URI(uri);
             airavataRegistry.setMessageBoxURI(msgBoxURI, formattedDate);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -421,12 +423,12 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeGFacURI(@QueryParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             URI gfacURI = new URI(uri);
             airavataRegistry.removeGFacURI(gfacURI);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -437,11 +439,11 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeAllGFacURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             airavataRegistry.removeAllGFacURI();
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -452,12 +454,12 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeWorkflowInterpreterURI(@QueryParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             URI intURI = new URI(uri);
             airavataRegistry.removeWorkflowInterpreterURI(intURI);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        }catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -468,11 +470,11 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeAllWorkflowInterpreterURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             airavataRegistry.removeAllWorkflowInterpreterURI();
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -483,11 +485,11 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response unsetEventingURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             airavataRegistry.unsetEventingURI();
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -498,27 +500,29 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response unsetMessageBoxURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             airavataRegistry.unsetMessageBoxURI();
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (Exception e){
+        } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
     }
 
 
-    /**---------------------------------Descriptor Registry----------------------------------**/
+    /**
+     * ---------------------------------Descriptor Registry----------------------------------*
+     */
 
 
     @GET
     @Path("hostdescriptor/exist")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response isHostDescriptorExists(@QueryParam("descriptorName") String descriptorName){
+    public Response isHostDescriptorExists(@QueryParam("descriptorName") String descriptorName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         boolean state;
-        try{
+        try {
             state = airavataRegistry.isHostDescriptorExists(descriptorName);
             if (state) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
@@ -543,12 +547,12 @@ import java.util.*;
                                       @FormParam("hostEndpoint") String hostEndpoint,
                                       @FormParam("gatekeeperEndpoint") String gatekeeperEndpoint) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             HostDescription hostDescription = DescriptorUtil.createHostDescription(hostName, hostAddress, hostEndpoint, gatekeeperEndpoint);
             airavataRegistry.addHostDescriptor(hostDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (DescriptorAlreadyExistsException e){
+        } catch (DescriptorAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             // TODO : Use WEbapplicationExcpetion
             return builder.build();
@@ -584,7 +588,7 @@ import java.util.*;
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response updateHostDescriptor(HostDescriptor host) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             HostDescription hostDescription = DescriptorUtil.createHostDescription(host);
             airavataRegistry.updateHostDescriptor(hostDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
@@ -604,7 +608,7 @@ import java.util.*;
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getHostDescriptor(@QueryParam("hostName") String hostName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             HostDescription hostDescription = airavataRegistry.getHostDescriptor(hostName);
             HostDescriptor hostDescriptor = DescriptorUtil.createHostDescriptor(hostDescription);
             if (hostDescription != null) {
@@ -627,14 +631,14 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeHostDescriptor(@QueryParam("hostName") String hostName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             airavataRegistry.removeHostDescriptor(hostName);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        }catch (DescriptorDoesNotExistsException e){
+        } catch (DescriptorDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
-        }catch (RegistryException e) {
+        } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -675,7 +679,7 @@ import java.util.*;
     public Response isServiceDescriptorExists(@QueryParam("descriptorName") String descriptorName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         boolean state;
-        try{
+        try {
             state = airavataRegistry.isServiceDescriptorExists(descriptorName);
             if (state) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
@@ -695,14 +699,14 @@ import java.util.*;
     @Path("servicedescriptor/save")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response addJSONServiceDescriptor(ServiceDescriptor service){
+    public Response addJSONServiceDescriptor(ServiceDescriptor service) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             ServiceDescription serviceDescription = DescriptorUtil.createServiceDescription(service);
             airavataRegistry.addServiceDescriptor(serviceDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (DescriptorAlreadyExistsException e){
+        } catch (DescriptorAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             return builder.build();
         } catch (RegistryException e) {
@@ -717,12 +721,12 @@ import java.util.*;
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response updateServiceDescriptor(ServiceDescriptor service) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             ServiceDescription serviceDescription = DescriptorUtil.createServiceDescription(service);
             airavataRegistry.updateServiceDescriptor(serviceDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (DescriptorAlreadyExistsException e){
+        } catch (DescriptorAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             return builder.build();
         } catch (RegistryException e) {
@@ -735,9 +739,9 @@ import java.util.*;
     @Path("servicedescriptor/description")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getServiceDescriptor(@QueryParam("serviceName") String serviceName){
+    public Response getServiceDescriptor(@QueryParam("serviceName") String serviceName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             ServiceDescription serviceDescription = airavataRegistry.getServiceDescriptor(serviceName);
             ServiceDescriptor serviceDescriptor = DescriptorUtil.createServiceDescriptor(serviceDescription);
             if (serviceDescription != null) {
@@ -759,14 +763,14 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeServiceDescriptor(@QueryParam("serviceName") String serviceName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             airavataRegistry.removeServiceDescriptor(serviceName);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        }catch (DescriptorDoesNotExistsException e){
+        } catch (DescriptorDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
-        }catch (RegistryException e) {
+        } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -776,7 +780,7 @@ import java.util.*;
     @Path("get/servicedescriptors")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getServiceDescriptors(){
+    public Response getServiceDescriptors() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             List<ServiceDescription> serviceDescriptors = airavataRegistry.getServiceDescriptors();
@@ -798,18 +802,19 @@ import java.util.*;
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
-        }    }
+        }
+    }
 
 
     @GET
     @Path("applicationdescriptor/exist")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response isApplicationDescriptorExists(@QueryParam("serviceName")String serviceName,
-                                                  @QueryParam("hostName")String hostName,
-                                                  @QueryParam("descriptorName")String descriptorName) {
+    public Response isApplicationDescriptorExists(@QueryParam("serviceName") String serviceName,
+                                                  @QueryParam("hostName") String hostName,
+                                                  @QueryParam("descriptorName") String descriptorName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         boolean state;
-        try{
+        try {
             state = airavataRegistry.isApplicationDescriptorExists(serviceName, hostName, descriptorName);
             if (state) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
@@ -839,8 +844,8 @@ import java.util.*;
         // Creating the descriptor as a temporary measure.
         ApplicationDeploymentDescription app = DescriptorUtil.registerApplication(appName, exeuctableLocation, scratchWorkingDirectory,
                 hostName, projAccNumber, queueName, cpuCount, nodeCount, maxMemory);
-        try{
-            if(!airavataRegistry.isHostDescriptorExists(hostName)){
+        try {
+            if (!airavataRegistry.isHostDescriptorExists(hostName)) {
                 System.out.println(hostName + " host not exist");
 //                Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
 //                return builder.build();
@@ -866,7 +871,7 @@ import java.util.*;
 //            airavataRegistry.addApplicationDescriptor(serviceName, hostName, app);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (DescriptorAlreadyExistsException e){
+        } catch (DescriptorAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             return builder.build();
         } catch (RegistryException e) {
@@ -879,33 +884,33 @@ import java.util.*;
     @Path("applicationdescriptor/build/save")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response addJSONApplicationDescriptor(ApplicationDescriptor applicationDescriptor){
+    public Response addJSONApplicationDescriptor(ApplicationDescriptor applicationDescriptor) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             String hostdescName = applicationDescriptor.getHostdescName();
-            if(!airavataRegistry.isHostDescriptorExists(hostdescName)){
+            if (!airavataRegistry.isHostDescriptorExists(hostdescName)) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
                 return builder.build();
             }
             ApplicationDeploymentDescription applicationDeploymentDescription = DescriptorUtil.createApplicationDescription(applicationDescriptor);
             ServiceDescriptor serviceDescriptor = applicationDescriptor.getServiceDescriptor();
             String serviceName;
-            if (serviceDescriptor != null){
-                if (serviceDescriptor.getServiceName() == null){
+            if (serviceDescriptor != null) {
+                if (serviceDescriptor.getServiceName() == null) {
                     serviceName = applicationDescriptor.getName();
                     serviceDescriptor.setServiceName(serviceName);
-                }else{
+                } else {
                     serviceName = serviceDescriptor.getServiceName();
                 }
                 ServiceDescription serviceDescription = DescriptorUtil.createServiceDescription(serviceDescriptor);
                 airavataRegistry.addServiceDescriptor(serviceDescription);
-            }  else {
+            } else {
                 serviceName = applicationDescriptor.getName();
             }
             airavataRegistry.addApplicationDescriptor(serviceName, hostdescName, applicationDeploymentDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (DescriptorAlreadyExistsException e){
+        } catch (DescriptorAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             return builder.build();
         } catch (RegistryException e) {
@@ -948,36 +953,36 @@ import java.util.*;
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response udpateApplicationDescriptorByDescriptors(ApplicationDescriptor applicationDescriptor) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             String hostdescName = applicationDescriptor.getHostdescName();
-            if(!airavataRegistry.isHostDescriptorExists(hostdescName)){
+            if (!airavataRegistry.isHostDescriptorExists(hostdescName)) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
                 return builder.build();
             }
             ApplicationDeploymentDescription applicationDeploymentDescription = DescriptorUtil.createApplicationDescription(applicationDescriptor);
             ServiceDescriptor serviceDescriptor = applicationDescriptor.getServiceDescriptor();
             String serviceName;
-            if (serviceDescriptor != null){
-                if (serviceDescriptor.getServiceName() == null){
+            if (serviceDescriptor != null) {
+                if (serviceDescriptor.getServiceName() == null) {
                     serviceName = applicationDescriptor.getName();
                     serviceDescriptor.setServiceName(serviceName);
-                }else{
+                } else {
                     serviceName = serviceDescriptor.getServiceName();
                 }
                 ServiceDescription serviceDescription = DescriptorUtil.createServiceDescription(serviceDescriptor);
-                if(airavataRegistry.isServiceDescriptorExists(serviceName)){
+                if (airavataRegistry.isServiceDescriptorExists(serviceName)) {
                     airavataRegistry.updateServiceDescriptor(serviceDescription);
                 } else {
                     airavataRegistry.addServiceDescriptor(serviceDescription);
                 }
 
-            }  else {
+            } else {
                 serviceName = applicationDescriptor.getName();
             }
             airavataRegistry.updateApplicationDescriptor(serviceName, hostdescName, applicationDeploymentDescription);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
-        } catch (DescriptorAlreadyExistsException e){
+        } catch (DescriptorAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
             return builder.build();
         } catch (RegistryException e) {
@@ -994,7 +999,7 @@ import java.util.*;
                                              @QueryParam("hostName") String hostName,
                                              @QueryParam("applicationName") String applicationName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             ApplicationDeploymentDescription applicationDeploymentDescription = airavataRegistry.getApplicationDescriptor(serviceName, hostName, applicationName);
             ApplicationDescriptor applicationDescriptor = DescriptorUtil.createApplicationDescriptor(applicationDeploymentDescription);
             applicationDescriptor.setHostdescName(hostName);
@@ -1002,7 +1007,7 @@ import java.util.*;
             ServiceDescriptor serviceDescriptor = DescriptorUtil.createServiceDescriptor(serviceDescription);
             applicationDescriptor.setServiceDescriptor(serviceDescriptor);
 
-            if (applicationDescriptor != null) {
+            if (applicationDeploymentDescription != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(applicationDescriptor);
                 return builder.build();
@@ -1019,10 +1024,10 @@ import java.util.*;
     @GET
     @Path("applicationdescriptors/alldescriptors/host/service")
     @Produces("text/xml")
-    public Response getApplicationDescriptors(@QueryParam("serviceName")String serviceName,
+    public Response getApplicationDescriptors(@QueryParam("serviceName") String serviceName,
                                               @QueryParam("hostName") String hostName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             ApplicationDeploymentDescription applicationDeploymentDescription = airavataRegistry.getApplicationDescriptors(serviceName, hostName);
             ApplicationDescriptor applicationDescriptor = DescriptorUtil.createApplicationDescriptor(applicationDeploymentDescription);
             applicationDescriptor.setHostdescName(hostName);
@@ -1030,7 +1035,7 @@ import java.util.*;
             ServiceDescriptor serviceDescriptor = DescriptorUtil.createServiceDescriptor(serviceDescription);
             applicationDescriptor.setServiceDescriptor(serviceDescriptor);
 
-            if (applicationDescriptor != null) {
+            if (applicationDeploymentDescription != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(applicationDescriptor);
                 return builder.build();
@@ -1049,12 +1054,12 @@ import java.util.*;
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getApplicationDescriptors(@QueryParam("serviceName") String serviceName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             Map<String, ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = airavataRegistry.getApplicationDescriptors(serviceName);
             ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
             ApplicationDescriptor[] applicationDescriptors = new ApplicationDescriptor[applicationDeploymentDescriptionMap.size()];
             int i = 0;
-            for(String hostName : applicationDeploymentDescriptionMap.keySet()){
+            for (String hostName : applicationDeploymentDescriptionMap.keySet()) {
                 ApplicationDeploymentDescription applicationDeploymentDescription = applicationDeploymentDescriptionMap.get(hostName);
                 ApplicationDescriptor applicationDescriptor = DescriptorUtil.createApplicationDescriptor(applicationDeploymentDescription);
                 applicationDescriptor.setHostdescName(hostName);
@@ -1067,7 +1072,7 @@ import java.util.*;
                 i++;
             }
             applicationDescriptorList.setApplicationDescriptors(applicationDescriptors);
-            if(applicationDeploymentDescriptionMap.size() != 0){
+            if (applicationDeploymentDescriptionMap.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(applicationDescriptorList);
                 return builder.build();
@@ -1087,19 +1092,19 @@ import java.util.*;
     @GET
     @Path("applicationdescriptor/alldescriptors")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getApplicationDescriptors(){
+    public Response getApplicationDescriptors() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             Map<String[], ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = airavataRegistry.getApplicationDescriptors();
             ApplicationDescriptorList applicationDescriptorList = new ApplicationDescriptorList();
             ApplicationDescriptor[] applicationDescriptors = new ApplicationDescriptor[applicationDeploymentDescriptionMap.size()];
             int i = 0;
-            for (String[] descriptors : applicationDeploymentDescriptionMap.keySet()){
+            for (String[] descriptors : applicationDeploymentDescriptionMap.keySet()) {
                 ApplicationDeploymentDescription applicationDeploymentDescription = applicationDeploymentDescriptionMap.get(descriptors);
                 ApplicationDescriptor applicationDescriptor = DescriptorUtil.createApplicationDescriptor(applicationDeploymentDescription);
                 applicationDescriptor.setHostdescName(descriptors[1]);
                 ServiceDescription serviceDescription = airavataRegistry.getServiceDescriptor(descriptors[0]);
-                if (serviceDescription == null){
+                if (serviceDescription == null) {
                     Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
                     return builder.build();
                 }
@@ -1109,7 +1114,7 @@ import java.util.*;
                 i++;
             }
             applicationDescriptorList.setApplicationDescriptors(applicationDescriptors);
-            if(applicationDeploymentDescriptionMap.size() != 0){
+            if (applicationDeploymentDescriptionMap.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(applicationDescriptorList);
                 return builder.build();
@@ -1133,7 +1138,7 @@ import java.util.*;
                                                 @QueryParam("hostName") String hostName,
                                                 @QueryParam("appName") String appName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             airavataRegistry.removeApplicationDescriptor(serviceName, hostName, appName);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
@@ -1146,17 +1151,16 @@ import java.util.*;
         }
     }
 
-    public Response getApplicationDescriptorMetadata(String s, String s1, String s2) {
-        return null;
-    }
 
-    /**---------------------------------Project Registry----------------------------------**/
+    /**
+     * ---------------------------------Project Registry----------------------------------*
+     */
     @GET
     @Path("project/exist")
     @Produces(MediaType.TEXT_PLAIN)
-        public Response isWorkspaceProjectExists(@QueryParam("projectName") String projectName) {
+    public Response isWorkspaceProjectExists(@QueryParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             boolean result = airavataRegistry.isWorkspaceProjectExists(projectName);
             if (result) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
@@ -1179,11 +1183,11 @@ import java.util.*;
     public Response isWorkspaceProjectExists(@FormParam("projectName") String projectName,
                                              @FormParam("createIfNotExists") String createIfNotExists) {
         boolean createIfNotExistStatus = false;
-        if(createIfNotExists.equals("true")){
+        if (createIfNotExists.equals("true")) {
             createIfNotExistStatus = true;
         }
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             boolean result = airavataRegistry.isWorkspaceProjectExists(projectName, createIfNotExistStatus);
             if (result) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
@@ -1206,7 +1210,7 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response addWorkspaceProject(@FormParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             WorkspaceProject workspaceProject = new WorkspaceProject(projectName, airavataRegistry);
             airavataRegistry.addWorkspaceProject(workspaceProject);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
@@ -1223,9 +1227,9 @@ import java.util.*;
     @POST
     @Path("update/project")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response updateWorkspaceProject(@FormParam("projectName") String projectName){
+    public Response updateWorkspaceProject(@FormParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             WorkspaceProject workspaceProject = new WorkspaceProject(projectName, airavataRegistry);
             airavataRegistry.updateWorkspaceProject(workspaceProject);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
@@ -1244,7 +1248,7 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response deleteWorkspaceProject(@QueryParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             airavataRegistry.deleteWorkspaceProject(projectName);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
@@ -1262,15 +1266,15 @@ import java.util.*;
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getWorkspaceProject(@QueryParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             WorkspaceProject workspaceProject = airavataRegistry.getWorkspaceProject(projectName);
-            if(workspaceProject != null){
+            if (workspaceProject != null) {
                 WorkspaceProjectMapping workspaceProjectMapping = new WorkspaceProjectMapping(workspaceProject.getProjectName());
 
                 List<AiravataExperiment> airavataExperimentList = workspaceProject.getProjectsRegistry().getExperiments(workspaceProject.getProjectName());
                 Experiment[] experiments = new Experiment[airavataExperimentList.size()];
-                if(airavataExperimentList.size() != 0){
-                    for (int i = 0; i < airavataExperimentList.size(); i++){
+                if (airavataExperimentList.size() != 0) {
+                    for (int i = 0; i < airavataExperimentList.size(); i++) {
                         Experiment experiment = new Experiment();
                         AiravataExperiment airavataExperiment = airavataExperimentList.get(i);
                         experiment.setExperimentId(airavataExperiment.getExperimentId());
@@ -1286,7 +1290,7 @@ import java.util.*;
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(workspaceProjectMapping);
                 return builder.build();
-            } else{
+            } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
                 return builder.build();
             }
@@ -1304,18 +1308,18 @@ import java.util.*;
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getWorkspaceProjects() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             List<WorkspaceProject> workspaceProjects = airavataRegistry.getWorkspaceProjects();
             WorkspaceProjectList workspaceProjectList = new WorkspaceProjectList();
             WorkspaceProjectMapping[] workspaceProjectSet = new WorkspaceProjectMapping[workspaceProjects.size()];
-            for(int i = 0; i < workspaceProjects.size(); i++) {
+            for (int i = 0; i < workspaceProjects.size(); i++) {
                 WorkspaceProject workspaceProject = workspaceProjects.get(i);
                 WorkspaceProjectMapping workspaceProjectMapping = new WorkspaceProjectMapping(workspaceProject.getProjectName());
 
                 List<AiravataExperiment> airavataExperimentList = workspaceProject.getProjectsRegistry().getExperiments(workspaceProject.getProjectName());
                 Experiment[] experiments = new Experiment[airavataExperimentList.size()];
-                if(airavataExperimentList.size() != 0){
-                    for (int j = 0; j < airavataExperimentList.size(); j++){
+                if (airavataExperimentList.size() != 0) {
+                    for (int j = 0; j < airavataExperimentList.size(); j++) {
                         Experiment experiment = new Experiment();
                         AiravataExperiment airavataExperiment = airavataExperimentList.get(j);
                         experiment.setExperimentId(airavataExperiment.getExperimentId());
@@ -1326,7 +1330,7 @@ import java.util.*;
                         experiments[j] = experiment;
                     }
                     workspaceProjectMapping.setExperimentsList(experiments);
-                 }
+                }
                 workspaceProjectSet[i] = workspaceProjectMapping;
             }
             workspaceProjectList.setWorkspaceProjectMappings(workspaceProjectSet);
@@ -1344,12 +1348,16 @@ import java.util.*;
         }
     }
 
+    /**
+     * ---------------------------------Experiments----------------------------------*
+     */
+
     @DELETE
     @Path("delete/experiment")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response removeExperiment(@QueryParam("experimentId") String experimentId){
+    public Response removeExperiment(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             airavataRegistry.removeExperiment(experimentId);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
@@ -1364,11 +1372,11 @@ import java.util.*;
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getExperiments() throws RegistryException {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             List<AiravataExperiment> airavataExperimentList = airavataRegistry.getExperiments();
             ExperimentList experimentList = new ExperimentList();
             Experiment[] experiments = new Experiment[airavataExperimentList.size()];
-            for (int i =0; i < airavataExperimentList.size(); i++){
+            for (int i = 0; i < airavataExperimentList.size(); i++) {
                 AiravataExperiment airavataExperiment = airavataExperimentList.get(i);
                 Experiment experiment = new Experiment();
                 experiment.setExperimentId(airavataExperiment.getExperimentId());
@@ -1379,7 +1387,7 @@ import java.util.*;
                 experiments[i] = experiment;
             }
             experimentList.setExperiments(experiments);
-            if(airavataExperimentList.size() != 0){
+            if (airavataExperimentList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(experimentList);
                 return builder.build();
@@ -1387,7 +1395,7 @@ import java.util.*;
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
                 return builder.build();
             }
-        }catch (RegistryException e) {
+        } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
             return builder.build();
         }
@@ -1398,11 +1406,11 @@ import java.util.*;
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getExperimentsByProject(@QueryParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             List<AiravataExperiment> airavataExperimentList = airavataRegistry.getExperiments(projectName);
             ExperimentList experimentList = new ExperimentList();
             Experiment[] experiments = new Experiment[airavataExperimentList.size()];
-            for (int i =0; i < airavataExperimentList.size(); i++){
+            for (int i = 0; i < airavataExperimentList.size(); i++) {
                 AiravataExperiment airavataExperiment = airavataExperimentList.get(i);
                 Experiment experiment = new Experiment();
                 experiment.setExperimentId(airavataExperiment.getExperimentId());
@@ -1413,7 +1421,7 @@ import java.util.*;
                 experiments[i] = experiment;
             }
             experimentList.setExperiments(experiments);
-            if(airavataExperimentList.size() != 0){
+            if (airavataExperimentList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(experimentList);
                 return builder.build();
@@ -1434,14 +1442,14 @@ import java.util.*;
     public Response getExperimentsByDate(@QueryParam("fromDate") String fromDate,
                                          @QueryParam("toDate") String toDate) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date formattedFromDate = dateFormat.parse(fromDate);
             Date formattedToDate = dateFormat.parse(toDate);
             List<AiravataExperiment> airavataExperimentList = airavataRegistry.getExperiments(formattedFromDate, formattedToDate);
             ExperimentList experimentList = new ExperimentList();
             Experiment[] experiments = new Experiment[airavataExperimentList.size()];
-            for (int i =0; i < airavataExperimentList.size(); i++){
+            for (int i = 0; i < airavataExperimentList.size(); i++) {
                 AiravataExperiment airavataExperiment = airavataExperimentList.get(i);
                 Experiment experiment = new Experiment();
                 experiment.setExperimentId(airavataExperiment.getExperimentId());
@@ -1452,7 +1460,7 @@ import java.util.*;
                 experiments[i] = experiment;
             }
             experimentList.setExperiments(experiments);
-            if(airavataExperimentList.size() != 0){
+            if (airavataExperimentList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(experimentList);
                 return builder.build();
@@ -1477,14 +1485,14 @@ import java.util.*;
                                                 @QueryParam("fromDate") String fromDate,
                                                 @QueryParam("toDate") String toDate) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date formattedFromDate = dateFormat.parse(fromDate);
             Date formattedToDate = dateFormat.parse(toDate);
             List<AiravataExperiment> airavataExperimentList = airavataRegistry.getExperiments(projectName, formattedFromDate, formattedToDate);
             ExperimentList experimentList = new ExperimentList();
             Experiment[] experiments = new Experiment[airavataExperimentList.size()];
-            for (int i =0; i < airavataExperimentList.size(); i++){
+            for (int i = 0; i < airavataExperimentList.size(); i++) {
                 AiravataExperiment airavataExperiment = airavataExperimentList.get(i);
                 Experiment experiment = new Experiment();
                 experiment.setExperimentId(airavataExperiment.getExperimentId());
@@ -1495,7 +1503,7 @@ import java.util.*;
                 experiments[i] = experiment;
             }
             experimentList.setExperiments(experiments);
-            if(airavataExperimentList.size() != 0){
+            if (airavataExperimentList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(experimentList);
                 return builder.build();
@@ -1518,13 +1526,13 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response addExperiment(@FormParam("projectName") String projectName,
                                   @FormParam("experimentID") String experimentID,
-                                  @FormParam("submittedDate") String submittedDate){
+                                  @FormParam("submittedDate") String submittedDate) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             AiravataExperiment experiment = new AiravataExperiment();
             experiment.setExperimentId(experimentID);
-            Gateway gateway = (Gateway)context.getAttribute(RestServicesConstants.GATEWAY);
-            AiravataUser airavataUser = (AiravataUser)context.getAttribute(RestServicesConstants.REGISTRY_USER);
+            Gateway gateway = (Gateway) context.getAttribute(RestServicesConstants.GATEWAY);
+            AiravataUser airavataUser = (AiravataUser) context.getAttribute(RestServicesConstants.REGISTRY_USER);
             experiment.setGateway(gateway);
             experiment.setUser(airavataUser);
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -1554,7 +1562,7 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response isExperimentExists(@QueryParam("experimentId") String experimentId) throws RegistryException {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             airavataRegistry.isExperimentExists(experimentId);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             builder.entity("True");
@@ -1570,13 +1578,13 @@ import java.util.*;
     @Path("experiment/notexist/create")
     @Produces(MediaType.TEXT_PLAIN)
     public Response isExperimentExistsThenCreate(@QueryParam("experimentId") String experimentId,
-                                                 @QueryParam("createIfNotPresent") String createIfNotPresent){
+                                                 @QueryParam("createIfNotPresent") String createIfNotPresent) {
         boolean createIfNotPresentStatus = false;
-        if(createIfNotPresent.equals("true")){
+        if (createIfNotPresent.equals("true")) {
             createIfNotPresentStatus = true;
         }
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             airavataRegistry.isExperimentExists(experimentId, createIfNotPresentStatus);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             builder.entity("True");
@@ -1593,8 +1601,8 @@ import java.util.*;
     public Response updateExperimentExecutionUser(@FormParam("experimentId") String experimentId,
                                                   @FormParam("user") String user) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
-            airavataRegistry.updateExperimentExecutionUser(experimentId,user);
+        try {
+            airavataRegistry.updateExperimentExecutionUser(experimentId, user);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
             return builder.build();
         } catch (RegistryException e) {
@@ -1608,13 +1616,13 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response getExperimentExecutionUser(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             String user = airavataRegistry.getExperimentExecutionUser(experimentId);
-            if(user != null){
+            if (user != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(user);
                 return builder.build();
-            }else{
+            } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
                 return builder.build();
             }
@@ -1629,13 +1637,13 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response getExperimentName(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             String result = airavataRegistry.getExperimentName(experimentId);
-            if(result != null){
+            if (result != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(result);
                 return builder.build();
-            }else{
+            } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
                 return builder.build();
             }
@@ -1649,9 +1657,9 @@ import java.util.*;
     @Path("update/experimentname")
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateExperimentName(@FormParam("experimentId") String experimentId,
-                                         @FormParam("experimentName") String experimentName){
-            airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+                                         @FormParam("experimentName") String experimentName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try {
             airavataRegistry.updateExperimentName(experimentId, experimentName);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
             return builder.build();
@@ -1667,13 +1675,13 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response getExperimentMetadata(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             String result = airavataRegistry.getExperimentMetadata(experimentId);
-            if(result != null){
+            if (result != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(result);
                 return builder.build();
-            }else{
+            } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
                 return builder.build();
             }
@@ -1686,10 +1694,10 @@ import java.util.*;
     @POST
     @Path("update/experimentmetadata")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response updateExperimentMetadata(@FormParam("experimentId")String experimentId,
+    public Response updateExperimentMetadata(@FormParam("experimentId") String experimentId,
                                              @FormParam("metadata") String metadata) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             airavataRegistry.updateExperimentMetadata(experimentId, metadata);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
             return builder.build();
@@ -1704,13 +1712,13 @@ import java.util.*;
     @Produces(MediaType.TEXT_PLAIN)
     public Response getWorkflowExecutionTemplateName(@QueryParam("workflowInstanceId") String workflowInstanceId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             String result = airavataRegistry.getWorkflowExecutionTemplateName(workflowInstanceId);
-            if(result != null){
+            if (result != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(result);
                 return builder.build();
-            }else{
+            } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
                 return builder.build();
             }
@@ -1726,7 +1734,7 @@ import java.util.*;
     public Response setWorkflowInstanceTemplateName(@FormParam("workflowInstanceId") String workflowInstanceId,
                                                     @FormParam("templateName") String templateName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             airavataRegistry.setWorkflowInstanceTemplateName(workflowInstanceId, templateName);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
@@ -1739,13 +1747,13 @@ import java.util.*;
     @GET
     @Path("get/experimentworkflowinstances")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getExperimentWorkflowInstances(@QueryParam("experimentId") String experimentId){
+    public Response getExperimentWorkflowInstances(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             List<WorkflowInstance> experimentWorkflowInstances = airavataRegistry.getExperimentWorkflowInstances(experimentId);
             WorkflowInstancesList workflowInstancesList = new WorkflowInstancesList();
             WorkflowInstanceMapping[] workflowInstanceMappings = new WorkflowInstanceMapping[experimentWorkflowInstances.size()];
-            for (int i=0; i<experimentWorkflowInstances.size(); i++){
+            for (int i = 0; i < experimentWorkflowInstances.size(); i++) {
                 WorkflowInstanceMapping workflowInstanceMapping = new WorkflowInstanceMapping();
                 WorkflowInstance workflowInstance = experimentWorkflowInstances.get(i);
                 workflowInstanceMapping.setExperimentId(workflowInstance.getExperimentId());
@@ -1771,9 +1779,9 @@ import java.util.*;
     @GET
     @Path("workflowinstance/exist/check")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response isWorkflowInstanceExists(@QueryParam("instanceId") String instanceId){
+    public Response isWorkflowInstanceExists(@QueryParam("instanceId") String instanceId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             Boolean result = airavataRegistry.isWorkflowInstanceExists(instanceId);
             if (result) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
@@ -1795,9 +1803,9 @@ import java.util.*;
     @Path("workflowinstance/exist/create")
     @Produces(MediaType.TEXT_PLAIN)
     public Response isWorkflowInstanceExistsThenCreate(@QueryParam("instanceId") String instanceId,
-                                                       @QueryParam("createIfNotPresent") boolean createIfNotPresent){
+                                                       @QueryParam("createIfNotPresent") boolean createIfNotPresent) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             Boolean result = airavataRegistry.isWorkflowInstanceExists(instanceId, createIfNotPresent);
             if (result) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
@@ -1819,7 +1827,7 @@ import java.util.*;
     public Response updateWorkflowInstanceStatusByInstance(@FormParam("instanceId") String instanceId,
                                                            @FormParam("executionStatus") String executionStatus) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             WorkflowInstanceStatus.ExecutionStatus status = WorkflowInstanceStatus.ExecutionStatus.valueOf(executionStatus);
             airavataRegistry.updateWorkflowInstanceStatus(instanceId, status);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
@@ -1837,7 +1845,7 @@ import java.util.*;
                                                  @FormParam("executionStatus") String executionStatus,
                                                  @FormParam("statusUpdateTime") String statusUpdateTime) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date formattedDate = dateFormat.parse(statusUpdateTime);
             WorkflowInstance workflowInstance = airavataRegistry.getWorkflowInstanceData(workflowInstanceId).getWorkflowInstance();
@@ -1860,24 +1868,24 @@ import java.util.*;
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getWorkflowInstanceStatus(@QueryParam("instanceId") String instanceId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             WorkflowInstanceStatus workflowInstanceStatus = airavataRegistry.getWorkflowInstanceStatus(instanceId);
             WorkflowInstanceStatusMapping workflowInstanceStatusMapping = new WorkflowInstanceStatusMapping();
             workflowInstanceStatusMapping.setExecutionStatus(workflowInstanceStatus.getExecutionStatus().name());
             workflowInstanceStatusMapping.setStatusUpdateTime(workflowInstanceStatus.getStatusUpdateTime());
             WorkflowInstance workflowInstance = workflowInstanceStatus.getWorkflowInstance();
             WorkflowInstanceMapping workflowInstanceMapping = new WorkflowInstanceMapping();
-            if(workflowInstance != null){
+            if (workflowInstance != null) {
                 workflowInstanceStatusMapping.setExperimentId(workflowInstance.getExperimentId());
                 workflowInstanceStatusMapping.setTemplateName(workflowInstance.getTemplateName());
                 workflowInstanceStatusMapping.setWorkflowInstanceId(workflowInstance.getWorkflowInstanceId());
             }
 //            workflowInstanceStatusMapping.setWorkflowInstanceMapping(workflowInstanceMapping);
-            if(workflowInstanceStatusMapping != null){
+            if (workflowInstanceStatusMapping != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(workflowInstanceStatusMapping);
                 return builder.build();
-            }else{
+            } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
                 return builder.build();
             }
@@ -1890,12 +1898,11 @@ import java.util.*;
     @POST
     @Path("update/workflownodeinput")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response updateWorkflowNodeInput(@FormParam("experimentId") String experimentID,
-                                            @FormParam("nodeID") String nodeID,
+    public Response updateWorkflowNodeInput(@FormParam("nodeID") String nodeID,
                                             @FormParam("workflowInstanceId") String workflowInstanceID,
-                                            @FormParam("data") String data){
+                                            @FormParam("data") String data) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             WorkflowInstanceData workflowInstanceData = airavataRegistry.getWorkflowInstanceData(workflowInstanceID);
             WorkflowInstanceNode workflowInstanceNode = workflowInstanceData.getNodeData(nodeID).getWorkflowInstanceNode();
             airavataRegistry.updateWorkflowNodeInput(workflowInstanceNode, data);
@@ -1912,10 +1919,10 @@ import java.util.*;
     @Path("update/workflownodeoutput")
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateWorkflowNodeOutput(@FormParam("nodeID") String nodeID,
-                                             @FormParam("workflowInstanceID") String workflowInstanceID,
+                                             @FormParam("workflowInstanceId") String workflowInstanceID,
                                              @FormParam("data") String data) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             WorkflowInstanceData workflowInstanceData = airavataRegistry.getWorkflowInstanceData(workflowInstanceID);
             WorkflowInstanceNode workflowInstanceNode = workflowInstanceData.getNodeData(nodeID).getWorkflowInstanceNode();
             airavataRegistry.updateWorkflowNodeOutput(workflowInstanceNode, data);
@@ -1934,11 +1941,11 @@ import java.util.*;
                                                     @QueryParam("workflowNameRegEx") String workflowNameRegEx,
                                                     @QueryParam("nodeNameRegEx") String nodeNameRegEx) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.searchWorkflowInstanceNodeInput(experimentIdRegEx, workflowNameRegEx, nodeNameRegEx);
             WorkflowNodeIODataMapping[] workflowNodeIODataCollection = new WorkflowNodeIODataMapping[workflowNodeIODataList.size()];
             WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
-            for (int i = 0; i<workflowNodeIODataList.size(); i++){
+            for (int i = 0; i < workflowNodeIODataList.size(); i++) {
                 WorkflowNodeIOData nodeIOData = workflowNodeIODataList.get(i);
                 WorkflowNodeIODataMapping workflowNodeIODataMapping = new WorkflowNodeIODataMapping();
 
@@ -1971,11 +1978,11 @@ import java.util.*;
                                                      @QueryParam("workflowNameRegEx") String workflowNameRegEx,
                                                      @QueryParam("nodeNameRegEx") String nodeNameRegEx) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.searchWorkflowInstanceNodeOutput(experimentIdRegEx, workflowNameRegEx, nodeNameRegEx);
             WorkflowNodeIODataMapping[] workflowNodeIODataCollection = new WorkflowNodeIODataMapping[workflowNodeIODataList.size()];
             WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
-            for (int i = 0; i<workflowNodeIODataList.size(); i++){
+            for (int i = 0; i < workflowNodeIODataList.size(); i++) {
                 WorkflowNodeIOData nodeIOData = workflowNodeIODataList.get(i);
                 WorkflowNodeIODataMapping workflowNodeIODataMapping = new WorkflowNodeIODataMapping();
 
@@ -2007,11 +2014,11 @@ import java.util.*;
     public Response getWorkflowInstanceNodeInput(@QueryParam("workflowInstanceId") String workflowInstanceId,
                                                  @QueryParam("nodeType") String nodeType) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.getWorkflowInstanceNodeInput(workflowInstanceId, nodeType);
             WorkflowNodeIODataMapping[] workflowNodeIODataCollection = new WorkflowNodeIODataMapping[workflowNodeIODataList.size()];
             WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
-            for (int i = 0; i<workflowNodeIODataList.size(); i++){
+            for (int i = 0; i < workflowNodeIODataList.size(); i++) {
                 WorkflowNodeIOData nodeIOData = workflowNodeIODataList.get(i);
                 WorkflowNodeIODataMapping workflowNodeIODataMapping = new WorkflowNodeIODataMapping();
 
@@ -2043,11 +2050,11 @@ import java.util.*;
     public Response getWorkflowInstanceNodeOutput(@QueryParam("workflowInstanceId") String workflowInstanceId,
                                                   @QueryParam("nodeType") String nodeType) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        try{
+        try {
             List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.getWorkflowInstanceNodeOutput(workflowInstanceId, nodeType);
             WorkflowNodeIODataMapping[] workflowNodeIODataCollection = new WorkflowNodeIODataMapping[workflowNodeIODataList.size()];
             WorkflowNodeIODataList workflowNodeIOData = new WorkflowNodeIODataList();
-            for (int i = 0; i<workflowNodeIODataList.size(); i++){
+            for (int i = 0; i < workflowNodeIODataList.size(); i++) {
                 WorkflowNodeIOData nodeIOData = workflowNodeIODataList.get(i);
                 WorkflowNodeIODataMapping workflowNodeIODataMapping = new WorkflowNodeIODataMapping();
 
@@ -2056,7 +2063,8 @@ import java.util.*;
                 workflowNodeIODataMapping.setWorkflowInstanceId(nodeIOData.getWorkflowInstanceId());
                 workflowNodeIODataMapping.setWorkflowName(nodeIOData.getWorkflowName());
                 workflowNodeIODataMapping.setWorkflowNodeType(nodeIOData.getNodeType().toString());
-                workflowNodeIODataCollection[i] = workflowNodeIODataMapping;            }
+                workflowNodeIODataCollection[i] = workflowNodeIODataMapping;
+            }
             workflowNodeIOData.setWorkflowNodeIODataMappings(workflowNodeIODataCollection);
             if (workflowNodeIODataList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
