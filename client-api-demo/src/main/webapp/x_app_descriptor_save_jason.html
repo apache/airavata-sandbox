@@ -60,20 +60,20 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
             inputCount++;
             $(this).after("<br/>");
             $(this).after("Input Name         *:" +
-                    "<input type=&quot;text&quot; id=&quot;inputName" + inputCount + "&quot; name=&quot;inputName" + inputCount + "&quot; value=&quot;echo_input&quot; size=&quot;50&quot;><br/>");
+                    "<input type=&quot;text&quot; id=&quot;inputName" + inputCount + "&quot; name=&quot;inputName" + inputCount + "&quot; size=&quot;50&quot;><br/>");
 
             $(this).after("Input Type         *:" +
-                    "<input type=&quot;text&quot; id=&quot;inputType" + inputCount + "&quot; name=&quot;inputType" + inputCount + "&quot; value=&quot;String&quot; size=&quot;50&quot;><br/>");
+                    "<input type=&quot;text&quot; id=&quot;inputType" + inputCount + "&quot; name=&quot;inputType" + inputCount + "&quot; size=&quot;50&quot;><br/>");
         });
 
         $("p2").live("click", function(){
             outputCount++;
             $(this).after("Output Name         *:" +
-                    "<input type=&quot;text&quot; id=&quot;outputName" + outputCount + "&quot; name=&quot;outputName" + outputCount + "&quot; value=&quot;echo_output&quot; size=&quot;50&quot;><br/>");
+                    "<input type=&quot;text&quot; id=&quot;outputName" + outputCount + "&quot; name=&quot;outputName" + outputCount + "&quot; size=&quot;50&quot;><br/>");
             $(this).after();
 
             $(this).after("Output Type         *:" +
-                    "<input type=&quot;text&quot; id=&quot;outputType" + outputCount + "&quot; name=&quot;outputType" + outputCount + "&quot; value=&quot;String&quot; size=&quot;50&quot;><br/>");
+                    "<input type=&quot;text&quot; id=&quot;outputType" + outputCount + "&quot; name=&quot;outputType" + outputCount + "&quot; size=&quot;50&quot;><br/>");
         });
 
         $('[name="btn2"]').click(function(){
@@ -116,7 +116,7 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
                 input["description"] = "empty";
                 input["name"] = "name"; //$("#inputName" + j+1).val();
                 input["type"] = "type"; //$("#inputType" + j+1).val();
-                inArray[j-1] = JSON.stringify(input);
+                inArray[j-1] = input;
 
                 console.log("input : " + j);
                 console.log(JSON.stringify(input));
@@ -129,28 +129,14 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
                 output["description"] = "empty";
                 output["name"] = "name"; //$("#outputName" + j+1).val();
                 output["type"] = "type"; //$("#outputType" + j+1).val();
-                outArray[j-1] = JSON.stringify(output);
-
-                console.log("output : " + j);
-                console.log(JSON.stringify(output));
-
+                outArray[j-1] = output;
             }
-            console.log("loop two done");
 
             var serviceDesc = {};
-            /*console.log("setting params to servicedesc");
-
             serviceDesc["inputParams"] = inArray;
             serviceDesc["outputParams"] = outArray;
-            console.log("service description:");
-            console.log(JSON.stringify(serviceDesc));
-
-            console.log("setting servicedesc to json request");
             jsonRequest["serviceDesc"] = serviceDesc;
-            */
-
             console.log(JSON.stringify(jsonRequest));
-            alert(JSON.stringify(jsonRequest));
 
 
             $.ajax({
