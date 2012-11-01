@@ -51,7 +51,8 @@ To test
 
     ############## Application descriptrors ##########################
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/applicationdescriptor/exist?serviceName=echo&hostName=LocalHost&descriptorName=LocalHost_application'
-    curl -H "Accept:application/json"  -X POST -H "Content-Type:application/json" -d '{"applicationName":"abc", "hostdescName":"LocalHost", "serviceName":"echo", "executablePath":"cccc", "workingDir":"dddd" }' http://localhost:9080/airavata-services/registry/api/applicationdescriptor/build/save    curl -H "Accept: text/plain" -X POST -H "Content-Type: text/xml" -d 'serviceName=echo&hostName=LocalHost&<type:applicationDeploymentDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:applicationName>LocalHost_application2</type:applicationName><type:executableLocation>/Users/chathuri/airavata/source/trunk_new/samples/echo.sh</type:executableLocation><type:scratchWorkingDirectory>/tmp1</type:scratchWorkingDirectory></type:applicationDeploymentDescription>' http://localhost:9080/airavata-services/registry/api/applicationdescriptor/save
+    curl -H "Accept:application/json"  -X POST -H "Content-Type:application/json" -d '{"applicationName":"abc", "hostdescName":"LocalHost", "serviceName":"echo", "executablePath":"cccc", "workingDir":"dddd" }' http://localhost:9080/airavata-services/registry/api/applicationdescriptor/build/save
+    curl -H "Accept: text/plain" -X POST -H "Content-Type: text/xml" -d 'serviceName=echo&hostName=LocalHost&<type:applicationDeploymentDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:applicationName>LocalHost_application2</type:applicationName><type:executableLocation>/Users/chathuri/airavata/source/trunk_new/samples/echo.sh</type:executableLocation><type:scratchWorkingDirectory>/tmp1</type:scratchWorkingDirectory></type:applicationDeploymentDescription>' http://localhost:9080/airavata-services/registry/api/applicationdescriptor/save
     curl -H "Accept: text/plain" -X POST -H "Content-Type: text/xml" -d 'service=<type:serviceDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:name>echo</type:name><type:inputParameters><type:parameterName>echo_input</type:parameterName><type:parameterDescription xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/><type:parameterType type="String"><name>String</name></type:parameterType></type:inputParameters><type:outputParameters><type:parameterName>echo_output</type:parameterName><type:parameterDescription xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/><type:parameterType type="String"><name>String</name></type:parameterType></type:outputParameters></type:serviceDescription>&host=<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>LocalHost</type:hostName><type:hostAddress>127.0.0.1</type:hostAddress></type:hostDescription>&application=<type:applicationDeploymentDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:applicationName>LocalHost_application2</type:applicationName><type:executableLocation>xccccccccxc</type:executableLocation><type:scratchWorkingDirectory>/sdddsdsds</type:scratchWorkingDirectory></type:applicationDeploymentDescription>' http://localhost:9080/airavata-services/registry/api/applicationdescriptor/update/descriptor
     curl -H "Accept: text/plain" -X POST -H "Content-Type: text/xml" -d 'serviceName=echo&hostName=LocalHost&application=<type:applicationDeploymentDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:applicationName>LocalHost_application2</type:applicationName><type:executableLocation>xccccccccxc11111</type:executableLocation><type:scratchWorkingDirectory>/sdddsdsds1111</type:scratchWorkingDirectory></type:applicationDeploymentDescription>' http://localhost:9080/airavata-services/registry/api/applicationdescriptor/update
     curl --request GET 'http://localhost:9080/airavata-services/registry/api/applicationdescriptor/description?serviceName=echo&hostName=LocalHost&applicationName=LocalHost_application2'
@@ -99,6 +100,10 @@ To test
 
 {
    "applicationName":"Tesing",
+   "projAccNumber" : "TG",                 // Update
+   "queueName" : "development",            // Update
+   "exeuctableLocation" : "/bin/echo",     // Update
+   "scratchWorkingDirectory" : "/tmp",     // Update
    "cpuCount":"12",
    "hostdescName":"localhost",
    "maxMemory":"0",
@@ -107,6 +112,7 @@ To test
    "nodeCount":"1",
    "processorsPerNode":"12",
    "serviceDesc":{
+      "serviceName" : "service1",          // Update
       "inputParams":[
          {
             "dataType":"input",
