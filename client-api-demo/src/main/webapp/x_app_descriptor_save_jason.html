@@ -98,18 +98,17 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
             var outputType = $("#outputType1").val();
 
 
-            jsonRequest["applicationName"] = appName;
+            jsonRequest["name"] = appName;
+            jsonRequest["executablePath"] = exeuctableLocation;
+            jsonRequest["workingDir"] = scratchWorkingDirectory;
             jsonRequest["cpuCount"] = cpuCount;
             jsonRequest["hostdescName"] = hostName;
             jsonRequest["maxMemory"] = maxMemory;
-            jsonRequest["maxWallTime"] = ""; //TODO
-            jsonRequest["minMemory"] = ""; //TODO
+            jsonRequest["maxWallTime"] = "10"; //TODO
+            jsonRequest["minMemory"] = "4"; //TODO
             jsonRequest["nodeCount"] = nodeCount;
-            jsonRequest["processorsPerNode"] = ""; //TODO
+            jsonRequest["processorsPerNode"] = "3"; //TODO
 
-//            var outArray = ["4" , "5" , "6"];
-            console.log("outputCount : " + outputCount);
-            console.log("inputCount : " + inputCount);
             var inArray = [];
             for(var j=1; j<inputCount+1; j++) {
                 var input = {};
@@ -123,9 +122,6 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
                 console.log(JSON.stringify(input));
             }
 
-            console.log("loop one done");
-
-//            var outArray = ["1" , "2" , "3"];
             var outArray = new Array();
             for(j=1; j<outputCount+1; j++) {
                 var output = {};
@@ -142,9 +138,6 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
             console.log("loop two done");
 
             var serviceDesc = {};
-
-
-
             /*console.log("setting params to servicedesc");
 
             serviceDesc["inputParams"] = inArray;
@@ -170,9 +163,9 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
                 dataType: "json",
                 contentType: "application/json;charset=utf-8",
                 url: "http://localhost:7080/airavata-registry-rest-services/registry/api/applicationdescriptor/build/save",
-//                url: "http://localhost:7080/airavata-registry-rest-services/registry/api/applicationdescriptor/build/save/test",
-                data: JSON.stringify({"name":"abc3", "hostdescName":"LocalHost", "executablePath":"cccc", "workingDir":"dddd" })
-//                data: jsonRequest
+                data: JSON.stringify(jsonRequest)
+//                data: JSON.stringify({"name":"abc3", "hostdescName":"LocalHost", "executablePath":"cccc", "workingDir":"dddd" })
+
             }).done(function( msg ) {
                         alert( "Data Saved: " + msg );
                     });
