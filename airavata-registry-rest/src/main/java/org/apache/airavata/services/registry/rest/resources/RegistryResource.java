@@ -8,6 +8,7 @@ import org.apache.airavata.persistance.registry.jpa.JPAResourceAccessor;
 import org.apache.airavata.registry.api.*;
 import org.apache.airavata.registry.api.exception.gateway.*;
 import org.apache.airavata.registry.api.exception.worker.*;
+import org.apache.airavata.registry.api.impl.ExperimentDataImpl;
 import org.apache.airavata.registry.api.workflow.*;
 import org.apache.airavata.schemas.gfac.*;
 import org.apache.airavata.services.registry.rest.resourcemappings.*;
@@ -1934,6 +1935,7 @@ public class RegistryResource {
         }
     }
 
+    /*
     @GET
     @Path("search/workflowinstancenodeinput")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -2013,6 +2015,7 @@ public class RegistryResource {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getWorkflowInstanceNodeInput(@QueryParam("workflowInstanceId") String workflowInstanceId,
                                                  @QueryParam("nodeType") String nodeType) {
+        // Airavata JPA Registry method returns null at the moment
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             List<WorkflowNodeIOData> workflowNodeIODataList = airavataRegistry.getWorkflowInstanceNodeInput(workflowInstanceId, nodeType);
@@ -2079,14 +2082,48 @@ public class RegistryResource {
             return builder.build();
         }
     }
+    */
 
     @GET
-    public Response getExperiment(String s) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @Path("get/experiment")
+    @Produces(MediaType.APPLICATION_XML)
+    public ExperimentDataImpl getExperiment(@QueryParam("experimentId") String experimentId) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            ExperimentDataImpl experimentData = (ExperimentDataImpl)airavataRegistry.getExperiment(experimentId);
+            return experimentData;
+//            if (experimentData != null){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(experimentData);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+        } catch (RegistryException e) {
+//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public Response getExperimentIdByUser(String s) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @GET
+    @Path("get/experimentID")
+    public ArrayList<String> getExperimentIdByUser(@QueryParam("username") String username) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            ArrayList<String> experiments = (ArrayList)airavataRegistry.getExperimentIdByUser(username);
+            return experiments;
+//            if (experiments.size() != 0){
+//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+//                builder.entity(experiments);
+//                return builder.build();
+//            } else {
+//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+//                return builder.build();
+//            }
+        } catch (RegistryException e) {
+            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public Response getExperimentByUser(String s) throws RegistryException {
