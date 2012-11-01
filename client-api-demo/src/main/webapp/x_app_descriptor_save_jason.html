@@ -102,6 +102,97 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
             var outputName = $("#outputName1").val();
             var outputType = $("#outputType1").val();
 
+            var jsonRequest = {};
+            jsonRequest["applicationName"] = appName;
+            jsonRequest["cpuCount"] = cpuCount;
+            jsonRequest["hostdescName"] = hostName;
+            jsonRequest["maxMemory"] = maxMemory;
+            jsonRequest["maxWallTime"] = ""; //TODO
+            jsonRequest["minMemory"] = ""; //TODO
+            jsonRequest["nodeCount"] = nodeCount;
+            jsonRequest["processorsPerNode"] = ""; //TODO
+
+            var inArray = [];
+            for(var j=0; j<inputCount; j++) {
+                var input = {};
+                input["dataType"] = "input";
+                input["description"] = "empty";
+                input["name"] = $("#inputName" + j+1).val();
+                input["type"] = $("#inputType" + j+1).val();
+
+                inArray[j] = input;
+            }
+
+            var outArray = new Array();
+            for(var j=0; j<outputCount; j++) {
+                var output = {};
+                output["dataType"] = "output";
+                output["description"] = "empty";
+                output["name"] = $("#outputName" + j+1).val();
+                output["type"] = $("#outputType" + j+1).val();
+
+                outArray[j] = output;
+            }
+
+            var serviceDesc = {};
+            serviceDesc["inputParams"] = inArray.toString();
+            serviceDesc["outputParams"] = outArray;
+
+            jsonRequest["serviceDesc"] = serviceDesc;
+
+
+            alert("printing inArray");
+            alert(inArray.toSource().toString());
+            alert(JSON.stringify(jsonRequest));
+
+            /*jQuery.map($(this).serializeArray(), function(n, i){
+                for(var j=1; j<inputCount; j++) {
+                    jsonRequest[n['da']] = n['value'];
+                }
+            });*/
+
+            /*{
+                "applicationName":"Tesing",
+                    "cpuCount":"12",
+                    "hostdescName":"localhost",
+                    "maxMemory":"0",
+                    "maxWallTime":"0",
+                    "minMemory":"0",
+                    "nodeCount":"1",
+                    "processorsPerNode":"12",
+                    "serviceDesc":{
+                "inputParams":[
+                    {
+                        "dataType":"input",
+                        "description":"my input",
+                        "name":"myinput",
+                        "type":"String"
+                    },
+                    {
+                        "dataType":"input",
+                        "description":"my input",
+                        "name":"myinput",
+                        "type":"String"
+                    }
+                ],
+                        "outputParams":[
+                    {
+                        "dataType":"output",
+                        "description":"my output",
+                        "name":"myoutput",
+                        "type":"String"
+                    },
+                    {
+                        "dataType":"output",
+                        "description":"my output",
+                        "name":"myoutput",
+                        "type":"String"
+                    }
+                ]
+            }
+            }*/
+
+
             $.ajax({
                 /*headers: {
                     Accept : "text/plain; charset=utf-8"
