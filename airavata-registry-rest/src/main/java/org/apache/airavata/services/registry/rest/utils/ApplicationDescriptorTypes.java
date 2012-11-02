@@ -22,8 +22,8 @@
 package org.apache.airavata.services.registry.rest.utils;
 
 public class ApplicationDescriptorTypes {
-    public static final String APP_DEP_DESC_TYPE = "ApplicationDeploymentDescriptionType";
-    public static final String BATCH_APP_DEP_DESC_TYPE = "BatchApplicationDeploymentDescriptionType";
-    public static final String GRAM_APP_DEP_DESC_TYPE = "GramApplicationDeploymentType";
-    public static final String HADOOP_APP_DEP_DESC_TYPE = "HadoopApplicationDeploymentDescriptionType";
+    public static final String APP_DEP_DESC_TYPE = "Default";
+    public static final String BATCH_APP_DEP_DESC_TYPE = "Batch";
+    public static final String GRAM_APP_DEP_DESC_TYPE = "Gram";
+    public static final String HADOOP_APP_DEP_DESC_TYPE = "Hadoop";
 }
