@@ -56,21 +56,17 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
 
         $("p1").live("click", function(){
             inputCount++;
-            $(this).after("<br/>");
-            $(this).after("Input Name         *:" +
-                    "<input type=&quot;text&quot; id=&quot;inputName" + inputCount + "&quot; name=&quot;inputName" + inputCount + "&quot; size=&quot;50&quot;><br/>");
-
-            $(this).after("Input Type         *:" +
+            $(this).after("<br/>Input Name         *:" +
+                    "<input type=&quot;text&quot; id=&quot;inputName" + inputCount + "&quot; name=&quot;inputName" + inputCount + "&quot; size=&quot;50&quot;><br/>" +
+                    "Input Type         *:" +
                     "<input type=&quot;text&quot; id=&quot;inputType" + inputCount + "&quot; name=&quot;inputType" + inputCount + "&quot; size=&quot;50&quot;><br/>");
         });
 
         $("p2").live("click", function(){
             outputCount++;
-            $(this).after("Output Name         *:" +
-                    "<input type=&quot;text&quot; id=&quot;outputName" + outputCount + "&quot; name=&quot;outputName" + outputCount + "&quot; size=&quot;50&quot;><br/>");
-            $(this).after();
-
-            $(this).after("Output Type         *:" +
+            $(this).after("<br/>Output Name         *:" +
+                    "<input type=&quot;text&quot; id=&quot;outputName" + outputCount + "&quot; name=&quot;outputName" + outputCount + "&quot; size=&quot;50&quot;><br/>" +
+                    "Output Type         *:" +
                     "<input type=&quot;text&quot; id=&quot;outputType" + outputCount + "&quot; name=&quot;outputType" + outputCount + "&quot; size=&quot;50&quot;><br/>");
         });
 
@@ -138,7 +134,6 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
             jsonRequest["serviceDesc"] = serviceDesc;
             console.log(JSON.stringify(jsonRequest));
 
-
             $.ajax({
                 beforeSend: function(x) {
                     if (x && x.overrideMimeType) {
@@ -150,8 +145,6 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
                 contentType: "application/json;charset=utf-8",
                 url: "http://localhost:7080/airavata-registry-rest-services/registry/api/applicationdescriptor/build/save",
                 data: JSON.stringify(jsonRequest)
-//                data: JSON.stringify({"name":"abc3", "hostdescName":"LocalHost", "executablePath":"cccc", "workingDir":"dddd" })
-
             }).done(function( msg ) {
                         alert( "Data Saved: " + msg );
                     });
