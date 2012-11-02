@@ -28,24 +28,36 @@
                 dataType: "json",
                 contentType: "application/json;charset=utf-8",
                 url: "http://localhost:7080/airavata-registry-rest-services/registry/api/get/hostdescriptors",
-                success: function(responseData, status, settings) {
-//                    alert(data);
-//                    var data = JSON.stringify(responseData);
-//                    $.each(data, function(key, val) {
-//                        var tr=$('<tr></tr>');
-//                        $.each(val, function(k, v){
-//                            $('<td>'+v+'</td>').appendTo(tr);
-//                        });
-//                        tr.appendTo('#display');
-//                    });
+                success: function(data, status, settings) {
+                    var keys=[],result='';
+                    $.each(data.hostDescriptions,function(i,row){
+                        $.each(row,function(key,value){
+                            if ($.inArray(key,keys)==-1) keys.push(key);
+                        })
+                    });
+                    result+="<thead><tr>";
+                    $.each(keys,function(i,key){
+                        result+="<th>"+key+"<\/th>";
+                    });
+                    result+="<\/tr><\/thead><tbody>";
+                    $.each(data.hostDescriptions,function(i,row){
+                        result+="<tr>";
+                        $.each(keys,function(i,key){
+                            result+="<td>"+ (row[key]||'') + "<\/td>";
+                        });
+                        result+="<\/tr>";
+                    });
+                    result+="<\/tbody>";
+                    $('#display').html(result);
+
                 },
                 error: function(ajaxrequest, ajaxOptions, thrownError){
                     alert(thrownError);
                 }
 
-            }).done(function(msg) {
+            });/*.done(function(msg) {
                         alert( "Data Saved: " + JSON.stringify(msg));
-                    });
+                    });*/
 
         });
     });
