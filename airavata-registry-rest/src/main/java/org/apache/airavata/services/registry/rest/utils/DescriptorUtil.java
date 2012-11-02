@@ -4,6 +4,7 @@ import org.apache.airavata.commons.gfac.type.ApplicationDeploymentDescription;
 import org.apache.airavata.commons.gfac.type.HostDescription;
 import org.apache.airavata.commons.gfac.type.ServiceDescription;
 import org.apache.airavata.schemas.gfac.*;
+import org.apache.airavata.schemas.gfac.impl.GramApplicationDeploymentTypeImpl;
 import org.apache.airavata.services.registry.rest.resourcemappings.ApplicationDescriptor;
 import org.apache.airavata.services.registry.rest.resourcemappings.HostDescriptor;
 import org.apache.airavata.services.registry.rest.resourcemappings.ServiceDescriptor;
@@ -238,16 +239,25 @@ public class DescriptorUtil {
         //set advanced options according app desc type
         if(applicationDescriptor.getApplicationDescType() != null && !applicationDescriptor.getApplicationDescType().isEmpty()){
             if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.GRAM_APP_DEP_DESC_TYPE)){
-                GramApplicationDeploymentType applicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
-                applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
-                applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
-                applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
-                applicationDeploymentType.setMinMemory(applicationDescriptor.getMinMemory());
-                applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
-                applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
-                applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
+                ApplicationDeploymentDescription appDesc = new ApplicationDeploymentDescription(GramApplicationDeploymentType.type);
+                appDesc.getType().setApplicationName(name);
+                appDesc.getType().setExecutableLocation(applicationDescriptor.getExecutablePath());
+                appDesc.getType().setOutputDataDirectory(applicationDescriptor.getWorkingDir());
+                GramApplicationDeploymentType app = (GramApplicationDeploymentType) appDesc.getType();
+                app.setCpuCount(applicationDescriptor.getCpuCount());
+                app.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
+                app.setMaxMemory(applicationDescriptor.getMaxMemory());
+                app.setMinMemory(applicationDescriptor.getMinMemory());
+                app.setMaxWallTime(applicationDescriptor.getMaxWallTime());
+                app.setNodeCount(applicationDescriptor.getNodeCount());
+                app.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
+                return appDesc;
             } else if (applicationDescriptor.getApplicationDescType().equals(ApplicationDescriptorTypes.BATCH_APP_DEP_DESC_TYPE)){
-                BatchApplicationDeploymentDescriptionType applicationDeploymentType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
+                ApplicationDeploymentDescription appDesc = new ApplicationDeploymentDescription(BatchApplicationDeploymentDescriptionType.type);
+                appDesc.getType().setApplicationName(name);
+                appDesc.getType().setExecutableLocation(applicationDescriptor.getExecutablePath());
+                appDesc.getType().setOutputDataDirectory(applicationDescriptor.getWorkingDir());
+                BatchApplicationDeploymentDescriptionType applicationDeploymentType = (BatchApplicationDeploymentDescriptionType) appDesc.getType();
                 applicationDeploymentType.setCpuCount(applicationDescriptor.getCpuCount());
                 applicationDeploymentType.setJobType(JobTypeType.Enum.forString(applicationDescriptor.getJobType()));
                 applicationDeploymentType.setMaxMemory(applicationDescriptor.getMaxMemory());
@@ -255,6 +265,7 @@ public class DescriptorUtil {
                 applicationDeploymentType.setMaxWallTime(applicationDescriptor.getMaxWallTime());
                 applicationDeploymentType.setNodeCount(applicationDescriptor.getNodeCount());
                 applicationDeploymentType.setProcessorsPerNode(applicationDescriptor.getProcessorsPerNode());
+                return appDesc;
             }
         }
         return applicationDeploymentDescription;

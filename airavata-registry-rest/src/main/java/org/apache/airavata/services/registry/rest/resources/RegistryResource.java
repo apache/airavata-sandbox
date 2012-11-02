@@ -904,11 +904,15 @@ public class RegistryResource {
                     serviceName = serviceDescriptor.getServiceName();
                 }
                 ServiceDescription serviceDescription = DescriptorUtil.createServiceDescription(serviceDescriptor);
-                airavataRegistry.addServiceDescriptor(serviceDescription);
+                if (!airavataRegistry.isServiceDescriptorExists(serviceName)) {
+                    airavataRegistry.addServiceDescriptor(serviceDescription);
+                }
             } else {
                 serviceName = applicationDescriptor.getName();
             }
             airavataRegistry.addApplicationDescriptor(serviceName, hostdescName, applicationDeploymentDescription);
+
+
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
             return builder.build();
         } catch (DescriptorAlreadyExistsException e) {
@@ -2107,12 +2111,16 @@ public class RegistryResource {
     }
 
     @GET
-    @Path("get/experimentID")
-    public ArrayList<String> getExperimentIdByUser(@QueryParam("username") String username) {
+    @Path("get/experimentID/user")
+    @Produces(MediaType.APPLICATION_XML)
+    public ExperimentIDList getExperimentIdByUser(@QueryParam("username") String username) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             ArrayList<String> experiments = (ArrayList)airavataRegistry.getExperimentIdByUser(username);
-            return experiments;
+            ExperimentIDList experimentIDList = new ExperimentIDList();
+            experimentIDList.setExperimentIDList(experiments);
+//            return experiments.toArray(new String[experiments.size()]);
+            return experimentIDList;
 //            if (experiments.size() != 0){
 //                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
 //                builder.entity(experiments);
