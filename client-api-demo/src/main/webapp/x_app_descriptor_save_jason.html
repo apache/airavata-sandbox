@@ -88,10 +88,12 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
             var outputName = $("#outputName1").val();
             var outputType = $("#outputType1").val();
 
+            var applicationDescType = "gram"; // TODO : input
 
             jsonRequest["name"] = appName;
             jsonRequest["projectNumber"] = projAccNumber;
             jsonRequest["queueName"] = queueName;
+            jsonRequest["applicationDescType"] = applicationDescType;
             jsonRequest["executablePath"] = exeuctableLocation;
             jsonRequest["workingDir"] = scratchWorkingDirectory;
             jsonRequest["cpuCount"] = cpuCount;
