@@ -16,6 +16,7 @@
             <%--<h4><a href="./execute_app.jsp">Execute an Application</a></h4>--%>
             <br>
             <h4><a href="./x_host_descriptor_view.html">View Host Descriptors - Jason</a></h4>
+            <h4><a href="./x_app_descriptor_view.html">View App Descriptors - Jason</a></h4>
 
             <br/>
             <h4><a href="./x_host_descriptor_save_jason.html">Save Host Descriptor - jason</a></h4>
