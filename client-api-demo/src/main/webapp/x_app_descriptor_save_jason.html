@@ -88,10 +88,11 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
             var outputName = $("#outputName1").val();
             var outputType = $("#outputType1").val();
 
-            var applicationDescType = "gram"; // TODO : input
+            var applicationDescType = "Gram"; // TODO : input
 
             jsonRequest["name"] = appName;
             jsonRequest["projectNumber"] = projAccNumber;
+            jsonRequest["jobType"] = "single"; // TODO : input
             jsonRequest["queueName"] = queueName;
             jsonRequest["applicationDescType"] = applicationDescType;
             jsonRequest["executablePath"] = exeuctableLocation;
@@ -133,7 +134,7 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
             serviceDesc["serviceName"] = serviceName;
             serviceDesc["inputParams"] = inArray;
             serviceDesc["outputParams"] = outArray;
-            jsonRequest["serviceDesc"] = serviceDesc;
+            jsonRequest["serviceDescriptor"] = serviceDesc;
             console.log(JSON.stringify(jsonRequest));
 
             $.ajax({
