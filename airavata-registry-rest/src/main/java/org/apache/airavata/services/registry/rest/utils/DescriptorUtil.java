@@ -279,20 +279,30 @@ public class DescriptorUtil {
         if(applicationDeploymentDescription.getType() != null){
             if(applicationDeploymentDescription.getType() instanceof GramApplicationDeploymentType){
                 GramApplicationDeploymentType gramApplicationDeploymentType = (GramApplicationDeploymentType)applicationDeploymentDescription.getType();
-                applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
-                applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
-                applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
-                applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
-                applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
-                applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
+                if(gramApplicationDeploymentType != null){
+                    applicationDescriptor.setCpuCount(gramApplicationDeploymentType.getCpuCount());
+                    applicationDescriptor.setNodeCount(gramApplicationDeploymentType.getNodeCount());
+                    applicationDescriptor.setMaxMemory(gramApplicationDeploymentType.getMaxMemory());
+                    applicationDescriptor.setMinMemory(gramApplicationDeploymentType.getMinMemory());
+                    applicationDescriptor.setMaxWallTime(gramApplicationDeploymentType.getMaxWallTime());
+                    if(gramApplicationDeploymentType.getQueue() != null){
+                        applicationDescriptor.setQueueName(gramApplicationDeploymentType.getQueue().getQueueName());
+                    }
+                }
             } else if (applicationDeploymentDescription.getType() instanceof BatchApplicationDeploymentDescriptionType){
                 BatchApplicationDeploymentDescriptionType batchApplicationDeploymentDescriptionType = (BatchApplicationDeploymentDescriptionType)applicationDeploymentDescription.getType();
-                applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
-                applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
-                applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
-                applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
-                applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
-                applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+                if (batchApplicationDeploymentDescriptionType != null){
+                    applicationDescriptor.setCpuCount(batchApplicationDeploymentDescriptionType.getCpuCount());
+                    applicationDescriptor.setNodeCount(batchApplicationDeploymentDescriptionType.getNodeCount());
+                    applicationDescriptor.setMaxMemory(batchApplicationDeploymentDescriptionType.getMaxMemory());
+                    applicationDescriptor.setMinMemory(batchApplicationDeploymentDescriptionType.getMinMemory());
+                    applicationDescriptor.setMaxWallTime(batchApplicationDeploymentDescriptionType.getMaxWallTime());
+                    if (batchApplicationDeploymentDescriptionType.getQueue() != null){
+                        applicationDescriptor.setQueueName(batchApplicationDeploymentDescriptionType.getQueue().getQueueName());
+                    }
+
+                }
+
             }
         }
 
