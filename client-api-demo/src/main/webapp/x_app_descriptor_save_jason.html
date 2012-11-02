@@ -53,8 +53,6 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
     }
 
     $(document).ready(function(){
-//        var inputCount = 1;
-//        var outputCount = 1;
 
         $("p1").live("click", function(){
             inputCount++;
@@ -77,21 +75,18 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
         });
 
         $('[name="btn2"]').click(function(){
-//            alert($(this).val());
-            alert("btn2 clicked");
             var appName = $("#appName1").val();
-            var exeuctableLocation = $("#exeuctableLocation1").val();
-            var scratchWorkingDirectory = $("#scratchWorkingDirectory1").val();
             var hostName = $("#hostName1").val();
-            //alert($(this).val());
-
+            var serviceName = $("#serviceName1").val();
+            var exeuctableLocation = $("#exeuctableLocation1").val();
             var projAccNumber = $("#projAccNumber1").val();
+
+            var scratchWorkingDirectory = $("#scratchWorkingDirectory1").val();
+            var maxMemory = $("#maxMemory1").val();
             var queueName = $("#queueName1").val();
             var cpuCount = $("#cpuCount1").val();
             var nodeCount = $("#nodeCount1").val();
-            var maxMemory = $("#maxMemory1").val();
 
-            var serviceName = $("#serviceName1").val();
             var inputName1 = $("#inputName1").val();
             var inputType1 = $("#inputType1").val();
             var outputName = $("#outputName1").val();
@@ -99,6 +94,8 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
 
 
             jsonRequest["name"] = appName;
+            jsonRequest["projectNumber"] = projAccNumber;
+            jsonRequest["queueName"] = queueName;
             jsonRequest["executablePath"] = exeuctableLocation;
             jsonRequest["workingDir"] = scratchWorkingDirectory;
             jsonRequest["cpuCount"] = cpuCount;
@@ -129,10 +126,13 @@ Output Type         *: <input type="text" id="outputType1" name="outputType1" va
                 output["description"] = "empty";
                 output["name"] = "name"; //$("#outputName" + j+1).val();
                 output["type"] = "type"; //$("#outputType" + j+1).val();
+//                output["name"] = $('#outputName'.concat(j+1)).val();
+//                output["type"] = $('#outputType'.concat(j+1)).val();
                 outArray[j-1] = output;
             }
 
             var serviceDesc = {};
+            serviceDesc["serviceName"] = serviceName;
             serviceDesc["inputParams"] = inArray;
             serviceDesc["outputParams"] = outArray;
             jsonRequest["serviceDesc"] = serviceDesc;
