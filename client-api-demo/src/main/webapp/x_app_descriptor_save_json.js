@@ -33,7 +33,7 @@ $(document).ready(function(){
             "<input type=&quot;text&quot; id=&quot;outputType" + outputCount + "&quot; name=&quot;outputType" + outputCount + "&quot; size=&quot;50&quot;><br/>");
     });
 
-    $('[name="btn2"]').click(function(){
+    $('[name="saveAppButton"]').click(function(){
         var appName = $("#appName1").val();
         var hostName = $("#hostName1").val();
         var serviceName = $("#serviceName1").val();
