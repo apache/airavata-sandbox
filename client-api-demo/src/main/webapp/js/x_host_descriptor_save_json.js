@@ -30,10 +30,6 @@ $(document).ready(function(){
         var hostName = $("#hostName1").val();
         var hostAddress = $("#hostAddress1").val();
         var hostEndpoint = $("#hostEndpoint1").val();
-//        alert(hostEndpoint);
-//        alert(hostEndpoint);
-//        alert("hostEndpoint null  :" + hostEndpoint == null);
-//        alert("hostEndpoint empty :" + hostEndpoint == "");
         var gatekeeperEndpoint = $("#gatekeeperEndpoint1").val();
         var xml = $('<type:hostDescription xmlns:type="http://schemas.airavata.apache.org/gfac/type"><type:hostName>' + hostName + '</type:hostName><type:hostAddress>' + hostAddress + '</type:hostAddress></type:hostDescription>');
 
@@ -46,10 +42,6 @@ $(document).ready(function(){
             xmlString = oSerializer.serializeToString(xmlData[0]);
         }
         console.log(xmlString);
-
-//        alert(hostName);
-//        alert(hostAddress);
-//        alert(xmlString);
 
         if (("" == hostEndpoint) || ("" == gatekeeperEndpoint)) {
             alert("if Case");

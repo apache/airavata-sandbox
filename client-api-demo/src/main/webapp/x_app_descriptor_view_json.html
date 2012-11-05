@@ -6,69 +6,16 @@
 </head>
 <body>
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/x_app_descriptor_view_jason.js" ></script>
+
 <h1>Get Application Descriptor Information </h1>
 <button name="btn2">Click</button>
 
 <table id="display"></table>
 
-<textarea id="jason-text" rows="50" cols="150" placeholder="Describe yourself with 4 words...">
+<textarea id="jason-text" rows="50" cols="150" placeholder="App descriptor in Jason">
 </textarea>
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
-<script>
-
-    $(document).ready(function(){
-
-        $('[name="btn2"]').click(function(){
-
-            $.ajax({
-                beforeSend: function(x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
-                type: "GET",
-                dataType: "json",
-                contentType: "application/json;charset=utf-8",
-                url: "http://localhost:7080/airavata-registry-rest-services/registry/api/applicationdescriptor/alldescriptors",
-                /*success: function(data, status, settings) {
-                    var keys=[],result='';
-                    $.each(data.applicationDescriptors,function(i,row){
-                        $.each(row,function(key,value){
-                            if ($.inArray(key,keys)==-1) {
-                                if (key != "serviceDescriptor") {
-                                keys.push(key);
-                                }
-                            }
-                        })
-                    });
-                    result+="<thead><tr>";
-                    $.each(keys,function(i,key){
-                        result+="<th>"+key+"<\/th>";
-                    });
-                    result+="<\/tr><\/thead><tbody>";
-                    $.each(data.hostDescriptions,function(i,row){
-                        result+="<tr>";
-                        $.each(keys,function(i,key){
-                            result+="<td>"+ (row[key]||'') + "<\/td>";
-                        });
-                        result+="<\/tr>";
-                    });
-                    result+="<\/tbody>";
-                    $('#display').html(result);
-                },*/
-                error: function(ajaxrequest, ajaxOptions, thrownError){
-                    alert(thrownError);
-                }
-
-            }).done(function(msg) {
-//                        alert( "Data Saved: " + JSON.stringify(msg));
-                        $("#jason-text").html(JSON.stringify(msg));
-                    });
-
-        });
-    });
-</script>
 
 </body>
 </html>
