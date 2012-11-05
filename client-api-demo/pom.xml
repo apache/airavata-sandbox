@@ -24,7 +24,7 @@
         <jackrabbit.version>2.2.7</jackrabbit.version>
         <logback.version>0.9.20</logback.version>
         <org.slf4j.version>1.6.1</org.slf4j.version>
-        <log4j.version>1.2.16</log4j.version>
+        <log4j.version>1.2.15</log4j.version>
         <axiom.version>1.2.8</axiom.version>
         <surefire.version>2.12</surefire.version>
         <jcr.version>2.0</jcr.version>
@@ -101,6 +101,12 @@
             <groupId>org.apache.jackrabbit</groupId>
             <artifactId>jackrabbit-core</artifactId>
             <version>${jackrabbit.version}</version>
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.slf4j</groupId>-->
+                    <!--<artifactId>jcl-over-slf4j</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
         </dependency>
         <dependency>
             <groupId>org.apache.jackrabbit</groupId>
@@ -306,6 +312,11 @@
             <groupId>org.apache.airavata</groupId>
             <artifactId>airavata-workflow-model-core</artifactId>
             <version>${airavata.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.0.8</version>
         </dependency>
         <dependency>
             <groupId>org.apache.airavata</groupId>
