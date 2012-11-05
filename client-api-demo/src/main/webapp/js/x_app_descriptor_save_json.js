@@ -1,6 +1,21 @@
-var jsonRequest = {};
-var inputCount = 1;
-var outputCount = 1;
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
 function xmlToString(xml) {
     var xmlData = $(xml);
@@ -15,25 +30,31 @@ function xmlToString(xml) {
     return xmlString;
 }
 
-$(document).ready(function(){
+function initButtons() {
+	var jsonRequest = {};
+	var inputCount = 1;
+	var outputCount = 1;
 
-    $("p1").live("click", function(){
+    $("#addInputButton").live("click", function(){
         inputCount++;
-        $(this).after("<br/>Input Name         *:" +
-            "<input type=&quot;text&quot; id=&quot;inputName" + inputCount + "&quot; name=&quot;inputName" + inputCount + "&quot; size=&quot;50&quot;><br/>" +
-            "Input Type         *:" +
-            "<input type=&quot;text&quot; id=&quot;inputType" + inputCount + "&quot; name=&quot;inputType" + inputCount + "&quot; size=&quot;50&quot;><br/>");
+        $(this).before("<br>");
+        $(this).before("<label class=\"span2\">Input Name         *:" +
+                "</label><input type=\"text\" id=\"inputName" + inputCount + "\" name=\"inputName" + inputCount + "\" value=\"echo_input\">");
+
+        $(this).before("<label class=\"span2\">Input Type         *:" +
+        		"</label><input type=\"text\" id=\"inputType" + inputCount + "\" name=\"inputType" + inputCount + "\" value=\"String\">");
     });
 
-    $("p2").live("click", function(){
+    $("#addOutputButton").live("click", function(){
         outputCount++;
-        $(this).after("<br/>Output Name         *:" +
-            "<input type=&quot;text&quot; id=&quot;outputName" + outputCount + "&quot; name=&quot;outputName" + outputCount + "&quot; size=&quot;50&quot;><br/>" +
-            "Output Type         *:" +
-            "<input type=&quot;text&quot; id=&quot;outputType" + outputCount + "&quot; name=&quot;outputType" + outputCount + "&quot; size=&quot;50&quot;><br/>");
+        $(this).before("<label class=\"span2\">Output Name         *:" +
+        		"</label><input type=\"text\" id=\"outputName" + outputCount + "\" name=\"outputName" + outputCount + "\" value=\"echo_output\">");
+
+        $(this).before("<label class=\"span2\">Output Type         *:" +
+        		"</label><input type=\"text\" id=\"outputType" + outputCount + "\" name=\"outputType" + outputCount + "\" value=\"String\">");
     });
 
-    $('[name="saveAppButton"]').click(function(){
+    $("#saveAppButton").click(function(){
         var appName = $("#appName1").val();
         var hostName = $("#hostName1").val();
         var serviceName = $("#serviceName1").val();
@@ -116,4 +137,8 @@ $(document).ready(function(){
             });
 
     });
+}
+
+$(document).ready(function(){
+	initButtons();
 });
