@@ -98,6 +98,16 @@ To test
     curl -H "Accept: text/plain" -X POST -d 'nodeID=TempConvertSoap_FahrenheitToCelsius&workflowInstanceId=ff7338c9-f9ad-4d86-b486-1e8e9c3a9cc4&data=testOutputdata' http://localhost:9080/airavata-services/registry/api/update/workflownodeoutput
 
 
+****************** Experiment Data *************************************
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/experiment?experimentId=ff7338c9-f9ad-4d86-b486-1e8e9c3a9cc4'
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/experimentId/user?username=admin'
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/experiment/user?username=admin'
+    curl -H "Accept: text/plain" -X POST -d 'workflowInstanceId=ff7338c9-f9ad-4d86-b486-1e8e9c3a9cc4&nodeId=TempConvertSoap_FahrenheitToCelsius&executionStatus=STARTED' http://localhost:9080/airavata-services/registry/api/update/workflownode/status
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/workflownode/status?workflowInstanceId=ff7338c9-f9ad-4d86-b486-1e8e9c3a9cc4&nodeId=TempConvertSoap_FahrenheitToCelsius'
+    curl --request GET 'http://localhost:9080/airavata-services/registry/api/get/workflownode/starttime?workflowInstanceId=ff7338c9-f9ad-4d86-b486-1e8e9c3a9cc4&nodeId=TempConvertSoap_FahrenheitToCelsius'
+
+
+
 ********* Sample JSON message for Application and service *****************
 
 {

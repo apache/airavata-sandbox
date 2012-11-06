@@ -1,24 +1,17 @@
 package org.apache.airavata.services.registry.rest.resources;
 
-import org.apache.airavata.registry.api.exception.RegistryException;
 import org.apache.airavata.commons.gfac.type.ApplicationDeploymentDescription;
 import org.apache.airavata.commons.gfac.type.HostDescription;
 import org.apache.airavata.commons.gfac.type.ServiceDescription;
-import org.apache.airavata.persistance.registry.jpa.JPAResourceAccessor;
 import org.apache.airavata.registry.api.*;
+import org.apache.airavata.registry.api.exception.RegistryException;
 import org.apache.airavata.registry.api.exception.gateway.*;
 import org.apache.airavata.registry.api.exception.worker.*;
 import org.apache.airavata.registry.api.impl.ExperimentDataImpl;
 import org.apache.airavata.registry.api.workflow.*;
-import org.apache.airavata.schemas.gfac.*;
 import org.apache.airavata.services.registry.rest.resourcemappings.*;
-import org.apache.airavata.registry.api.AiravataExperiment;
-import org.apache.airavata.services.registry.rest.resourcemappings.WorkflowInstanceMapping;
-import org.apache.airavata.services.registry.rest.utils.ApplicationDescriptorTypes;
 import org.apache.airavata.services.registry.rest.utils.DescriptorUtil;
 import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.*;
@@ -29,24 +22,21 @@ import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 /**
  * RegistryResource for REST interface of Registry API
- * Three objects will be retrieved from the servelet context as
- * airavataRegistry, axis2Registry, dataRegistry which are
- * analogues to main API interfaces of Airavata
+ *
  */
 @Path("/registry/api")
 //public class RegistryResource implements ConfigurationRegistryService,
 //        ProjectsRegistryService, ProvenanceRegistryService, UserWorkflowRegistryService,
 //        PublishedWorkflowRegistryService, DescriptorRegistryService{
 public class RegistryResource {
-    private final static Logger logger = LoggerFactory.getLogger(RegistryResource.class);
-    private JPAResourceAccessor jpa;
-    private boolean active = false;
-    private static final String DEFAULT_PROJECT_NAME = "default";
     private AiravataRegistry2 airavataRegistry;
 
     @Context
@@ -54,12 +44,6 @@ public class RegistryResource {
 
     public String getVersion() {
         return null;
-    }
-
-    protected void initialize() {
-        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
-        jpa = new JPAResourceAccessor(airavataRegistry);
-        active = true;
     }
 
     /**
@@ -2091,175 +2075,635 @@ public class RegistryResource {
     @GET
     @Path("get/experiment")
     @Produces(MediaType.APPLICATION_XML)
-    public ExperimentDataImpl getExperiment(@QueryParam("experimentId") String experimentId) {
+    public Response getExperiment(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             ExperimentDataImpl experimentData = (ExperimentDataImpl)airavataRegistry.getExperiment(experimentId);
-            return experimentData;
-//            if (experimentData != null){
-//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-//                builder.entity(experimentData);
-//                return builder.build();
-//            } else {
-//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-//                return builder.build();
-//            }
+            if (experimentData != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(experimentData);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
         } catch (RegistryException e) {
-//            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
         }
     }
 
     @GET
-    @Path("get/experimentID/user")
+    @Path("get/experimentId/user")
     @Produces(MediaType.APPLICATION_XML)
-    public ExperimentIDList getExperimentIdByUser(@QueryParam("username") String username) {
+    public Response getExperimentIdByUser(@QueryParam("username") String username) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             ArrayList<String> experiments = (ArrayList)airavataRegistry.getExperimentIdByUser(username);
             ExperimentIDList experimentIDList = new ExperimentIDList();
             experimentIDList.setExperimentIDList(experiments);
-//            return experiments.toArray(new String[experiments.size()]);
-            return experimentIDList;
-//            if (experiments.size() != 0){
-//                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-//                builder.entity(experiments);
-//                return builder.build();
-//            } else {
-//                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-//                return builder.build();
-//            }
+
+            if (experiments.size() != 0){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(experimentIDList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
         } catch (RegistryException e) {
-            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
         }
     }
 
-    public Response getExperimentByUser(String s) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @GET
+    @Path("get/experiment/user")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getExperimentByUser(@QueryParam("username") String username) throws RegistryException {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            List<ExperimentData> experimentDataList = airavataRegistry.getExperimentByUser(username);
+            ExperimentDataList experimentData = new ExperimentDataList();
+            List<ExperimentDataImpl> experimentDatas = new ArrayList<ExperimentDataImpl>();
+            for (int i = 0; i < experimentDataList.size(); i ++){
+                experimentDatas.add((ExperimentDataImpl)experimentDataList.get(i));
+            }
+            experimentData.setExperimentDataList(experimentDatas);
+            if (experimentDataList.size() != 0) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(experimentData);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    public Response getExperimentByUser(String s, int i, int i1) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @POST
+    @Path("update/workflownode/status")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateWorkflowNodeStatus(@FormParam("workflowInstanceId") String workflowInstanceId,
+                                             @FormParam("nodeId") String nodeId,
+                                             @FormParam("executionStatus") String executionStatus) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            WorkflowInstanceStatus.ExecutionStatus status = WorkflowInstanceStatus.ExecutionStatus.valueOf(executionStatus);
+            airavataRegistry.updateWorkflowNodeStatus(workflowInstanceId, nodeId, status);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    public Response updateWorkflowNodeStatus(WorkflowInstanceNodeStatus workflowInstanceNodeStatus) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+
+    @GET
+    @Path("get/workflownode/status")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getWorkflowNodeStatus(@QueryParam("workflowInstanceId") String workflowInstanceId,
+                                          @QueryParam("nodeId") String nodeId){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            WorkflowInstanceData workflowInstanceData = airavataRegistry.getWorkflowInstanceData(workflowInstanceId);
+            WorkflowInstanceNode workflowInstanceNode = workflowInstanceData.getNodeData(nodeId).getWorkflowInstanceNode();
+            WorkflowInstanceNodeStatus workflowNodeStatus = airavataRegistry.getWorkflowNodeStatus(workflowInstanceNode);
+            if(workflowNodeStatus != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowNodeStatus);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    public Response updateWorkflowNodeStatus(String s, String s1, String s2) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @GET
+    @Path("get/workflownode/starttime")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getWorkflowNodeStartTime(@QueryParam("workflowInstanceId") String workflowInstanceId,
+                                             @QueryParam("nodeId") String nodeId) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            WorkflowInstanceData workflowInstanceData = airavataRegistry.getWorkflowInstanceData(workflowInstanceId);
+            WorkflowInstanceNode workflowInstanceNode = workflowInstanceData.getNodeData(nodeId).getWorkflowInstanceNode();
+            Date workflowNodeStartTime = airavataRegistry.getWorkflowNodeStartTime(workflowInstanceNode);
+            if(workflowNodeStartTime != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowNodeStartTime.toString());
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    public Response updateWorkflowNodeStatus(String s, String s1) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @GET
+    @Path("get/workflow/starttime")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getWorkflowStartTime(@QueryParam("workflowInstanceId") String workflowInstanceId) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            WorkflowInstanceData workflowInstanceData = airavataRegistry.getWorkflowInstanceData(workflowInstanceId);
+            WorkflowInstance workflowInstance = workflowInstanceData.getWorkflowInstance();
+            Date workflowStartTime = airavataRegistry.getWorkflowStartTime(workflowInstance);
+            if(workflowStartTime != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowStartTime.toString());
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    public Response getWorkflowNodeStatus(String s, String s1) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @GET
+    @Path("update/workflownode/gramdata")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateWorkflowNodeGramData(WorkflowNodeGramData workflowNodeGramData) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            airavataRegistry.updateWorkflowNodeGramData(workflowNodeGramData);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
+
     }
 
-    public Response getWorkflowNodeStartTime(String s, String s1) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @GET
+    @Path("get/workflowinstancedata")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getWorkflowInstanceData(@QueryParam("workflowInstanceId") String workflowInstanceId) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            WorkflowInstanceData workflowInstanceData = airavataRegistry.getWorkflowInstanceData(workflowInstanceId);
+            if (workflowInstanceData != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowInstanceData);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            return builder.build();
+        }
     }
 
-    public Response getWorkflowStartTime(String s) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @GET
+    @Path("workflowinstance/exist")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response isWorkflowInstanceNodePresent(@QueryParam("workflowInstanceId") String workflowInstanceId,
+                                                  @QueryParam("nodeId") String nodeId){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            boolean workflowInstanceNodePresent = airavataRegistry.isWorkflowInstanceNodePresent(workflowInstanceId, nodeId);
+            if (workflowInstanceNodePresent){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity("True");
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("False");
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
+
     }
 
-    public Response updateWorkflowNodeGramData(WorkflowNodeGramData workflowNodeGramData) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @GET
+    @Path("workflowinstance/nodeData")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getWorkflowInstanceNodeData(@QueryParam("workflowInstanceId") String workflowInstanceId,
+                                                @QueryParam("nodeId") String nodeId) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            WorkflowInstanceNodeData workflowInstanceNodeData = airavataRegistry.getWorkflowInstanceNodeData(workflowInstanceId, nodeId);
+            if (workflowInstanceNodeData != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowInstanceNodeData);
+                return builder.build();
+            }  else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
+
     }
 
-    public Response getWorkflowInstanceData(String s) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @POST
+    @Path("add/workflowinstance")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response addWorkflowInstance(@FormParam("experimentId") String experimentId,
+                                        @FormParam("workflowInstanceId") String workflowInstanceId,
+                                        @FormParam("templateName") String templateName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            airavataRegistry.addWorkflowInstance(experimentId, workflowInstanceId, templateName);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response isWorkflowInstanceNodePresent(String s, String s1) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @POST
+    @Path("update/workflownodetype")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateWorkflowNodeType(@FormParam("workflowInstanceId") String workflowInstanceId,
+                                           @FormParam("nodeId") String nodeId,
+                                           @FormParam("nodeType") String nodeType) throws RegistryException {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            WorkflowInstanceNodeData workflowInstanceNodeData = airavataRegistry.getWorkflowInstanceData(workflowInstanceId).getNodeData(nodeId);
+            WorkflowInstanceNode workflowInstanceNode = workflowInstanceNodeData.getWorkflowInstanceNode();
+            WorkflowNodeType workflowNodeType = new WorkflowNodeType();
+
+            //currently from API only service node is being used
+            workflowNodeType.setNodeType(WorkflowNodeType.WorkflowNode.SERVICENODE);
+//            workflowNodeType.setNodeType(nodeType);
+            airavataRegistry.updateWorkflowNodeType(workflowInstanceNode, workflowNodeType);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response isWorkflowInstanceNodePresent(String s, String s1, boolean b) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+
+    @POST
+    @Path("add/workflowinstancenode")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response addWorkflowInstanceNode(@FormParam("workflowInstanceId") String workflowInstanceId,
+                                            @FormParam("nodeId") String nodeId) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            airavataRegistry.addWorkflowInstanceNode(workflowInstanceId, nodeId);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response getWorkflowInstanceNodeData(String s, String s1) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    /**---------------------------------User Workflow Registry----------------------------------**/
+
+    @GET
+    @Path("workflow/exist")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response isWorkflowExists(@QueryParam("workflowName") String workflowName){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            boolean workflowExists = airavataRegistry.isWorkflowExists(workflowName);
+            if (workflowExists){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity("True");
+                return builder.build();
+            }else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("False");
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response addWorkflowInstance(String s, String s1, String s2) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+
+    @POST
+    @Path("add/workflow")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response addWorkflow(@FormParam("workflowName") String workflowName,
+                                @FormParam("workflowGraphXml") String workflowGraphXml) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            airavataRegistry.addWorkflow(workflowName, workflowGraphXml);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
+        } catch (UserWorkflowAlreadyExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response updateWorkflowNodeType(String s, String s1, String s2) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @POST
+    @Path("update/workflow")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateWorkflow(@FormParam("workflowName") String workflowName,
+                                   @FormParam("workflowGraphXml") String workflowGraphXml){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            airavataRegistry.updateWorkflow(workflowName, workflowGraphXml);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
+        } catch (UserWorkflowAlreadyExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response addWorkflowInstanceNode(String s, String s1) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @GET
+    @Path("get/workflowgraph")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getWorkflowGraphXML(@QueryParam("workflowName") String workflowName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            String workflowGraphXML = airavataRegistry.getWorkflowGraphXML(workflowName);
+            if (workflowGraphXML != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowGraphXML);
+                return builder.build();
+            }else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (UserWorkflowDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public boolean isActive() {
-        return active;
+    @GET
+    @Path("get/workflows")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getWorkflows()  {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            Map<String, String> workflows = airavataRegistry.getWorkflows();
+            WorkflowList workflowList = new WorkflowList();
+            List<Workflow> workflowsModels = new ArrayList<Workflow>();
+            for (String workflowName : workflows.keySet()){
+                Workflow workflow = new Workflow();
+                workflow.setWorkflowName(workflowName);
+                workflow.setWorkflowGraph(workflows.get(workflowName));
+                workflowsModels.add(workflow);
+            }
+            workflowList.setWorkflowList(workflowsModels);
+            if(workflows.size() != 0 ){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response isWorkflowExists(String s) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+
+    @GET
+    @Path("remove/workflow")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response removeWorkflow(@QueryParam("workflowName") String workflowName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            airavataRegistry.removeWorkflow(workflowName);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
+        } catch (UserWorkflowDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response addWorkflow(String s, String s1) throws UserWorkflowAlreadyExistsException, RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    /**---------------------------------Published Workflow Registry----------------------------------**/
+
+    @GET
+    @Path("publishwf/exist")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response isPublishedWorkflowExists(@QueryParam("workflowname") String workflowname) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            boolean workflowExists = airavataRegistry.isPublishedWorkflowExists(workflowname);
+            if (workflowExists){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity("True");
+                return builder.build();
+            }else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("False");
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response updateWorkflow(String s, String s1) throws UserWorkflowDoesNotExistsException, RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @POST
+    @Path("publish/workflow")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response publishWorkflow(@FormParam("workflowName") String workflowName,
+                                    @FormParam("publishWorkflowName") String publishWorkflowName)  {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            airavataRegistry.publishWorkflow(workflowName, publishWorkflowName);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
+        } catch (UserWorkflowDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        } catch (PublishedWorkflowAlreadyExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response getWorkflowGraphXML(String s) throws UserWorkflowDoesNotExistsException, RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @POST
+    @Path("publish/default/workflow")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response publishWorkflow(@FormParam("workflowName") String workflowName){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            airavataRegistry.publishWorkflow(workflowName);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
+        } catch (UserWorkflowDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        } catch (PublishedWorkflowAlreadyExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response getWorkflows() throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @GET
+    @Path("get/publishworkflowgraph")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getPublishedWorkflowGraphXML(@QueryParam("workflowName") String workflowName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            String publishedWorkflowGraphXML = airavataRegistry.getPublishedWorkflowGraphXML(workflowName);
+            if (publishedWorkflowGraphXML !=null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(publishedWorkflowGraphXML);
+                return builder.build();
+            }else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (PublishedWorkflowDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response getWorkflowMetadata(String s) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @GET
+    @Path("get/publishworkflownames")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getPublishedWorkflowNames() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            List<String> publishedWorkflowNames = airavataRegistry.getPublishedWorkflowNames();
+            PublishWorkflowNamesList publishWorkflowNamesList = new PublishWorkflowNamesList();
+            publishWorkflowNamesList.setPublishWorkflowNames(publishedWorkflowNames);
+            if (publishedWorkflowNames.size() != 0){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(publishWorkflowNamesList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response removeWorkflow(String s) throws UserWorkflowDoesNotExistsException, RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @GET
+    @Path("get/publishworkflows")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getPublishedWorkflows() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            Map<String, String> publishedWorkflows = airavataRegistry.getPublishedWorkflows();
+            WorkflowList workflowList = new WorkflowList();
+            List<Workflow> workflowsModels = new ArrayList<Workflow>();
+            for (String workflowName : publishedWorkflows.keySet()){
+                Workflow workflow = new Workflow();
+                workflow.setWorkflowName(workflowName);
+                workflow.setWorkflowGraph(publishedWorkflows.get(workflowName));
+                workflowsModels.add(workflow);
+            }
+            workflowList.setWorkflowList(workflowsModels);
+            if(publishedWorkflows.size() != 0 ){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(workflowList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                return builder.build();
+            }
+
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 
-    public Response isPublishedWorkflowExists(String s) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public Response publishWorkflow(String s, String s1) throws PublishedWorkflowAlreadyExistsException, UserWorkflowDoesNotExistsException, RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public Response publishWorkflow(String s) throws PublishedWorkflowAlreadyExistsException, UserWorkflowDoesNotExistsException, RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public Response getPublishedWorkflowGraphXML(String s) throws PublishedWorkflowDoesNotExistsException, RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public Response getPublishedWorkflowNames() throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public Response getPublishedWorkflows() throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public Response getPublishedWorkflowMetadata(String s) throws RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public Response removePublishedWorkflow(String s) throws PublishedWorkflowDoesNotExistsException, RegistryException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    @GET
+    @Path("remove/publishworkflow")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response removePublishedWorkflow(@QueryParam("workflowName") String workflowName) {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            airavataRegistry.removePublishedWorkflow(workflowName);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            return builder.build();
+        } catch (PublishedWorkflowDoesNotExistsException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
     }
 }
+
 
