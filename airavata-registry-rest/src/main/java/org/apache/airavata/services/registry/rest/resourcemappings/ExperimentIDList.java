@@ -21,13 +21,11 @@
 
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlRootElement(name = "experiments")
 public class ExperimentIDList {
-    @XmlElement(name = "experimentId")
     List<String> experimentIDList;
 
     public ExperimentIDList() {
