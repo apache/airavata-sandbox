@@ -1258,26 +1258,8 @@ public class RegistryResource {
         try {
             WorkspaceProject workspaceProject = airavataRegistry.getWorkspaceProject(projectName);
             if (workspaceProject != null) {
-                WorkspaceProjectMapping workspaceProjectMapping = new WorkspaceProjectMapping(workspaceProject.getProjectName());
-
-                List<AiravataExperiment> airavataExperimentList = workspaceProject.getProjectsRegistry().getExperiments(workspaceProject.getProjectName());
-                Experiment[] experiments = new Experiment[airavataExperimentList.size()];
-                if (airavataExperimentList.size() != 0) {
-                    for (int i = 0; i < airavataExperimentList.size(); i++) {
-                        Experiment experiment = new Experiment();
-                        AiravataExperiment airavataExperiment = airavataExperimentList.get(i);
-                        experiment.setExperimentId(airavataExperiment.getExperimentId());
-                        experiment.setGatewayName(airavataExperiment.getGateway().getGatewayName());
-                        experiment.setProject(airavataExperiment.getProject().getProjectName());
-                        experiment.setUser(airavataExperiment.getUser().getUserName());
-                        experiment.setDate(airavataExperiment.getSubmittedDate());
-                        experiments[i] = experiment;
-                    }
-                    workspaceProjectMapping.setExperimentsList(experiments);
-                }
-
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(workspaceProjectMapping);
+                builder.entity(workspaceProject);
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
@@ -1300,29 +1282,11 @@ public class RegistryResource {
         try {
             List<WorkspaceProject> workspaceProjects = airavataRegistry.getWorkspaceProjects();
             WorkspaceProjectList workspaceProjectList = new WorkspaceProjectList();
-            WorkspaceProjectMapping[] workspaceProjectSet = new WorkspaceProjectMapping[workspaceProjects.size()];
+            WorkspaceProject[] workspaceProjectSet = new WorkspaceProject[workspaceProjects.size()];
             for (int i = 0; i < workspaceProjects.size(); i++) {
-                WorkspaceProject workspaceProject = workspaceProjects.get(i);
-                WorkspaceProjectMapping workspaceProjectMapping = new WorkspaceProjectMapping(workspaceProject.getProjectName());
-
-                List<AiravataExperiment> airavataExperimentList = workspaceProject.getProjectsRegistry().getExperiments(workspaceProject.getProjectName());
-                Experiment[] experiments = new Experiment[airavataExperimentList.size()];
-                if (airavataExperimentList.size() != 0) {
-                    for (int j = 0; j < airavataExperimentList.size(); j++) {
-                        Experiment experiment = new Experiment();
-                        AiravataExperiment airavataExperiment = airavataExperimentList.get(j);
-                        experiment.setExperimentId(airavataExperiment.getExperimentId());
-                        experiment.setGatewayName(airavataExperiment.getGateway().getGatewayName());
-                        experiment.setProject(airavataExperiment.getProject().getProjectName());
-                        experiment.setUser(airavataExperiment.getUser().getUserName());
-                        experiment.setDate(airavataExperiment.getSubmittedDate());
-                        experiments[j] = experiment;
-                    }
-                    workspaceProjectMapping.setExperimentsList(experiments);
-                }
-                workspaceProjectSet[i] = workspaceProjectMapping;
+                workspaceProjectSet[i] = workspaceProjects.get(i);
             }
-            workspaceProjectList.setWorkspaceProjectMappings(workspaceProjectSet);
+            workspaceProjectList.setWorkspaceProjects(workspaceProjectSet);
             if (workspaceProjects.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(workspaceProjectList);
@@ -1364,16 +1328,9 @@ public class RegistryResource {
         try {
             List<AiravataExperiment> airavataExperimentList = airavataRegistry.getExperiments();
             ExperimentList experimentList = new ExperimentList();
-            Experiment[] experiments = new Experiment[airavataExperimentList.size()];
+            AiravataExperiment[] experiments = new AiravataExperiment[airavataExperimentList.size()];
             for (int i = 0; i < airavataExperimentList.size(); i++) {
-                AiravataExperiment airavataExperiment = airavataExperimentList.get(i);
-                Experiment experiment = new Experiment();
-                experiment.setExperimentId(airavataExperiment.getExperimentId());
-                experiment.setGatewayName(airavataExperiment.getGateway().getGatewayName());
-                experiment.setProject(airavataExperiment.getProject().getProjectName());
-                experiment.setUser(airavataExperiment.getUser().getUserName());
-                experiment.setDate(airavataExperiment.getSubmittedDate());
-                experiments[i] = experiment;
+                experiments[i] = airavataExperimentList.get(i);
             }
             experimentList.setExperiments(experiments);
             if (airavataExperimentList.size() != 0) {
@@ -1398,16 +1355,9 @@ public class RegistryResource {
         try {
             List<AiravataExperiment> airavataExperimentList = airavataRegistry.getExperiments(projectName);
             ExperimentList experimentList = new ExperimentList();
-            Experiment[] experiments = new Experiment[airavataExperimentList.size()];
+            AiravataExperiment[] experiments = new AiravataExperiment[airavataExperimentList.size()];
             for (int i = 0; i < airavataExperimentList.size(); i++) {
-                AiravataExperiment airavataExperiment = airavataExperimentList.get(i);
-                Experiment experiment = new Experiment();
-                experiment.setExperimentId(airavataExperiment.getExperimentId());
-                experiment.setGatewayName(airavataExperiment.getGateway().getGatewayName());
-                experiment.setProject(airavataExperiment.getProject().getProjectName());
-                experiment.setUser(airavataExperiment.getUser().getUserName());
-                experiment.setDate(airavataExperiment.getSubmittedDate());
-                experiments[i] = experiment;
+                experiments[i] = airavataExperimentList.get(i);
             }
             experimentList.setExperiments(experiments);
             if (airavataExperimentList.size() != 0) {
@@ -1437,16 +1387,9 @@ public class RegistryResource {
             Date formattedToDate = dateFormat.parse(toDate);
             List<AiravataExperiment> airavataExperimentList = airavataRegistry.getExperiments(formattedFromDate, formattedToDate);
             ExperimentList experimentList = new ExperimentList();
-            Experiment[] experiments = new Experiment[airavataExperimentList.size()];
+            AiravataExperiment[] experiments = new AiravataExperiment[airavataExperimentList.size()];
             for (int i = 0; i < airavataExperimentList.size(); i++) {
-                AiravataExperiment airavataExperiment = airavataExperimentList.get(i);
-                Experiment experiment = new Experiment();
-                experiment.setExperimentId(airavataExperiment.getExperimentId());
-                experiment.setGatewayName(airavataExperiment.getGateway().getGatewayName());
-                experiment.setProject(airavataExperiment.getProject().getProjectName());
-                experiment.setUser(airavataExperiment.getUser().getUserName());
-                experiment.setDate(airavataExperiment.getSubmittedDate());
-                experiments[i] = experiment;
+                experiments[i] = airavataExperimentList.get(i);
             }
             experimentList.setExperiments(experiments);
             if (airavataExperimentList.size() != 0) {
@@ -1480,16 +1423,9 @@ public class RegistryResource {
             Date formattedToDate = dateFormat.parse(toDate);
             List<AiravataExperiment> airavataExperimentList = airavataRegistry.getExperiments(projectName, formattedFromDate, formattedToDate);
             ExperimentList experimentList = new ExperimentList();
-            Experiment[] experiments = new Experiment[airavataExperimentList.size()];
+            AiravataExperiment[] experiments = new AiravataExperiment[airavataExperimentList.size()];
             for (int i = 0; i < airavataExperimentList.size(); i++) {
-                AiravataExperiment airavataExperiment = airavataExperimentList.get(i);
-                Experiment experiment = new Experiment();
-                experiment.setExperimentId(airavataExperiment.getExperimentId());
-                experiment.setGatewayName(airavataExperiment.getGateway().getGatewayName());
-                experiment.setProject(airavataExperiment.getProject().getProjectName());
-                experiment.setUser(airavataExperiment.getUser().getUserName());
-                experiment.setDate(airavataExperiment.getSubmittedDate());
-                experiments[i] = experiment;
+                experiments[i] = airavataExperimentList.get(i);
             }
             experimentList.setExperiments(experiments);
             if (airavataExperimentList.size() != 0) {
@@ -1696,6 +1632,10 @@ public class RegistryResource {
         }
     }
 
+    /**
+     * --------------------------------- Provenance Registry ----------------------------------*
+     */
+
     @GET
     @Path("get/workflowtemplatename")
     @Produces(MediaType.TEXT_PLAIN)
@@ -1741,16 +1681,11 @@ public class RegistryResource {
         try {
             List<WorkflowInstance> experimentWorkflowInstances = airavataRegistry.getExperimentWorkflowInstances(experimentId);
             WorkflowInstancesList workflowInstancesList = new WorkflowInstancesList();
-            WorkflowInstanceMapping[] workflowInstanceMappings = new WorkflowInstanceMapping[experimentWorkflowInstances.size()];
+            WorkflowInstance[] workflowInstanceMappings = new WorkflowInstance[experimentWorkflowInstances.size()];
             for (int i = 0; i < experimentWorkflowInstances.size(); i++) {
-                WorkflowInstanceMapping workflowInstanceMapping = new WorkflowInstanceMapping();
-                WorkflowInstance workflowInstance = experimentWorkflowInstances.get(i);
-                workflowInstanceMapping.setExperimentId(workflowInstance.getExperimentId());
-                workflowInstanceMapping.setTemplateName(workflowInstance.getTemplateName());
-                workflowInstanceMapping.setWorkflowInstanceId(workflowInstance.getWorkflowInstanceId());
-                workflowInstanceMappings[i] = workflowInstanceMapping;
+                workflowInstanceMappings[i] = experimentWorkflowInstances.get(i);
             }
-            workflowInstancesList.setWorkflowInstanceMappings(workflowInstanceMappings);
+            workflowInstancesList.setWorkflowInstances(workflowInstanceMappings);
             if (experimentWorkflowInstances.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(workflowInstancesList);
@@ -1859,20 +1794,9 @@ public class RegistryResource {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             WorkflowInstanceStatus workflowInstanceStatus = airavataRegistry.getWorkflowInstanceStatus(instanceId);
-            WorkflowInstanceStatusMapping workflowInstanceStatusMapping = new WorkflowInstanceStatusMapping();
-            workflowInstanceStatusMapping.setExecutionStatus(workflowInstanceStatus.getExecutionStatus().name());
-            workflowInstanceStatusMapping.setStatusUpdateTime(workflowInstanceStatus.getStatusUpdateTime());
-            WorkflowInstance workflowInstance = workflowInstanceStatus.getWorkflowInstance();
-            WorkflowInstanceMapping workflowInstanceMapping = new WorkflowInstanceMapping();
-            if (workflowInstance != null) {
-                workflowInstanceStatusMapping.setExperimentId(workflowInstance.getExperimentId());
-                workflowInstanceStatusMapping.setTemplateName(workflowInstance.getTemplateName());
-                workflowInstanceStatusMapping.setWorkflowInstanceId(workflowInstance.getWorkflowInstanceId());
-            }
-//            workflowInstanceStatusMapping.setWorkflowInstanceMapping(workflowInstanceMapping);
-            if (workflowInstanceStatusMapping != null) {
+            if (workflowInstanceStatus != null) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity(workflowInstanceStatusMapping);
+                builder.entity(workflowInstanceStatus);
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
@@ -1946,7 +1870,7 @@ public class RegistryResource {
                 workflowNodeIODataMapping.setWorkflowNodeType(nodeIOData.getNodeType().toString());
                 workflowNodeIODataCollection[i] = workflowNodeIODataMapping;
             }
-            workflowNodeIOData.setWorkflowNodeIODataMappings(workflowNodeIODataCollection);
+            workflowNodeIOData.setWorkflowNodeIOData(workflowNodeIODataCollection);
             if (workflowNodeIODataList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(workflowNodeIOData);
@@ -1983,7 +1907,7 @@ public class RegistryResource {
                 workflowNodeIODataMapping.setWorkflowNodeType(nodeIOData.getNodeType().toString());
                 workflowNodeIODataCollection[i] = workflowNodeIODataMapping;
             }
-            workflowNodeIOData.setWorkflowNodeIODataMappings(workflowNodeIODataCollection);
+            workflowNodeIOData.setWorkflowNodeIOData(workflowNodeIODataCollection);
             if (workflowNodeIODataList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(workflowNodeIOData);
@@ -2020,7 +1944,7 @@ public class RegistryResource {
                 workflowNodeIODataMapping.setWorkflowNodeType(nodeIOData.getNodeType().toString());
                 workflowNodeIODataCollection[i] = workflowNodeIODataMapping;
             }
-            workflowNodeIOData.setWorkflowNodeIODataMappings(workflowNodeIODataCollection);
+            workflowNodeIOData.setWorkflowNodeIOData(workflowNodeIODataCollection);
             if (workflowNodeIODataList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(workflowNodeIOData);
@@ -2056,7 +1980,7 @@ public class RegistryResource {
                 workflowNodeIODataMapping.setWorkflowNodeType(nodeIOData.getNodeType().toString());
                 workflowNodeIODataCollection[i] = workflowNodeIODataMapping;
             }
-            workflowNodeIOData.setWorkflowNodeIODataMappings(workflowNodeIODataCollection);
+            workflowNodeIOData.setWorkflowNodeIOData(workflowNodeIODataCollection);
             if (workflowNodeIODataList.size() != 0) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(workflowNodeIOData);

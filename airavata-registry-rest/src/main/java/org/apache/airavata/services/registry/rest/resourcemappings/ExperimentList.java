@@ -1,19 +1,21 @@
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
+import org.apache.airavata.registry.api.AiravataExperiment;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ExperimentList {
-    private Experiment[] experiments = null;
+    private AiravataExperiment[] experiments = null;
 
     public ExperimentList() {
     }
 
-    public Experiment[] getExperiments() {
+    public AiravataExperiment[] getExperiments() {
         return experiments;
     }
 
-    public void setExperiments(Experiment[] experiments) {
+    public void setExperiments(AiravataExperiment[] experiments) {
         this.experiments = experiments;
     }
 }

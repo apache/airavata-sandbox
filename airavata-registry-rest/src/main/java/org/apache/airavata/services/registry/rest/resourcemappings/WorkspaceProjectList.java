@@ -1,20 +1,22 @@
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
 
+import org.apache.airavata.registry.api.WorkspaceProject;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class WorkspaceProjectList {
-    private WorkspaceProjectMapping[] workspaceProjectMappings = null;
+    private WorkspaceProject[] workspaceProjects = null;
 
     public WorkspaceProjectList() {
     }
 
-    public WorkspaceProjectMapping[] getWorkspaceProjectMappings() {
-        return workspaceProjectMappings;
+    public WorkspaceProject[] getWorkspaceProjects() {
+        return workspaceProjects;
     }
 
-    public void setWorkspaceProjectMappings(WorkspaceProjectMapping[] workspaceProjectMappings) {
-        this.workspaceProjectMappings = workspaceProjectMappings;
+    public void setWorkspaceProjects(WorkspaceProject[] workspaceProjects) {
+        this.workspaceProjects = workspaceProjects;
     }
 }
