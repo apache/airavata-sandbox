@@ -1520,6 +1520,10 @@ public class RegistryResource {
         }
     }
 
+    /**
+     * --------------------------------- Provenance Registry ----------------------------------*
+     */
+
     @POST
     @Path("update/experiment")
     @Produces(MediaType.TEXT_PLAIN)
