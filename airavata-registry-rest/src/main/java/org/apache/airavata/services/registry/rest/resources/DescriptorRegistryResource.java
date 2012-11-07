@@ -38,6 +38,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -63,14 +64,16 @@ public class DescriptorRegistryResource {
             state = airavataRegistry.isHostDescriptorExists(descriptorName);
             if (state) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("True");
+                builder.entity("Host Descriptor exists...");
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Host Descriptor does not exist..");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -79,18 +82,21 @@ public class DescriptorRegistryResource {
     @Path("hostdescriptor/save")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response addJSONHostDescriptor(HostDescriptor host) {
+    public Response addHostDescriptor(HostDescriptor host) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             HostDescription hostDescription = DescriptorUtil.createHostDescription(host);
             airavataRegistry.addHostDescriptor(hostDescription);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Host descriptor saved successfully...");
             return builder.build();
         } catch (DescriptorAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -104,13 +110,16 @@ public class DescriptorRegistryResource {
         try {
             HostDescription hostDescription = DescriptorUtil.createHostDescription(host);
             airavataRegistry.updateHostDescriptor(hostDescription);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Host descriptor updated successfully...");
             return builder.build();
         } catch (DescriptorDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -130,10 +139,12 @@ public class DescriptorRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+                builder.entity("Host Descriptor does not exist...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
 
@@ -147,12 +158,15 @@ public class DescriptorRegistryResource {
         try {
             airavataRegistry.removeHostDescriptor(hostName);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            builder.entity("Host descriptor deleted successfully...");
             return builder.build();
         } catch (DescriptorDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -178,10 +192,41 @@ public class DescriptorRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No host descriptors available...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("get/hostdescriptor/names")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getHostDescriptorNames() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try {
+            List<HostDescription> hostDescriptionList = airavataRegistry.getHostDescriptors();
+            List<String> hostDescriptorNames = new ArrayList<String>();
+            DescriptorNameList descriptorNameList = new DescriptorNameList();
+            for (int i = 0; i < hostDescriptionList.size(); i++) {
+                hostDescriptorNames.add(hostDescriptionList.get(i).getType().getHostName());
+            }
+            descriptorNameList.setDescriptorNames(hostDescriptorNames);
+            if (hostDescriptionList.size() != 0) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(descriptorNameList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No host descriptors available...");
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -200,10 +245,12 @@ public class DescriptorRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Service descriptor does not exist...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -217,13 +264,16 @@ public class DescriptorRegistryResource {
         try {
             ServiceDescription serviceDescription = DescriptorUtil.createServiceDescription(service);
             airavataRegistry.addServiceDescriptor(serviceDescription);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Service descriptor saved successfully...");
             return builder.build();
         } catch (DescriptorAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -237,13 +287,16 @@ public class DescriptorRegistryResource {
         try {
             ServiceDescription serviceDescription = DescriptorUtil.createServiceDescription(service);
             airavataRegistry.updateServiceDescriptor(serviceDescription);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Service descriptor updated successfully...");
             return builder.build();
         } catch (DescriptorAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -263,10 +316,12 @@ public class DescriptorRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+                builder.entity("No service descriptor available with given service name...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -278,13 +333,16 @@ public class DescriptorRegistryResource {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             airavataRegistry.removeServiceDescriptor(serviceName);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Service descriptor deleted successfully...");
             return builder.build();
         } catch (DescriptorDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -310,10 +368,12 @@ public class DescriptorRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No service descriptors available...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -335,10 +395,12 @@ public class DescriptorRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Application descriptor does not exist...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -348,12 +410,13 @@ public class DescriptorRegistryResource {
     @Path("applicationdescriptor/build/save")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response addJSONApplicationDescriptor(ApplicationDescriptor applicationDescriptor) {
+    public Response addApplicationDescriptor(ApplicationDescriptor applicationDescriptor) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             String hostdescName = applicationDescriptor.getHostdescName();
             if (!airavataRegistry.isHostDescriptorExists(hostdescName)) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                builder.entity("Given host does not exist...");
                 return builder.build();
             }
             ApplicationDeploymentDescription applicationDeploymentDescription = DescriptorUtil.createApplicationDescription(applicationDescriptor);
@@ -376,13 +439,16 @@ public class DescriptorRegistryResource {
             airavataRegistry.addApplicationDescriptor(serviceName, hostdescName, applicationDeploymentDescription);
 
 
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Application descriptor saved successfully...");
             return builder.build();
         } catch (DescriptorAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -398,6 +464,7 @@ public class DescriptorRegistryResource {
             String hostdescName = applicationDescriptor.getHostdescName();
             if (!airavataRegistry.isHostDescriptorExists(hostdescName)) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                builder.entity("Host does not available...");
                 return builder.build();
             }
             ApplicationDeploymentDescription applicationDeploymentDescription = DescriptorUtil.createApplicationDescription(applicationDescriptor);
@@ -421,13 +488,16 @@ public class DescriptorRegistryResource {
                 serviceName = applicationDescriptor.getName();
             }
             airavataRegistry.updateApplicationDescriptor(serviceName, hostdescName, applicationDeploymentDescription);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Application descriptor updated successfully...");
             return builder.build();
         } catch (DescriptorAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -454,10 +524,12 @@ public class DescriptorRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+                builder.entity("Application descriptor does not exist...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -482,10 +554,12 @@ public class DescriptorRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.BAD_REQUEST);
+                builder.entity("Application descriptor does not exist...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -519,13 +593,16 @@ public class DescriptorRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Application descriptor does not exist...");
                 return builder.build();
             }
         } catch (MalformedDescriptorException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -561,13 +638,50 @@ public class DescriptorRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No application descriptors available...");
                 return builder.build();
             }
         } catch (MalformedDescriptorException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
+    }
+
+    @GET
+    @Path("applicationdescriptor/names")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Response getApplicationDescriptorNames() {
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try {
+            Map<String[], ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = airavataRegistry.getApplicationDescriptors();
+            DescriptorNameList descriptorNameList = new DescriptorNameList();
+            List<String> appDesNames = new ArrayList<String>();
+            for (String[] descriptors : applicationDeploymentDescriptionMap.keySet()) {
+                ApplicationDeploymentDescription applicationDeploymentDescription = applicationDeploymentDescriptionMap.get(descriptors);
+                appDesNames.add(applicationDeploymentDescription.getType().getApplicationName().getStringValue());
+            }
+            descriptorNameList.setDescriptorNames(appDesNames);
+            if (applicationDeploymentDescriptionMap.size() != 0) {
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(descriptorNameList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No application descriptors available...");
+                return builder.build();
+            }
+        } catch (MalformedDescriptorException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -582,12 +696,15 @@ public class DescriptorRegistryResource {
         try {
             airavataRegistry.removeApplicationDescriptor(serviceName, hostName, appName);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            builder.entity("Application descriptor deleted successfully...");
             return builder.build();
         } catch (DescriptorDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
