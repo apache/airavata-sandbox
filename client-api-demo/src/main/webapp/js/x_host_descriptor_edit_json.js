@@ -26,7 +26,7 @@ function initButtons() {
         }
     });
 
-    $("#saveHostButton").click(function(){
+    $("#updateHostButton").click(function(){
         var hostName = $("#hostName1").val();
         var hostAddress = $("#hostAddress1").val();
         var hostEndpoint = $("#hostEndpoint1").val();
@@ -49,8 +49,8 @@ function initButtons() {
                     "hostname": hostName,
                     "hostAddress": hostAddress
                 })
-            }).done(function( msg ) {
-                    alert( "Data Saved: " + msg );
+            }).done(function(msg) {
+                    alert( "Host Updated : " + msg );
                 });
         } else {
             alert("end Case");
@@ -70,10 +70,32 @@ function initButtons() {
                     "hostEndpoint" : hostEndpoint,
                     "gatekeeperEndpoint" : gatekeeperEndpoint
                 })
-            }).done(function( msg ) {
-                    alert( "Data Saved: " + msg );
+            }).done(function(msg) {
+                    alert( "Host Updated : " + msg );
                 });
         }
+
+    });
+
+    $("#deleteHostButton").click(function(){
+        var hostName = $("#hostName1").val();
+
+        $.ajax({
+            beforeSend: function(x) {
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            url: "http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/delete",
+            data: JSON.stringify({
+                "hostname": hostName
+            })
+        }).done(function( msg ) {
+                alert( "Host Deleted: " + msg );
+            });
 
     });
 }
