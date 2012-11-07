@@ -1,0 +1,74 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+  -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register Host Description</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
+    <script src="js/x_app_descriptor_save_json.js"></script>
+</head>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="brand" href="">Airavata API Demo</a>
+        </div>
+    </div>
+</div>
+<br><br>
+
+
+<h3> Register Application Description </h3>
+<div class="well row">
+    <div class="span5">
+        <p class="span5">
+            <label class="span2">Application Name*</label><input type="text" required="required" class="span3" id="appName1" name="appName" value="EchoLocal">
+            <label class="span2">Executable location *</label> <input type="text" required="required" class="span3" id="exeuctableLocation1" name="exeuctableLocation" value="/bin/echo">
+            <label class="span2">Scratch Working Dir.*</label> <input type="text" required="required" class="span3" id="scratchWorkingDirectory1" name="scratchWorkingDirectory" value="/scratch/01437/ogce/test">
+            <label class="span2">Host Name           *</label> <input type="text" required="required" class="span3" name="hostName" id="hostName1">
+            <label class="span2">Project Acc. number  </label> <input type="text" class="span3" id="projAccNumber1" name="projAccNumber" value="TG-STA110014S">
+            <label class="span2">Queue Name           </label> <input type="text" class="span3" id="queueName1" name="queueName" value="development">
+            <label class="span2">CPU count            </label> <input type="text" class="span3" id="cpuCount1" name="cpuCount" value="1">
+            <label class="span2">Node count           </label> <input type="text" class="span3" id="nodeCount1" name="nodeCount" value="1">
+            <label class="span2">Max memory           </label> <input type="text" class="span3" id="maxMemory1" name="maxMemory" value="100">
+        </p>
+    </div>
+    <div class="span5">
+        <p class="span5">
+            <b>SERVICE</b><br>
+            <label class="span2">Service Name        *:</label> <input type="text" required="required" class="span3" id="serviceName1" name="serviceName" value="SimpleEcho">
+            <label class="span2">Input Name          *:</label> <input type="text" required="required" class="span3" id="inputName1" name="inputName1" value="echo_input">
+            <label class="span2">Input Type          *:</label> <input type="text" required="required" class="span3" id="inputType1" name="inputType1" value="String">
+            <button class="btn btn-small" id="addInputButton">Add Input</button><br>
+            <label class="span2">Output Name         *:</label> <input type="text" required="required" class="span3" id="outputName1" name="outputName1" value="echo_output">
+            <label class="span2">Output Type         *:</label> <input type="text" required="required" class="span3" id="outputType1" name="outputType1" value="String">
+            <button class="btn btn-small" id="addOutputButton">Add Output</button><br>
+        </p>
+    </div>
+</div>
+
+<button class="btn btn-primary btn-medium" id="updateAppButton" >Update Application</button>
+<button class="btn btn-primary btn-medium" id="deleteAppButton" >Delete Application</button>
+
+
+</body>
+</html>
