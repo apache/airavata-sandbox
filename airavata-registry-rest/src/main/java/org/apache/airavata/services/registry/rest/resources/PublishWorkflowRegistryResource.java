@@ -58,11 +58,11 @@ public class PublishWorkflowRegistryResource {
             boolean workflowExists = airavataRegistry.isPublishedWorkflowExists(workflowname);
             if (workflowExists){
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("True");
+                builder.entity("Publish workflow exists...");
                 return builder.build();
             }else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                builder.entity("False");
+                builder.entity("Publish workflow does not exists...");
                 return builder.build();
             }
         } catch (RegistryException e) {
@@ -81,6 +81,7 @@ public class PublishWorkflowRegistryResource {
         try{
             airavataRegistry.publishWorkflow(workflowName, publishWorkflowName);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow published successfully...");
             return builder.build();
         } catch (UserWorkflowDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
@@ -105,6 +106,7 @@ public class PublishWorkflowRegistryResource {
         try{
             airavataRegistry.publishWorkflow(workflowName);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow published successfully...");
             return builder.build();
         } catch (UserWorkflowDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
@@ -134,6 +136,7 @@ public class PublishWorkflowRegistryResource {
                 return builder.build();
             }else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Could not find workflow graph...");
                 return builder.build();
             }
         } catch (PublishedWorkflowDoesNotExistsException e) {
@@ -162,6 +165,7 @@ public class PublishWorkflowRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No published workflows available...");
                 return builder.build();
             }
         } catch (RegistryException e) {
@@ -193,6 +197,7 @@ public class PublishWorkflowRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Publish workflows does not exists...");
                 return builder.build();
             }
 
@@ -211,6 +216,7 @@ public class PublishWorkflowRegistryResource {
         try{
             airavataRegistry.removePublishedWorkflow(workflowName);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Publish workflow removed successfully...");
             return builder.build();
         } catch (PublishedWorkflowDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);

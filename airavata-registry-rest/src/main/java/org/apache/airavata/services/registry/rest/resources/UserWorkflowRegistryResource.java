@@ -56,11 +56,11 @@ public class UserWorkflowRegistryResource {
             boolean workflowExists = airavataRegistry.isWorkflowExists(workflowName);
             if (workflowExists){
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("True");
+                builder.entity("User workflow exists...");
                 return builder.build();
             }else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                builder.entity("False");
+                builder.entity("User workflow does not exists...");
                 return builder.build();
             }
         } catch (RegistryException e) {
@@ -80,6 +80,7 @@ public class UserWorkflowRegistryResource {
         try{
             airavataRegistry.addWorkflow(workflowName, workflowGraphXml);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow added successfully...");
             return builder.build();
         } catch (UserWorkflowAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
@@ -101,6 +102,7 @@ public class UserWorkflowRegistryResource {
         try{
             airavataRegistry.updateWorkflow(workflowName, workflowGraphXml);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow updated successfully...");
             return builder.build();
         } catch (UserWorkflowAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
@@ -126,6 +128,7 @@ public class UserWorkflowRegistryResource {
                 return builder.build();
             }else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Could not get workflow graph...");
                 return builder.build();
             }
         } catch (UserWorkflowDoesNotExistsException e) {
@@ -161,6 +164,7 @@ public class UserWorkflowRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("User workflows do not exists...");
                 return builder.build();
             }
 
@@ -180,6 +184,7 @@ public class UserWorkflowRegistryResource {
         try{
             airavataRegistry.removeWorkflow(workflowName);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow removed successfully...");
             return builder.build();
         } catch (UserWorkflowDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);

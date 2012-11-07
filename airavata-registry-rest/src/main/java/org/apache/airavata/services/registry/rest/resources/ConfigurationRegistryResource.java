@@ -61,10 +61,12 @@ public class ConfigurationRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Configuration does not exist...");
                 return builder.build();
             }
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
 
@@ -90,10 +92,12 @@ public class ConfigurationRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No configuration available with given config key...");
                 return builder.build();
             }
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -111,10 +115,12 @@ public class ConfigurationRegistryResource {
             Date formattedDate = dateFormat.parse(date);
             airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
             airavataRegistry.setConfiguration(key, value, formattedDate);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Configuration saved successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -130,10 +136,12 @@ public class ConfigurationRegistryResource {
             Date formattedDate = dateFormat.parse(date);
             airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
             airavataRegistry.addConfiguration(key, value, formattedDate);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Configuration updated successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -145,10 +153,12 @@ public class ConfigurationRegistryResource {
         try {
             airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
             airavataRegistry.removeAllConfiguration(key);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("All configurations with given config key removed successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -160,10 +170,12 @@ public class ConfigurationRegistryResource {
         try {
             airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
             airavataRegistry.removeConfiguration(key, value);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Configuration removed successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -187,10 +199,12 @@ public class ConfigurationRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No GFac URIs available...");
                 return builder.build();
             }
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -215,10 +229,12 @@ public class ConfigurationRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No Workflow Interpreter URIs available...");
                 return builder.build();
             }
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -236,10 +252,12 @@ public class ConfigurationRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No eventing URI available...");
                 return builder.build();
             }
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -257,10 +275,12 @@ public class ConfigurationRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No message box URI available...");
                 return builder.build();
             }
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -273,10 +293,12 @@ public class ConfigurationRegistryResource {
         try {
             URI gfacURI = new URI(uri);
             airavataRegistry.addGFacURI(gfacURI);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("GFac URI added successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -289,10 +311,12 @@ public class ConfigurationRegistryResource {
         try {
             URI interpreterURI = new URI(uri);
             airavataRegistry.addWorkflowInterpreterURI(interpreterURI);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow interpreter URI added successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -305,10 +329,12 @@ public class ConfigurationRegistryResource {
         try {
             URI eventingURI = new URI(uri);
             airavataRegistry.setEventingURI(eventingURI);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Eventing URI set successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -322,9 +348,11 @@ public class ConfigurationRegistryResource {
             URI msgBoxURI = new URI(uri);
             airavataRegistry.setMessageBoxURI(msgBoxURI);
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            builder.entity("MessageBox URI set successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -339,10 +367,12 @@ public class ConfigurationRegistryResource {
             Date formattedDate = dateFormat.parse(date);
             URI gfacURI = new URI(uri);
             airavataRegistry.addGFacURI(gfacURI, formattedDate);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("GFac URI added successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -357,10 +387,12 @@ public class ConfigurationRegistryResource {
             Date formattedDate = dateFormat.parse(date);
             URI interpreterURI = new URI(uri);
             airavataRegistry.addWorkflowInterpreterURI(interpreterURI, formattedDate);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow interpreter URI added successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -375,10 +407,12 @@ public class ConfigurationRegistryResource {
             Date formattedDate = dateFormat.parse(date);
             URI eventingURI = new URI(uri);
             airavataRegistry.setEventingURI(eventingURI, formattedDate);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Eventing URI added successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -393,10 +427,12 @@ public class ConfigurationRegistryResource {
             Date formattedDate = dateFormat.parse(date);
             URI msgBoxURI = new URI(uri);
             airavataRegistry.setMessageBoxURI(msgBoxURI, formattedDate);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Message box URI retrieved successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -409,10 +445,12 @@ public class ConfigurationRegistryResource {
         try {
             URI gfacURI = new URI(uri);
             airavataRegistry.removeGFacURI(gfacURI);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("GFac URI deleted successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -424,10 +462,12 @@ public class ConfigurationRegistryResource {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             airavataRegistry.removeAllGFacURI();
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("All GFac URIs deleted successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -440,10 +480,12 @@ public class ConfigurationRegistryResource {
         try {
             URI intURI = new URI(uri);
             airavataRegistry.removeWorkflowInterpreterURI(intURI);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow Interpreter URI deleted successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -455,10 +497,12 @@ public class ConfigurationRegistryResource {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             airavataRegistry.removeAllWorkflowInterpreterURI();
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("All workflow interpreter URIs deleted successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -470,10 +514,12 @@ public class ConfigurationRegistryResource {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             airavataRegistry.unsetEventingURI();
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Eventing URI deleted successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -485,10 +531,12 @@ public class ConfigurationRegistryResource {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             airavataRegistry.unsetMessageBoxURI();
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("MessageBox URI deleted successfully...");
             return builder.build();
         } catch (Exception e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }

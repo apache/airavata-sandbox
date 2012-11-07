@@ -62,9 +62,11 @@ public class ProvenanceRegistryResource {
         try {
             airavataRegistry.updateExperimentExecutionUser(experimentId, user);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Experiment execution user updated successfully...");
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -82,10 +84,12 @@ public class ProvenanceRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
+                builder.entity("Could not get experiment execution user...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -103,10 +107,12 @@ public class ProvenanceRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
+                builder.entity("Experiment name not available...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -120,9 +126,11 @@ public class ProvenanceRegistryResource {
         try {
             airavataRegistry.updateExperimentName(experimentId, experimentName);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Experiment Name updated successfully...");
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -140,11 +148,13 @@ public class ProvenanceRegistryResource {
                 builder.entity(result);
                 return builder.build();
             } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Experiment metadata not available...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -158,9 +168,11 @@ public class ProvenanceRegistryResource {
         try {
             airavataRegistry.updateExperimentMetadata(experimentId, metadata);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Experiment metadata updated successfully...");
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -179,11 +191,13 @@ public class ProvenanceRegistryResource {
                 builder.entity(result);
                 return builder.build();
             } else {
-                Response.ResponseBuilder builder = Response.status(Response.Status.NOT_MODIFIED);
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Workflow template name not available...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -196,10 +210,12 @@ public class ProvenanceRegistryResource {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             airavataRegistry.setWorkflowInstanceTemplateName(workflowInstanceId, templateName);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow template name updated successfully...");
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -223,10 +239,12 @@ public class ProvenanceRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No workflow instances available...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -240,15 +258,16 @@ public class ProvenanceRegistryResource {
             Boolean result = airavataRegistry.isWorkflowInstanceExists(instanceId);
             if (result) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("True");
+                builder.entity("Workflow instance available...");
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                builder.entity("False");
+                builder.entity("Workflow instance does not exist...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            builder.entity(e.getMessage());
             return builder.build();
         }
 
@@ -264,14 +283,16 @@ public class ProvenanceRegistryResource {
             Boolean result = airavataRegistry.isWorkflowInstanceExists(instanceId, createIfNotPresent);
             if (result) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("True");
+                builder.entity("New workflow instance has been created...");
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                builder.entity("Could not create workflow instance...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -286,9 +307,11 @@ public class ProvenanceRegistryResource {
             WorkflowInstanceStatus.ExecutionStatus status = WorkflowInstanceStatus.ExecutionStatus.valueOf(executionStatus);
             airavataRegistry.updateWorkflowInstanceStatus(instanceId, status);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow instance status updated successfully...");
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -308,12 +331,15 @@ public class ProvenanceRegistryResource {
             WorkflowInstanceStatus workflowInstanceStatus = new WorkflowInstanceStatus(workflowInstance, status, formattedDate);
             airavataRegistry.updateWorkflowInstanceStatus(workflowInstanceStatus);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow instance status updated successfully...");
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (ParseException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -331,10 +357,12 @@ public class ProvenanceRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Could not get workflow instance status...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -351,9 +379,11 @@ public class ProvenanceRegistryResource {
             WorkflowInstanceNode workflowInstanceNode = workflowInstanceData.getNodeData(nodeID).getWorkflowInstanceNode();
             airavataRegistry.updateWorkflowNodeInput(workflowInstanceNode, data);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow node input saved successfully...");
             return builder.build();
         } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
 
@@ -371,9 +401,11 @@ public class ProvenanceRegistryResource {
             WorkflowInstanceNode workflowInstanceNode = workflowInstanceData.getNodeData(nodeID).getWorkflowInstanceNode();
             airavataRegistry.updateWorkflowNodeOutput(workflowInstanceNode, data);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow node output saved successfully...");
             return builder.build();
         } catch (RegistryException e) {
-            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -540,10 +572,12 @@ public class ProvenanceRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No experiments available...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -557,17 +591,18 @@ public class ProvenanceRegistryResource {
             ArrayList<String> experiments = (ArrayList)airavataRegistry.getExperimentIdByUser(username);
             ExperimentIDList experimentIDList = new ExperimentIDList();
             experimentIDList.setExperimentIDList(experiments);
-
             if (experiments.size() != 0){
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity(experimentIDList);
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No experiments available...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -591,10 +626,12 @@ public class ProvenanceRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No experiments available...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -610,9 +647,11 @@ public class ProvenanceRegistryResource {
             WorkflowInstanceStatus.ExecutionStatus status = WorkflowInstanceStatus.ExecutionStatus.valueOf(executionStatus);
             airavataRegistry.updateWorkflowNodeStatus(workflowInstanceId, nodeId, status);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow node status updated successfully...");
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -634,10 +673,12 @@ public class ProvenanceRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Could not retrieve workflow node status...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -658,10 +699,12 @@ public class ProvenanceRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Could not retrieve workflow node started time...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -681,10 +724,12 @@ public class ProvenanceRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Could not retrieve workflow start time...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -698,9 +743,11 @@ public class ProvenanceRegistryResource {
         try{
             airavataRegistry.updateWorkflowNodeGramData(workflowNodeGramData);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow node Gram data updated successfully...");
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
 
@@ -719,10 +766,12 @@ public class ProvenanceRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Could not retrieve workflow instance data...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -737,11 +786,11 @@ public class ProvenanceRegistryResource {
             boolean workflowInstanceNodePresent = airavataRegistry.isWorkflowInstanceNodePresent(workflowInstanceId, nodeId);
             if (workflowInstanceNodePresent){
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("True");
+                builder.entity("Workflow instance node exists...");
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
-                builder.entity("False");
+                builder.entity("Workflow instance node does not exist...");
                 return builder.build();
             }
         } catch (RegistryException e) {
@@ -766,6 +815,7 @@ public class ProvenanceRegistryResource {
                 return builder.build();
             }  else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Could not retrieve workflow instance node data...");
                 return builder.build();
             }
         } catch (RegistryException e) {
@@ -786,6 +836,7 @@ public class ProvenanceRegistryResource {
         try{
             airavataRegistry.addWorkflowInstance(experimentId, workflowInstanceId, templateName);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow instance added successfully...");
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
@@ -811,6 +862,7 @@ public class ProvenanceRegistryResource {
 //            workflowNodeType.setNodeType(nodeType);
             airavataRegistry.updateWorkflowNodeType(workflowInstanceNode, workflowNodeType);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow instance node type updated successfully...");
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
@@ -829,6 +881,7 @@ public class ProvenanceRegistryResource {
         try{
             airavataRegistry.addWorkflowInstanceNode(workflowInstanceId, nodeId);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workflow instance node added successfully...");
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);

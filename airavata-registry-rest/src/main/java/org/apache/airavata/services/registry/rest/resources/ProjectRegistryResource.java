@@ -55,15 +55,16 @@ public class ProjectRegistryResource {
             boolean result = airavataRegistry.isWorkspaceProjectExists(projectName);
             if (result) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("True");
+                builder.entity("Project exists...");
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                builder.entity("False");
+                builder.entity("Project does not exist...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -82,16 +83,16 @@ public class ProjectRegistryResource {
             boolean result = airavataRegistry.isWorkspaceProjectExists(projectName, createIfNotExistStatus);
             if (result) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
-                builder.entity("True");
+                builder.entity("New project has been created...");
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
-                builder.entity("False");
+                builder.entity("Could not create the project...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-            builder.entity("False");
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -104,13 +105,16 @@ public class ProjectRegistryResource {
         try {
             WorkspaceProject workspaceProject = new WorkspaceProject(projectName, airavataRegistry);
             airavataRegistry.addWorkspaceProject(workspaceProject);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workspace project added successfully...");
             return builder.build();
         } catch (WorkspaceProjectAlreadyExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -123,13 +127,16 @@ public class ProjectRegistryResource {
         try {
             WorkspaceProject workspaceProject = new WorkspaceProject(projectName, airavataRegistry);
             airavataRegistry.updateWorkspaceProject(workspaceProject);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workspace project updated successfully...");
             return builder.build();
         } catch (WorkspaceProjectDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -141,13 +148,16 @@ public class ProjectRegistryResource {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             airavataRegistry.deleteWorkspaceProject(projectName);
-            Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+            Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+            builder.entity("Workspace project deleted successfully...");
             return builder.build();
         } catch (WorkspaceProjectDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -165,13 +175,16 @@ public class ProjectRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+                builder.entity("No workspace projects available...");
                 return builder.build();
             }
         } catch (WorkspaceProjectDoesNotExistsException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
@@ -195,10 +208,12 @@ public class ProjectRegistryResource {
                 return builder.build();
             } else {
                 Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No workspace projects available...");
                 return builder.build();
             }
         } catch (RegistryException e) {
             Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
             return builder.build();
         }
     }
