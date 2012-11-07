@@ -36,6 +36,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+/**
+ * This class is a REST interface for all the operations related to Project that are exposed in
+ * Airavata Registry API
+ */
 @Path("/registry/api/projectregistry")
 public class ProjectRegistryResource {
     private AiravataRegistry2 airavataRegistry;
@@ -45,6 +49,12 @@ public class ProjectRegistryResource {
 
     /**
      * ---------------------------------Project Registry----------------------------------*
+     */
+
+    /**
+     * This method will check whether a given project name exists
+     * @param projectName project name
+     * @return HTTP response
      */
     @GET
     @Path("project/exist")
@@ -69,6 +79,13 @@ public class ProjectRegistryResource {
         }
     }
 
+    /**
+     * This method will check whether a project exists and create according to the createIfNotExists
+     * flag
+     * @param projectName project name
+     * @param createIfNotExists  flag to check whether a new project should be created or not
+     * @return HTTP response
+     */
     @POST
     @Path("project/exist")
     @Produces(MediaType.TEXT_PLAIN)
@@ -97,6 +114,11 @@ public class ProjectRegistryResource {
         }
     }
 
+    /**
+     * This method will add new workspace project
+     * @param projectName project name
+     * @return HTTP response
+     */
     @POST
     @Path("add/project")
     @Produces(MediaType.TEXT_PLAIN)
@@ -119,6 +141,11 @@ public class ProjectRegistryResource {
         }
     }
 
+    /**
+     * This method will update the workspace project
+     * @param projectName project name
+     * @return HTTP response
+     */
     @POST
     @Path("update/project")
     @Produces(MediaType.TEXT_PLAIN)
@@ -141,6 +168,11 @@ public class ProjectRegistryResource {
         }
     }
 
+    /**
+     * This method will delete workspace project
+     * @param projectName project name
+     * @return HTTP response
+     */
     @DELETE
     @Path("delete/project")
     @Produces(MediaType.TEXT_PLAIN)
@@ -162,6 +194,11 @@ public class ProjectRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve the workspace project
+     * @param projectName project name
+     * @return HTTP response
+     */
     @GET
     @Path("get/project")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -189,6 +226,10 @@ public class ProjectRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve all the workspace projects
+     * @return HTTP response
+     */
     @GET
     @Path("get/projects")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

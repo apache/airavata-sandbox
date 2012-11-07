@@ -40,6 +40,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is the REST interface for all the operations related to published workflows that has
+ * been exposed by Airavata Registry API
+ */
 @Path("/registry/api/publishwfregistry")
 public class PublishWorkflowRegistryResource {
     private AiravataRegistry2 airavataRegistry;
@@ -49,6 +53,11 @@ public class PublishWorkflowRegistryResource {
 
     /**---------------------------------Published Workflow Registry----------------------------------**/
 
+    /**
+     * This method will check whether a given published workflow name already exists
+     * @param workflowname publish workflow name
+     * @return HTTP response
+     */
     @GET
     @Path("publishwf/exist")
     @Produces(MediaType.TEXT_PLAIN)
@@ -72,6 +81,12 @@ public class PublishWorkflowRegistryResource {
         }
     }
 
+    /**
+     * This method will make a user workflow as a published workflow with the given name
+     * @param workflowName user workflow name
+     * @param publishWorkflowName name need to save the published workflow as
+     * @return HTTP response
+     */
     @POST
     @Path("publish/workflow")
     @Produces(MediaType.TEXT_PLAIN)
@@ -98,6 +113,11 @@ public class PublishWorkflowRegistryResource {
         }
     }
 
+    /**
+     * This method will publish a workflow with the default workflow name
+     * @param workflowName workflow name
+     * @return HTTP response
+     */
     @POST
     @Path("publish/default/workflow")
     @Produces(MediaType.TEXT_PLAIN)
@@ -123,6 +143,11 @@ public class PublishWorkflowRegistryResource {
         }
     }
 
+    /**
+     * This method will return the worklflow graph
+     * @param workflowName workflow name
+     * @return HTTP response
+     */
     @GET
     @Path("get/publishworkflowgraph")
     @Produces(MediaType.TEXT_PLAIN)
@@ -150,6 +175,10 @@ public class PublishWorkflowRegistryResource {
         }
     }
 
+    /**
+     * This method will return all the published workflow names
+     * @return HTTP response
+     */
     @GET
     @Path("get/publishworkflownames")
     @Produces(MediaType.TEXT_PLAIN)
@@ -175,6 +204,10 @@ public class PublishWorkflowRegistryResource {
         }
     }
 
+    /**
+     * This method will return all the published workflows
+     * @return HTTP response
+     */
     @GET
     @Path("get/publishworkflows")
     @Produces(MediaType.TEXT_PLAIN)
@@ -208,6 +241,11 @@ public class PublishWorkflowRegistryResource {
         }
     }
 
+    /**
+     * This method will delete a published workflow with the given published workflow name
+     * @param workflowName published workflow name
+     * @return HTTP response
+     */
     @GET
     @Path("remove/publishworkflow")
     @Produces(MediaType.TEXT_PLAIN)

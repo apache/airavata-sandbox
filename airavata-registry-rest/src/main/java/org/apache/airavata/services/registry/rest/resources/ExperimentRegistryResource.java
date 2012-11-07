@@ -42,6 +42,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * This class is a REST interface all the methods related to experiments that are exposed by
+ * Airavata Registry API
+ */
 @Path("/registry/api/experimentregistry")
 public class ExperimentRegistryResource {
     private AiravataRegistry2 airavataRegistry;
@@ -53,6 +57,11 @@ public class ExperimentRegistryResource {
      * ---------------------------------Experiments----------------------------------*
      */
 
+    /**
+     * This method will delete an experiment with given experiment ID
+     * @param experimentId  experiment ID
+     * @return HTTP response
+     */
     @DELETE
     @Path("delete/experiment")
     @Produces(MediaType.TEXT_PLAIN)
@@ -70,10 +79,15 @@ public class ExperimentRegistryResource {
         }
     }
 
+    /**
+     * This method will return all the experiments available
+     * @return HTTP response
+     *
+     */
     @GET
     @Path("get/experiments/all")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getExperiments() throws RegistryException {
+    public Response getExperiments(){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             List<AiravataExperiment> airavataExperimentList = airavataRegistry.getExperiments();
@@ -99,6 +113,11 @@ public class ExperimentRegistryResource {
         }
     }
 
+    /**
+     * This method will return all the experiments for a given project
+     * @param projectName project name
+     * @return HTTP response
+     */
     @GET
     @Path("get/experiments/project")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -128,6 +147,12 @@ public class ExperimentRegistryResource {
         }
     }
 
+    /**
+     * This method will return all the experiments in a given period of time
+     * @param fromDate starting date
+     * @param toDate end date
+     * @return  HTTP response
+     */
     @GET
     @Path("get/experiments/date")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -166,6 +191,13 @@ public class ExperimentRegistryResource {
         }
     }
 
+    /**
+     * This method will return all the experiments for a given project in a given period of time
+     * @param projectName project name
+     * @param fromDate starting date
+     * @param toDate end date
+     * @return HTTP response
+     */
     @GET
     @Path("get/experiments/project/date")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -205,6 +237,13 @@ public class ExperimentRegistryResource {
         }
     }
 
+    /**
+     * This method will add a new experiment
+     * @param projectName project name
+     * @param experimentID experiment ID
+     * @param submittedDate submitted date
+     * @return HTTP response
+     */
     @POST
     @Path("add/experiment")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -247,10 +286,15 @@ public class ExperimentRegistryResource {
 
     }
 
+    /**
+     * This method will check whether the given experiment ID exists
+     * @param experimentId experiment ID
+     * @return HTTP response
+     */
     @GET
     @Path("experiment/exist")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response isExperimentExists(@QueryParam("experimentId") String experimentId) throws RegistryException {
+    public Response isExperimentExists(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             airavataRegistry.isExperimentExists(experimentId);
@@ -261,9 +305,20 @@ public class ExperimentRegistryResource {
             Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
             builder.entity("Exprtiment does not exist...");
             return builder.build();
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.NOT_FOUND);
+            builder.entity("Exprtiment does not exist...");
+            return builder.build();
         }
     }
 
+    /**
+     * This method will check whether an experiment exist and create if not exists according to the
+     * createIfNotPresent flag
+     * @param experimentId  experiment ID
+     * @param createIfNotPresent  flag to check whether to create a new experiment or not
+     * @return HTTP response
+     */
     @GET
     @Path("experiment/notexist/create")
     @Produces(MediaType.TEXT_PLAIN)

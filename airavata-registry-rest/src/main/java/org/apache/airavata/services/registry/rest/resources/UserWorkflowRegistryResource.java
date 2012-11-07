@@ -38,6 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is a REST interface to all the operations related to user workflows that has been
+ * exposed by Airavata Registry API
+ */
 @Path("/registry/api/userwfregistry")
 public class UserWorkflowRegistryResource {
     private AiravataRegistry2 airavataRegistry;
@@ -47,6 +51,11 @@ public class UserWorkflowRegistryResource {
 
     /**---------------------------------User Workflow Registry----------------------------------**/
 
+    /**
+     * This method will check whether a given user workflow name already exists
+     * @param workflowName workflow name
+     * @return HTTP response
+     */
     @GET
     @Path("workflow/exist")
     @Produces(MediaType.TEXT_PLAIN)
@@ -70,7 +79,12 @@ public class UserWorkflowRegistryResource {
         }
     }
 
-
+    /**
+     * This method will add a new workflow
+     * @param workflowName workflow name
+     * @param workflowGraphXml workflow content
+     * @return HTTP response
+     */
     @POST
     @Path("add/workflow")
     @Produces(MediaType.TEXT_PLAIN)
@@ -93,6 +107,12 @@ public class UserWorkflowRegistryResource {
         }
     }
 
+    /**
+     * This method will update the workflow
+     * @param workflowName workflow name
+     * @param workflowGraphXml workflow content
+     * @return HTTP response
+     */
     @POST
     @Path("update/workflow")
     @Produces(MediaType.TEXT_PLAIN)
@@ -115,6 +135,11 @@ public class UserWorkflowRegistryResource {
         }
     }
 
+    /**
+     * This method will return the content of the given workflow
+     * @param workflowName workflow name
+     * @return HTTP response
+     */
     @GET
     @Path("get/workflowgraph")
     @Produces(MediaType.TEXT_PLAIN)
@@ -142,6 +167,10 @@ public class UserWorkflowRegistryResource {
         }
     }
 
+    /**
+     * This method will return all the user workflows
+     * @return HTTP response
+     */
     @GET
     @Path("get/workflows")
     @Produces(MediaType.TEXT_PLAIN)
@@ -175,7 +204,11 @@ public class UserWorkflowRegistryResource {
         }
     }
 
-
+    /**
+     * This method will delete a user workflow with the given user workflow name
+     * @param workflowName user workflow name
+     * @return HTTP response
+     */
     @GET
     @Path("remove/workflow")
     @Produces(MediaType.TEXT_PLAIN)

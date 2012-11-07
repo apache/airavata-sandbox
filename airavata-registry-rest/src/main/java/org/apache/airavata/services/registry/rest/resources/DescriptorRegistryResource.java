@@ -42,6 +42,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is the REST interface for all the operation regarding descriptors that are
+ * exposed from Airavata Registry API
+ */
 @Path("/registry/api/descriptors")
 public class DescriptorRegistryResource {
     private AiravataRegistry2 airavataRegistry;
@@ -54,14 +58,19 @@ public class DescriptorRegistryResource {
      */
 
 
+    /**
+     * This method will check whether the host descriptor exists
+     * @param hostDescriptorName host descriptor name
+     * @return HTTP response
+     */
     @GET
     @Path("hostdescriptor/exist")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response isHostDescriptorExists(@QueryParam("descriptorName") String descriptorName) {
+    public Response isHostDescriptorExists(@QueryParam("hostDescriptorName") String hostDescriptorName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         boolean state;
         try {
-            state = airavataRegistry.isHostDescriptorExists(descriptorName);
+            state = airavataRegistry.isHostDescriptorExists(hostDescriptorName);
             if (state) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity("Host Descriptor exists...");
@@ -78,6 +87,11 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will save the host descriptor
+     * @param host JSON message send according to HostDescriptor class
+     * @return HTTP response
+     */
     @POST
     @Path("hostdescriptor/save")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -101,6 +115,11 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will update the host descriptor
+     * @param host JSON message send according to HostDescriptor class
+     * @return HTTP response
+     */
     @POST
     @Path("hostdescriptor/update")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -124,6 +143,12 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve host descriptor. Clients will get a JSON message that is generated
+     * according to HostDescriptor class
+     * @param hostName host name
+     * @return   HTTP response
+     */
     @GET
     @Path("host/description")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -150,6 +175,11 @@ public class DescriptorRegistryResource {
 
     }
 
+    /**
+     * This method will delete the given host descriptor
+     * @param hostName host descriptor name
+     * @return HTTP response
+     */
     @DELETE
     @Path("hostdescriptor/delete")
     @Produces(MediaType.TEXT_PLAIN)
@@ -171,6 +201,10 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve all the host descriptors available.
+     * @return HTTP response
+     */
     @GET
     @Path("get/hostdescriptors")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -202,6 +236,10 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will return all the host descriptor names available
+     * @return HTTP response
+     */
     @GET
     @Path("get/hostdescriptor/names")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -231,14 +269,19 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will check whether the service descriptor available
+     * @param serviceDescriptorName service descriptor name
+     * @return HTTP response
+     */
     @GET
     @Path("servicedescriptor/exist")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response isServiceDescriptorExists(@QueryParam("descriptorName") String descriptorName) {
+    public Response isServiceDescriptorExists(@QueryParam("serviceDescriptorName") String serviceDescriptorName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         boolean state;
         try {
-            state = airavataRegistry.isServiceDescriptorExists(descriptorName);
+            state = airavataRegistry.isServiceDescriptorExists(serviceDescriptorName);
             if (state) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity("True");
@@ -255,6 +298,11 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will save the service descriptor
+     * @param service this is a JSON message created according to ServiceDescriptor class
+     * @return HTTP response
+     */
     @POST
     @Path("servicedescriptor/save")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -278,6 +326,11 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will update the service descriptor
+     * @param service this is a JSON message generated according to Service Descriptor class
+     * @return HTTP response
+     */
     @POST
     @Path("servicedescriptor/update")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -301,6 +354,12 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve service descriptor for a given service descriptor name. Clients
+     * will get a JSON message that is generated according to Service Descriptor class
+     * @param serviceName  service name
+     * @return HTTP response
+     */
     @GET
     @Path("servicedescriptor/description")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -326,6 +385,11 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will delete a given service descriptor
+     * @param serviceName service descriptor name
+     * @return HTTP response
+     */
     @DELETE
     @Path("servicedescriptor/delete")
     @Produces(MediaType.TEXT_PLAIN)
@@ -347,6 +411,10 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve all the service descriptors
+     * @return HTTP response
+     */
     @GET
     @Path("get/servicedescriptors")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -379,16 +447,23 @@ public class DescriptorRegistryResource {
     }
 
 
+    /**
+     * This method will check whether the given application descriptor exists
+     * @param serviceName service descriptor name
+     * @param hostName host descriptor name
+     * @param appDescriptorName application descriptor name
+     * @return HTTP response
+     */
     @GET
     @Path("applicationdescriptor/exist")
     @Produces(MediaType.TEXT_PLAIN)
     public Response isApplicationDescriptorExists(@QueryParam("serviceName") String serviceName,
                                                   @QueryParam("hostName") String hostName,
-                                                  @QueryParam("descriptorName") String descriptorName) {
+                                                  @QueryParam("appDescName") String appDescriptorName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         boolean state;
         try {
-            state = airavataRegistry.isApplicationDescriptorExists(serviceName, hostName, descriptorName);
+            state = airavataRegistry.isApplicationDescriptorExists(serviceName, hostName, appDescriptorName);
             if (state) {
                 Response.ResponseBuilder builder = Response.status(Response.Status.OK);
                 builder.entity("True");
@@ -405,7 +480,12 @@ public class DescriptorRegistryResource {
         }
     }
 
-
+    /**
+     * This method will save given application descriptor
+     * @param applicationDescriptor this is a JSON message created according to
+     * ApplicationDescriptor class
+     * @return HTTP response
+     */
     @POST
     @Path("applicationdescriptor/build/save")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -453,7 +533,11 @@ public class DescriptorRegistryResource {
         }
     }
 
-
+    /**
+     * This method will update the application descriptor
+     * @param applicationDescriptor JSON message of ApplicationDescriptor class
+     * @return HTTP response
+     */
     @POST
     @Path("applicationdescriptor/update")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -502,7 +586,14 @@ public class DescriptorRegistryResource {
         }
     }
 
-
+    /**
+     * This method will retrieve an application descriptor according to given service name, host name
+     * and application name
+     * @param serviceName  service name
+     * @param hostName  host name
+     * @param applicationName  application name
+     * @return HTTP response
+     */
     @GET
     @Path("applicationdescriptor/description")
     @Produces("text/xml")
@@ -534,6 +625,12 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve application descriptors for a given service and host
+     * @param serviceName service name
+     * @param hostName host name
+     * @return HTTP response
+     */
     @GET
     @Path("applicationdescriptors/alldescriptors/host/service")
     @Produces("text/xml")
@@ -564,6 +661,11 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will get all the application descriptors for a given service
+     * @param serviceName service name
+     * @return HTTP response
+     */
     @GET
     @Path("applicationdescriptor/alldescriptors/service")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -607,6 +709,10 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve all the application descriptors available
+     * @return HTTP response
+     */
     @GET
     @Path("applicationdescriptor/alldescriptors")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -652,6 +758,10 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method will return all the application names available
+     * @return HTTP response
+     */
     @GET
     @Path("applicationdescriptor/names")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -686,6 +796,14 @@ public class DescriptorRegistryResource {
         }
     }
 
+    /**
+     * This method wil remove an application descriptor according to given service name, host name
+     * and application name
+     * @param serviceName service name
+     * @param hostName  host name
+     * @param appName application name
+     * @return HTTP response
+     */
     @DELETE
     @Path("applicationdescriptor/delete")
     @Produces(MediaType.TEXT_PLAIN)

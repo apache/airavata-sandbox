@@ -42,6 +42,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * This class is the REST interface for all the provenance data related methods that are exposed
+ * by Airavata Registry API
+ */
 @Path("/registry/api/provenanceregistry")
 public class ProvenanceRegistryResource {
     private AiravataRegistry2 airavataRegistry;
@@ -53,6 +57,12 @@ public class ProvenanceRegistryResource {
      * --------------------------------- Provenance Registry ----------------------------------*
      */
 
+    /**
+     * This method will update the experiment execution user
+     * @param experimentId experiment ID
+     * @param user experiment execution user
+     * @return HTTP response
+     */
     @POST
     @Path("update/experiment")
     @Produces(MediaType.TEXT_PLAIN)
@@ -71,6 +81,11 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve experiment execution user
+     * @param experimentId  experiment ID
+     * @return HTTP response
+     */
     @GET
     @Path("get/experiment/executionuser")
     @Produces(MediaType.TEXT_PLAIN)
@@ -94,6 +109,11 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve the experiment name for a given experiment ID
+     * @param experimentId  experiment ID
+     * @return HTTP response
+     */
     @GET
     @Path("get/experiment/name")
     @Produces(MediaType.TEXT_PLAIN)
@@ -117,6 +137,12 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will update the experiment name
+     * @param experimentId experiment ID
+     * @param experimentName experiment name
+     * @return HTTP response
+     */
     @POST
     @Path("update/experimentname")
     @Produces(MediaType.TEXT_PLAIN)
@@ -135,7 +161,11 @@ public class ProvenanceRegistryResource {
         }
     }
 
-
+    /**
+     * This method will retrieve the experiment metadata
+     * @param experimentId experiment ID
+     * @return HTTP response
+     */
     @GET
     @Path("get/experimentmetadata")
     @Produces(MediaType.TEXT_PLAIN)
@@ -159,6 +189,12 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will update the experiment metadata
+     * @param experimentId experiment ID
+     * @param metadata experiment metadata
+     * @return HTTP response
+     */
     @POST
     @Path("update/experimentmetadata")
     @Produces(MediaType.TEXT_PLAIN)
@@ -178,7 +214,11 @@ public class ProvenanceRegistryResource {
     }
 
 
-
+    /**
+     * This method will retrieve workflow execution name
+     * @param workflowInstanceId workflow instance ID
+     * @return HTTP response
+     */
     @GET
     @Path("get/workflowtemplatename")
     @Produces(MediaType.TEXT_PLAIN)
@@ -202,6 +242,12 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will set the workflow instance template name
+     * @param workflowInstanceId workflow instance id
+     * @param templateName template name
+     * @return HTTP response
+     */
     @POST
     @Path("update/workflowinstancetemplatename")
     @Produces(MediaType.TEXT_PLAIN)
@@ -220,6 +266,11 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will get experiment workflow instances for a given experiment ID
+     * @param experimentId experiment ID
+     * @return HTTP response
+     */
     @GET
     @Path("get/experimentworkflowinstances")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -249,6 +300,11 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will check whether a workflow instance exists
+     * @param instanceId workflow instance ID
+     * @return HTTP response
+     */
     @GET
     @Path("workflowinstance/exist/check")
     @Produces(MediaType.TEXT_PLAIN)
@@ -273,6 +329,13 @@ public class ProvenanceRegistryResource {
 
     }
 
+    /**
+     * This method will check whether a workflow instance exist and create the workflow instance
+     * according to createIfNotPresent flag
+     * @param instanceId workflow instance ID
+     * @param createIfNotPresent flag whether to create a new workflow instance or not
+     * @return HTTP response
+     */
     @GET
     @Path("workflowinstance/exist/create")
     @Produces(MediaType.TEXT_PLAIN)
@@ -297,6 +360,12 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will update workflow instance status
+     * @param instanceId  workflow instance ID
+     * @param executionStatus workflow execution status
+     * @return HTTP response
+     */
     @POST
     @Path("update/workflowinstancestatus/instanceid")
     @Produces(MediaType.TEXT_PLAIN)
@@ -316,6 +385,13 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will update the workflow instance status
+     * @param workflowInstanceId  workflow instance ID
+     * @param executionStatus workflow execution status
+     * @param statusUpdateTime workflow status update time
+     * @return HTTP response
+     */
     @POST
     @Path("update/workflowinstancestatus")
     @Produces(MediaType.TEXT_PLAIN)
@@ -344,6 +420,11 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve workflow instance statuse for a given workflow instance ID
+     * @param instanceId workflow instance ID
+     * @return HTTP response
+     */
     @GET
     @Path("get/workflowinstancestatus")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -367,6 +448,13 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will update workflowNodeInput
+     * @param nodeID workflow node ID
+     * @param workflowInstanceID  workflow instance ID
+     * @param data input data
+     * @return  HTTP response
+     */
     @POST
     @Path("update/workflownodeinput")
     @Produces(MediaType.TEXT_PLAIN)
@@ -389,6 +477,13 @@ public class ProvenanceRegistryResource {
 
     }
 
+    /**
+     * This method will update workflow node output
+     * @param nodeID workflow node ID
+     * @param workflowInstanceID workflow instance ID
+     * @param data workflow node output data
+     * @return HTTP response
+     */
     @POST
     @Path("update/workflownodeoutput")
     @Produces(MediaType.TEXT_PLAIN)
@@ -559,6 +654,12 @@ public class ProvenanceRegistryResource {
     }
     */
 
+    /**
+     * This method will return all the data related to a given experiment. This will include workflow
+     * status, input values, output values to the workflow, node statuses etc.
+     * @param experimentId experiment ID
+     * @return HTTP response
+     */
     @GET
     @Path("get/experiment")
     @Produces(MediaType.APPLICATION_XML)
@@ -582,6 +683,11 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will return all the experiment IDs for a given user
+     * @param username experiment execution user
+     * @return HTTP response
+     */
     @GET
     @Path("get/experimentId/user")
     @Produces(MediaType.APPLICATION_XML)
@@ -607,10 +713,16 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will return all the experiments for a given user
+     * @param username experiment execution user
+     * @return  HTTP response
+     *
+     */
     @GET
     @Path("get/experiment/user")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getExperimentByUser(@QueryParam("username") String username) throws RegistryException {
+    public Response getExperimentByUser(@QueryParam("username") String username){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             List<ExperimentData> experimentDataList = airavataRegistry.getExperimentByUser(username);
@@ -636,6 +748,13 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will update the workflow node status
+     * @param workflowInstanceId  workflow instance ID
+     * @param nodeId  node ID
+     * @param executionStatus node execution status
+     * @return HTTP response
+     */
     @POST
     @Path("update/workflownode/status")
     @Produces(MediaType.TEXT_PLAIN)
@@ -656,7 +775,12 @@ public class ProvenanceRegistryResource {
         }
     }
 
-
+    /**
+     * This method will retrieve workflow status for a given workflow instance and node
+     * @param workflowInstanceId workflow instance ID
+     * @param nodeId node ID
+     * @return HTTP response
+     */
     @GET
     @Path("get/workflownode/status")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -683,6 +807,12 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve workflow node started time
+     * @param workflowInstanceId workflow instance ID
+     * @param nodeId node ID
+     * @return  HTTP response
+     */
     @GET
     @Path("get/workflownode/starttime")
     @Produces(MediaType.TEXT_PLAIN)
@@ -709,6 +839,11 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will return workflow started time
+     * @param workflowInstanceId workflow instance ID
+     * @return HTTP response
+     */
     @GET
     @Path("get/workflow/starttime")
     @Produces(MediaType.TEXT_PLAIN)
@@ -734,6 +869,11 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will update workflow node Gram data
+     * @param workflowNodeGramData workflow node gram data object as a JSON input
+     * @return HTTP response
+     */
     @GET
     @Path("update/workflownode/gramdata")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -753,6 +893,11 @@ public class ProvenanceRegistryResource {
 
     }
 
+    /**
+     * This method will return all the information regarding a workflow instance
+     * @param workflowInstanceId workflow instance ID
+     * @return HTTP response
+     */
     @GET
     @Path("get/workflowinstancedata")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -776,6 +921,12 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method wil check whether a workflow node present
+     * @param workflowInstanceId workflow instance ID
+     * @param nodeId node ID
+     * @return HTTP response
+     */
     @GET
     @Path("workflowinstance/exist")
     @Produces(MediaType.TEXT_PLAIN)
@@ -801,6 +952,12 @@ public class ProvenanceRegistryResource {
 
     }
 
+    /**
+     * This method will return data related to the workflow instance node
+     * @param workflowInstanceId workflow instance ID
+     * @param nodeId node ID
+     * @return HTTP response
+     */
     @GET
     @Path("workflowinstance/nodeData")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -826,6 +983,13 @@ public class ProvenanceRegistryResource {
 
     }
 
+    /**
+     * This method will add a workflow instance
+     * @param experimentId experiment ID
+     * @param workflowInstanceId  workflow instance ID
+     * @param templateName workflow template name
+     * @return  HTTP response
+     */
     @POST
     @Path("add/workflowinstance")
     @Produces(MediaType.TEXT_PLAIN)
@@ -845,12 +1009,19 @@ public class ProvenanceRegistryResource {
         }
     }
 
+    /**
+     * This method will update the workflow node type
+     * @param workflowInstanceId workflow instance ID
+     * @param nodeId node ID
+     * @param nodeType node type
+     * @return  HTTP response
+     */
     @POST
     @Path("update/workflownodetype")
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateWorkflowNodeType(@FormParam("workflowInstanceId") String workflowInstanceId,
                                            @FormParam("nodeId") String nodeId,
-                                           @FormParam("nodeType") String nodeType) throws RegistryException {
+                                           @FormParam("nodeType") String nodeType) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{
             WorkflowInstanceNodeData workflowInstanceNodeData = airavataRegistry.getWorkflowInstanceData(workflowInstanceId).getNodeData(nodeId);
@@ -872,6 +1043,12 @@ public class ProvenanceRegistryResource {
     }
 
 
+    /**
+     * This method will add a new node to workflow instance
+     * @param workflowInstanceId workflow instance ID
+     * @param nodeId  node ID
+     * @return  HTTP response
+     */
     @POST
     @Path("add/workflowinstancenode")
     @Produces(MediaType.TEXT_PLAIN)

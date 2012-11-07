@@ -37,6 +37,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * This class is a REST interface to all the methods related to Configuration which are exposed by
+ * Airavata Registry API
+ */
 @Path("/registry/api/congfigregistry")
 public class ConfigurationRegistryResource {
     private AiravataRegistry2 airavataRegistry;
@@ -48,6 +52,11 @@ public class ConfigurationRegistryResource {
      * ---------------------------------Configuration Registry----------------------------------*
      */
 
+    /**
+     * This method will return the configuration value corrosponding to given config key
+     * @param key configuration key
+     * @return HTTP Response
+     */
     @Path("get/configuration")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -72,7 +81,11 @@ public class ConfigurationRegistryResource {
 
     }
 
-
+    /**
+     * This method will return configuration list for given configuration key
+     * @param key configuration key
+     * @return HTTP response
+     */
     @GET
     @Path("get/configurationlist")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -103,6 +116,13 @@ public class ConfigurationRegistryResource {
     }
 
 
+    /**
+     * This method will add a configuration with given config key, config value and expiration date
+     * @param key configuration key
+     * @param value configuration value
+     * @param date configuration expire data
+     * @return HTTP response
+     */
     @POST
     @Path("save/configuration")
     @Produces(MediaType.TEXT_PLAIN)
@@ -125,6 +145,14 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will update the configuration according to the given config value and expire
+     * date
+     * @param key config key
+     * @param value config value
+     * @param date  expiration date
+     * @return  HTTP response
+     */
     @POST
     @Path("update/configuration")
     @Produces(MediaType.TEXT_PLAIN)
@@ -146,6 +174,11 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will delete all configuration of the given config key
+     * @param key configuration key
+     * @return HTTP response
+     */
     @DELETE
     @Path("delete/allconfiguration")
     @Produces(MediaType.TEXT_PLAIN)
@@ -163,6 +196,12 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will delete the configuration with the given config key and config value
+     * @param key configuration key
+     * @param value configuration value
+     * @return HTTP response
+     */
     @DELETE
     @Path("delete/configuration")
     @Produces(MediaType.TEXT_PLAIN)
@@ -180,6 +219,10 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve all the GFac URIs
+     * @return  HTTP response
+     */
     @GET
     @Path("get/gfac/urilist")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -209,7 +252,10 @@ public class ConfigurationRegistryResource {
         }
     }
 
-
+    /**
+     * This method will retrieve all the workflow interpreter URIs
+     * @return HTTP response
+     */
     @GET
     @Path("get/workflowinterpreter/urilist")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -239,6 +285,10 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve eventing URI
+     * @return HTTP response
+     */
     @GET
     @Path("get/eventingservice/uri")
     @Produces(MediaType.TEXT_PLAIN)
@@ -262,6 +312,10 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will retrieve messagebox URI
+     * @return HTTP response
+     */
     @GET
     @Path("get/messagebox/uri")
     @Produces(MediaType.TEXT_PLAIN)
@@ -285,6 +339,11 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will add new GFac URI
+     * @param uri gfac URI
+     * @return HTTP response
+     */
     @POST
     @Path("add/gfacuri")
     @Produces(MediaType.TEXT_PLAIN)
@@ -303,6 +362,11 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will add new workflow interpreter URI
+     * @param uri workflow interpreter URI
+     * @return HTTP response
+     */
     @POST
     @Path("add/workflowinterpreteruri")
     @Produces(MediaType.TEXT_PLAIN)
@@ -321,6 +385,11 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will set a new eventing URI
+     * @param uri eventing URI
+     * @return HTTP response
+     */
     @POST
     @Path("add/eventinguri")
     @Produces(MediaType.TEXT_PLAIN)
@@ -339,6 +408,11 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will set message box URI
+     * @param uri message box URI
+     * @return HTTP response
+     */
     @POST
     @Path("add/msgboxuri")
     @Produces(MediaType.TEXT_PLAIN)
@@ -357,6 +431,12 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will update GFac URI expiring date
+     * @param uri GFac URI
+     * @param date Expiration date
+     * @return HTTP response
+     */
     @POST
     @Path("add/gfacuri/date")
     @Produces(MediaType.TEXT_PLAIN)
@@ -377,6 +457,12 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will update workflow interpreter URI expiration date
+     * @param uri workflow interpreter URI
+     * @param date workflow interpreter expiration date
+     * @return HTTP response
+     */
     @POST
     @Path("add/workflowinterpreteruri/date")
     @Produces(MediaType.TEXT_PLAIN)
@@ -397,6 +483,12 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will update Eventing URI expiration date
+     * @param uri eventing URI
+     * @param date eventing URI expiration date
+     * @return HTTP response
+     */
     @POST
     @Path("add/eventinguri/date")
     @Produces(MediaType.TEXT_PLAIN)
@@ -417,6 +509,12 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     *  This method will update expiration date of Message box URI
+     * @param uri message box URI
+     * @param date message box expiration date
+     * @return HTTP response
+     */
     @POST
     @Path("add/msgboxuri/date")
     @Produces(MediaType.TEXT_PLAIN)
@@ -437,6 +535,11 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will remove GFac URI
+     * @param uri GFac URI
+     * @return HTTP response
+     */
     @DELETE
     @Path("delete/gfacuri")
     @Produces(MediaType.TEXT_PLAIN)
@@ -455,6 +558,10 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will remove all the GFac URIs
+     * @return HTTP response
+     */
     @DELETE
     @Path("delete/allgfacuris")
     @Produces(MediaType.TEXT_PLAIN)
@@ -472,6 +579,11 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will remove workflow interpreter URI
+     * @param uri workflow interpreter URI
+     * @return HTTP response
+     */
     @DELETE
     @Path("delete/workflowinterpreteruri")
     @Produces(MediaType.TEXT_PLAIN)
@@ -490,6 +602,10 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will remove all the workflow interpreter URIs
+     * @return HTTP response
+     */
     @DELETE
     @Path("delete/allworkflowinterpreteruris")
     @Produces(MediaType.TEXT_PLAIN)
@@ -507,6 +623,10 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will remove eventing URI
+     * @return HTTP response
+     */
     @DELETE
     @Path("delete/eventinguri")
     @Produces(MediaType.TEXT_PLAIN)
@@ -524,6 +644,10 @@ public class ConfigurationRegistryResource {
         }
     }
 
+    /**
+     * This method will remove message box URI
+     * @return HTTP response
+     */
     @DELETE
     @Path("delete/msgboxuri")
     @Produces(MediaType.TEXT_PLAIN)
