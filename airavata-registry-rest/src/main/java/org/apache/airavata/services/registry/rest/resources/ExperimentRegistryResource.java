@@ -29,6 +29,7 @@ import org.apache.airavata.registry.api.exception.RegistryException;
 import org.apache.airavata.registry.api.exception.worker.ExperimentDoesNotExistsException;
 import org.apache.airavata.registry.api.exception.worker.WorkspaceProjectDoesNotExistsException;
 import org.apache.airavata.services.registry.rest.resourcemappings.ExperimentList;
+import org.apache.airavata.services.registry.rest.utils.ResourcePathConstants;
 import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
 
 import javax.servlet.ServletContext;
@@ -46,7 +47,7 @@ import java.util.List;
  * This class is a REST interface all the methods related to experiments that are exposed by
  * Airavata Registry API
  */
-@Path("/registry/api/experimentregistry")
+@Path(ResourcePathConstants.ExperimentResourcePathConstants.EXP_RESOURCE_PATH)
 public class ExperimentRegistryResource {
     private AiravataRegistry2 airavataRegistry;
 
@@ -63,7 +64,7 @@ public class ExperimentRegistryResource {
      * @return HTTP response
      */
     @DELETE
-    @Path("delete/experiment")
+    @Path(ResourcePathConstants.ExperimentResourcePathConstants.DELETE_EXP)
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeExperiment(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -85,7 +86,7 @@ public class ExperimentRegistryResource {
      *
      */
     @GET
-    @Path("get/experiments/all")
+    @Path(ResourcePathConstants.ExperimentResourcePathConstants.GET_APP_EXPS)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getExperiments(){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -119,7 +120,7 @@ public class ExperimentRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/experiments/project")
+    @Path(ResourcePathConstants.ExperimentResourcePathConstants.GET_EXPS_BY_PROJECT)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getExperimentsByProject(@QueryParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -154,7 +155,7 @@ public class ExperimentRegistryResource {
      * @return  HTTP response
      */
     @GET
-    @Path("get/experiments/date")
+    @Path(ResourcePathConstants.ExperimentResourcePathConstants.GET_EXPS_BY_DATE)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getExperimentsByDate(@QueryParam("fromDate") String fromDate,
@@ -199,7 +200,7 @@ public class ExperimentRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/experiments/project/date")
+    @Path(ResourcePathConstants.ExperimentResourcePathConstants.GET_EXPS_PER_PROJECT_BY_DATE)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getExperimentsByProjectDate(@QueryParam("projectName") String projectName,
@@ -245,7 +246,7 @@ public class ExperimentRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("add/experiment")
+    @Path(ResourcePathConstants.ExperimentResourcePathConstants.ADD_EXP)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addExperiment(@FormParam("projectName") String projectName,
@@ -292,7 +293,7 @@ public class ExperimentRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("experiment/exist")
+    @Path(ResourcePathConstants.ExperimentResourcePathConstants.EXP_EXISTS)
     @Produces(MediaType.TEXT_PLAIN)
     public Response isExperimentExists(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -320,7 +321,7 @@ public class ExperimentRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("experiment/notexist/create")
+    @Path(ResourcePathConstants.ExperimentResourcePathConstants.EXP_EXISTS_CREATE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response isExperimentExistsThenCreate(@QueryParam("experimentId") String experimentId,
                                                  @QueryParam("createIfNotPresent") String createIfNotPresent) {

@@ -24,6 +24,7 @@ package org.apache.airavata.services.registry.rest.resources;
 import org.apache.airavata.registry.api.AiravataRegistry2;
 import org.apache.airavata.services.registry.rest.resourcemappings.ConfigurationList;
 import org.apache.airavata.services.registry.rest.resourcemappings.URLList;
+import org.apache.airavata.services.registry.rest.utils.ResourcePathConstants;
 import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
 
 import javax.servlet.ServletContext;
@@ -41,7 +42,7 @@ import java.util.List;
  * This class is a REST interface to all the methods related to Configuration which are exposed by
  * Airavata Registry API
  */
-@Path("/registry/api/congfigregistry")
+@Path(ResourcePathConstants.ConfigResourcePathConstants.CONFIGURATION_REGISTRY_RESOURCE)
 public class ConfigurationRegistryResource {
     private AiravataRegistry2 airavataRegistry;
 
@@ -57,7 +58,7 @@ public class ConfigurationRegistryResource {
      * @param key configuration key
      * @return HTTP Response
      */
-    @Path("get/configuration")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.GET_CONFIGURATION)
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response getConfiguration(@QueryParam("key") String key) {
@@ -87,7 +88,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/configurationlist")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.GET_CONFIGURATION_LIST)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getConfigurationList(@QueryParam("key") String key) {
         try {
@@ -124,7 +125,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("save/configuration")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.SAVE_CONFIGURATION)
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response setConfiguration(@FormParam("key") String key,
@@ -154,7 +155,7 @@ public class ConfigurationRegistryResource {
      * @return  HTTP response
      */
     @POST
-    @Path("update/configuration")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.UPDATE_CONFIGURATION)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addConfiguration(@FormParam("key") String key,
                                      @FormParam("value") String value,
@@ -180,7 +181,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @DELETE
-    @Path("delete/allconfiguration")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_ALL_CONFIGURATION)
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeAllConfiguration(@QueryParam("key") String key) {
         try {
@@ -203,7 +204,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @DELETE
-    @Path("delete/configuration")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_CONFIGURATION)
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeConfiguration(@QueryParam("key") String key, @QueryParam("value") String value) {
         try {
@@ -224,7 +225,7 @@ public class ConfigurationRegistryResource {
      * @return  HTTP response
      */
     @GET
-    @Path("get/gfac/urilist")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.GET_GFAC_URI_LIST)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getGFacURIs() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -257,7 +258,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/workflowinterpreter/urilist")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.GET_WFINTERPRETER_URI_LIST)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getWorkflowInterpreterURIs() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -290,7 +291,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/eventingservice/uri")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.GET_EVENTING_URI)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getEventingServiceURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -317,7 +318,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/messagebox/uri")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.GET_MESSAGE_BOX_URI)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getMessageBoxURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -345,7 +346,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("add/gfacuri")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.ADD_GFAC_URI)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addGFacURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -368,7 +369,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("add/workflowinterpreteruri")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.ADD_WFINTERPRETER_URI)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addWorkflowInterpreterURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -391,7 +392,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("add/eventinguri")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.ADD_EVENTING_URI)
     @Produces(MediaType.TEXT_PLAIN)
     public Response setEventingURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -414,7 +415,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("add/msgboxuri")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.ADD_MESSAGE_BOX_URI)
     @Produces(MediaType.TEXT_PLAIN)
     public Response setMessageBoxURI(@FormParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -438,7 +439,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("add/gfacuri/date")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.ADD_GFAC_URI_DATE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addGFacURIByDate(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -464,7 +465,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("add/workflowinterpreteruri/date")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.ADD_WFINTERPRETER_URI_DATE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addWorkflowInterpreterURI(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -490,7 +491,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("add/eventinguri/date")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.ADD_EVENTING_URI_DATE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response setEventingURIByDate(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -516,7 +517,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("add/msgboxuri/date")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.ADD_MSG_BOX_URI_DATE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response setMessageBoxURIByDate(@FormParam("uri") String uri, @FormParam("date") String date) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -541,7 +542,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @DELETE
-    @Path("delete/gfacuri")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_GFAC_URI)
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeGFacURI(@QueryParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -563,7 +564,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @DELETE
-    @Path("delete/allgfacuris")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_ALL_GFAC_URIS)
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeAllGFacURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -585,7 +586,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @DELETE
-    @Path("delete/workflowinterpreteruri")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_WFINTERPRETER_URI)
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeWorkflowInterpreterURI(@QueryParam("uri") String uri) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -607,7 +608,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @DELETE
-    @Path("delete/allworkflowinterpreteruris")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_ALL_WFINTERPRETER_URIS)
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeAllWorkflowInterpreterURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -628,7 +629,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @DELETE
-    @Path("delete/eventinguri")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_EVENTING_URI)
     @Produces(MediaType.TEXT_PLAIN)
     public Response unsetEventingURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -649,7 +650,7 @@ public class ConfigurationRegistryResource {
      * @return HTTP response
      */
     @DELETE
-    @Path("delete/msgboxuri")
+    @Path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_MSG_BOX_URI)
     @Produces(MediaType.TEXT_PLAIN)
     public Response unsetMessageBoxURI() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);

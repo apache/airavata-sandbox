@@ -27,6 +27,7 @@ import org.apache.airavata.registry.api.exception.RegistryException;
 import org.apache.airavata.registry.api.exception.worker.WorkspaceProjectAlreadyExistsException;
 import org.apache.airavata.registry.api.exception.worker.WorkspaceProjectDoesNotExistsException;
 import org.apache.airavata.services.registry.rest.resourcemappings.WorkspaceProjectList;
+import org.apache.airavata.services.registry.rest.utils.ResourcePathConstants;
 import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
 
 import javax.servlet.ServletContext;
@@ -40,7 +41,7 @@ import java.util.List;
  * This class is a REST interface for all the operations related to Project that are exposed in
  * Airavata Registry API
  */
-@Path("/registry/api/projectregistry")
+@Path(ResourcePathConstants.ProjectResourcePathConstants.REGISTRY_API_PROJECTREGISTRY)
 public class ProjectRegistryResource {
     private AiravataRegistry2 airavataRegistry;
 
@@ -57,7 +58,7 @@ public class ProjectRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("project/exist")
+    @Path(ResourcePathConstants.ProjectResourcePathConstants.PROJECT_EXIST)
     @Produces(MediaType.TEXT_PLAIN)
     public Response isWorkspaceProjectExists(@QueryParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -87,7 +88,7 @@ public class ProjectRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("project/exist")
+    @Path(ResourcePathConstants.ProjectResourcePathConstants.PROJECT_EXIST_CREATE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response isWorkspaceProjectExists(@FormParam("projectName") String projectName,
                                              @FormParam("createIfNotExists") String createIfNotExists) {
@@ -120,7 +121,7 @@ public class ProjectRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("add/project")
+    @Path(ResourcePathConstants.ProjectResourcePathConstants.ADD_PROJECT)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addWorkspaceProject(@FormParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -147,7 +148,7 @@ public class ProjectRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("update/project")
+    @Path(ResourcePathConstants.ProjectResourcePathConstants.UPDATE_PROJECT)
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateWorkspaceProject(@FormParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -174,7 +175,7 @@ public class ProjectRegistryResource {
      * @return HTTP response
      */
     @DELETE
-    @Path("delete/project")
+    @Path(ResourcePathConstants.ProjectResourcePathConstants.DELETE_PROJECT)
     @Produces(MediaType.TEXT_PLAIN)
     public Response deleteWorkspaceProject(@QueryParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -200,7 +201,7 @@ public class ProjectRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/project")
+    @Path(ResourcePathConstants.ProjectResourcePathConstants.GET_PROJECT)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getWorkspaceProject(@QueryParam("projectName") String projectName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -231,7 +232,7 @@ public class ProjectRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/projects")
+    @Path(ResourcePathConstants.ProjectResourcePathConstants.GET_PROJECTS)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getWorkspaceProjects() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);

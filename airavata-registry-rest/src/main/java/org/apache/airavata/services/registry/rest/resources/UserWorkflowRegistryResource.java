@@ -27,6 +27,7 @@ import org.apache.airavata.registry.api.exception.worker.UserWorkflowAlreadyExis
 import org.apache.airavata.registry.api.exception.worker.UserWorkflowDoesNotExistsException;
 import org.apache.airavata.services.registry.rest.resourcemappings.Workflow;
 import org.apache.airavata.services.registry.rest.resourcemappings.WorkflowList;
+import org.apache.airavata.services.registry.rest.utils.ResourcePathConstants;
 import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
 
 import javax.servlet.ServletContext;
@@ -42,7 +43,7 @@ import java.util.Map;
  * This class is a REST interface to all the operations related to user workflows that has been
  * exposed by Airavata Registry API
  */
-@Path("/registry/api/userwfregistry")
+@Path(ResourcePathConstants.UserWFConstants.REGISTRY_API_USERWFREGISTRY)
 public class UserWorkflowRegistryResource {
     private AiravataRegistry2 airavataRegistry;
 
@@ -57,7 +58,7 @@ public class UserWorkflowRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("workflow/exist")
+    @Path(ResourcePathConstants.UserWFConstants.WORKFLOW_EXIST)
     @Produces(MediaType.TEXT_PLAIN)
     public Response isWorkflowExists(@QueryParam("workflowName") String workflowName){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -86,7 +87,7 @@ public class UserWorkflowRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("add/workflow")
+    @Path(ResourcePathConstants.UserWFConstants.ADD_WORKFLOW)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addWorkflow(@FormParam("workflowName") String workflowName,
                                 @FormParam("workflowGraphXml") String workflowGraphXml) {
@@ -114,7 +115,7 @@ public class UserWorkflowRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("update/workflow")
+    @Path(ResourcePathConstants.UserWFConstants.UPDATE_WORKFLOW)
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateWorkflow(@FormParam("workflowName") String workflowName,
                                    @FormParam("workflowGraphXml") String workflowGraphXml){
@@ -141,7 +142,7 @@ public class UserWorkflowRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/workflowgraph")
+    @Path(ResourcePathConstants.UserWFConstants.GET_WORKFLOWGRAPH)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getWorkflowGraphXML(@QueryParam("workflowName") String workflowName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -172,7 +173,7 @@ public class UserWorkflowRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/workflows")
+    @Path(ResourcePathConstants.UserWFConstants.GET_WORKFLOWS)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getWorkflows()  {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -210,7 +211,7 @@ public class UserWorkflowRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("remove/workflow")
+    @Path(ResourcePathConstants.UserWFConstants.REMOVE_WORKFLOW)
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeWorkflow(@QueryParam("workflowName") String workflowName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);

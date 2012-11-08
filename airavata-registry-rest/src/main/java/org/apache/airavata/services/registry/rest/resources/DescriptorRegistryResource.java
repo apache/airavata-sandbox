@@ -31,6 +31,7 @@ import org.apache.airavata.registry.api.exception.gateway.DescriptorDoesNotExist
 import org.apache.airavata.registry.api.exception.gateway.MalformedDescriptorException;
 import org.apache.airavata.services.registry.rest.resourcemappings.*;
 import org.apache.airavata.services.registry.rest.utils.DescriptorUtil;
+import org.apache.airavata.services.registry.rest.utils.ResourcePathConstants;
 import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
 
 import javax.servlet.ServletContext;
@@ -44,9 +45,9 @@ import java.util.Map;
 
 /**
  * This class is the REST interface for all the operation regarding descriptors that are
- * exposed from Airavata Registry API
+ * exposed from Airavatas Registry API
  */
-@Path("/registry/api/descriptors")
+@Path(ResourcePathConstants.DecResourcePathConstants.DESC_RESOURCE_PATH)
 public class DescriptorRegistryResource {
     private AiravataRegistry2 airavataRegistry;
 
@@ -64,7 +65,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("hostdescriptor/exist")
+    @Path(ResourcePathConstants.DecResourcePathConstants.HOST_DESC_EXISTS)
     @Produces(MediaType.TEXT_PLAIN)
     public Response isHostDescriptorExists(@QueryParam("hostDescriptorName") String hostDescriptorName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -93,7 +94,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("hostdescriptor/save")
+    @Path(ResourcePathConstants.DecResourcePathConstants.HOST_DESC_SAVE)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response addHostDescriptor(HostDescriptor host) {
@@ -121,7 +122,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("hostdescriptor/update")
+    @Path(ResourcePathConstants.DecResourcePathConstants.HOST_DESC_UPDATE)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response updateHostDescriptor(HostDescriptor host) {
@@ -150,7 +151,7 @@ public class DescriptorRegistryResource {
      * @return   HTTP response
      */
     @GET
-    @Path("host/description")
+    @Path(ResourcePathConstants.DecResourcePathConstants.HOST_DESC)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getHostDescriptor(@QueryParam("hostName") String hostName) {
@@ -181,7 +182,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @DELETE
-    @Path("hostdescriptor/delete")
+    @Path(ResourcePathConstants.DecResourcePathConstants.HOST_DESC_DELETE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeHostDescriptor(@QueryParam("hostName") String hostName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -206,7 +207,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/hostdescriptors")
+    @Path(ResourcePathConstants.DecResourcePathConstants.GET_HOST_DESCS)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getHostDescriptors() {
@@ -241,7 +242,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/hostdescriptor/names")
+    @Path(ResourcePathConstants.DecResourcePathConstants.GET_HOST_DESCS_NAMES)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getHostDescriptorNames() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -275,7 +276,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("servicedescriptor/exist")
+    @Path(ResourcePathConstants.DecResourcePathConstants.SERVICE_DESC_EXISTS)
     @Produces(MediaType.TEXT_PLAIN)
     public Response isServiceDescriptorExists(@QueryParam("serviceDescriptorName") String serviceDescriptorName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -304,7 +305,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("servicedescriptor/save")
+    @Path(ResourcePathConstants.DecResourcePathConstants.SERVICE_DESC_SAVE)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response addJSONServiceDescriptor(ServiceDescriptor service) {
@@ -332,7 +333,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("servicedescriptor/update")
+    @Path(ResourcePathConstants.DecResourcePathConstants.SERVICE_DESC_UPDATE)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response updateServiceDescriptor(ServiceDescriptor service) {
@@ -361,7 +362,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("servicedescriptor/description")
+    @Path(ResourcePathConstants.DecResourcePathConstants.SERVICE_DESC)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getServiceDescriptor(@QueryParam("serviceName") String serviceName) {
@@ -391,7 +392,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @DELETE
-    @Path("servicedescriptor/delete")
+    @Path(ResourcePathConstants.DecResourcePathConstants.SERVICE_DESC_DELETE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeServiceDescriptor(@QueryParam("serviceName") String serviceName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -416,7 +417,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/servicedescriptors")
+    @Path(ResourcePathConstants.DecResourcePathConstants.GET_SERVICE_DESCS)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getServiceDescriptors() {
@@ -455,7 +456,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("applicationdescriptor/exist")
+    @Path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_SAVE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response isApplicationDescriptorExists(@QueryParam("serviceName") String serviceName,
                                                   @QueryParam("hostName") String hostName,
@@ -487,7 +488,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("applicationdescriptor/build/save")
+    @Path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_BUILD_SAVE)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response addApplicationDescriptor(ApplicationDescriptor applicationDescriptor) {
@@ -539,7 +540,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("applicationdescriptor/update")
+    @Path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_UPDATE)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response udpateApplicationDescriptorByDescriptors(ApplicationDescriptor applicationDescriptor) {
@@ -595,7 +596,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("applicationdescriptor/description")
+    @Path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_DESCRIPTION)
     @Produces("text/xml")
     public Response getApplicationDescriptor(@QueryParam("serviceName") String serviceName,
                                              @QueryParam("hostName") String hostName,
@@ -632,7 +633,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("applicationdescriptors/alldescriptors/host/service")
+    @Path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_ALL_DESCS_HOST_SERVICE)
     @Produces("text/xml")
     public Response getApplicationDescriptors(@QueryParam("serviceName") String serviceName,
                                               @QueryParam("hostName") String hostName) {
@@ -667,7 +668,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("applicationdescriptor/alldescriptors/service")
+    @Path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_ALL_DESCS_SERVICE)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getApplicationDescriptors(@QueryParam("serviceName") String serviceName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -714,7 +715,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("applicationdescriptor/alldescriptors")
+    @Path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_ALL_DESCRIPTORS)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getApplicationDescriptors() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -763,7 +764,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("applicationdescriptor/names")
+    @Path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_NAMES)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getApplicationDescriptorNames() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -805,7 +806,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @DELETE
-    @Path("applicationdescriptor/delete")
+    @Path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_DELETE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response removeApplicationDescriptor(@QueryParam("serviceName") String serviceName,
                                                 @QueryParam("hostName") String hostName,

@@ -28,6 +28,7 @@ import org.apache.airavata.registry.api.workflow.*;
 import org.apache.airavata.services.registry.rest.resourcemappings.ExperimentDataList;
 import org.apache.airavata.services.registry.rest.resourcemappings.ExperimentIDList;
 import org.apache.airavata.services.registry.rest.resourcemappings.WorkflowInstancesList;
+import org.apache.airavata.services.registry.rest.utils.ResourcePathConstants;
 import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
 
 import javax.servlet.ServletContext;
@@ -46,7 +47,7 @@ import java.util.List;
  * This class is the REST interface for all the provenance data related methods that are exposed
  * by Airavata Registry API
  */
-@Path("/registry/api/provenanceregistry")
+@Path(ResourcePathConstants.ProvenanceResourcePathConstants.REGISTRY_API_PROVENANCEREGISTRY)
 public class ProvenanceRegistryResource {
     private AiravataRegistry2 airavataRegistry;
 
@@ -64,7 +65,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("update/experiment")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.UPDATE_EXPERIMENT)
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateExperimentExecutionUser(@FormParam("experimentId") String experimentId,
                                                   @FormParam("user") String user) {
@@ -87,7 +88,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/experiment/executionuser")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENT_EXECUTIONUSER)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getExperimentExecutionUser(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -115,7 +116,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/experiment/name")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENT_NAME)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getExperimentName(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -144,7 +145,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("update/experimentname")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.UPDATE_EXPERIMENTNAME)
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateExperimentName(@FormParam("experimentId") String experimentId,
                                          @FormParam("experimentName") String experimentName) {
@@ -167,7 +168,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/experimentmetadata")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENTMETADATA)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getExperimentMetadata(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -196,7 +197,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("update/experimentmetadata")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.UPDATE_EXPERIMENTMETADATA)
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateExperimentMetadata(@FormParam("experimentId") String experimentId,
                                              @FormParam("metadata") String metadata) {
@@ -220,7 +221,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/workflowtemplatename")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_WORKFLOWTEMPLATENAME)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getWorkflowExecutionTemplateName(@QueryParam("workflowInstanceId") String workflowInstanceId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -249,7 +250,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("update/workflowinstancetemplatename")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.UPDATE_WORKFLOWINSTANCETEMPLATENAME)
     @Produces(MediaType.TEXT_PLAIN)
     public Response setWorkflowInstanceTemplateName(@FormParam("workflowInstanceId") String workflowInstanceId,
                                                     @FormParam("templateName") String templateName) {
@@ -272,7 +273,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/experimentworkflowinstances")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENTWORKFLOWINSTANCES)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getExperimentWorkflowInstances(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -306,7 +307,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("workflowinstance/exist/check")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.WORKFLOWINSTANCE_EXIST_CHECK)
     @Produces(MediaType.TEXT_PLAIN)
     public Response isWorkflowInstanceExists(@QueryParam("instanceId") String instanceId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -337,7 +338,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("workflowinstance/exist/create")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.WORKFLOWINSTANCE_EXIST_CREATE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response isWorkflowInstanceExistsThenCreate(@QueryParam("instanceId") String instanceId,
                                                        @QueryParam("createIfNotPresent") boolean createIfNotPresent) {
@@ -367,7 +368,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("update/workflowinstancestatus/instanceid")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.UPDATE_WORKFLOWINSTANCESTATUS_INSTANCEID)
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateWorkflowInstanceStatusByInstance(@FormParam("instanceId") String instanceId,
                                                            @FormParam("executionStatus") String executionStatus) {
@@ -393,7 +394,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("update/workflowinstancestatus")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.UPDATE_WORKFLOWINSTANCESTATUS)
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateWorkflowInstanceStatus(@FormParam("workflowInstanceId") String workflowInstanceId,
                                                  @FormParam("executionStatus") String executionStatus,
@@ -426,7 +427,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/workflowinstancestatus")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_WORKFLOWINSTANCESTATUS)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getWorkflowInstanceStatus(@QueryParam("instanceId") String instanceId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -456,7 +457,7 @@ public class ProvenanceRegistryResource {
      * @return  HTTP response
      */
     @POST
-    @Path("update/workflownodeinput")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.UPDATE_WORKFLOWNODEINPUT)
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateWorkflowNodeInput(@FormParam("nodeID") String nodeID,
                                             @FormParam("workflowInstanceId") String workflowInstanceID,
@@ -485,7 +486,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("update/workflownodeoutput")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.UPDATE_WORKFLOWNODEOUTPUT)
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateWorkflowNodeOutput(@FormParam("nodeID") String nodeID,
                                              @FormParam("workflowInstanceId") String workflowInstanceID,
@@ -661,7 +662,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/experiment")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENT)
     @Produces(MediaType.APPLICATION_XML)
     public Response getExperiment(@QueryParam("experimentId") String experimentId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -689,7 +690,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/experimentId/user")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENT_ID_USER)
     @Produces(MediaType.APPLICATION_XML)
     public Response getExperimentIdByUser(@QueryParam("username") String username) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -720,7 +721,7 @@ public class ProvenanceRegistryResource {
      *
      */
     @GET
-    @Path("get/experiment/user")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENT_USER)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getExperimentByUser(@QueryParam("username") String username){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -756,7 +757,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("update/workflownode/status")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.UPDATE_WORKFLOWNODE_STATUS)
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateWorkflowNodeStatus(@FormParam("workflowInstanceId") String workflowInstanceId,
                                              @FormParam("nodeId") String nodeId,
@@ -782,7 +783,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/workflownode/status")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_WORKFLOWNODE_STATUS)
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getWorkflowNodeStatus(@QueryParam("workflowInstanceId") String workflowInstanceId,
                                           @QueryParam("nodeId") String nodeId){
@@ -814,7 +815,7 @@ public class ProvenanceRegistryResource {
      * @return  HTTP response
      */
     @GET
-    @Path("get/workflownode/starttime")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_WORKFLOWNODE_STARTTIME)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getWorkflowNodeStartTime(@QueryParam("workflowInstanceId") String workflowInstanceId,
                                              @QueryParam("nodeId") String nodeId) {
@@ -845,7 +846,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/workflow/starttime")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_WORKFLOW_STARTTIME)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getWorkflowStartTime(@QueryParam("workflowInstanceId") String workflowInstanceId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -875,7 +876,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("update/workflownode/gramdata")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.UPDATE_WORKFLOWNODE_GRAMDATA)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateWorkflowNodeGramData(WorkflowNodeGramData workflowNodeGramData) {
@@ -899,7 +900,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/workflowinstancedata")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_WORKFLOWINSTANCEDATA)
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getWorkflowInstanceData(@QueryParam("workflowInstanceId") String workflowInstanceId) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -928,7 +929,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("workflowinstance/exist")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.WORKFLOWINSTANCE_EXIST)
     @Produces(MediaType.TEXT_PLAIN)
     public Response isWorkflowInstanceNodePresent(@QueryParam("workflowInstanceId") String workflowInstanceId,
                                                   @QueryParam("nodeId") String nodeId){
@@ -959,7 +960,7 @@ public class ProvenanceRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("workflowinstance/nodeData")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.WORKFLOWINSTANCE_NODE_DATA)
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getWorkflowInstanceNodeData(@QueryParam("workflowInstanceId") String workflowInstanceId,
                                                 @QueryParam("nodeId") String nodeId) {
@@ -991,7 +992,7 @@ public class ProvenanceRegistryResource {
      * @return  HTTP response
      */
     @POST
-    @Path("add/workflowinstance")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.ADD_WORKFLOWINSTANCE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addWorkflowInstance(@FormParam("experimentId") String experimentId,
                                         @FormParam("workflowInstanceId") String workflowInstanceId,
@@ -1017,7 +1018,7 @@ public class ProvenanceRegistryResource {
      * @return  HTTP response
      */
     @POST
-    @Path("update/workflownodetype")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.UPDATE_WORKFLOWNODETYPE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response updateWorkflowNodeType(@FormParam("workflowInstanceId") String workflowInstanceId,
                                            @FormParam("nodeId") String nodeId,
@@ -1050,7 +1051,7 @@ public class ProvenanceRegistryResource {
      * @return  HTTP response
      */
     @POST
-    @Path("add/workflowinstancenode")
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.ADD_WORKFLOWINSTANCENODE)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addWorkflowInstanceNode(@FormParam("workflowInstanceId") String workflowInstanceId,
                                             @FormParam("nodeId") String nodeId) {

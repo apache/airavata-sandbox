@@ -29,6 +29,7 @@ import org.apache.airavata.registry.api.exception.worker.UserWorkflowDoesNotExis
 import org.apache.airavata.services.registry.rest.resourcemappings.PublishWorkflowNamesList;
 import org.apache.airavata.services.registry.rest.resourcemappings.Workflow;
 import org.apache.airavata.services.registry.rest.resourcemappings.WorkflowList;
+import org.apache.airavata.services.registry.rest.utils.ResourcePathConstants;
 import org.apache.airavata.services.registry.rest.utils.RestServicesConstants;
 
 import javax.servlet.ServletContext;
@@ -44,7 +45,7 @@ import java.util.Map;
  * This class is the REST interface for all the operations related to published workflows that has
  * been exposed by Airavata Registry API
  */
-@Path("/registry/api/publishwfregistry")
+@Path(ResourcePathConstants.PublishedWFConstants.REGISTRY_API_PUBLISHWFREGISTRY)
 public class PublishWorkflowRegistryResource {
     private AiravataRegistry2 airavataRegistry;
 
@@ -59,7 +60,7 @@ public class PublishWorkflowRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("publishwf/exist")
+    @Path(ResourcePathConstants.PublishedWFConstants.PUBLISHWF_EXIST)
     @Produces(MediaType.TEXT_PLAIN)
     public Response isPublishedWorkflowExists(@QueryParam("workflowname") String workflowname) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -88,7 +89,7 @@ public class PublishWorkflowRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("publish/workflow")
+    @Path(ResourcePathConstants.PublishedWFConstants.PUBLISH_WORKFLOW)
     @Produces(MediaType.TEXT_PLAIN)
     public Response publishWorkflow(@FormParam("workflowName") String workflowName,
                                     @FormParam("publishWorkflowName") String publishWorkflowName)  {
@@ -119,7 +120,7 @@ public class PublishWorkflowRegistryResource {
      * @return HTTP response
      */
     @POST
-    @Path("publish/default/workflow")
+    @Path(ResourcePathConstants.PublishedWFConstants.PUBLISH_DEFAULT_WORKFLOW)
     @Produces(MediaType.TEXT_PLAIN)
     public Response publishWorkflow(@FormParam("workflowName") String workflowName){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -149,7 +150,7 @@ public class PublishWorkflowRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/publishworkflowgraph")
+    @Path(ResourcePathConstants.PublishedWFConstants.GET_PUBLISHWORKFLOWGRAPH)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getPublishedWorkflowGraphXML(@QueryParam("workflowName") String workflowName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -180,7 +181,7 @@ public class PublishWorkflowRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/publishworkflownames")
+    @Path(ResourcePathConstants.PublishedWFConstants.GET_PUBLISHWORKFLOWNAMES)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getPublishedWorkflowNames() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -209,7 +210,7 @@ public class PublishWorkflowRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("get/publishworkflows")
+    @Path(ResourcePathConstants.PublishedWFConstants.GET_PUBLISHWORKFLOWS)
     @Produces(MediaType.TEXT_PLAIN)
     public Response getPublishedWorkflows() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
@@ -247,7 +248,7 @@ public class PublishWorkflowRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path("remove/publishworkflow")
+    @Path(ResourcePathConstants.PublishedWFConstants.REMOVE_PUBLISHWORKFLOW)
     @Produces(MediaType.TEXT_PLAIN)
     public Response removePublishedWorkflow(@QueryParam("workflowName") String workflowName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
