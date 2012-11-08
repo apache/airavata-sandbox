@@ -90,7 +90,7 @@ public class ProjectRegistryResource {
     @POST
     @Path(ResourcePathConstants.ProjectResourcePathConstants.PROJECT_EXIST_CREATE)
     @Produces(MediaType.TEXT_PLAIN)
-    public Response isWorkspaceProjectExists(@FormParam("projectName") String projectName,
+    public Response isWorkspaceProjectExistsCreate(@FormParam("projectName") String projectName,
                                              @FormParam("createIfNotExists") String createIfNotExists) {
         boolean createIfNotExistStatus = false;
         if (createIfNotExists.equals("true")) {

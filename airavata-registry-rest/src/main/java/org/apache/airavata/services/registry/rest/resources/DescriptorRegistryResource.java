@@ -308,7 +308,7 @@ public class DescriptorRegistryResource {
     @Path(ResourcePathConstants.DecResourcePathConstants.SERVICE_DESC_SAVE)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response addJSONServiceDescriptor(ServiceDescriptor service) {
+    public Response addServiceDescriptor(ServiceDescriptor service) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             ServiceDescription serviceDescription = DescriptorUtil.createServiceDescription(service);
@@ -543,7 +543,7 @@ public class DescriptorRegistryResource {
     @Path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_UPDATE)
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response udpateApplicationDescriptorByDescriptors(ApplicationDescriptor applicationDescriptor) {
+    public Response udpateApplicationDescriptor(ApplicationDescriptor applicationDescriptor) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {
             String hostdescName = applicationDescriptor.getHostdescName();

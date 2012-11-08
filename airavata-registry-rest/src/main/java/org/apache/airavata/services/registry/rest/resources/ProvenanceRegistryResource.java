@@ -1068,4 +1068,137 @@ public class ProvenanceRegistryResource {
         }
     }
 
+
+    /**
+     * This method wil check whether the experiment name exists
+     * @param experimentName experiment name
+     * @return HTTP response
+     */
+    @GET
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.EXPERIMENTNAME_EXISTS)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response isExperimentNameExist(@QueryParam("experimentName") String experimentName){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            boolean experimentNameExist = airavataRegistry.isExperimentNameExist(experimentName);
+            if (experimentNameExist){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity("Experiment name exists...");
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Experiment name does not exists...");
+                return builder.build();
+            }
+
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
+
+    }
+
+    /**
+     * This method will return only information regarding to the experiment. Node information will
+     * not be retrieved
+     * @param experimentId experiment ID
+     * @return HTTP response
+     */
+    @GET
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENT_METAINFORMATION)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getExperimentMetaInformation(@QueryParam("experimentId") String experimentId){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            ExperimentDataImpl experimentMetaInformation = (ExperimentDataImpl)airavataRegistry.getExperimentMetaInformation(experimentId);
+            if (experimentMetaInformation != null){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(experimentMetaInformation);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("Could not retrieve experiment meta information...");
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
+    }
+
+    /**
+     * This method will return all meta information for all the experiments
+     * @param user experiment execution user
+     * @return HTTP response
+     */
+    @GET
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_ALL_EXPERIMENT_METAINFORMATION)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getAllExperimentMetaInformation(@QueryParam("user") String user){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            List<ExperimentData> allExperimentMetaInformation = airavataRegistry.getAllExperimentMetaInformation(user);
+            ExperimentDataList experimentDataList = new ExperimentDataList();
+            List<ExperimentDataImpl> experimentDatas = new ArrayList<ExperimentDataImpl>();
+            for (ExperimentData experimentData : allExperimentMetaInformation){
+                experimentDatas.add((ExperimentDataImpl)experimentData);
+            }
+            experimentDataList.setExperimentDataList(experimentDatas);
+            if (allExperimentMetaInformation.size() != 0){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(experimentDataList);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No experiment data available...");
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
+    }
+
+    /**
+     * This method will search all the experiments which has the name like given experiment name for
+     * a given experiment execution user
+     * @param user experiment execution user
+     * @param experimentNameRegex experiment name
+     * @return  HTTP response
+     */
+    @GET
+    @Path(ResourcePathConstants.ProvenanceResourcePathConstants.SEARCH_EXPERIMENTS)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response searchExperiments(@QueryParam("user") String user,
+                                      @QueryParam("experimentNameRegex") String experimentNameRegex){
+        airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
+        try{
+            List<ExperimentData> experimentDataList = airavataRegistry.searchExperiments(user, experimentNameRegex);
+            ExperimentDataList experimentData = new ExperimentDataList();
+            List<ExperimentDataImpl> experimentDatas = new ArrayList<ExperimentDataImpl>();
+            for (ExperimentData experimentData1 : experimentDataList){
+                experimentDatas.add((ExperimentDataImpl)experimentData1);
+            }
+            experimentData.setExperimentDataList(experimentDatas);
+            if (experimentDataList.size() != 0){
+                Response.ResponseBuilder builder = Response.status(Response.Status.OK);
+                builder.entity(experimentData);
+                return builder.build();
+            } else {
+                Response.ResponseBuilder builder = Response.status(Response.Status.NO_CONTENT);
+                builder.entity("No experiment data available...");
+                return builder.build();
+            }
+        } catch (RegistryException e) {
+            Response.ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+            builder.entity(e.getMessage());
+            return builder.build();
+        }
+
+    }
+
+
 }

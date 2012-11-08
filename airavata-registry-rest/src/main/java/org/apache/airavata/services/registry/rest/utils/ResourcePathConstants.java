@@ -134,6 +134,11 @@ public class ResourcePathConstants {
         public static final String ADD_WORKFLOWINSTANCE = "add/workflowinstance";
         public static final String UPDATE_WORKFLOWNODETYPE = "update/workflownodetype";
         public static final String ADD_WORKFLOWINSTANCENODE = "add/workflowinstancenode";
+        public static final String EXPERIMENTNAME_EXISTS = "experimentname/exists";
+
+        public static final String GET_EXPERIMENT_METAINFORMATION = "get/experiment/metainformation";
+        public static final String GET_ALL_EXPERIMENT_METAINFORMATION = "get/all/experiment/metainformation";
+        public static final String SEARCH_EXPERIMENTS = "search/experiments";
     }
 
     public final class PublishedWFConstants {
