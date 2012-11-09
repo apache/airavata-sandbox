@@ -25,7 +25,7 @@ public class ResourcePathConstants {
 
 
     public final class ConfigResourcePathConstants {
-        public static final String CONFIGURATION_REGISTRY_RESOURCE = "/registry/api/congfigregistry";
+        public static final String CONFIGURATION_REGISTRY_RESOURCE = "/registry/api/congfigregistry/";
         public static final String GET_CONFIGURATION = "get/configuration";
         public static final String GET_CONFIGURATION_LIST = "get/configurationlist";
         public static final String SAVE_CONFIGURATION = "save/configuration";
@@ -53,7 +53,7 @@ public class ResourcePathConstants {
     }
 
     public final class DecResourcePathConstants {
-        public static final String DESC_RESOURCE_PATH = "/registry/api/descriptors";
+        public static final String DESC_RESOURCE_PATH = "/registry/api/descriptors/";
         public static final String HOST_DESC_EXISTS = "hostdescriptor/exist";
         public static final String HOST_DESC_SAVE = "hostdescriptor/save";
         public static final String HOST_DESC_UPDATE = "hostdescriptor/update";
@@ -79,7 +79,7 @@ public class ResourcePathConstants {
     }
 
     public final class ExperimentResourcePathConstants {
-        public static final String EXP_RESOURCE_PATH  =  "/registry/api/experimentregistry";
+        public static final String EXP_RESOURCE_PATH  =  "/registry/api/experimentregistry/";
         public static final String DELETE_EXP = "delete/experiment";
         public static final String GET_APP_EXPS = "get/experiments/all" ;
         public static final String GET_EXPS_BY_PROJECT = "get/experiments/project" ;
@@ -91,7 +91,7 @@ public class ResourcePathConstants {
     }
 
     public final class ProjectResourcePathConstants {
-        public static final String REGISTRY_API_PROJECTREGISTRY = "/registry/api/projectregistry";
+        public static final String REGISTRY_API_PROJECTREGISTRY = "/registry/api/projectregistry/";
         public static final String PROJECT_EXIST = "project/exist";
         public static final String PROJECT_EXIST_CREATE = "project/exist";
         public static final String ADD_PROJECT = "add/project";
@@ -103,7 +103,7 @@ public class ResourcePathConstants {
 
     public final class ProvenanceResourcePathConstants {
 
-        public static final String REGISTRY_API_PROVENANCEREGISTRY = "/registry/api/provenanceregistry";
+        public static final String REGISTRY_API_PROVENANCEREGISTRY = "/registry/api/provenanceregistry/";
         public static final String UPDATE_EXPERIMENT = "update/experiment";
         public static final String GET_EXPERIMENT_EXECUTIONUSER = "get/experiment/executionuser";
         public static final String GET_EXPERIMENT_NAME = "get/experiment/name";
@@ -143,7 +143,7 @@ public class ResourcePathConstants {
 
     public final class PublishedWFConstants {
 
-        public static final String REGISTRY_API_PUBLISHWFREGISTRY = "/registry/api/publishwfregistry";
+        public static final String REGISTRY_API_PUBLISHWFREGISTRY = "/registry/api/publishwfregistry/";
         public static final String PUBLISHWF_EXIST = "publishwf/exist";
         public static final String PUBLISH_WORKFLOW = "publish/workflow";
         public static final String PUBLISH_DEFAULT_WORKFLOW = "publish/default/workflow";
@@ -155,7 +155,7 @@ public class ResourcePathConstants {
 
     public final class UserWFConstants {
 
-        public static final String REGISTRY_API_USERWFREGISTRY = "/registry/api/userwfregistry";
+        public static final String REGISTRY_API_USERWFREGISTRY = "/registry/api/userwfregistry/";
         public static final String WORKFLOW_EXIST = "workflow/exist";
         public static final String ADD_WORKFLOW = "add/workflow";
         public static final String UPDATE_WORKFLOW = "update/workflow";
