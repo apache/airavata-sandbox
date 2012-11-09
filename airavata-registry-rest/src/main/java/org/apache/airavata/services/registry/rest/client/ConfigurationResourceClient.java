@@ -43,15 +43,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigurationResourceClient {
-    private static WebResource webResource;
+    private WebResource webResource;
     private final static Logger logger = LoggerFactory.getLogger(ConfigurationResourceClient.class);
 
-    private static URI getBaseURI() {
+    private URI getBaseURI() {
         logger.info("Creating Base URI");
         return UriBuilder.fromUri("http://localhost:9080/airavata-services/").build();
     }
 
-    private static WebResource getConfigurationBaseResource (){
+    private WebResource getConfigurationBaseResource (){
         ClientConfig config = new DefaultClientConfig();
         config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING,
                 Boolean.TRUE);
@@ -62,7 +62,7 @@ public class ConfigurationResourceClient {
     }
 
 
-    public static Object getConfiguration(String configKey) {
+    public Object getConfiguration(String configKey) {
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.GET_CONFIGURATION);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("key", configKey);
@@ -78,7 +78,7 @@ public class ConfigurationResourceClient {
         return output;
     }
 
-    public static List<Object> getConfigurationList (String configKey) {
+    public List<Object> getConfigurationList (String configKey) {
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.GET_CONFIGURATION_LIST);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("key", configKey);
@@ -103,7 +103,7 @@ public class ConfigurationResourceClient {
         return configurationValueList;
     }
 
-    public static void setConfiguration (String configKey, String configVal, String date){
+    public void setConfiguration (String configKey, String configVal, String date){
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.SAVE_CONFIGURATION);
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("key", configKey);
@@ -120,7 +120,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void addConfiguration(String configKey, String configVal, String date){
+    public void addConfiguration(String configKey, String configVal, String date){
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.UPDATE_CONFIGURATION);
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("key", configKey);
@@ -137,7 +137,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void removeAllConfiguration(String key){
+    public void removeAllConfiguration(String key){
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_ALL_CONFIGURATION);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("key", key);
@@ -152,7 +152,7 @@ public class ConfigurationResourceClient {
 
     }
 
-    public static void removeConfiguration(String key, String value){
+    public void removeConfiguration(String key, String value){
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_CONFIGURATION);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("key", key);
@@ -167,7 +167,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static List<URI> getGFacURIs(){
+    public List<URI> getGFacURIs(){
         List<URI> uriList = new ArrayList<URI>();
         try{
             webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.GET_GFAC_URI_LIST);
@@ -193,7 +193,7 @@ public class ConfigurationResourceClient {
         return uriList;
     }
 
-    public static List<URI> getWorkflowInterpreterURIs(){
+    public List<URI> getWorkflowInterpreterURIs(){
         List<URI> uriList = new ArrayList<URI>();
         try{
             webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.GET_WFINTERPRETER_URI_LIST);
@@ -219,7 +219,7 @@ public class ConfigurationResourceClient {
     }
 
 
-    public static URI getEventingURI(){
+    public URI getEventingURI(){
         try{
             webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.GET_EVENTING_URI);
             ClientResponse response = webResource.get(ClientResponse.class);
@@ -239,7 +239,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static URI getMsgBoxURI(){
+    public URI getMsgBoxURI(){
         try{
             webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.GET_MESSAGE_BOX_URI);
             ClientResponse response = webResource.get(ClientResponse.class);
@@ -259,7 +259,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void addGFacURI(String uri) {
+    public void addGFacURI(String uri) {
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.ADD_GFAC_URI);
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("uri", uri);
@@ -274,7 +274,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void addWFInterpreterURI(String uri) {
+    public void addWFInterpreterURI(String uri) {
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.ADD_WFINTERPRETER_URI);
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("uri", uri);
@@ -289,7 +289,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void setEventingURI(String uri) {
+    public void setEventingURI(String uri) {
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.ADD_EVENTING_URI);
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("uri", uri);
@@ -304,7 +304,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void setMessageBoxURI(String uri) {
+    public void setMessageBoxURI(String uri) {
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.ADD_MESSAGE_BOX_URI);
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("uri", uri);
@@ -319,7 +319,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void addGFacURIByDate(String uri, String date) {
+    public void addGFacURIByDate(String uri, String date) {
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.ADD_GFAC_URI_DATE);
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("uri", uri);
@@ -335,7 +335,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void addWorkflowInterpreterURI(String uri, String date) {
+    public void addWorkflowInterpreterURI(String uri, String date) {
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.ADD_WFINTERPRETER_URI_DATE);
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("uri", uri);
@@ -351,7 +351,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void setEventingURIByDate(String uri, String date) {
+    public void setEventingURIByDate(String uri, String date) {
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.ADD_EVENTING_URI_DATE);
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("uri", uri);
@@ -367,7 +367,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void setMessageBoxURIByDate(String uri, String date) {
+    public void setMessageBoxURIByDate(String uri, String date) {
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.ADD_MSG_BOX_URI_DATE);
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("uri", uri);
@@ -383,7 +383,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void removeGFacURI(String uri){
+    public void removeGFacURI(String uri){
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_GFAC_URI);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("uri", uri);
@@ -397,7 +397,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void removeAllGFacURI(){
+    public void removeAllGFacURI(){
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_ALL_GFAC_URIS);
         ClientResponse response = webResource.delete(ClientResponse.class);
         int status = response.getStatus();
@@ -409,7 +409,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void removeWorkflowInterpreterURI(String uri){
+    public void removeWorkflowInterpreterURI(String uri){
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_WFINTERPRETER_URI);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("uri", uri);
@@ -423,7 +423,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void removeAllWorkflowInterpreterURI(){
+    public void removeAllWorkflowInterpreterURI(){
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_ALL_WFINTERPRETER_URIS);
         ClientResponse response = webResource.delete(ClientResponse.class);
         int status = response.getStatus();
@@ -435,7 +435,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void unsetEventingURI(){
+    public void unsetEventingURI(){
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_EVENTING_URI);
         ClientResponse response = webResource.delete(ClientResponse.class);
         int status = response.getStatus();
@@ -447,7 +447,7 @@ public class ConfigurationResourceClient {
         }
     }
 
-    public static void unsetMessageBoxURI(){
+    public void unsetMessageBoxURI(){
         webResource = getConfigurationBaseResource().path(ResourcePathConstants.ConfigResourcePathConstants.DELETE_MSG_BOX_URI);
         ClientResponse response = webResource.delete(ClientResponse.class);
         int status = response.getStatus();

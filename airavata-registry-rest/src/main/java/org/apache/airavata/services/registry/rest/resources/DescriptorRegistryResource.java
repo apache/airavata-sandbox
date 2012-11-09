@@ -456,7 +456,7 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_SAVE)
+    @Path(ResourcePathConstants.DecResourcePathConstants.APPL_DESC_EXIST)
     @Produces(MediaType.TEXT_PLAIN)
     public Response isApplicationDescriptorExists(@QueryParam("serviceName") String serviceName,
                                                   @QueryParam("hostName") String hostName,
@@ -633,9 +633,9 @@ public class DescriptorRegistryResource {
      * @return HTTP response
      */
     @GET
-    @Path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_ALL_DESCS_HOST_SERVICE)
+    @Path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_PER_HOST_SERVICE)
     @Produces("text/xml")
-    public Response getApplicationDescriptors(@QueryParam("serviceName") String serviceName,
+    public Response getApplicationDescriptorPerServiceHost(@QueryParam("serviceName") String serviceName,
                                               @QueryParam("hostName") String hostName) {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try {

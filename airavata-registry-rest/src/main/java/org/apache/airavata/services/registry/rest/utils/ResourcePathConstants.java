@@ -67,11 +67,11 @@ public class ResourcePathConstants {
         public static final String SERVICE_DESC = "servicedescriptor/description";
         public static final String SERVICE_DESC_DELETE = "servicedescriptor/delete";
         public static final String GET_SERVICE_DESCS = "get/servicedescriptors";
-        public static final String APP_DESC_SAVE = "applicationdescriptor/exist";
+        public static final String APPL_DESC_EXIST = "applicationdescriptor/exist";
         public static final String APP_DESC_BUILD_SAVE = "applicationdescriptor/build/save";
         public static final String APP_DESC_UPDATE = "applicationdescriptor/update";
         public static final String APP_DESC_DESCRIPTION = "applicationdescriptor/description";
-        public static final String APP_DESC_ALL_DESCS_HOST_SERVICE = "applicationdescriptors/alldescriptors/host/service";
+        public static final String APP_DESC_PER_HOST_SERVICE = "applicationdescriptors/alldescriptors/host/service";
         public static final String APP_DESC_ALL_DESCS_SERVICE = "applicationdescriptor/alldescriptors/service";
         public static final String APP_DESC_ALL_DESCRIPTORS = "applicationdescriptor/alldescriptors";
         public static final String APP_DESC_NAMES = "applicationdescriptor/names";
