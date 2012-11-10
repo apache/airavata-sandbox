@@ -37,7 +37,7 @@ public class ApplicationContext {
 	 * 
 	 */
     private static final long serialVersionUID = -2270092298283648553L;
-    public static final String GRAMCLIENT_PROPERTY = "gramclient.properties";
+    public static final String GRAMCLIENT_PROPERTY = "airavata-gram-client.properties";
     private Properties properties;
     protected GSSCredential gssCredential;
 

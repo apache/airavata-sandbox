@@ -5,8 +5,8 @@ do
   CLASSPATH=$CLASSPATH:$i
 done
 
-CLASSPATH=$CLASSPATH:target/GRAM5-Lite-1.0.jar:./config
+CLASSPATH=$CLASSPATH:target/airavata-gram-client-0.1-SNAPSHOT.jar:./config
 
 echo $CLASSPATH
 
-$JAVA_HOME/bin/java -classpath $CLASSPATH org.apache.airavata.jobsubmission.JobSubmission $*
+java -classpath $CLASSPATH org.apache.airavata.jobsubmission.JobSubmission $*

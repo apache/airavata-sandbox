@@ -30,6 +30,15 @@ import org.apache.airavata.jobsubmission.utils.ServiceConstants;
 
 public class ExectionContext {
 
+    private String testingHost;
+    
+    private String lonestarGRAM;
+    private String lonestarGridFTP;
+    private String rangerGRAM;
+    private String rangerGridFTP;
+    private String trestlesGRAM;
+    private String trestlesGridFTP;
+    
     private String workingDir;
     private String tmpDir;
     private String stdOut;
@@ -56,7 +65,7 @@ public class ExectionContext {
     private String gridFTPServerDest;
     private String destdataLocation;
 
-    public static final String PROPERTY_FILE = "gramclient.properties";
+    public static final String PROPERTY_FILE = "airavata-gram-client.properties";
 
     public ExectionContext() throws IOException {
         loadConfigration();
@@ -69,8 +78,17 @@ public class ExectionContext {
         Properties properties = new Properties();
         if (propertyStream != null) {
             properties.load(propertyStream);
-            String gateway = properties.getProperty(ServiceConstants.GATEWAY);
-            String exec = properties.getProperty(ServiceConstants.EXECUTION);
+            
+            String testinghost = properties.getProperty(ServiceConstants.TESTINGHOST);
+            
+            String lonestargram = properties.getProperty(ServiceConstants.LONESTARGRAMEPR);
+            String lonestargridftp = properties.getProperty(ServiceConstants.LONESTARGRIDFTPEPR);
+            String rangergram = properties.getProperty(ServiceConstants.RANGERGRAMEPR);
+            String rangergridftp = properties.getProperty(ServiceConstants.RANGERGRIDFTPEPR);
+            String trestlesgram = properties.getProperty(ServiceConstants.TRESTLESGRAMEPR);
+            String trestlesgridftp = properties.getProperty(ServiceConstants.TRESTLESGRIDFTPEPR);
+
+            String exec = properties.getProperty(ServiceConstants.EXECUTABLE);
             String args = properties.getProperty(ServiceConstants.ARGUMENTS);
             String queueName = properties.getProperty(ServiceConstants.QUEUE);
             String pn = properties.getProperty(ServiceConstants.PROJECT_NUMBER);
@@ -82,9 +100,30 @@ public class ExectionContext {
             String gridFTPSourcePath = properties.getProperty(ServiceConstants.GRIDFTPSOURCEPATH);
             String gridFTPServerDest = properties.getProperty(ServiceConstants.GRIDFTPSERVERDEST);
             String gridFTPDestPath = properties.getProperty(ServiceConstants.GRIDFTPDESTPATH);
-            if (gateway != null) {
-                this.host = gateway;
+
+            if (testinghost != null) {
+                this.testingHost = testinghost;
             }
+            
+            if (lonestargram != null) {
+                this.lonestarGRAM = lonestargram;
+            }
+            if (lonestargridftp != null) {
+                this.lonestarGridFTP = lonestargridftp;
+            }
+            if (rangergram != null) {
+                this.rangerGRAM = rangergram;
+            }
+            if (rangergridftp != null) {
+                this.rangerGridFTP= rangergridftp;
+            }
+            if (trestlesgram != null) {
+                this.trestlesGRAM = trestlesgram;
+            }
+            if (trestlesgridftp != null) {
+                this.trestlesGridFTP = trestlesgridftp;
+            }
+            
             if (exec != null) {
                 this.executable = exec;
             }
@@ -135,6 +174,62 @@ public class ExectionContext {
             }
 
         }
+    }
+
+    public String getTestingHost() {
+        return testingHost;
+    }
+
+    public void setTestingHost(String testingHost) {
+        this.testingHost = testingHost;
+    }
+
+    public String getLonestarGRAM() {
+        return lonestarGRAM;
+    }
+
+    public void setLonestarGRAM(String lonestarGRAM) {
+        this.lonestarGRAM = lonestarGRAM;
+    }
+
+    public String getLonestarGridFTP() {
+        return lonestarGridFTP;
+    }
+
+    public void setLonestarGridFTP(String lonestarGridFTP) {
+        this.lonestarGridFTP = lonestarGridFTP;
+    }
+
+    public String getRangerGRAM() {
+        return rangerGRAM;
+    }
+
+    public void setRangerGRAM(String rangerGRAM) {
+        this.rangerGRAM = rangerGRAM;
+    }
+
+    public String getRangerGridFTP() {
+        return rangerGridFTP;
+    }
+
+    public void setRangerGridFTP(String rangerGridFTP) {
+        this.rangerGridFTP = rangerGridFTP;
+    }
+
+    public String getTrestlesGRAM() {
+        return trestlesGRAM;
+    }
+
+    public void setTrestlesGRAM(String trestlesGRAM) {
+        this.trestlesGRAM = trestlesGRAM;
+    }
+
+    public String getTrestlesGridFTP() {
+        return trestlesGridFTP;
+    }
+
+    public void setTrestlesGridFTP(String trestlesGridFTP) {
+        this.trestlesGridFTP = trestlesGridFTP;
     }
 
     /**

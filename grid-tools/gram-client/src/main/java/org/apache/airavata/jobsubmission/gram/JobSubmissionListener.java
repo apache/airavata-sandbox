@@ -59,7 +59,7 @@ public class JobSubmissionListener implements GramJobListener {
             }
 
             synchronized (this) {
-                wait(60 * 1000l);
+                wait(20 * 1000l);
             }
         }
     }

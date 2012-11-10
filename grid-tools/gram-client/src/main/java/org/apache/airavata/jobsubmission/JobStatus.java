@@ -36,7 +36,7 @@ public class JobStatus {
 
             String rsl = "";
             GramJob job = new GramJob(context.getGssCredential(), rsl);
-            job.setID("https://gatekeeper.ranger.tacc.teragrid.org:50388/16073791261988702796/9536223017013632385/");
+            job.setID("https://trestles-login2.sdsc.edu:50385/16289849894573229156/9412551328091080577/");
             JobListener listener = new JobListener(job, context.getGssCredential());
             job.addListener(listener);
             System.out.println("Status 1111111" + job.getStatusAsString());

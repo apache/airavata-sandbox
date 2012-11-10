@@ -43,8 +43,15 @@ public class GramJobSubmission {
     public void executeJob(GSSCredential gssCred, ExectionContext appExecContext, StringBuffer buffer) throws Exception {
 
         try {
-            log.setLevel(org.apache.log4j.Level.INFO);
-            String contact = appExecContext.getHost();
+            log.setLevel(org.apache.log4j.Level.ALL);
+            String contact = "";
+            if (appExecContext.getTestingHost().equals("trestles")) {
+                contact = appExecContext.getTrestlesGRAM();
+            } else if (appExecContext.getTestingHost().equals("ranger")) {
+                contact = appExecContext.getRangerGRAM();
+            } else if (appExecContext.getTestingHost().equals("lonestar")) {
+                contact = appExecContext.getLonestarGRAM();
+            }
             GramAttributes jobAttr = configureRemoteJob(appExecContext);
             String rsl = jobAttr.toRSL();
             GramJob job = new GramJob(rsl);
@@ -83,30 +90,18 @@ public class GramJobSubmission {
             jobAttr.setStdout(appExecContext.getStdOut());
             jobAttr.setStderr(appExecContext.getStderr());
         }
-        // The env here contains the env of the host and the application. i.e
-        // ArrayList<String[]> nv = appExecContext.getEnv();
-        //
-        // for (int i = 0; i < nv.size(); ++i) {
-        // String[] nvPair = (String[]) nv.get(i);
-        // jobAttr.addEnvVariable(nvPair[0], nvPair[1]);
-        // }
-
-        // jobAttr.addEnvVariable(GFacConstants.INPUT_DATA_DIR,
-        // appExecContext.getInputDataDir());
-        // jobAttr.addEnvVariable(GFacConstants.OUTPUT_DATA_DIR,
-        // appExecContext.getOutputDataDir());
 
         if (appExecContext.getMaxWallTime() != null && appExecContext.getMaxWallTime() > 0) {
             log.info("Setting max wall clock time to " + appExecContext.getMaxWallTime());
             jobAttr.setMaxWallTime(appExecContext.getMaxWallTime());
             jobAttr.set("proxy_timeout", "1");
         }
-        if (appExecContext.getPcount() != null && appExecContext.getPcount() > 1) {
+        if (appExecContext.getPcount() != null && appExecContext.getPcount() >= 1) {
             log.info("Setting number of procs to " + appExecContext.getPcount());
             jobAttr.setNumProcs(appExecContext.getPcount());
         }
 
-        if (appExecContext.getHostCount() != null && appExecContext.getHostCount() > 1) {
+        if (appExecContext.getHostCount() != null && appExecContext.getHostCount() >= 1) {
             jobAttr.set("hostCount", String.valueOf(appExecContext.getHostCount()));
         }
 
@@ -139,23 +134,6 @@ public class GramJobSubmission {
             log.info("Setting job type to condor");
             jobAttr.setJobType(GramAttributes.JOBTYPE_CONDOR);
         }
-
-        // Support to add the Additional RSL parameters
-        // RSLParmType[] rslParams = app.getRslparmArray();
-        // if (rslParams.length > 0) {
-        // for (RSLParmType rslType : rslParams) {
-        // log.info("Adding rsl param of [" + rslType.getName() + ","
-        // + rslType.getStringValue() + "]");
-        // if(rslType.getName()!= ""){
-        // jobAttr.set(rslType.getName(), rslType.getStringValue());
-        // }
-        // }
-        // }
-
-        // support urgency/SPRUCE case
-        // only add spruce rsl parameter if this host has a spruce jobmanager
-        // configured
-        // jobAttr.set("urgency", appExecContext.getLeadHeader().getUrgency());
 
         return jobAttr;
     }

@@ -31,8 +31,16 @@ public class ServiceConstants {
 	public static final String TRUSTED_CERTS_FILE = "trustedCertsFile";
 	public static final String HOSTCERTS_KEY_FILE = "hostcertsKeyFile";
 
-	public static final String GATEWAY = "gateway";
-	public static final String EXECUTION = "execution";
+	public static final String TESTINGHOST = "testing.host";
+	
+    public static final String LONESTARGRAMEPR = "lonestar.gram.endpoint";
+    public static final String LONESTARGRIDFTPEPR = "lonestar.gridftp.endpoint";
+    public static final String RANGERGRAMEPR = "ranger.gram.endpoint";
+    public static final String RANGERGRIDFTPEPR = "ranger.gridftp.endpoint";
+    public static final String TRESTLESGRAMEPR = "trestles.gram.endpoint";
+    public static final String TRESTLESGRIDFTPEPR = "trestles.gridftp.endpoint";
+	
+	public static final String EXECUTABLE = "executable";
 	public static final String ARGUMENTS = "arguments";
 	public static final String QUEUE = "queue";
 	public static final String PROJECT_NUMBER = "project_number";
