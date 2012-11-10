@@ -21,14 +21,12 @@
 
 package org.apache.airavata.jobsubmission.utils;
 
-
-
 /**
  * Class represents GridFTP Endpoint
  * 
  */
 public class GridFTPContactInfo {
-	 public static final int DEFAULT_GSI_FTP_PORT = 2811;
+    public static final int DEFAULT_GSI_FTP_PORT = 2811;
     public String hostName;
     public int port;
 

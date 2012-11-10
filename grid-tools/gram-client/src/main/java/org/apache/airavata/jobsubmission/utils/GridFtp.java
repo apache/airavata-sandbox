@@ -43,14 +43,13 @@ import org.globus.ftp.exception.ServerException;
 import org.globus.gsi.gssapi.auth.HostAuthorization;
 import org.ietf.jgss.GSSCredential;
 
-
 /**
  * GridFTP tools
  */
 public class GridFtp {
 
-      public static final String GSIFTP_SCHEME = "gsiftp";
-      private static final Logger log = Logger.getLogger(GridFtp.class);
+    public static final String GSIFTP_SCHEME = "gsiftp";
+    private static final Logger log = Logger.getLogger(GridFtp.class);
 
     /**
      * Make directory at remote location
@@ -156,7 +155,7 @@ public class GridFtp {
                 try {
                     ftpClient.close();
                 } catch (Exception e) {
-                	log.info("Cannot close GridFTP client connection");
+                    log.info("Cannot close GridFTP client connection");
                 }
             }
         }
@@ -204,7 +203,7 @@ public class GridFtp {
                 try {
                     ftpClient.close();
                 } catch (Exception e) {
-                	log.info("Cannot close GridFTP client connection");
+                    log.info("Cannot close GridFTP client connection");
                 }
             }
         }
@@ -381,6 +380,7 @@ public class GridFtp {
             }
         }
     }
+
     public static URI createGsiftpURI(String host, String localPath) throws URISyntaxException {
         StringBuffer buf = new StringBuffer();
         if (!host.startsWith("gsiftp://"))
