@@ -1,0 +1,19 @@
+Apache Airavata GRAM Client - README
+Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+--------------------------------------------------------------------------------
+
+About
+=====
+Apache Airavata, a software framework to executing and managing computational jobs on 
+distributed computing resources including local clusters, supercomputers, national grids, 
+academic and commercial clouds. 
+
+The airavata-gridftp-client is a test suite to run stand alone transfers between two GridFTP end points. 
+
+
+CA Trusted Certificates
+===========================
+* The XSEDE project maintains a repo of International Grid Certificate Authorities
+* The certificate tar file can be downloaded from https://software.xsede.org/security/xsede-certs.tar.gz
+* Once the certificates are downloaded locally, the airavata-gram-client.properties has to be configured. 
+
