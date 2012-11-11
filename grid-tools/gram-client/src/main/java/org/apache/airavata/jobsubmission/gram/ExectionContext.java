@@ -33,11 +33,8 @@ public class ExectionContext {
     private String testingHost;
     
     private String lonestarGRAM;
-    private String lonestarGridFTP;
     private String rangerGRAM;
-    private String rangerGridFTP;
     private String trestlesGRAM;
-    private String trestlesGridFTP;
     
     private String workingDir;
     private String tmpDir;
@@ -60,10 +57,6 @@ public class ExectionContext {
     private Integer hostCount;
     private String jobType;
     private String arguments;
-    private String gridFTPServerSource;
-    private String sourcedataLocation;
-    private String gridFTPServerDest;
-    private String destdataLocation;
 
     public static final String PROPERTY_FILE = "airavata-gram-client.properties";
 
@@ -82,11 +75,8 @@ public class ExectionContext {
             String testinghost = properties.getProperty(ServiceConstants.TESTINGHOST);
             
             String lonestargram = properties.getProperty(ServiceConstants.LONESTARGRAMEPR);
-            String lonestargridftp = properties.getProperty(ServiceConstants.LONESTARGRIDFTPEPR);
             String rangergram = properties.getProperty(ServiceConstants.RANGERGRAMEPR);
-            String rangergridftp = properties.getProperty(ServiceConstants.RANGERGRIDFTPEPR);
             String trestlesgram = properties.getProperty(ServiceConstants.TRESTLESGRAMEPR);
-            String trestlesgridftp = properties.getProperty(ServiceConstants.TRESTLESGRIDFTPEPR);
 
             String exec = properties.getProperty(ServiceConstants.EXECUTABLE);
             String args = properties.getProperty(ServiceConstants.ARGUMENTS);
@@ -96,10 +86,6 @@ public class ExectionContext {
             String mwt = properties.getProperty(ServiceConstants.MAX_WALL_TIME);
             String pc = properties.getProperty(ServiceConstants.PCOUNT);
             String hc = properties.getProperty(ServiceConstants.HOSTCOUNT);
-            String gridFTPServerSource = properties.getProperty(ServiceConstants.GRIDFTPSERVERSOURCE);
-            String gridFTPSourcePath = properties.getProperty(ServiceConstants.GRIDFTPSOURCEPATH);
-            String gridFTPServerDest = properties.getProperty(ServiceConstants.GRIDFTPSERVERDEST);
-            String gridFTPDestPath = properties.getProperty(ServiceConstants.GRIDFTPDESTPATH);
 
             if (testinghost != null) {
                 this.testingHost = testinghost;
@@ -108,20 +94,11 @@ public class ExectionContext {
             if (lonestargram != null) {
                 this.lonestarGRAM = lonestargram;
             }
-            if (lonestargridftp != null) {
-                this.lonestarGridFTP = lonestargridftp;
-            }
             if (rangergram != null) {
                 this.rangerGRAM = rangergram;
             }
-            if (rangergridftp != null) {
-                this.rangerGridFTP= rangergridftp;
-            }
             if (trestlesgram != null) {
                 this.trestlesGRAM = trestlesgram;
-            }
-            if (trestlesgridftp != null) {
-                this.trestlesGridFTP = trestlesgridftp;
             }
             
             if (exec != null) {
@@ -160,18 +137,6 @@ public class ExectionContext {
                     this.hostCount = 1;
                 }
             }
-            if (gridFTPServerSource != null && !gridFTPServerSource.isEmpty()) {
-                this.gridFTPServerSource = gridFTPServerSource;
-            }
-            if (gridFTPSourcePath != null && !gridFTPSourcePath.isEmpty()) {
-                this.sourcedataLocation = gridFTPSourcePath;
-            }
-            if (gridFTPServerDest != null && !gridFTPServerDest.isEmpty()) {
-                this.gridFTPServerDest = gridFTPServerDest;
-            }
-            if (gridFTPDestPath != null && !gridFTPDestPath.isEmpty()) {
-                this.destdataLocation = gridFTPDestPath;
-            }
 
         }
     }
@@ -192,14 +157,6 @@ public class ExectionContext {
         this.lonestarGRAM = lonestarGRAM;
     }
 
-    public String getLonestarGridFTP() {
-        return lonestarGridFTP;
-    }
-
-    public void setLonestarGridFTP(String lonestarGridFTP) {
-        this.lonestarGridFTP = lonestarGridFTP;
-    }
-
     public String getRangerGRAM() {
         return rangerGRAM;
     }
@@ -208,28 +165,12 @@ public class ExectionContext {
         this.rangerGRAM = rangerGRAM;
     }
 
-    public String getRangerGridFTP() {
-        return rangerGridFTP;
-    }
-
-    public void setRangerGridFTP(String rangerGridFTP) {
-        this.rangerGridFTP = rangerGridFTP;
-    }
-
     public String getTrestlesGRAM() {
         return trestlesGRAM;
     }
 
     public void setTrestlesGRAM(String trestlesGRAM) {
         this.trestlesGRAM = trestlesGRAM;
-    }
-
-    public String getTrestlesGridFTP() {
-        return trestlesGridFTP;
-    }
-
-    public void setTrestlesGridFTP(String trestlesGridFTP) {
-        this.trestlesGridFTP = trestlesGridFTP;
     }
 
     /**
@@ -517,37 +458,5 @@ public class ExectionContext {
 
     public String getArguments() {
         return arguments;
-    }
-
-    public String getGridFTPServerSource() {
-        return gridFTPServerSource;
-    }
-
-    public void setGridFTPServerSource(String gridFTPServerSource) {
-        this.gridFTPServerSource = gridFTPServerSource;
-    }
-
-    public String getSourcedataLocation() {
-        return sourcedataLocation;
-    }
-
-    public void setSourcedataLocation(String sourcedataLocation) {
-        this.sourcedataLocation = sourcedataLocation;
-    }
-
-    public String getGridFTPServerDest() {
-        return gridFTPServerDest;
-    }
-
-    public void setGridFTPServerDest(String gridFTPServerDest) {
-        this.gridFTPServerDest = gridFTPServerDest;
-    }
-
-    public String getDestdataLocation() {
-        return destdataLocation;
-    }
-
-    public void setDestdataLocation(String destdataLocation) {
-        this.destdataLocation = destdataLocation;
     }
 }

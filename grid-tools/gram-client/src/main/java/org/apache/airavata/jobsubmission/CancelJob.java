@@ -21,8 +21,8 @@
 
 package org.apache.airavata.jobsubmission;
 
-import org.apache.airavata.jobsubmission.context.ApplicationContext;
 import org.apache.airavata.jobsubmission.gram.ExectionContext;
+import org.apache.airavata.jobsubmission.security.SecurityContext;
 import org.apache.log4j.Logger;
 import org.globus.gram.GramJob;
 import org.ietf.jgss.GSSCredential;
@@ -40,7 +40,7 @@ public class CancelJob {
 	}
 public static void main(String[] args) {
 	try {
-		ApplicationContext context = new ApplicationContext();
+		SecurityContext context = new SecurityContext();
 		context.login();
 		CancelJob job = new CancelJob();
 		String jobURL = "https://lslogin2.lonestar.tacc.utexas.edu:50385/16073824805448638521/14062883951572193460/";

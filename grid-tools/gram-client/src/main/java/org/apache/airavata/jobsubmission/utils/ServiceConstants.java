@@ -34,11 +34,8 @@ public class ServiceConstants {
 	public static final String TESTINGHOST = "testing.host";
 	
     public static final String LONESTARGRAMEPR = "lonestar.gram.endpoint";
-    public static final String LONESTARGRIDFTPEPR = "lonestar.gridftp.endpoint";
     public static final String RANGERGRAMEPR = "ranger.gram.endpoint";
-    public static final String RANGERGRIDFTPEPR = "ranger.gridftp.endpoint";
     public static final String TRESTLESGRAMEPR = "trestles.gram.endpoint";
-    public static final String TRESTLESGRIDFTPEPR = "trestles.gridftp.endpoint";
 	
 	public static final String EXECUTABLE = "executable";
 	public static final String ARGUMENTS = "arguments";
@@ -48,10 +45,5 @@ public class ServiceConstants {
 	public static final String JOB_TYPE = "jobtype";
 	public static final String PCOUNT = "processors";
 	public static final String HOSTCOUNT = "hosts";
-	
-	public static final String GRIDFTPSERVERSOURCE = "gridftpserverSource";
-	public static final String GRIDFTPSOURCEPATH = "gridftpSourcePath";
-	public static final String GRIDFTPSERVERDEST = "gridftpserverDest";
-	public static final String GRIDFTPDESTPATH = "gridftpDestPath";
 
 }

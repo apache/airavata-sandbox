@@ -19,7 +19,7 @@
  *
  */
 
-package org.apache.airavata.jobsubmission.context;
+package org.apache.airavata.jobsubmission.security;
 
 import java.io.File;
 import java.io.FileInputStream;

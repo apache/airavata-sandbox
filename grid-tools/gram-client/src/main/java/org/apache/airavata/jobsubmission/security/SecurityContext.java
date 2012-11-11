@@ -19,7 +19,7 @@
  *
  */
 
-package org.apache.airavata.jobsubmission.context;
+package org.apache.airavata.jobsubmission.security;
 
 import java.io.File;
 import java.io.InputStream;
@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 import org.globus.myproxy.MyProxy;
 import org.ietf.jgss.GSSCredential;
 
-public class ApplicationContext {
+public class SecurityContext {
 
     /**
 	 * 
@@ -42,7 +42,7 @@ public class ApplicationContext {
     protected GSSCredential gssCredential;
 
     private MyProxyCredentials credentials;
-    private static final Logger log = Logger.getLogger(ApplicationContext.class);
+    private static final Logger log = Logger.getLogger(SecurityContext.class);
 
     /**
      * 
@@ -51,7 +51,7 @@ public class ApplicationContext {
      * @throws GfacGUIException
      */
 
-    public ApplicationContext() throws Exception {
+    public SecurityContext() throws Exception {
         log.setLevel(org.apache.log4j.Level.INFO);
         loadConfiguration();
 
@@ -59,7 +59,7 @@ public class ApplicationContext {
 
     public static void main(String[] args) {
         try {
-            ApplicationContext context = new ApplicationContext();
+            SecurityContext context = new SecurityContext();
             context.login();
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,7 +76,7 @@ public class ApplicationContext {
 
     public static String getProperty(String name) {
         try {
-            ApplicationContext context = new ApplicationContext();
+            SecurityContext context = new SecurityContext();
             return context.getProperties().getProperty(name);
         } catch (Exception e) {
             e.printStackTrace();

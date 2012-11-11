@@ -21,9 +21,9 @@
 
 package org.apache.airavata.jobsubmission;
 
-import org.apache.airavata.jobsubmission.context.ApplicationContext;
 import org.apache.airavata.jobsubmission.gram.ExectionContext;
 import org.apache.airavata.jobsubmission.gram.GramJobSubmission;
+import org.apache.airavata.jobsubmission.security.SecurityContext;
 import org.apache.log4j.Logger;
 import org.ietf.jgss.GSSCredential;
 
@@ -31,12 +31,12 @@ public class JobSubmission {
 
     private static final Logger log = Logger.getLogger(JobSubmission.class);
     private static ExectionContext contextExectionContext;
-    private static ApplicationContext context;
+    private static SecurityContext context;
     private static String newline = System.getProperty("line.separator");
 
-    public static synchronized ApplicationContext getContext() throws Exception {
+    public static synchronized SecurityContext getContext() throws Exception {
         if (context == null) {
-            context = new ApplicationContext();
+            context = new SecurityContext();
             try {
                 context.login();
             } catch (Exception e) {
@@ -80,7 +80,7 @@ public class JobSubmission {
 
     public static void main(String[] args) {
         try {
-            ApplicationContext context = new ApplicationContext();
+            SecurityContext context = new SecurityContext();
             context.login();
 
             StringBuffer jobstatus = new StringBuffer();

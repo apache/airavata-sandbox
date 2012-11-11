@@ -21,7 +21,7 @@
 
 package org.apache.airavata.jobsubmission;
 
-import org.apache.airavata.jobsubmission.context.ApplicationContext;
+import org.apache.airavata.jobsubmission.security.SecurityContext;
 import org.globus.gram.GramJob;
 
 public class JobStatus {
@@ -31,7 +31,7 @@ public class JobStatus {
      */
     public static void main(String[] args) {
         try {
-            ApplicationContext context = new ApplicationContext();
+            SecurityContext context = new SecurityContext();
             context.login();
 
             String rsl = "";
