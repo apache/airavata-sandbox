@@ -81,7 +81,7 @@ public class ResourcePathConstants {
     public final class ExperimentResourcePathConstants {
         public static final String EXP_RESOURCE_PATH  =  "/registry/api/experimentregistry/";
         public static final String DELETE_EXP = "delete/experiment";
-        public static final String GET_APP_EXPS = "get/experiments/all" ;
+        public static final String GET_ALL_EXPS = "get/experiments/all" ;
         public static final String GET_EXPS_BY_PROJECT = "get/experiments/project" ;
         public static final String GET_EXPS_BY_DATE =  "get/experiments/date";
         public static final String GET_EXPS_PER_PROJECT_BY_DATE = "get/experiments/project/date";
@@ -104,7 +104,7 @@ public class ResourcePathConstants {
     public final class ProvenanceResourcePathConstants {
 
         public static final String REGISTRY_API_PROVENANCEREGISTRY = "/registry/api/provenanceregistry/";
-        public static final String UPDATE_EXPERIMENT = "update/experiment";
+        public static final String UPDATE_EXPERIMENT_EXECUTIONUSER = "update/experiment/executionuser";
         public static final String GET_EXPERIMENT_EXECUTIONUSER = "get/experiment/executionuser";
         public static final String GET_EXPERIMENT_NAME = "get/experiment/name";
         public static final String UPDATE_EXPERIMENTNAME = "update/experimentname";
@@ -129,7 +129,8 @@ public class ResourcePathConstants {
         public static final String GET_WORKFLOW_STARTTIME = "get/workflow/starttime";
         public static final String UPDATE_WORKFLOWNODE_GRAMDATA = "update/workflownode/gramdata";
         public static final String GET_WORKFLOWINSTANCEDATA = "get/workflowinstancedata";
-        public static final String WORKFLOWINSTANCE_EXIST = "workflowinstance/exist";
+        public static final String WORKFLOWINSTANCE_NODE_EXIST = "wfnode/exist";
+        public static final String WORKFLOWINSTANCE_NODE_EXIST_CREATE = "wfnode/exist/create";
         public static final String WORKFLOWINSTANCE_NODE_DATA = "workflowinstance/nodeData";
         public static final String ADD_WORKFLOWINSTANCE = "add/workflowinstance";
         public static final String UPDATE_WORKFLOWNODETYPE = "update/workflownodetype";

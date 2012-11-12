@@ -86,7 +86,7 @@ public class ExperimentRegistryResource {
      *
      */
     @GET
-    @Path(ResourcePathConstants.ExperimentResourcePathConstants.GET_APP_EXPS)
+    @Path(ResourcePathConstants.ExperimentResourcePathConstants.GET_ALL_EXPS)
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response getExperiments(){
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
