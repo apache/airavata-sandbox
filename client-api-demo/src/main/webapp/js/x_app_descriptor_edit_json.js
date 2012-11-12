@@ -206,16 +206,23 @@ function initButtons() {
         console.log(JSON.stringify(jsonRequest));
 
         $.ajax({
-            beforeSend: function(x) {
+            /*beforeSend: function(x) {
                 if (x && x.overrideMimeType) {
                     x.overrideMimeType("application/j-son;charset=UTF-8");
                 }
+            },*/
+            headers: {
+                Accept : "text/plain; charset=utf-8"
             },
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json;charset=utf-8",
+            type: "DELETE",
+//            dataType: "json",
+//            contentType: "application/json;charset=utf-8",
             url: "http://localhost:7080/airavata-registry-rest-services/registry/api/applicationdescriptor/delete",
-            data: JSON.stringify(jsonRequest)
+            data: {
+                "appName" : appName,
+                "hostName" : hostName,
+                "serviceName"  : serviceName
+            }
         }).done(function( msg ) {
                 alert( "Data Saved: " + msg );
             });

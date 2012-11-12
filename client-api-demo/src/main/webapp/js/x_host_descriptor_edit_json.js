@@ -79,6 +79,7 @@ function initButtons() {
 
     $("#deleteHostButton").click(function(){
         var hostName = $("#hostName1").val();
+        alert("Delete button clicked!");
 
         $.ajax({
             beforeSend: function(x) {
@@ -86,13 +87,13 @@ function initButtons() {
                     x.overrideMimeType("application/j-son;charset=UTF-8");
                 }
             },
-            type: "POST",
-            dataType: "json",
+            type: "DELETE",
+//            dataType: "json",
             contentType: "application/json;charset=utf-8",
             url: "http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/delete",
-            data: JSON.stringify({
-                "hostname": hostName
-            })
+            data: {
+                "hostName": hostName
+            }
         }).done(function( msg ) {
                 alert( "Host Deleted: " + msg );
             });
