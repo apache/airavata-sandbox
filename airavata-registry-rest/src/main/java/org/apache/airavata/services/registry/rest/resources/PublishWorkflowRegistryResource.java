@@ -182,7 +182,7 @@ public class PublishWorkflowRegistryResource {
      */
     @GET
     @Path(ResourcePathConstants.PublishedWFConstants.GET_PUBLISHWORKFLOWNAMES)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response getPublishedWorkflowNames() {
         airavataRegistry = (AiravataRegistry2) context.getAttribute(RestServicesConstants.AIRAVATA_REGISTRY);
         try{

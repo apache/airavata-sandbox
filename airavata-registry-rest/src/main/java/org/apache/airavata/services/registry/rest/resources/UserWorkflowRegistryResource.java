@@ -88,6 +88,7 @@ public class UserWorkflowRegistryResource {
      */
     @POST
     @Path(ResourcePathConstants.UserWFConstants.ADD_WORKFLOW)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addWorkflow(@FormParam("workflowName") String workflowName,
                                 @FormParam("workflowGraphXml") String workflowGraphXml) {
