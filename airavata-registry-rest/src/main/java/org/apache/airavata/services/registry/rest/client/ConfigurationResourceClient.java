@@ -90,13 +90,12 @@ public class ConfigurationResourceClient {
             throw new RuntimeException("Failed : HTTP error code : "
                     + status);
         }
+        ConfigurationList configurationList = response.getEntity(ConfigurationList.class);
         List<Object> configurationValueList = new ArrayList<Object>();
-        ConfigurationList entity = response.getEntity(ConfigurationList.class);
-        Object[] configValList = entity.getConfigValList();
+        Object[] configValList = configurationList.getConfigValList();
         for(Object configVal : configValList){
             String[] strings = configVal.toString().split("=");
             String configurationValue = strings[2].substring(0, strings[2].length() - 1);
-            System.out.println(configurationValue);
             configurationValueList.add(configurationValue);
         }
 
@@ -264,7 +263,7 @@ public class ConfigurationResourceClient {
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("uri", uri);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -279,7 +278,7 @@ public class ConfigurationResourceClient {
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("uri", uri);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -294,7 +293,7 @@ public class ConfigurationResourceClient {
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("uri", uri);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -309,7 +308,7 @@ public class ConfigurationResourceClient {
         MultivaluedMap formData = new MultivaluedMapImpl();
         formData.add("uri", uri);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -325,7 +324,7 @@ public class ConfigurationResourceClient {
         formData.add("uri", uri);
         formData.add("date", date);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -341,7 +340,7 @@ public class ConfigurationResourceClient {
         formData.add("uri", uri);
         formData.add("date", date);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -357,7 +356,7 @@ public class ConfigurationResourceClient {
         formData.add("uri", uri);
         formData.add("date", date);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -373,7 +372,7 @@ public class ConfigurationResourceClient {
         formData.add("uri", uri);
         formData.add("date", date);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formData);
         int status = response.getStatus();
 
         if (status != 200) {

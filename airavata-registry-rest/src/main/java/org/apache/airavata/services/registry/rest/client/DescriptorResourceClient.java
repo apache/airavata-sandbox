@@ -84,7 +84,7 @@ public class DescriptorResourceClient {
     public void addHostDescriptor (HostDescription hostDescription){
         HostDescriptor hostDescriptor = DescriptorUtil.createHostDescriptor(hostDescription);
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.HOST_DESC_SAVE);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, hostDescriptor);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, hostDescriptor);
 
         int status = response.getStatus();
 
@@ -98,7 +98,7 @@ public class DescriptorResourceClient {
     public void updateHostDescriptor (HostDescription hostDescription){
         HostDescriptor hostDescriptor = DescriptorUtil.createHostDescriptor(hostDescription);
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.HOST_DESC_UPDATE);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, hostDescriptor);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, hostDescriptor);
 
         int status = response.getStatus();
 
@@ -113,7 +113,7 @@ public class DescriptorResourceClient {
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.HOST_DESC);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("hostName", hostName);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
         int status = response.getStatus();
 
@@ -144,7 +144,7 @@ public class DescriptorResourceClient {
 
     public List<HostDescription> getHostDescriptors() {
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.GET_HOST_DESCS);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
         int status = response.getStatus();
 
@@ -167,7 +167,7 @@ public class DescriptorResourceClient {
 
     public List<String> getHostDescriptorNames(){
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.GET_HOST_DESCS_NAMES);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
         int status = response.getStatus();
 
@@ -200,7 +200,7 @@ public class DescriptorResourceClient {
     public void saveServiceDescriptor (ServiceDescription serviceDescription){
         ServiceDescriptor serviceDescriptor = DescriptorUtil.createServiceDescriptor(serviceDescription);
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.SERVICE_DESC_SAVE);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, serviceDescriptor);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, serviceDescriptor);
 
         int status = response.getStatus();
 
@@ -214,7 +214,7 @@ public class DescriptorResourceClient {
     public void updateServiceDescriptor(ServiceDescription serviceDescription){
         ServiceDescriptor serviceDescriptor = DescriptorUtil.createServiceDescriptor(serviceDescription);
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.SERVICE_DESC_UPDATE);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, serviceDescriptor);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, serviceDescriptor);
 
         int status = response.getStatus();
 
@@ -229,7 +229,7 @@ public class DescriptorResourceClient {
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.SERVICE_DESC);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("serviceName", serviceName);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
         int status = response.getStatus();
 
@@ -260,7 +260,7 @@ public class DescriptorResourceClient {
 
     public List<ServiceDescription> getServiceDescriptors (){
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.GET_SERVICE_DESCS);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
         int status = response.getStatus();
 
@@ -307,7 +307,7 @@ public class DescriptorResourceClient {
         applicationDescriptor.setServiceDescriptor(serviceDescriptor);
 
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_BUILD_SAVE);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, applicationDescriptor);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, applicationDescriptor);
 
         int status = response.getStatus();
 
@@ -326,7 +326,7 @@ public class DescriptorResourceClient {
         applicationDescriptor.setServiceDescriptor(serviceDescriptor);
 
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_BUILD_SAVE);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, applicationDescriptor);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, applicationDescriptor);
 
         int status = response.getStatus();
 
@@ -346,7 +346,7 @@ public class DescriptorResourceClient {
         applicationDescriptor.setServiceDescriptor(serviceDescriptor);
 
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_UPDATE);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, applicationDescriptor);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, applicationDescriptor);
 
         int status = response.getStatus();
 
@@ -365,7 +365,7 @@ public class DescriptorResourceClient {
         applicationDescriptor.setServiceDescriptor(serviceDescriptor);
 
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_UPDATE);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, applicationDescriptor);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, applicationDescriptor);
 
         int status = response.getStatus();
 
@@ -385,7 +385,7 @@ public class DescriptorResourceClient {
         queryParams.add("hostName", hostname);
         queryParams.add("applicationName", applicationName);
 
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
         int status = response.getStatus();
 
@@ -406,7 +406,7 @@ public class DescriptorResourceClient {
         queryParams.add("serviceName", serviceName);
         queryParams.add("hostName", hostname);
 
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
         int status = response.getStatus();
 
@@ -425,7 +425,7 @@ public class DescriptorResourceClient {
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_ALL_DESCS_SERVICE);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("serviceName", serviceName);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
         int status = response.getStatus();
 
@@ -448,7 +448,7 @@ public class DescriptorResourceClient {
     public Map<String[], ApplicationDeploymentDescription> getApplicationDescriptors(){
         Map<String[], ApplicationDeploymentDescription> applicationDeploymentDescriptionMap = new HashMap<String[], ApplicationDeploymentDescription>();
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_ALL_DESCRIPTORS);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
         int status = response.getStatus();
 
@@ -470,7 +470,7 @@ public class DescriptorResourceClient {
 
     private List<String> getApplicationDescriptorNames (){
         webResource = getDescriptorRegistryBaseResource().path(ResourcePathConstants.DecResourcePathConstants.APP_DESC_NAMES);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {
