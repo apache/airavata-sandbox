@@ -94,9 +94,7 @@ public class ConfigurationResourceClient {
         List<Object> configurationValueList = new ArrayList<Object>();
         Object[] configValList = configurationList.getConfigValList();
         for(Object configVal : configValList){
-            String[] strings = configVal.toString().split("=");
-            String configurationValue = strings[2].substring(0, strings[2].length() - 1);
-            configurationValueList.add(configurationValue);
+            configurationValueList.add(configVal);
         }
 
         return configurationValueList;

@@ -62,9 +62,6 @@ public class DescriptorResourceClient {
         ClientConfig config = new DefaultClientConfig();
         config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING,
                 Boolean.TRUE);
-        //config.getFeatures().put(JSONConfiguration.)
-        config.getClasses().add(JacksonJsonProvider.class);
-        //JSONConfiguration build = JSONConfiguration.natural().build();
         Client client = Client.create(config);
         WebResource baseWebResource = client.resource(getBaseURI());
         webResource = baseWebResource.path(ResourcePathConstants.DecResourcePathConstants.DESC_RESOURCE_PATH);
