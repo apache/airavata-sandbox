@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class WorkspaceProjectList {
-    private WorkspaceProject[] workspaceProjects = null;
+    private WorkspaceProject[] workspaceProjects = new WorkspaceProject[]{};
 
     public WorkspaceProjectList() {
     }

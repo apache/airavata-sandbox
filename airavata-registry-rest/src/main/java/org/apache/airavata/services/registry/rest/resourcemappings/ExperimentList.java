@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ExperimentList {
-    private AiravataExperiment[] experiments = null;
+    private AiravataExperiment[] experiments = new AiravataExperiment[]{};
 
     public ExperimentList() {
     }

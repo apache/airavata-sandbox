@@ -4,7 +4,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ConfigurationList {
-    private Object[] configValList = null;
+
+    private Object[] configValList = new Object[]{};
 
     public Object[] getConfigValList() {
         return configValList;

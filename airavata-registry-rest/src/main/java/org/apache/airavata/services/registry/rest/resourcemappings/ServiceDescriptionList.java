@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ServiceDescriptionList {
-    private ServiceDescriptor[] serviceDescriptions = null;
+    private ServiceDescriptor[] serviceDescriptions = new ServiceDescriptor[]{};
 
     public ServiceDescriptor[] getServiceDescriptions() {
         return serviceDescriptions;

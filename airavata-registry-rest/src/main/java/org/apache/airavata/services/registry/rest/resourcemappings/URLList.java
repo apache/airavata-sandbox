@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class URLList {
-    private String[] uris = null;
+    private String[] uris = new String[]{};
 
     public String[] getUris() {
         return uris;

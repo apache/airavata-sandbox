@@ -68,7 +68,7 @@ public class ExperimentResourceClient {
         formParams.add("experimentID", experiment.getExperimentId());
         formParams.add("submittedDate", experiment.getSubmittedDate().toString());
 
-        ClientResponse response = webResource.accept(MediaType.APPLICATION_FORM_URLENCODED).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).type(MediaType.APPLICATION_FORM_URLENCODED).post(ClientResponse.class, formParams);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -94,7 +94,7 @@ public class ExperimentResourceClient {
 
     public List<AiravataExperiment> getExperiments(){
         webResource = getExperimentRegistryBaseResource().path(ResourcePathConstants.ExperimentResourcePathConstants.GET_ALL_EXPS);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -117,7 +117,7 @@ public class ExperimentResourceClient {
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("projectName", projectName);
 
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -142,7 +142,7 @@ public class ExperimentResourceClient {
         queryParams.add("fromDate", from.toString());
         queryParams.add("toDate", to.toString());
 
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -168,7 +168,7 @@ public class ExperimentResourceClient {
         queryParams.add("fromDate", from.toString());
         queryParams.add("toDate", to.toString());
 
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -213,7 +213,7 @@ public class ExperimentResourceClient {
         formParams.add("experimentId", experimentId );
         formParams.add("createIfNotPresent", createStatus );
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
 
         if (status != 200) {

@@ -24,11 +24,12 @@ package org.apache.airavata.services.registry.rest.resourcemappings;
 import org.apache.airavata.registry.api.impl.ExperimentDataImpl;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement
 public class ExperimentDataList {
-    private List<ExperimentDataImpl> experimentDataList;
+    private List<ExperimentDataImpl> experimentDataList = new ArrayList<ExperimentDataImpl>();
 
     public ExperimentDataList() {
     }

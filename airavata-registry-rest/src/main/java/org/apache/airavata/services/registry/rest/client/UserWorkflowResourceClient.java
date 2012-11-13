@@ -65,7 +65,7 @@ public class UserWorkflowResourceClient {
         webResource = getUserWFRegistryBaseResource().path(ResourcePathConstants.UserWFConstants.WORKFLOW_EXIST);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("workflowname", workflowName);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -83,7 +83,7 @@ public class UserWorkflowResourceClient {
         formParams.add("workflowName", workflowName);
         formParams.add("workflowGraphXml", workflowGraphXml);
 
-        ClientResponse response = webResource.accept(MediaType.APPLICATION_FORM_URLENCODED).type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.type(MediaType.APPLICATION_FORM_URLENCODED).accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -98,7 +98,7 @@ public class UserWorkflowResourceClient {
         formParams.add("workflowName", workflowName);
         formParams.add("workflowGraphXml", workflowGraphXml);
 
-        ClientResponse response = webResource.accept(MediaType.APPLICATION_FORM_URLENCODED).type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.type(MediaType.APPLICATION_FORM_URLENCODED).accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -111,7 +111,7 @@ public class UserWorkflowResourceClient {
         webResource = getUserWFRegistryBaseResource().path(ResourcePathConstants.UserWFConstants.GET_WORKFLOWGRAPH);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("workflowname", workflowName);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -126,7 +126,7 @@ public class UserWorkflowResourceClient {
 
     public Map<String, String> getWorkflows(){
         webResource = getUserWFRegistryBaseResource().path(ResourcePathConstants.UserWFConstants.GET_WORKFLOWS);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -150,7 +150,7 @@ public class UserWorkflowResourceClient {
         webResource = getUserWFRegistryBaseResource().path(ResourcePathConstants.UserWFConstants.REMOVE_WORKFLOW);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("workflowname", workflowName);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {

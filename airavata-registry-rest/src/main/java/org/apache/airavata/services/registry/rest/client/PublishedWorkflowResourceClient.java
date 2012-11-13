@@ -66,7 +66,7 @@ public class PublishedWorkflowResourceClient {
         webResource = getPublishedWFRegistryBaseResource().path(ResourcePathConstants.PublishedWFConstants.PUBLISHWF_EXIST);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("workflowname", workflowName);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -84,7 +84,7 @@ public class PublishedWorkflowResourceClient {
         formParams.add("workflowName", workflowName);
         formParams.add("publishWorkflowName", publishWorkflowName);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -98,7 +98,7 @@ public class PublishedWorkflowResourceClient {
         MultivaluedMap formParams = new MultivaluedMapImpl();
         formParams.add("workflowName", workflowName);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -112,7 +112,7 @@ public class PublishedWorkflowResourceClient {
         webResource = getPublishedWFRegistryBaseResource().path(ResourcePathConstants.PublishedWFConstants.GET_PUBLISHWORKFLOWGRAPH);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("workflowname", workflowName);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -128,7 +128,7 @@ public class PublishedWorkflowResourceClient {
 
     public List<String> getPublishedWorkflowNames(){
         webResource = getPublishedWFRegistryBaseResource().path(ResourcePathConstants.PublishedWFConstants.GET_PUBLISHWORKFLOWNAMES);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -144,7 +144,7 @@ public class PublishedWorkflowResourceClient {
 
     public Map<String, String> getPublishedWorkflows(){
         webResource = getPublishedWFRegistryBaseResource().path(ResourcePathConstants.PublishedWFConstants.GET_PUBLISHWORKFLOWS);
-        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -168,7 +168,7 @@ public class PublishedWorkflowResourceClient {
         webResource = getPublishedWFRegistryBaseResource().path(ResourcePathConstants.PublishedWFConstants.REMOVE_PUBLISHWORKFLOW);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("workflowname", workflowName);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {

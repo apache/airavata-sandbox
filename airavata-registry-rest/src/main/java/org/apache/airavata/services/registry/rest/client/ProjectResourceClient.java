@@ -86,7 +86,7 @@ public class ProjectResourceClient {
         formParams.add("projectName", projectName );
         formParams.add("createIfNotExists", createStatus );
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -103,7 +103,7 @@ public class ProjectResourceClient {
         MultivaluedMap formParams = new MultivaluedMapImpl();
         formParams.add("projectName", projectName );
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -118,7 +118,7 @@ public class ProjectResourceClient {
         MultivaluedMap formParams = new MultivaluedMapImpl();
         formParams.add("projectName", projectName );
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
 
         if (status != 200) {

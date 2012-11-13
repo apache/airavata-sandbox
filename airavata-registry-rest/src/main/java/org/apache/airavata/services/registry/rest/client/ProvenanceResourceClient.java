@@ -72,7 +72,7 @@ public class ProvenanceResourceClient {
         MultivaluedMap formParams = new MultivaluedMapImpl();
         formParams.add("experimentId", experimentId);
         formParams.add("user", user);
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -86,7 +86,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENT_EXECUTIONUSER);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("experimentId", experimentId);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
 
         if (status != 200) {
@@ -103,7 +103,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.EXPERIMENTNAME_EXISTS);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("experimentName", experimentName);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -117,7 +117,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENT_NAME);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("experimentId", experimentId);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -135,7 +135,7 @@ public class ProvenanceResourceClient {
         formParams.add("experimentId", experimentId);
         formParams.add("experimentName", experimentName);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -149,7 +149,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENTMETADATA);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("experimentId", experimentId);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -167,7 +167,7 @@ public class ProvenanceResourceClient {
         formParams.add("experimentId", experimentId);
         formParams.add("metadata", metadata);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -180,7 +180,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_WORKFLOWTEMPLATENAME);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("workflowInstanceId", workflowInstanceId);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -198,7 +198,7 @@ public class ProvenanceResourceClient {
         formParams.add("workflowInstanceId", workflowInstanceId);
         formParams.add("templateName", templateName);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -211,7 +211,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENTWORKFLOWINSTANCES);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("experimentId", experimentId);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -234,7 +234,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.WORKFLOWINSTANCE_EXIST_CHECK);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("instanceId", instanceId);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -250,7 +250,7 @@ public class ProvenanceResourceClient {
         formParams.add("instanceId", instanceId);
         formParams.add("createIfNotPresent", createIfNotPresent);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -266,7 +266,7 @@ public class ProvenanceResourceClient {
         formParams.add("instanceId", instanceId);
         formParams.add("executionStatus", executionStatus.name());
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -282,7 +282,7 @@ public class ProvenanceResourceClient {
         formParams.add("executionStatus", workflowInstanceStatus.getExecutionStatus().name());
         formParams.add("statusUpdateTime", workflowInstanceStatus.getStatusUpdateTime().toString());
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -295,7 +295,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_WORKFLOWINSTANCESTATUS);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("instanceId", instanceId);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -314,7 +314,7 @@ public class ProvenanceResourceClient {
         formParams.add("workflowInstanceId", node.getWorkflowInstance().getWorkflowInstanceId());
         formParams.add("data", data);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -330,7 +330,7 @@ public class ProvenanceResourceClient {
         formParams.add("workflowInstanceId", node.getWorkflowInstance().getWorkflowInstanceId());
         formParams.add("data", data);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -343,7 +343,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENT);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("experimentId", experimentId);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -359,7 +359,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENT_METAINFORMATION);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("experimentId", experimentId);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -375,7 +375,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_ALL_EXPERIMENT_METAINFORMATION);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("user", user);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -397,7 +397,7 @@ public class ProvenanceResourceClient {
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("user", user);
         queryParams.add("experimentNameRegex", experimentNameRegex);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -418,7 +418,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENT_ID_USER);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("username", user);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -435,7 +435,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_EXPERIMENT_USER);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("username", user);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -458,7 +458,7 @@ public class ProvenanceResourceClient {
         formParams.add("nodeId", workflowStatusNode.getWorkflowInstanceNode().getNodeId());
         formParams.add("executionStatus", workflowStatusNode.getExecutionStatus().name());
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -474,7 +474,7 @@ public class ProvenanceResourceClient {
         formParams.add("nodeId", nodeId);
         formParams.add("executionStatus", executionStatus.name());
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -490,7 +490,7 @@ public class ProvenanceResourceClient {
         formParams.add("nodeId", workflowNode.getNodeId());
         formParams.add("executionStatus", executionStatus.name());
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -504,7 +504,7 @@ public class ProvenanceResourceClient {
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("workflowInstanceId", workflowNode.getWorkflowInstance().getWorkflowInstanceId());
         queryParams.add("nodeId", workflowNode.getNodeId());
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -521,7 +521,7 @@ public class ProvenanceResourceClient {
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("workflowInstanceId", workflowNode.getWorkflowInstance().getWorkflowInstanceId());
         queryParams.add("nodeId", workflowNode.getNodeId());
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -544,7 +544,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_WORKFLOW_STARTTIME);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("workflowInstanceId", workflowInstance.getWorkflowInstanceId());
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -565,7 +565,7 @@ public class ProvenanceResourceClient {
 
     public void updateWorkflowNodeGramData(WorkflowNodeGramData workflowNodeGramData){
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.UPDATE_WORKFLOWNODE_GRAMDATA);
-        ClientResponse response = webResource.accept(MediaType.APPLICATION_JSON).type(MediaType.TEXT_PLAIN).post(ClientResponse.class, workflowNodeGramData);
+        ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, workflowNodeGramData);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -578,7 +578,7 @@ public class ProvenanceResourceClient {
         webResource = getProvenanceRegistryBaseResource().path(ResourcePathConstants.ProvenanceResourcePathConstants.GET_WORKFLOWINSTANCEDATA);
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("workflowInstanceId", workflowInstanceId);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -595,7 +595,7 @@ public class ProvenanceResourceClient {
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("workflowInstanceId", workflowInstanceId);
         queryParams.add("nodeId", nodeId);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -611,7 +611,7 @@ public class ProvenanceResourceClient {
         queryParams.add("workflowInstanceId", workflowInstanceId);
         queryParams.add("nodeId", nodeId);
         queryParams.add("createIfNotPresent", createIfNotPresent);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.TEXT_PLAIN).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.TEXT_PLAIN).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -626,7 +626,7 @@ public class ProvenanceResourceClient {
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("workflowInstanceId", workflowInstanceId);
         queryParams.add("nodeId", nodeId);
-        ClientResponse response = webResource.queryParams(queryParams).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        ClientResponse response = webResource.queryParams(queryParams).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -645,7 +645,7 @@ public class ProvenanceResourceClient {
         formParams.add("workflowInstanceId", workflowInstanceId);
         formParams.add("templateName", templateName);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -661,7 +661,7 @@ public class ProvenanceResourceClient {
         formParams.add("nodeId", node.getNodeId());
         formParams.add("nodeType", type.getNodeType().name());
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);
@@ -676,7 +676,7 @@ public class ProvenanceResourceClient {
         formParams.add("workflowInstanceId", workflowInstance);
         formParams.add("nodeId", nodeId);
 
-        ClientResponse response = webResource.type(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
+        ClientResponse response = webResource.accept(MediaType.TEXT_PLAIN).post(ClientResponse.class, formParams);
         int status = response.getStatus();
         if (status != 200) {
             logger.error("Failed : HTTP error code : " + status);

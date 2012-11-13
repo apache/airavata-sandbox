@@ -21,20 +21,37 @@
 
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement(name = "host")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class HostDescriptor {
 
     private String hostname;
     private String hostAddress;
-    private List<String> hostType;
-    private List<String> gridFTPEndPoint;
-    private List<String> globusGateKeeperEndPoint;
-    private List<String> imageID;
-    private List<String> instanceID;
+
+    @XmlTransient
+    private List<String> hostType = new ArrayList<String>();
+    @XmlTransient
+    private List<String> gridFTPEndPoint = new ArrayList<String>();
+    @XmlTransient
+    private List<String> globusGateKeeperEndPoint = new ArrayList<String>();
+    @XmlTransient
+    private List<String> imageID = new ArrayList<String>();
+    @XmlTransient
+    private List<String> instanceID = new ArrayList<String>();
+    private String hostTypeVal;
+    private String gridFTPEndPointVal;
+    private String globusGateKeeperEndPointVal;
+    private String imageIDVal;
+    private String instanceIDVal;
+
 
     public String getHostname() {
         return hostname;
@@ -57,6 +74,9 @@ public class HostDescriptor {
     }
 
     public void setHostType(List<String> hostType) {
+        if (hostType != null && hostType.isEmpty()){
+            hostTypeVal = hostType.get(0);
+        }
         this.hostType = hostType;
     }
 
@@ -65,6 +85,10 @@ public class HostDescriptor {
     }
 
     public void setGridFTPEndPoint(List<String> gridFTPEndPoint) {
+        if (gridFTPEndPoint != null && !gridFTPEndPoint.isEmpty()) {
+            gridFTPEndPointVal = gridFTPEndPoint.get(0);
+        }
+
         this.gridFTPEndPoint = gridFTPEndPoint;
     }
 
@@ -73,6 +97,10 @@ public class HostDescriptor {
     }
 
     public void setGlobusGateKeeperEndPoint(List<String> globusGateKeeperEndPoint) {
+        if(globusGateKeeperEndPoint != null && !globusGateKeeperEndPoint.isEmpty()){
+            gridFTPEndPointVal = globusGateKeeperEndPoint.get(0);
+        }
+
         this.globusGateKeeperEndPoint = globusGateKeeperEndPoint;
     }
 
@@ -81,6 +109,10 @@ public class HostDescriptor {
     }
 
     public void setImageID(List<String> imageID) {
+        if(imageID != null && !imageID.isEmpty()){
+            imageIDVal = imageID.get(0);
+        }
+
         this.imageID = imageID;
     }
 
@@ -89,7 +121,49 @@ public class HostDescriptor {
     }
 
     public void setInstanceID(List<String> instanceID) {
+        if(instanceID != null && !instanceID.isEmpty()){
+            instanceIDVal = instanceID.get(0);
+        }
         this.instanceID = instanceID;
     }
 
+    public void setHostTypeVal(String hostTypeVal) {
+        this.hostTypeVal = hostTypeVal;
+    }
+
+    public void setGridFTPEndPointVal(String gridFTPEndPointVal) {
+        this.gridFTPEndPointVal = gridFTPEndPointVal;
+    }
+
+    public void setGlobusGateKeeperEndPointVal(String globusGateKeeperEndPointVal) {
+        this.globusGateKeeperEndPointVal = globusGateKeeperEndPointVal;
+    }
+
+    public void setImageIDVal(String imageIDVal) {
+        this.imageIDVal = imageIDVal;
+    }
+
+    public void setInstanceIDVal(String instanceIDVal) {
+        this.instanceIDVal = instanceIDVal;
+    }
+
+    public String getHostTypeVal() {
+        return hostTypeVal;
+    }
+
+    public String getGridFTPEndPointVal() {
+        return gridFTPEndPointVal;
+    }
+
+    public String getGlobusGateKeeperEndPointVal() {
+        return globusGateKeeperEndPointVal;
+    }
+
+    public String getImageIDVal() {
+        return imageIDVal;
+    }
+
+    public String getInstanceIDVal() {
+        return instanceIDVal;
+    }
 }

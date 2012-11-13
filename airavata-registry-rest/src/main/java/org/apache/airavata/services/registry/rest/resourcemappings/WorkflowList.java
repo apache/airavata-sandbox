@@ -22,11 +22,12 @@
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement
 public class WorkflowList {
-    private List<Workflow> workflowList;
+    private List<Workflow> workflowList = new ArrayList<Workflow>();
 
     public WorkflowList() {
     }

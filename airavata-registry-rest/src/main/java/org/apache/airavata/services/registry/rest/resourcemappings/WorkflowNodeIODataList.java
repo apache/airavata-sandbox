@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class WorkflowNodeIODataList {
-    WorkflowNodeIOData[] workflowNodeIOData = null;
+    WorkflowNodeIOData[] workflowNodeIOData = new WorkflowNodeIOData[]{};
 
     public WorkflowNodeIOData[] getWorkflowNodeIOData() {
         return workflowNodeIOData;

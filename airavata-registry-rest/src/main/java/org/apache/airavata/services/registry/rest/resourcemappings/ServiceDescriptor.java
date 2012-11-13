@@ -21,6 +21,7 @@
 
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -30,8 +31,8 @@ public class ServiceDescriptor {
 
     private String serviceName;
     private String description;
-    private List<ServiceParameters> inputParams;
-    private List<ServiceParameters> outputParams;
+    private List<ServiceParameters> inputParams = new ArrayList<ServiceParameters>();
+    private List<ServiceParameters> outputParams = new ArrayList<ServiceParameters>();
 
     public String getServiceName() {
         return serviceName;

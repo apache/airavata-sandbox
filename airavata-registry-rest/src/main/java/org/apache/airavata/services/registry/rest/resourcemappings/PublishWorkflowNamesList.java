@@ -21,10 +21,11 @@
 
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PublishWorkflowNamesList {
-    private List<String> publishWorkflowNames;
+    private List<String> publishWorkflowNames = new ArrayList<String>();
 
     public PublishWorkflowNamesList() {
     }

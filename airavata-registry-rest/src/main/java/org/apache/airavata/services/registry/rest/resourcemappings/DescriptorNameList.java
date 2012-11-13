@@ -22,11 +22,12 @@
 package org.apache.airavata.services.registry.rest.resourcemappings;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement
 public class DescriptorNameList {
-    private List<String> descriptorNames;
+    private List<String> descriptorNames = new ArrayList<String>();
 
     public DescriptorNameList() {
     }

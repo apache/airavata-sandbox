@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class WorkflowInstancesList {
-    WorkflowInstance[] workflowInstances = null;
+    WorkflowInstance[] workflowInstances = new WorkflowInstance[]{};
 
     public WorkflowInstance[] getWorkflowInstances() {
         return workflowInstances;

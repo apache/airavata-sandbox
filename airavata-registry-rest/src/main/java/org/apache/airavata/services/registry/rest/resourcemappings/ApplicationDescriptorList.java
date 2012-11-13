@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ApplicationDescriptorList {
-    private ApplicationDescriptor[] applicationDescriptors;
+    private ApplicationDescriptor[] applicationDescriptors = new ApplicationDescriptor[]{};
 
     public ApplicationDescriptorList() {
     }

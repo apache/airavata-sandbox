@@ -34,6 +34,9 @@ import org.apache.airavata.commons.gfac.type.ServiceDescription;
 import org.apache.airavata.services.registry.rest.resourcemappings.*;
 import org.apache.airavata.services.registry.rest.utils.DescriptorUtil;
 import org.apache.airavata.services.registry.rest.utils.ResourcePathConstants;
+import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +62,9 @@ public class DescriptorResourceClient {
         ClientConfig config = new DefaultClientConfig();
         config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING,
                 Boolean.TRUE);
+        //config.getFeatures().put(JSONConfiguration.)
+        config.getClasses().add(JacksonJsonProvider.class);
+        //JSONConfiguration build = JSONConfiguration.natural().build();
         Client client = Client.create(config);
         WebResource baseWebResource = client.resource(getBaseURI());
         webResource = baseWebResource.path(ResourcePathConstants.DecResourcePathConstants.DESC_RESOURCE_PATH);
