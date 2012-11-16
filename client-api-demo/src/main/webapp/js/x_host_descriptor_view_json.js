@@ -20,6 +20,7 @@
 $(document).ready(function(){
 
     $('[name="btn2"]').click(function(){
+        var url = "http://localhost:7080/airavata-rest-services/registry/api/descriptors/get/hostdescriptors";
 
         $.ajax({
             beforeSend: function(x) {
@@ -30,7 +31,7 @@ $(document).ready(function(){
             type: "GET",
             dataType: "json",
             contentType: "application/json;charset=utf-8",
-            url: "http://localhost:7080/airavata-registry-rest-services/registry/api/get/hostdescriptors",
+            url: url,
             success: function(data, status, settings) {
                 var keys=[],result='';
                 $.each(data.hostDescriptions,function(i,row){

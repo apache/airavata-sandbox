@@ -57,6 +57,9 @@ function initButtons() {
         }
         console.log(xmlString);
 
+        var url = "http://localhost:7080/airavata-rest-services/registry/api/descriptors/hostdescriptor/save"
+//        var url = "http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save";
+
         if (("" == hostEndpoint) || ("" == gatekeeperEndpoint)) {
             alert("if Case");
             $.ajax({
@@ -70,7 +73,7 @@ function initButtons() {
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json;charset=utf-8",
-                url: "http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save",
+                url: url,
                 data: JSON.stringify({
                     "hostname": hostName,
                     "hostAddress": hostAddress
@@ -89,7 +92,7 @@ function initButtons() {
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json;charset=utf-8",
-                url: "http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save",
+                url: url,
                 data: JSON.stringify({
                     "hostname": hostName,
                     "hostAddress": hostAddress,
