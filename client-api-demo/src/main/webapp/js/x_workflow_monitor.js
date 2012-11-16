@@ -28,39 +28,17 @@ $(document).ready(function(){
                 }
             },
             type: "GET",
-            dataType: "json",
+//            dataType: "json",
+            data : {user : "admin"},
             contentType: "application/json;charset=utf-8",
             url: "http://localhost:7080/airavata-registry-rest-services/registry/api/provenanceregistry/get/experimentId/user",
-            success: function(data, status, settings) {
-                var keys=[],result='';
-                $.each(data.hostDescriptions,function(i,row){
-                    $.each(row,function(key,value){
-                        if ($.inArray(key,keys)==-1) keys.push(key);
-                    })
-                });
-                result+="<thead><tr>";
-                $.each(keys,function(i,key){
-                    result+="<th>"+key+"<\/th>";
-                });
-                result+="<\/tr><\/thead><tbody>";
-                $.each(data.hostDescriptions,function(i,row){
-                    result+="<tr>";
-                    $.each(keys,function(i,key){
-                        result+="<td>"+ (row[key]||'') + "<\/td>";
-                    });
-                    result+="<\/tr>";
-                });
-                result+="<\/tbody>";
-                $('#display').html(result);
-
-            },
             error: function(ajaxrequest, ajaxOptions, thrownError){
                 alert(thrownError);
             }
 
-        });/*.done(function(msg) {
-         alert( "Data Saved: " + JSON.stringify(msg));
-         });*/
+        }).done(function(msg) {
+                $("#jason-text").html(JSON.stringify(msg));
+            });
 
     });
 });
