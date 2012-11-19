@@ -37,7 +37,31 @@ $(document).ready(function(){
             }
 
         }).done(function(msg) {
-                $("#json-text").html(JSON.stringify(msg));
+                $("#experiment-list").html(JSON.stringify(msg));
+            });
+
+    });
+
+    $('[name="btn3"]').click(function(){
+        var experimentId = $("#experimentId1").val();
+
+        $.ajax({
+            beforeSend: function(x) {
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            type: "GET",
+            dataType: "json",
+            data : {experimentId : experimentId},
+            contentType: "application/json;charset=utf-8",
+            url: "http://localhost:7080/airavata-rest-services/registry/api/provenanceregistry/get/experiment",
+            error: function(ajaxrequest, ajaxOptions, thrownError){
+                alert(thrownError);
+            }
+
+        }).done(function(msg) {
+                $("#experiment-data").html(JSON.stringify(msg));
             });
 
     });
