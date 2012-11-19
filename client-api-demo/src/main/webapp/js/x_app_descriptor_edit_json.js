@@ -55,6 +55,8 @@ function initButtons() {
     });
 
     $("#updateAppButton").click(function(){
+        alert("Update clicked!");
+
         var appName = $("#appName1").val();
         var hostName = $("#hostName1").val();
         var serviceName = $("#serviceName1").val();
@@ -139,6 +141,8 @@ function initButtons() {
     });
 
     $("#deleteAppButton").click(function(){
+        alert("Delete clicked!");
+
         var appName = $("#appName1").val();
         var hostName = $("#hostName1").val();
         var serviceName = $("#serviceName1").val();
@@ -231,5 +235,6 @@ function initButtons() {
 }
 
 $(document).ready(function(){
+    alert("Document ready function called!");
     initButtons();
 });

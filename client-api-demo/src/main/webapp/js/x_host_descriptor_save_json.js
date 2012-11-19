@@ -57,7 +57,7 @@ function initButtons() {
         }
         console.log(xmlString);
 
-        var url = "http://localhost:7080/airavata-rest-services/registry/api/descriptors/hostdescriptor/save"
+        var url = "http://localhost:7080/airavata-rest-services/registry/api/descriptors/hostdescriptor/save";
 //        var url = "http://localhost:7080/airavata-registry-rest-services/registry/api/hostdescriptor/save";
 
         if (("" == hostEndpoint) || ("" == gatekeeperEndpoint)) {
