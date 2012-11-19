@@ -28,16 +28,16 @@ $(document).ready(function(){
                 }
             },
             type: "GET",
-//            dataType: "json",
+            dataType: "json",
             data : {user : "admin"},
             contentType: "application/json;charset=utf-8",
-            url: "http://localhost:7080/airavata-registry-rest-services/registry/api/provenanceregistry/get/experimentId/user",
+            url: "http://localhost:7080/airavata-rest-services/registry/api/provenanceregistry/get/experimentId/user",
             error: function(ajaxrequest, ajaxOptions, thrownError){
                 alert(thrownError);
             }
 
         }).done(function(msg) {
-                $("#jason-text").html(JSON.stringify(msg));
+                $("#json-text").html(JSON.stringify(msg));
             });
 
     });

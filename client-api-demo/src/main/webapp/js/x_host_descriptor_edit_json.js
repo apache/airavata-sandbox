@@ -83,20 +83,11 @@ function initButtons() {
         var hostName = $("#hostName1").val();
         var deleteUrl = "http://localhost:7080/airavata-rest-services/registry/api/descriptors/hostdescriptor/delete";
         alert("Delete button clicked!");
+        alert("hostname : " + hostName);
 
         $.ajax({
-            beforeSend: function(x) {
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                }
-            },
             type: "DELETE",
-//            dataType: "json",
-            contentType: "application/json;charset=utf-8",
-            url: deleteUrl,
-            data: {
-                "hostName": hostName
-            }
+            url: deleteUrl + "?hostname=" + hostName
         }).done(function( msg ) {
                 alert( "Host Deleted: " + msg );
             });
