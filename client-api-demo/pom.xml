@@ -15,7 +15,7 @@
 
     <!-- Edit the following properties. -->
     <properties>
-        <airavata.version>0.5-SNAPSHOT</airavata.version>
+        <airavata.version>0.6-SNAPSHOT</airavata.version>
         <used.axis2.release>${axis2.version}</used.axis2.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
