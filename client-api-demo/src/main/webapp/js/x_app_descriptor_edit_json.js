@@ -132,7 +132,7 @@ function initButtons() {
             type: "POST",
             dataType: "json",
             contentType: "application/json;charset=utf-8",
-            url: "http://localhost:7080/airavata-registry-rest-services/registry/api/applicationdescriptor/update",
+            url: "http://localhost:7080/airavata-rest-services/registry/api/descriptors/applicationdescriptor/update",
             data: JSON.stringify(jsonRequest)
         }).done(function( msg ) {
                 alert( "Data Saved: " + msg );
