@@ -369,11 +369,11 @@
             <artifactId>airavata-gfac-axis2-interface</artifactId>
             <version>${airavata.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.airavata</groupId>
-            <artifactId>airavata-common-registry-api</artifactId>
-            <version>${airavata.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.airavata</groupId>-->
+            <!--<artifactId>airavata-common-registry-api</artifactId>-->
+            <!--<version>${airavata.version}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15</artifactId>
