@@ -221,7 +221,7 @@ function initButtons() {
             type: "DELETE",
 //            dataType: "json",
 //            contentType: "application/json;charset=utf-8",
-            url: "http://localhost:7080/airavata-registry-rest-services/registry/api/applicationdescriptor/delete",
+            url: "http://localhost:7080/airavata-rest-services/registry/api/descriptors/applicationdescriptor/delete",
             data: {
                 "appName" : appName,
                 "hostName" : hostName,
