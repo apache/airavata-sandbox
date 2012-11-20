@@ -29,7 +29,7 @@ $(document).ready(function(){
             type: "GET",
             dataType: "json",
             contentType: "application/json;charset=utf-8",
-            url: "http://localhost:7080/airavata-registry-rest-services/registry/api/applicationdescriptor/alldescriptors",
+            url: "http://localhost:7080/airavata-rest-services/registry/api/descriptors/applicationdescriptor/alldescriptors",
             error: function(ajaxrequest, ajaxOptions, thrownError){
                 alert(thrownError);
             }
