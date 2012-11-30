@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<assembly>
+  <id>all</id>
+  <formats>
+    <format>zip</format>
+    <format>tar.gz</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <includes>
+        <include>*.xml</include>
+        <include>*.conf</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>src</directory>
+      <outputDirectory>/src</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>target/endorsed</directory>
+      <outputDirectory>/lib/endorsed</outputDirectory>
+    </fileSet>
+  </fileSets>
+  <dependencySets>
+    <dependencySet>
+      <useStrictFiltering>true</useStrictFiltering>
+      <outputDirectory>lib</outputDirectory>
+      <unpack>false</unpack>
+      <scope>runtime</scope>
+      <excludes>
+      <!-- exclude things not needed by pure clients 
+       <exclude>org.mortbay.jetty:jetty</exclude>
+      -->
+     </excludes>
+    </dependencySet>
+  </dependencySets>
+</assembly>

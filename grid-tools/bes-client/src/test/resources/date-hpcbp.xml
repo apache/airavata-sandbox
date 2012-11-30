@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jsdl:JobDefinition xmlns:jsdl="http://schemas.ggf.org/jsdl/2005/11/jsdl"
+                    xmlns:jsdl-hpcpa="http://schemas.ggf.org/jsdl/2006/07/jsdl-hpcpa"
+                    xmlns:cred="http://schemas.ogf.org/hpcp/2007/11/ac"
+                    xmlns:token="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+  <jsdl:JobDescription>
+    <jsdl:JobIdentification>
+      <jsdl:JobName>Date-Job</jsdl:JobName>
+      <jsdl:JobProject>SG-ExampleJob</jsdl:JobProject>
+    </jsdl:JobIdentification>
+    <jsdl:Resources>
+      <jsdl:TotalCPUCount>
+        <jsdl:Exact>1</jsdl:Exact>
+      </jsdl:TotalCPUCount>
+      <jsdl:IndividualCPUTime>
+        <jsdl:Exact>3600</jsdl:Exact>
+      </jsdl:IndividualCPUTime>
+    </jsdl:Resources>
+    <jsdl:Application>
+      <jsdl-hpcpa:HPCProfileApplication>
+	      <jsdl-hpcpa:Executable>/bin/date</jsdl-hpcpa:Executable>
+	      <jsdl-hpcpa:Output>stdout.txt</jsdl-hpcpa:Output>
+      </jsdl-hpcpa:HPCProfileApplication>
+    </jsdl:Application>
+  </jsdl:JobDescription>
+</jsdl:JobDefinition>
+
