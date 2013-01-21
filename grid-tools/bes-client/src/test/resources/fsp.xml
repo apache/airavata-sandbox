@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:JobDefinition xmlns:p="http://schemas.ggf.org/jsdl/2005/11/jsdl"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://schemas.ggf.org/jsdl/2005/11/jsdl jsdl.xsd ">
+	<p:JobDescription>
+		<p:Application>
+			<POSIXApplication xmlns="http://schemas.ggf.org/jsdl/2005/11/jsdl-posix">
+				<Executable>/bin/date;/bin/cat</Executable>
+				<Argument>input.txt</Argument>
+				<Output>stdout.txt</Output>
+				<Error>stderr.txt</Error>
+			</POSIXApplication>
+		</p:Application>
+		<p:DataStaging>
+			<p:FileName>input.txt</p:FileName>
+			<p:CreationFlag>overwrite</p:CreationFlag>
+			<p:Source>
+				<p:URI>ftp://host.name:8004/hello.txt
+				</p:URI>
+			</p:Source>
+			<ac:Credential xmlns:ac="http://schemas.ogf.org/hpcp/2007/11/ac">
+				<wsse:UsernameToken
+					xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+					<wsse:Username>myuser</wsse:Username>
+					<wsse:Password>mypass</wsse:Password>
+				</wsse:UsernameToken>
+			</ac:Credential>
+		</p:DataStaging>
+		<p:DataStaging>
+			<p:FileName>input.txt</p:FileName>
+			<p:CreationFlag>overwrite</p:CreationFlag>
+			<p:Target>
+				<p:URI>ftp://host.name:8004/input.txt</p:URI>
+			</p:Target>
+			<ac:Credential xmlns:ac="http://schemas.ogf.org/hpcp/2007/11/ac">
+				<wsse:UsernameToken
+					xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+					<wsse:Username>myuser</wsse:Username>
+					<wsse:Password>mypass</wsse:Password>
+				</wsse:UsernameToken>
+			</ac:Credential>
+		</p:DataStaging>
+		<p:DataStaging>
+			<p:FileName>stderr.txt</p:FileName>
+			<p:CreationFlag>overwrite</p:CreationFlag>
+			<p:Target>
+				<!-- replace gridsam with your middleware client - arc clients : ftp://zam1161v01.zam.kfa-juelich.de:8004/ogf27/arc/test__9_200.out 
+					- genesis clients : ftp://zam1161v01.zam.kfa-juelich.de:8004/ogf27/genesis/test__9_200.out -->
+				<p:URI>ftp://host.name:8004/stderr.txt</p:URI>
+			</p:Target>
+			<ac:Credential xmlns:ac="http://schemas.ogf.org/hpcp/2007/11/ac">
+				<wsse:UsernameToken
+					xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+					<wsse:Username>myuser</wsse:Username>
+					<wsse:Password>mypass</wsse:Password>
+				</wsse:UsernameToken>
+			</ac:Credential>
+		</p:DataStaging>
+		<p:DataStaging>
+			<p:FileName>stdout.txt</p:FileName>
+			<p:CreationFlag>overwrite</p:CreationFlag>
+			<!-- replace gridsam with your middleware client - arc clients : ftp://zam1161v01.zam.kfa-juelich.de:8004/ogf27/arc/test__9_200.out 
+				- genesis clients : ftp://zam1161v01.zam.kfa-juelich.de:8004/ogf27/genesis/test__9_200.out -->
+
+			<p:Target>
+				<p:URI>ftp://host.name:8004/stdout.txt</p:URI>
+			</p:Target>
+			<ac:Credential xmlns:ac="http://schemas.ogf.org/hpcp/2007/11/ac">
+				<wsse:UsernameToken
+					xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+					<wsse:Username>myuser</wsse:Username>
+					<wsse:Password>mypass</wsse:Password>
+				</wsse:UsernameToken>
+			</ac:Credential>
+		</p:DataStaging>
+	</p:JobDescription>
+</p:JobDefinition>
