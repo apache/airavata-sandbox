@@ -13,5 +13,10 @@ public class TestInterop {
 		besJob.runJob();
 	}
 	
+	@Test
+	public void testRunAndTerminateJob(){
+		RunAndTerminateJob besJob = new RunAndTerminateJob();
+		besJob.runAndTerminate();
+	}
 	
 }

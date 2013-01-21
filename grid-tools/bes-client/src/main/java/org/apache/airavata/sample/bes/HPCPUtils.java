@@ -6,6 +6,11 @@ import javax.xml.namespace.QName;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlCursor.TokenType;
 import org.apache.xmlbeans.XmlObject;
+import org.ggf.schemas.jsdl.x2005.x11.jsdl.DataStagingType;
+import org.ggf.schemas.jsdl.x2005.x11.jsdl.SourceTargetType;
+
+import de.fzj.unicore.wsrflite.xmlbeans.WSUtilities;
+
 import eu.unicore.security.util.Log;
 
 /**
@@ -112,5 +117,24 @@ public class HPCPUtils {
 		}
 		return null;
 	}
-
+	
+	
+	public static XmlObject createCredentialsElement(String userName, String password){
+		XmlObject newXml = XmlObject.Factory.newInstance();
+		
+		XmlCursor cursor = newXml.newCursor();
+		cursor.toNextToken();
+		cursor.beginElement(AC_QNAME);
+		cursor.insertElementWithText(AC_USERNAME, userName);
+		cursor.insertElementWithText(AC_PASSWD, password);
+		cursor.dispose();
+		
+		return newXml;
+	}
+	
+	
+	public static void appendDataStagingWithCredentials(DataStagingType dsType, String userName, String password){
+		WSUtilities.append(createCredentialsElement(userName, password), dsType);
+	}
+	
 }
