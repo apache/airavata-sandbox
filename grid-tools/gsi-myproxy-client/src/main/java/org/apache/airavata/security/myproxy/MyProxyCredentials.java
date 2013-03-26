@@ -25,12 +25,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.Serializable;
+import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 
 import org.apache.log4j.Logger;
-import org.globus.gsi.GlobusCredential;
-import org.globus.gsi.TrustedCertificates;
+import org.globus.gsi.X509Credential;
 import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
+import org.globus.gsi.provider.GlobusProvider;
+import org.globus.gsi.provider.KeyStoreParametersFactory;
 import org.globus.myproxy.MyProxy;
 import org.ietf.jgss.GSSCredential;
 
@@ -75,10 +77,8 @@ public class MyProxyCredentials implements Serializable {
         try {
             if (hostcertsKeyFile != null && !user) {
                 fis = new FileInputStream(hostcertsKeyFile);
-                // X509Credential globusCred = new X509Credential(fis); //**
-                GlobusCredential globusCred = new GlobusCredential(fis);
-                this.gssCredential = new GlobusGSSCredentialImpl(globusCred, GSSCredential.INITIATE_AND_ACCEPT);
-
+                X509Credential x509Cred = new X509Credential(fis);
+                this.gssCredential = new GlobusGSSCredentialImpl(x509Cred, GSSCredential.INITIATE_AND_ACCEPT);
             } else {
                 this.gssCredential = getDefaultProxy();
             }
@@ -112,17 +112,21 @@ public class MyProxyCredentials implements Serializable {
     private void init() {
         if (trustedCertsFile != null) {
             if (new File(trustedCertsFile).isDirectory()) {
-                TrustedCertificates certificates = TrustedCertificates.load(trustedCertsFile);
-                TrustedCertificates.setDefaultTrustedCertificates(certificates);
-            } else {
+    			try {
+            	KeyStore trustStore = KeyStore.getInstance(
+    					GlobusProvider.KEYSTORE_TYPE,
+    					GlobusProvider.PROVIDER_NAME);
+    			trustStore.load(KeyStoreParametersFactory
+    					.createTrustStoreParameters(trustedCertsFile + "/*.0"));
                 this.trustedCertificates = CertificateManager.getTrustedCertificate(trustedCertsFile);
-
-                TrustedCertificates certificatesArray = new TrustedCertificates(this.trustedCertificates);
-                TrustedCertificates.setDefaultTrustedCertificates(certificatesArray);
-            }
+    			} catch (Exception e) {
+    				e.printStackTrace(); 
+    			}
+                }
         }
     }
 
+    
     public GSSCredential renewProxy() throws Exception {
         init();
 
@@ -133,10 +137,10 @@ public class MyProxyCredentials implements Serializable {
             int lifeHours = myproxyLifeTime * SECS_PER_HOUR;
             GSSCredential proxy = myproxy.get(myproxyUserName, myproxyPassword, lifeHours);
 
-            GlobusCredential globusCred = null; // **
+            X509Credential globusCred = null; // **
             // X509Credential globusCred = null; //**
             if (proxy instanceof GlobusGSSCredentialImpl) {
-                globusCred = ((GlobusGSSCredentialImpl) proxy).getGlobusCredential();// **
+                globusCred = ((GlobusGSSCredentialImpl) proxy).getX509Credential();// **
                 // globusCred = ((GlobusGSSCredentialImpl) proxy).getX509Credential();//**
                 log.info("got proxy from myproxy for " + myproxyUserName + " with " + myproxyLifeTime + " lifetime.");
                 String uid = myproxyUserName;

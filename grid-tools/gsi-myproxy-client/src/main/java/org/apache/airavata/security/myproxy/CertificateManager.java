@@ -27,7 +27,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.globus.gsi.CertUtil;
+import org.globus.gsi.util.CertificateLoadUtil;
 import org.globus.util.ClassLoaderUtils;
 
 public class CertificateManager {
@@ -72,8 +72,7 @@ public class CertificateManager {
         while (true) {
             X509Certificate certificate;
             try {
-                certificate = CertUtil.loadCertificate(stream);
-                // certificate = CertificateLoadUtil.loadCertificate(stream); //**
+                certificate = CertificateLoadUtil.loadCertificate(stream);
             } catch (GeneralSecurityException e) {
                 String message = "Certificates are invalid";
                 throw new RuntimeException(message, e);

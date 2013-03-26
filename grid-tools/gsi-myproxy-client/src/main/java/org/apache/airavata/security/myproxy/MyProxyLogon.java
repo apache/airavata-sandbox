@@ -21,9 +21,7 @@
 
 package org.apache.airavata.security.myproxy;
 
-import java.io.File;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -35,7 +33,6 @@ public class MyProxyLogon {
     /**
 	 * 
 	 */
-    private static final long serialVersionUID = -2270092298283648553L;
     public static final String MYPROXYCLIENT_PROPERTY = "airavata-myproxy-client.properties";
     private Properties properties;
     protected GSSCredential gssCredential;
@@ -91,23 +88,13 @@ public class MyProxyLogon {
     /**
      * Load the configration file
      * 
-     * @throws GfacException
+     * @throws Exception
      */
     private void loadConfiguration() throws Exception {
         try {
             if (properties == null) {
                 ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                File webinfDir = null;
-                URL propertyFile = classLoader.getResource(MYPROXYCLIENT_PROPERTY);
-
-                if (propertyFile != null) {
-                    File tempFile = new File(propertyFile.getFile());
-                    if (tempFile.exists()) {
-                        webinfDir = tempFile.getParentFile().getParentFile();
-                    }
-                } else {
-                    throw new Exception(" Not able to locate " + MYPROXYCLIENT_PROPERTY);
-                }
+ 
                 InputStream propertyStream = classLoader.getResourceAsStream(MYPROXYCLIENT_PROPERTY);
                 properties = new Properties();
                 if (credentials == null) {
