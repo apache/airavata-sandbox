@@ -23,18 +23,14 @@ package org.apache.airavata.gridtools.jsdl;
 
 import java.io.StringWriter;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
-import org.ogf.jsdl.ApplicationType;
-import org.ogf.jsdl.FileNameType;
-import org.ogf.jsdl.JobDefinitionType;
-import org.ogf.jsdl.JobDescriptionType;
-import org.ogf.jsdl.JobIdentificationType;
-import org.ogf.jsdl.ObjectFactory;
-import org.ogf.jsdl.POSIXApplicationType;
+import org.apache.xmlbeans.ObjectFactory;
+import org.ogf.schemas.jsdl.ApplicationType;
+import org.ogf.schemas.jsdl.JobDefinitionDocument;
+import org.ogf.schemas.jsdl.JobDefinitionType;
+import org.ogf.schemas.jsdl.JobDescriptionType;
+import org.ogf.schemas.jsdl.JobIdentificationType;
+import org.ogf.schemas.jsdl.posix.FileNameType;
+import org.ogf.schemas.jsdl.posix.POSIXApplicationType;
 
 public class GenerateJSDLExample {
 
@@ -43,45 +39,50 @@ public class GenerateJSDLExample {
      */
     public static void main(String[] args) {
 
-        try {
-
-            ObjectFactory jsdlObjFact = new ObjectFactory();
-            JobDefinitionType jsdlJobDefType = jsdlObjFact.createJobDefinitionType();
-            JobDescriptionType jsdlJobDescType = jsdlObjFact.createJobDescriptionType();
-            
-            
-            JobIdentificationType jsdlJobIdenType = jsdlObjFact.createJobIdentificationType();
-            jsdlJobIdenType.setJobName("Airavata Test");
-            jsdlJobIdenType.setDescription("Airavata JSDL Test Job");
-            jsdlJobDescType.setJobIdentification(jsdlJobIdenType);
-            
-            POSIXApplicationType jsdlPosixAppType = jsdlObjFact.createPOSIXApplicationType();
-            FileNameType execFileType = jsdlObjFact.createFileNameType();
-            execFileType.setValue("/bin/date");
-            jsdlPosixAppType.setExecutable(execFileType);
-            JAXBElement<POSIXApplicationType> jsdlPosixApp = jsdlObjFact.createPOSIXApplication(jsdlPosixAppType);
-            
-            ApplicationType jsdlAppType = jsdlObjFact.createApplicationType();
-            jsdlAppType.setApplicationName("Test Date");
-            jsdlAppType.setApplicationVersion("v1.0");
-            jsdlAppType.setDescription("Testing Date");
-            jsdlAppType.getAny().add(jsdlPosixApp);
-            jsdlJobDescType.setApplication(jsdlAppType);          
-            
-            jsdlJobDefType.setJobDescription(jsdlJobDescType);
-            JAXBElement<JobDefinitionType> jsdlJobDef = jsdlObjFact.createJobDefinition(jsdlJobDefType);
-
-            //generate the required jsdl
-            JAXBContext jaxbContext = JAXBContext.newInstance(new Class[] { JobDefinitionType.class });
-            StringWriter jsdlXMLString = new StringWriter();
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(jsdlJobDef, jsdlXMLString);
-            System.out.println(jsdlXMLString.toString());
-         
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+//        try {
+//
+//            JobDefinitionDocument jobDefDoc = JobDefinitionDocument.Factory
+//                    .newInstance();
+//            JobDefinitionType jobDef = jobDefDoc.addNewJobDefinition();
+//            
+//            jobDef.addNewJobDescription().addNewResources() addNewJobDescription();
+//            
+//            ObjectFactory jsdlObjFact = new ObjectFactory();
+//            JobDefinitionType jsdlJobDefType = jsdlObjFact.createJobDefinitionType();
+//            JobDescriptionType jsdlJobDescType = jsdlObjFact.createJobDescriptionType();
+//                   
+//            JobIdentificationType jsdlJobIdenType = jsdlObjFact.createJobIdentificationType();
+//            jsdlJobIdenType.setJobName("Airavata Test");
+//            jsdlJobIdenType.setDescription("Airavata JSDL Test Job");
+//            jsdlJobDescType.setJobIdentification(jsdlJobIdenType);
+//            
+//            POSIXApplicationType jsdlPosixAppType = jsdlObjFact.createPOSIXApplicationType();
+//            FileNameType execFileType = jsdlObjFact.
+//            execFileType.setValue("/bin/date");
+//            jsdlPosixAppType.setExecutable(execFileType);
+//            JAXBElement<POSIXApplicationType> jsdlPosixApp = jsdlObjFact.createPOSIXApplication(jsdlPosixAppType);
+//            
+//            ApplicationType jsdlAppType = jsdlObjFact.createApplicationType();
+//            jsdlAppType.setApplicationName("Test Date");
+//            jsdlAppType.setApplicationVersion("v1.0");
+//            jsdlAppType.setDescription("Testing Date");
+//            jsdlAppType.getAny().add(jsdlPosixApp);
+//            jsdlJobDescType.setApplication(jsdlAppType);          
+//            
+//            jsdlJobDefType.setJobDescription(jsdlJobDescType);
+//            JAXBElement<JobDefinitionType> jsdlJobDef = jsdlObjFact.createJobDefinition(jsdlJobDefType);
+//
+//            //generate the required jsdl
+//            JAXBContext jaxbContext = JAXBContext.newInstance(new Class[] { JobDefinitionType.class });
+//            StringWriter jsdlXMLString = new StringWriter();
+//            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+//            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//            jaxbMarshaller.marshal(jsdlJobDef, jsdlXMLString);
+//            System.out.println(jsdlXMLString.toString());
+//         
+//        } catch (JAXBException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
