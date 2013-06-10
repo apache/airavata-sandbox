@@ -54,10 +54,10 @@ public class GridFtp {
     /**
      * Make directory at remote location
      * 
-     * @param destURI
-     * @param gssCred
-     * @throws ServerException
-     * @throws IOException
+     * @param destURI Directory name and server location to create the directory.
+     * @param gssCred Credentials to authenticate with remote server.
+     * @throws ServerException If an error occurred while authenticating.
+     * @throws IOException If an error occurred while creating the directory.
      */
     public void makeDir(URI destURI, GSSCredential gssCred) throws Exception {
         GridFTPClient destClient = null;
@@ -114,10 +114,8 @@ public class GridFtp {
     /**
      * Upload file from stream
      * 
-     * @param destURI
-     * @param gsCredential
-     * @param localFile
-     * @throws GfacException
+     * @param destURI Name of the file to be uploaded.
+     * @param gsCredential Credentials to authenticate.
      */
     public void updateFile(URI destURI, GSSCredential gsCredential, InputStream io) throws Exception {
         GridFTPClient ftpClient = null;
@@ -164,10 +162,9 @@ public class GridFtp {
     /**
      * Upload file to remote location
      * 
-     * @param destURI
-     * @param gsCredential
-     * @param localFile
-     * @throws GfacException
+     * @param destURI Name of the file to be uploaded.
+     * @param gsCredential Credentials used to upload the file.
+     * @param localFile Local file to be uploaded.
      */
     public void updateFile(URI destURI, GSSCredential gsCredential, File localFile) throws Exception {
         GridFTPClient ftpClient = null;
@@ -189,6 +186,7 @@ public class GridFtp {
             log.info("Uploading file");
 
             ftpClient.put(localFile, remoteFile, false);
+
 
             log.info("Upload file to:" + remoteFile + " is done");
 
@@ -212,10 +210,9 @@ public class GridFtp {
     /**
      * Download File from remote location
      * 
-     * @param destURI
-     * @param gsCredential
-     * @param localFile
-     * @throws GfacException
+     * @param destURI  File to be downloaded.
+     * @param gsCredential To authenticate user to remote machine.
+     * @param localFile The downloaded file name.
      */
     public void downloadFile(URI destURI, GSSCredential gsCredential, File localFile) throws Exception {
         GridFTPClient ftpClient = null;
@@ -257,13 +254,52 @@ public class GridFtp {
     }
 
     /**
+     * Checks whether files exists.
+     *
+     * @param destURI Name of the file to check existence.
+     * @param gsCredential Credentials to authenticate user.
+     */
+    public boolean exists(URI destURI, GSSCredential gsCredential) throws Exception {
+        GridFTPClient ftpClient = null;
+        GridFTPContactInfo contactInfo = new GridFTPContactInfo(destURI.getHost(), destURI.getPort());
+        try {
+            String remoteFile = destURI.getPath();
+
+            log.info("the remote file is " + remoteFile);
+
+            log.info("Setup GridFTP Client");
+
+            ftpClient = new GridFTPClient(contactInfo.hostName, contactInfo.port);
+            ftpClient.setAuthorization(new HostAuthorization("host"));
+            ftpClient.authenticate(gsCredential);
+            ftpClient.setDataChannelAuthentication(DataChannelAuthentication.SELF);
+
+            log.info("Checking whether file exists");
+
+            return ftpClient.exists(destURI.getPath());
+
+        } catch (ServerException e) {
+            throw new Exception("Cannot download file from GridFTP:" + contactInfo.toString(), e);
+        } catch (IOException e) {
+            throw new Exception("Cannot download file from GridFTP:" + contactInfo.toString(), e);
+        } finally {
+            if (ftpClient != null) {
+                try {
+                    ftpClient.close();
+                } catch (Exception e) {
+                    log.info("Cannot close GridFTP client connection");
+                }
+            }
+        }
+    }
+
+    /**
      * Stream remote file
      * 
-     * @param destURI
-     * @param gsCredential
-     * @param localFile
-     * @return
-     * @throws GfacException
+     * @param destURI Remote file to be read.
+     * @param gsCredential Credentials to authenticate user.
+     * @param localFile Downloaded local file name.
+     * @return  The content of the downloaded file.
      */
     public String readRemoteFile(URI destURI, GSSCredential gsCredential, File localFile) throws Exception {
         BufferedReader instream = null;
@@ -309,9 +345,9 @@ public class GridFtp {
     /**
      * Transfer data from one GridFTp Endpoint to another GridFTP Endpoint
      * 
-     * @param srchost
-     * @param desthost
-     * @param gssCred
+     * @param srchost Source file and host.
+     * @param desthost Destination file and host.
+     * @param gssCred Credentials to be authenticate user.
      * @param srcActive
      * @throws ServerException
      * @throws ClientException

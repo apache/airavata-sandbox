@@ -23,6 +23,8 @@ package org.apache.airavata.filetransfer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -40,6 +42,7 @@ public class ExectionContext {
     private String sourcedataLocation;
     private String gridFTPServerDest;
     private String destdataLocation;
+    private String uploadingFilePath;
 
     public static final String PROPERTY_FILE = "airavata-gridftp-client.properties";
 
@@ -65,6 +68,7 @@ public class ExectionContext {
             String gridFTPSourcePath = properties.getProperty(ServiceConstants.GRIDFTPSOURCEPATH);
             String gridFTPServerDest = properties.getProperty(ServiceConstants.GRIDFTPSERVERDEST);
             String gridFTPDestPath = properties.getProperty(ServiceConstants.GRIDFTPDESTPATH);
+            String gridFTPUploadingPath = properties.getProperty(ServiceConstants.UPLOADING_FILE_PATH);
 
             if (testinghost != null) {
                 this.testingHost = testinghost;
@@ -91,6 +95,9 @@ public class ExectionContext {
             }
             if (gridFTPDestPath != null && !gridFTPDestPath.isEmpty()) {
                 this.destdataLocation = gridFTPDestPath;
+            }
+            if (gridFTPUploadingPath != null && !gridFTPUploadingPath.isEmpty()) {
+                this.uploadingFilePath = gridFTPUploadingPath;
             }
 
         }
@@ -134,6 +141,24 @@ public class ExectionContext {
 
     public void setGridFTPServerSource(String gridFTPServerSource) {
         this.gridFTPServerSource = gridFTPServerSource;
+    }
+
+    public URI getSourceDataFileUri() throws URISyntaxException {
+        String file = gridFTPServerSource + getSourcedataLocation();
+        return new URI(file);
+    }
+
+    public URI getUploadingFilePathUri() throws URISyntaxException {
+        String file = gridFTPServerSource + getUploadingFilePath();
+        return new URI(file);
+    }
+
+    public String getUploadingFilePath() {
+        return uploadingFilePath;
+    }
+
+    public void setUploadingFilePath(String uploadingFilePath) {
+        this.uploadingFilePath = uploadingFilePath;
     }
 
     public String getSourcedataLocation() {

@@ -41,5 +41,6 @@ public class ServiceConstants {
 	public static final String GRIDFTPSOURCEPATH = "gridftpSourcePath";
 	public static final String GRIDFTPSERVERDEST = "gridftpserverDest";
 	public static final String GRIDFTPDESTPATH = "gridftpDestPath";
+	public static final String UPLOADING_FILE_PATH = "gridftpUploadingFilePath";
 
 }

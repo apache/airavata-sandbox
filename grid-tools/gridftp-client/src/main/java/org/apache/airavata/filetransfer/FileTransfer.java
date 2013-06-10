@@ -23,7 +23,7 @@ package org.apache.airavata.filetransfer;
 
 import java.net.URI;
 
-import org.apache.airavata.filetransfer.security.SecurityContext;
+import org.apache.airavata.security.myproxy.SecurityContext;
 import org.apache.airavata.filetransfer.utils.GridFtp;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;

@@ -23,56 +23,26 @@
 	<version>0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<repositories>
-		<repository>
-			<name>ogce.m2.all</name>
-			<id>ogce.m2.all</id>
-			<url>http://community.ucs.indiana.edu:9090/archiva/repository/ogce.m2.all</url>
-		</repository>
-	</repositories>
-
 
 	<dependencies>
 
-		<dependency>
-			<groupId>cog-jglobus</groupId>
-			<artifactId>cog-jglobus</artifactId>
-			<version>1.8.0_1</version>
-		</dependency>
+        <dependency>
+            <groupId>org.jglobus</groupId>
+            <artifactId>gss</artifactId>
+            <version>2.0.6-rc2</version>
+        </dependency>
 
-		<dependency>
-			<groupId>cog-4_1_6_rc2</groupId>
-			<artifactId>puretls</artifactId>
-			<type>jar</type>
-			<version>cog-4_1_6</version>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.airavata</groupId>
+            <artifactId>airavata-myproxy-client</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
 
-		<dependency>
-			<groupId>cog-4_1_6_rc2</groupId>
-			<artifactId>cryptix32</artifactId>
-			<type>jar</type>
-			<version>cog-4_1_6</version>
-		</dependency>
-
-		<dependency>
-			<groupId>cog-4_1_6_rc2</groupId>
-			<artifactId>jce-jdk13</artifactId>
-			<version>131</version>
-			<type>jar</type>
-		</dependency>
-
-		<dependency>
-			<groupId>cog-4_1_6_rc2</groupId>
-			<artifactId>cryptix-asn1</artifactId>
-			<type>jar</type>
-			<version>cog-4_1_6</version>
-		</dependency>
-		<dependency>
-			<groupId>cog-4_1_6_rc2</groupId>
-			<artifactId>commons-digester</artifactId>
-			<type>jar</type>
-			<version>cog-4_1_6</version>
-		</dependency>
+        <dependency>
+            <groupId>org.jglobus</groupId>
+            <artifactId>gridftp</artifactId>
+            <version>2.0.6-rc2</version>
+        </dependency>
 
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -97,6 +67,20 @@
 					<target>1.5</target>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+                <configuration>
+                    <failIfNoTests>false</failIfNoTests>
+                    <skipTests>${skipTests}</skipTests>
+                    <workingDirectory>${project.build.testOutputDirectory}</workingDirectory>
+                    <systemPropertyVariables>
+                        <projectDirectory>${basedir}</projectDirectory>
+                    </systemPropertyVariables>
+
+                </configuration>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -117,6 +101,12 @@
 			</plugin>
 		</plugins>
 	</build>
+
+    <properties>
+        <surefire.version>2.12</surefire.version>
+        <junit.version>4.7</junit.version>
+        <skipTests>false</skipTests>
+    </properties>
 
 </project>
 
