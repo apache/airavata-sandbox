@@ -2,6 +2,6 @@
 trustedCertsFile=./certificates/
 myproxyServer=myproxy.teragrid.org
 myproxy_lifetime=17280000
-myproxyUserName=
+myProxyUserName=
 myproxyPasswd=
 myproxyPort=7512

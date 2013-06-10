@@ -21,302 +21,278 @@
 
 package org.apache.airavata.security.myproxy;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.Serializable;
-import java.security.KeyStore;
+import java.io.*;
+import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
 import org.apache.log4j.Logger;
+import org.globus.gsi.GlobusCredential;
 import org.globus.gsi.X509Credential;
 import org.globus.gsi.gssapi.GlobusGSSCredentialImpl;
-import org.globus.gsi.provider.GlobusProvider;
-import org.globus.gsi.provider.KeyStoreParametersFactory;
+import org.globus.myproxy.GetParams;
 import org.globus.myproxy.MyProxy;
 import org.ietf.jgss.GSSCredential;
 
+/**
+ * Class to manipulate my proxy credentials. Responsible for retrieving, creating
+ * my proxy credentials.
+ */
 public class MyProxyCredentials implements Serializable {
 
     private static final long serialVersionUID = -2471014486509046212L;
-    protected String myproxyHostname;
-    protected String myproxyUserName;
-    protected String myproxyPassword;
-    protected int myproxyPortNumber;
-    protected GSSCredential gssCredential;
-    protected String portalUserName;
-    private String hostcertsKeyFile;
-    private String trustedCertsFile;
-
-    protected int myproxyLifeTime = 14400;
-    final static int SECS_PER_MIN = 60;
-    final static int SECS_PER_HOUR = 3600;
-
-    private boolean initialized = false;
-    private boolean user = true;
-    protected X509Certificate[] trustedCertificates;
+    protected String myProxyHostname;
+    protected String myProxyUserName;
+    protected String myProxyPassword;
+    protected int myProxyPortNumber;
+    protected int myProxyLifeTime = 14400;
+    protected String trustedCertificatePath;
 
     private static final Logger log = Logger.getLogger(MyProxyCredentials.class);
 
+    /**
+     * Default constructor.
+     */
     public MyProxyCredentials() {
-        // default constructor
     }
 
-    public MyProxyCredentials(String myproxyServer, int myproxyPort, String myproxyUsername, String myproxyPassphrase,
-            int myproxyLifetime) {
-        this.myproxyHostname = myproxyServer;
-        this.myproxyPortNumber = myproxyPort;
-        this.myproxyUserName = myproxyUsername;
-        this.myproxyPassword = myproxyPassphrase;
-        this.myproxyLifeTime = myproxyLifetime;
+    /**
+     * Constructor.
+     * @param myProxyServer Ip address of the my proxy server.
+     * @param myProxyPort Port which my proxy server is running.
+     * @param myProxyUsername User name to connect to my proxy server.
+     * @param myProxyPassPhrase Password for my proxy authentication.
+     * @param myProxyLifetime Lifetime of the retrieving credentials.
+     * @param trustedCerts Trusted certificate location for SSL communication.
+     */
+    public MyProxyCredentials(String myProxyServer, int myProxyPort, String myProxyUsername, String myProxyPassPhrase,
+                              int myProxyLifetime, String trustedCerts) {
 
-    }
+        this.myProxyHostname = myProxyServer;
+        this.myProxyPortNumber = myProxyPort;
+        this.myProxyUserName = myProxyUsername;
+        this.myProxyPassword = myProxyPassPhrase;
+        this.myProxyLifeTime = myProxyLifetime;
+        this.trustedCertificatePath = trustedCerts;
 
-    public GSSCredential getGssCredential() throws Exception {
-        FileInputStream fis = null;
-        try {
-            if (hostcertsKeyFile != null && !user) {
-                fis = new FileInputStream(hostcertsKeyFile);
-                X509Credential x509Cred = new X509Credential(fis);
-                this.gssCredential = new GlobusGSSCredentialImpl(x509Cred, GSSCredential.INITIATE_AND_ACCEPT);
-            } else {
-                this.gssCredential = getDefaultProxy();
-            }
-            if (gssCredential != null) {
-                return gssCredential;
-            }
-        } catch (Exception e) {
-            log.error("Failed to load proxy credential from ProxyManager");
-            e.printStackTrace();
-            throw e;
-        } finally {
-            if (fis != null) {
-                fis.close();
-            }
-        }
-
-        // then we will try the MyProxy
-        if (getMyproxyUserName() != null && getMyproxyPassword() != null) {
-            gssCredential = renewProxy();
-        }
-        return gssCredential;
-    }
-
-    public GSSCredential getDefaultProxy() throws Exception {
-        init();
-        MyProxy myproxy = new MyProxy(this.myproxyHostname, this.myproxyPortNumber);
-        log.info("USER=" + this.myproxyUserName + ",PASS=" + this.myproxyPassword + ",TIME=" + this.myproxyLifeTime);
-        return myproxy.get(this.myproxyUserName, this.myproxyPassword, this.myproxyLifeTime);
-    }
-
-    private void init() {
-        if (trustedCertsFile != null) {
-            if (new File(trustedCertsFile).isDirectory()) {
-    			try {
-            	KeyStore trustStore = KeyStore.getInstance(
-    					GlobusProvider.KEYSTORE_TYPE,
-    					GlobusProvider.PROVIDER_NAME);
-    			trustStore.load(KeyStoreParametersFactory
-    					.createTrustStoreParameters(trustedCertsFile + "/*.0"));
-                this.trustedCertificates = CertificateManager.getTrustedCertificate(trustedCertsFile);
-    			} catch (Exception e) {
-    				e.printStackTrace(); 
-    			}
-                }
-        }
-    }
-
-    
-    public GSSCredential renewProxy() throws Exception {
         init();
 
-        FileOutputStream fout = null;
-        try {
-            String proxyloc = null;
-            MyProxy myproxy = new MyProxy(myproxyHostname, myproxyPortNumber);
-            int lifeHours = myproxyLifeTime * SECS_PER_HOUR;
-            GSSCredential proxy = myproxy.get(myproxyUserName, myproxyPassword, lifeHours);
+    }
 
-            X509Credential globusCred = null; // **
-            // X509Credential globusCred = null; //**
-            if (proxy instanceof GlobusGSSCredentialImpl) {
-                globusCred = ((GlobusGSSCredentialImpl) proxy).getX509Credential();// **
-                // globusCred = ((GlobusGSSCredentialImpl) proxy).getX509Credential();//**
-                log.info("got proxy from myproxy for " + myproxyUserName + " with " + myproxyLifeTime + " lifetime.");
-                String uid = myproxyUserName;
-                if (proxyloc == null) {
-                    log.info("uid: " + uid);
-                    proxyloc = "/tmp/x509up_u" + uid;
-                }
-                File proxyfile = new File(proxyloc);
-                log.info("proxy location: " + proxyfile.getAbsolutePath());
-                if (proxyfile.exists() == false) {
-                    String dirpath = proxyloc.substring(0, proxyloc.lastIndexOf('/'));
-                    File dir = new File(dirpath);
-                    if (dir.exists() == false) {
-                        dir.mkdirs();
-                        log.info("new directory " + dirpath + " is created.");
-                    }
-                    proxyfile.createNewFile();
-                    log.info("new proxy file " + proxyloc + " is created.");
-                }
-                fout = new FileOutputStream(proxyfile);
-                globusCred.save(fout);
-                String osName = System.getProperty("os.name");
-                if (!osName.contains("Windows")) {
-                    Runtime.getRuntime().exec("/bin/chmod 600 " + proxyloc);
-                }
-                log.info("Proxy file renewed to " + proxyloc + " for the user " + myproxyUserName + " with "
-                        + myproxyLifeTime + " lifetime.");
+    /**
+     * Gets the default proxy certificate.
+     * @return Default my proxy credentials.
+     * @throws Exception If an error occurred while retrieving credentials.
+     */
+    public GSSCredential getDefaultCredentials() throws Exception {
+        MyProxy myproxy = new MyProxy(this.myProxyHostname, this.myProxyPortNumber);
+        return myproxy.get(this.myProxyUserName, this.myProxyPassword, this.myProxyLifeTime);
+    }
 
-            }
-            return proxy;
-        } catch (Exception e) {
-            throw new Exception(e);
-        } finally {
-            if (fout != null) {
-                fout.close();
-            }
+    /**
+     * Gets a new proxy certificate given current credentials.
+     * @param credential The new proxy credentials.
+     * @return The short lived GSSCredentials
+     * @throws Exception If an error is occurred while retrieving credentials.
+     */
+    public GSSCredential getProxyCredentials(GSSCredential credential) throws Exception {
+
+        MyProxy myproxy = new MyProxy(this.myProxyHostname, this.myProxyPortNumber);
+        return myproxy.get(credential, this.myProxyUserName, this.myProxyPassword, this.myProxyLifeTime);
+    }
+
+    /**
+     * Renew GSSCredentials.
+     * @param credential Credentials to be renewed.
+     * @return  Renewed credentials.
+     * @throws Exception If an error occurred while renewing credentials.
+     */
+    public GSSCredential renewCredentials(GSSCredential credential) throws Exception {
+        MyProxy myproxy = new MyProxy(this.myProxyHostname, this.myProxyPortNumber);
+
+        GetParams getParams = new GetParams();
+        getParams.setAuthzCreds(credential);
+        getParams.setUserName(this.myProxyUserName);
+        getParams.setLifetime(this.getMyProxyLifeTime());
+
+        return myproxy.get(credential, getParams);
+    }
+
+    public GSSCredential createCredentials(X509Certificate[] x509Certificates, PrivateKey privateKey) throws Exception {
+        X509Credential newCredential = new X509Credential(privateKey,
+                x509Certificates);
+
+        return new GlobusGSSCredentialImpl(newCredential,
+                GSSCredential.INITIATE_AND_ACCEPT);
+
+    }
+
+    public GSSCredential createCredentials(X509Certificate x509Certificate, PrivateKey privateKey) throws Exception {
+
+        X509Certificate[] x509Certificates = new X509Certificate[1];
+        x509Certificates[0] = x509Certificate;
+
+        return createCredentials(x509Certificates, privateKey);
+
+    }
+
+    public void init() {
+        validateTrustedCertificatePath();
+    }
+
+    private void validateTrustedCertificatePath() {
+
+        File file = new File(this.trustedCertificatePath);
+
+        if (!file.exists() || !file.canRead()) {
+            File f = new File(".");
+            System.out.println("Current directory " + f.getAbsolutePath());
+            throw new RuntimeException("Cannot read trusted certificate path " + this.trustedCertificatePath);
+        } else {
+            System.setProperty("X509_CERT_DIR", file.getAbsolutePath());
         }
     }
 
+
     /**
-     * @return the myproxyHostname
+     * @return the myProxyHostname
      */
-    public String getMyproxyHostname() {
-        return myproxyHostname;
+    public String getMyProxyHostname() {
+        return myProxyHostname;
     }
 
     /**
-     * @param myproxyHostname
-     *            the myproxyHostname to set
+     * @param myProxyHostname the myProxyHostname to set
      */
-    public void setMyproxyHostname(String myproxyHostname) {
-        this.myproxyHostname = myproxyHostname;
+    public void setMyProxyHostname(String myProxyHostname) {
+        this.myProxyHostname = myProxyHostname;
     }
 
     /**
-     * @return the myproxyUserName
+     * @return the myProxyUserName
      */
-    public String getMyproxyUserName() {
-        return myproxyUserName;
+    public String getMyProxyUserName() {
+        return myProxyUserName;
     }
 
     /**
-     * @param myproxyUserName
-     *            the myproxyUserName to set
+     * @param myProxyUserName the myProxyUserName to set
      */
-    public void setMyproxyUserName(String myproxyUserName) {
-        this.myproxyUserName = myproxyUserName;
+    public void setMyProxyUserName(String myProxyUserName) {
+        this.myProxyUserName = myProxyUserName;
     }
 
     /**
-     * @return the myproxyPassword
+     * @return the myProxyPassword
      */
-    public String getMyproxyPassword() {
-        return myproxyPassword;
+    public String getMyProxyPassword() {
+        return myProxyPassword;
     }
 
     /**
-     * @param myproxyPassword
-     *            the myproxyPassword to set
+     * @param myProxyPassword the myProxyPassword to set
      */
-    public void setMyproxyPassword(String myproxyPassword) {
-        this.myproxyPassword = myproxyPassword;
+    public void setMyProxyPassword(String myProxyPassword) {
+        this.myProxyPassword = myProxyPassword;
     }
 
     /**
-     * @return the myproxyLifeTime
+     * @return the myProxyLifeTime
      */
-    public int getMyproxyLifeTime() {
-        return myproxyLifeTime;
+    public int getMyProxyLifeTime() {
+        return myProxyLifeTime;
     }
 
     /**
-     * @param myproxyLifeTime
-     *            the myproxyLifeTime to set
+     * @param myProxyLifeTime the myProxyLifeTime to set
      */
-    public void setMyproxyLifeTime(int myproxyLifeTime) {
-        this.myproxyLifeTime = myproxyLifeTime;
+    public void setMyProxyLifeTime(int myProxyLifeTime) {
+        this.myProxyLifeTime = myProxyLifeTime;
     }
 
     /**
-     * @return the myproxyPortNumber
+     * @return the myProxyPortNumber
      */
-    public int getMyproxyPortNumber() {
-        return myproxyPortNumber;
+    public int getMyProxyPortNumber() {
+        return myProxyPortNumber;
     }
 
     /**
-     * @param myproxyPortNumber
-     *            the myproxyPortNumber to set
+     * @param myProxyPortNumber the myProxyPortNumber to set
      */
-    public void setMyproxyPortNumber(int myproxyPortNumber) {
-        this.myproxyPortNumber = myproxyPortNumber;
+    public void setMyProxyPortNumber(int myProxyPortNumber) {
+        this.myProxyPortNumber = myProxyPortNumber;
+    }
+
+    public String getTrustedCertificatePath() {
+        return trustedCertificatePath;
+    }
+
+    public void setTrustedCertificatePath(String trustedCertificatePath) {
+        this.trustedCertificatePath = trustedCertificatePath;
     }
 
     /**
      * @return the portalUserName
      */
-    public String getPortalUserName() {
+    /*public String getPortalUserName() {
         return portalUserName;
-    }
+    }*/
 
     /**
      * @param portalUserName
      *            the portalUserName to set
      */
-    public void setPortalUserName(String portalUserName) {
+    /*public void setPortalUserName(String portalUserName) {
         this.portalUserName = portalUserName;
-    }
+    }*/
 
     /**
      * Returns the initialized.
-     * 
+     *
      * @return The initialized
      */
-    public boolean isInitialized() {
+    /*public boolean isInitialized() {
         return this.initialized;
-    }
+    }*/
 
     /**
      * Sets initialized.
-     * 
+     *
      * @param initialized
      *            The initialized to set.
      */
-    public void setInitialized(boolean initialized) {
+   /* public void setInitialized(boolean initialized) {
         this.initialized = initialized;
-    }
+    }*/
 
     /**
      * @param hostcertsKeyFile
      *            the hostcertsKeyFile to set
      */
-    public void setHostcertsKeyFile(String hostcertsKeyFile) {
+    /*public void setHostcertsKeyFile(String hostcertsKeyFile) {
         this.hostcertsKeyFile = hostcertsKeyFile;
-    }
+    }*/
 
     /**
      * @return the hostcertsKeyFile
      */
-    public String getHostcertsKeyFile() {
+    /*public String getHostcertsKeyFile() {
         return hostcertsKeyFile;
-    }
+    }*/
 
     /**
      * @param trustedCertsFile
      *            the trustedCertsFile to set
      */
-    public void setTrustedCertsFile(String trustedCertsFile) {
+    /*public void setTrustedCertsFile(String trustedCertsFile) {
         this.trustedCertsFile = trustedCertsFile;
-    }
+    }*/
 
     /**
      * @return the trustedCertsFile
      */
-    public String getTrustedCertsFile() {
+    /*public String getTrustedCertsFile() {
         return trustedCertsFile;
-    }
+    }*/
 
 }

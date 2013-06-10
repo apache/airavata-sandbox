@@ -28,26 +28,26 @@ import org.apache.log4j.Logger;
 import org.globus.myproxy.MyProxy;
 import org.ietf.jgss.GSSCredential;
 
-public class MyProxyLogon {
+public class SecurityContext {
 
     /**
 	 * 
 	 */
-    public static final String MYPROXYCLIENT_PROPERTY = "airavata-myproxy-client.properties";
+    public static final String MY_PROXY_CLIENT_PROPERTY = "airavata-myproxy-client.properties";
     private Properties properties;
     protected GSSCredential gssCredential;
 
-    private MyProxyCredentials credentials;
-    private static final Logger log = Logger.getLogger(MyProxyLogon.class);
+    private MyProxyCredentials myProxyCredentials;
+    private static final Logger log = Logger.getLogger(SecurityContext.class);
 
     /**
      * 
      * Constructs a ApplicationGlobalContext.
      * 
-     * @throws GfacGUIException
+     * @throws Exception
      */
 
-    public MyProxyLogon() throws Exception {
+    public SecurityContext() throws Exception {
         log.setLevel(org.apache.log4j.Level.INFO);
         loadConfiguration();
 
@@ -55,7 +55,7 @@ public class MyProxyLogon {
 
     public static void main(String[] args) {
         try {
-            MyProxyLogon myproxy = new MyProxyLogon();
+            SecurityContext myproxy = new SecurityContext();
             myproxy.login();
             String proxyName = myproxy.getGssCredential().getName().toString();
             int proxyTime = myproxy.getGssCredential().getRemainingLifetime();
@@ -68,15 +68,23 @@ public class MyProxyLogon {
 
     /**
      * 
-     * @throws GfacException
+     * @throws Exception
      */
     public void login() throws Exception {
-        gssCredential = credentials.getGssCredential();
+        gssCredential = myProxyCredentials.getDefaultCredentials();
+    }
+
+    public GSSCredential getProxyCredentials(GSSCredential credential) throws Exception {
+        return myProxyCredentials.getProxyCredentials(credential);
+    }
+
+    public GSSCredential renewCredentials(GSSCredential credential) throws Exception {
+        return myProxyCredentials.renewCredentials(credential);
     }
 
     public static String getProperty(String name) {
         try {
-            MyProxyLogon context = new MyProxyLogon();
+            SecurityContext context = new SecurityContext();
             return context.getProperties().getProperty(name);
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,39 +100,50 @@ public class MyProxyLogon {
      */
     private void loadConfiguration() throws Exception {
         try {
+
+            System.out.println("In the load configurations method .....");
+
             if (properties == null) {
                 ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
  
-                InputStream propertyStream = classLoader.getResourceAsStream(MYPROXYCLIENT_PROPERTY);
+                InputStream propertyStream = classLoader.getResourceAsStream(MY_PROXY_CLIENT_PROPERTY);
                 properties = new Properties();
-                if (credentials == null) {
-                    this.credentials = new MyProxyCredentials();
+                if (myProxyCredentials == null) {
+                    this.myProxyCredentials = new MyProxyCredentials();
                 }
                 if (propertyStream != null) {
                     properties.load(propertyStream);
                     String myproxyServerTmp = properties.getProperty(ServiceConstants.MYPROXY_SERVER);
                     if (myproxyServerTmp != null) {
-                        this.credentials.setMyproxyHostname(myproxyServerTmp.trim());
+                        this.myProxyCredentials.setMyProxyHostname(myproxyServerTmp.trim());
                     }
                     String myproxyPortTemp = properties.getProperty(ServiceConstants.MYPROXY_PORT);
                     if (myproxyPortTemp != null && myproxyPortTemp.trim().length() > 0) {
-                        this.credentials.setMyproxyPortNumber(Integer.parseInt(myproxyPortTemp.trim()));
+                        this.myProxyCredentials.setMyProxyPortNumber(Integer.parseInt(myproxyPortTemp.trim()));
                     } else {
-                        this.credentials.setMyproxyPortNumber(MyProxy.DEFAULT_PORT);
+                        this.myProxyCredentials.setMyProxyPortNumber(MyProxy.DEFAULT_PORT);
                     }
                     String myproxyuser = properties.getProperty(ServiceConstants.MYPROXY_USERNAME);
                     if (myproxyuser != null) {
-                        this.credentials.setMyproxyUserName(myproxyuser);
+                        this.myProxyCredentials.setMyProxyUserName(myproxyuser);
                     }
+
+                    System.out.println("My proxy user name " + myproxyuser);
+
                     String myproxypass = properties.getProperty(ServiceConstants.MYPROXY_PASSWD);
                     if (myproxypass != null) {
-                        this.credentials.setMyproxyPassword(myproxypass);
+                        this.myProxyCredentials.setMyProxyPassword(myproxypass);
                     }
+
                     String myproxytime = properties.getProperty(ServiceConstants.MYPROXY_LIFETIME);
                     if (myproxytime != null) {
-                        this.credentials.setMyproxyLifeTime(Integer.parseInt(myproxytime));
+                        this.myProxyCredentials.setMyProxyLifeTime(Integer.parseInt(myproxytime));
                     }
-                    this.credentials.setTrustedCertsFile(properties.getProperty(ServiceConstants.TRUSTED_CERTS_FILE));
+                    this.myProxyCredentials.setTrustedCertificatePath(properties.getProperty(ServiceConstants.TRUSTED_CERTS_FILE));
+
+                    System.out.println("Certificate path - " + properties.getProperty(ServiceConstants.TRUSTED_CERTS_FILE));
+
+                    this.myProxyCredentials.init();
                 }
             }
 
@@ -156,8 +175,12 @@ public class MyProxyLogon {
      * 
      * @return The gssCredential
      */
-    public GSSCredential getGssCredential() {
-        return this.gssCredential;
+    public GSSCredential getGssCredential() throws Exception{
+
+        if (this.gssCredential == null)
+            return null;
+
+        return renewCredentials(gssCredential);
     }
 
     /**
@@ -170,11 +193,11 @@ public class MyProxyLogon {
         this.gssCredential = gssCredential;
     }
 
-    public MyProxyCredentials getCredentials() {
-        return credentials;
+    public MyProxyCredentials getMyProxyCredentials() {
+        return myProxyCredentials;
     }
 
-    public void setCredentials(MyProxyCredentials credentials) {
-        this.credentials = credentials;
+    public void setMyProxyCredentials(MyProxyCredentials myProxyCredentials) {
+        this.myProxyCredentials = myProxyCredentials;
     }
 }

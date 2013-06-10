@@ -9,4 +9,4 @@ CLASSPATH=$CLASSPATH:target/airavata-myproxy-client-0.1-SNAPSHOT.jar:./config
 
 echo $CLASSPATH
 
-java -classpath $CLASSPATH org.apache.airavata.security.myproxy.MyProxyLogon $*
+java -classpath $CLASSPATH org.apache.airavata.security.myproxy.SecurityContext $*
