@@ -214,7 +214,7 @@ public class GramJobSubmissionManagerTest extends TestCase {
 
         Assert.assertNotNull(jobId);
 
-        gramJobSubmissionManager.cancelJob(jobId);
+        gramJobSubmissionManager.cancelJob(jobId, context.getRawCredential());
 
 
         logger.info("========== End of test case ==============");

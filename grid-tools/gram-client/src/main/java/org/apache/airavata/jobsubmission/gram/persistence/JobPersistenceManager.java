@@ -31,16 +31,45 @@ import java.util.List;
  * Time: 2:23 PM
  */
 
+/**
+ * Responsible persisting job data. This data is useful during a restart.
+ * When restarting Airavata can resume monitoring currently executing jobs.
+ */
 public interface JobPersistenceManager {
 
+    /**
+     * Updates the job state in the persisting storage.
+     * @param jobData Job data to update.
+     * @throws GFacException If an error occurred while updating job data.
+     */
     void updateJobStatus (JobData jobData) throws GFacException;
 
+    /**
+     * Get all running jobs.
+     * @return Job ids which are not failed nor completed.
+     * @throws GFacException If an error occurred while querying job data.
+     */
     List<JobData> getRunningJobs() throws GFacException;
 
+    /**
+     * Get all failed job ids.
+     * @return Failed job ids.
+     * @throws GFacException If an error occurred while querying job data.
+     */
     List<JobData> getFailedJobs() throws GFacException;
 
+    /**
+     * Get all un-submitted job ids.
+     * @return Un-submitted job ids.
+     * @throws GFacException If an error occurred while querying job data.
+     */
     List<JobData> getUnSubmittedJobs() throws GFacException;
 
+    /**
+     * Get all successfully completed job ids.
+     * @return Successfully completed job ids.
+     * @throws GFacException If an error occurred while querying job data.
+     */
     List<JobData> getSuccessfullyCompletedJobs() throws GFacException;
 
 }

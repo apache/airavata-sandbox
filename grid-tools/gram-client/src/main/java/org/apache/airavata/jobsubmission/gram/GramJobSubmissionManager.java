@@ -42,7 +42,7 @@ public class GramJobSubmissionManager {
 
     private static final Logger log = Logger.getLogger(GramJobSubmissionManager.class);
 
-    private static final Map<String, GramJob> currentlyExecutingJobs = new ConcurrentHashMap<String, GramJob>();
+    private static final Map<String, GramJob> currentlyExecutingJobCache = new ConcurrentHashMap<String, GramJob>();
 
     private RSLGenerator rslGenerator;
 
@@ -86,7 +86,7 @@ public class GramJobSubmissionManager {
                 ListenerQueue listenerQueue = ListenerQueue.getInstance();
                 listenerQueue.addJob(job);
 
-                currentlyExecutingJobs.put(job.getIDAsString(), job);
+                currentlyExecutingJobCache.put(job.getIDAsString(), job);
 
                 log.debug("Two phase commit: sending COMMIT_REQUEST signal");
                 job.signal(GramJob.SIGNAL_COMMIT_REQUEST);
@@ -110,14 +110,23 @@ public class GramJobSubmissionManager {
 
 
 
-    public void cancelJob(String jobId) throws GramException, GSSException {
+    public void cancelJob(String jobId, GSSCredential gssCred) throws GramException, GSSException,
+            MalformedURLException {
 
-        if (currentlyExecutingJobs.containsKey(jobId)) {
-            GramJob gramJob = currentlyExecutingJobs.get(jobId);
+        if (currentlyExecutingJobCache.containsKey(jobId)) {
+            GramJob gramJob = currentlyExecutingJobCache.get(jobId);
             if (gramJob != null) {
                 gramJob.cancel();
                 gramJob.signal(GramJob.SIGNAL_COMMIT_END);
             }
+        } else {
+
+            GramJob gramJob = new GramJob(null);
+            gramJob.setID(jobId);
+            gramJob.setCredentials(gssCred);
+
+            gramJob.cancel();
+            gramJob.signal(GramJob.SIGNAL_COMMIT_END);
         }
 
     }
