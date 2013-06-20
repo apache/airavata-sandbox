@@ -21,14 +21,19 @@
 
 package org.apache.airavata.jobsubmission.gram;
 
+/**
+ * User: AmilaJ (amilaj@apache.org)
+ * Date: 6/18/13
+ * Time: 10:24 AM
+ */
+
 import org.apache.log4j.Logger;
 import org.globus.gram.GramAttributes;
-import org.globus.gram.GramException;
-import org.globus.gram.GramJob;
-import org.ietf.jgss.GSSCredential;
-import org.ietf.jgss.GSSException;
 
-public class GramJobSubmission {
+/**
+ * Responsible for generating the RSL from descriptors. Based on execution contexts.
+ */
+public class RSLGenerator {
 
     private static final String MULTIPLE = "multiple";
 
@@ -38,51 +43,9 @@ public class GramJobSubmission {
 
     private static final String CONDOR = "CONDOR";
 
-    private static final Logger log = Logger.getLogger(GramJobSubmission.class);
+    private static final Logger log = Logger.getLogger(RSLGenerator.class);
 
-    public void executeJob(GSSCredential gssCred, ExectionContext appExecContext, StringBuffer buffer) throws Exception {
-
-        try {
-            log.setLevel(org.apache.log4j.Level.ALL);
-            String contact = "";
-            if (appExecContext.getTestingHost().equals("trestles")) {
-                contact = appExecContext.getTrestlesGRAM();
-            } else if (appExecContext.getTestingHost().equals("ranger")) {
-                contact = appExecContext.getRangerGRAM();
-            } else if (appExecContext.getTestingHost().equals("lonestar")) {
-                contact = appExecContext.getLonestarGRAM();
-            }
-            GramAttributes jobAttr = configureRemoteJob(appExecContext);
-            String rsl = jobAttr.toRSL();
-            GramJob job = new GramJob(rsl);
-
-            log.info("RSL = " + rsl);
-            JobSubmissionListener listener = new JobSubmissionListener(job, buffer);
-            job.setCredentials(gssCred);
-            job.addListener(listener);
-            log.info("Request to contact:" + contact);
-            job.request(contact);
-
-            log.info("JobID = " + job.getIDAsString());
-
-            listener.waitFor();
-            job.removeListener(listener);
-        } catch (GramException ge) {
-            ge.printStackTrace();
-            log.error(ge, ge.getCause());
-            buffer.append(System.currentTimeMillis() + "#id#FAILED#" + ge.getMessage());
-        } catch (GSSException gss) {
-            gss.printStackTrace();
-            log.error(gss, gss.getCause());
-            buffer.append(System.currentTimeMillis() + "#id#FAILED#" + gss.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(e, e.getCause());
-            buffer.append(System.currentTimeMillis() + "#id#FAILED#" + e.getMessage());
-        }
-    }
-
-    protected GramAttributes configureRemoteJob(ExectionContext appExecContext) throws Exception {
+    protected GramAttributes configureRemoteJob(ExecutionContext appExecContext) throws Exception {
         GramAttributes jobAttr = new GramAttributes();
         jobAttr.setExecutable(appExecContext.getExecutable());
         if (appExecContext.getWorkingDir() != null) {
@@ -135,6 +98,8 @@ public class GramJobSubmission {
             jobAttr.setJobType(GramAttributes.JOBTYPE_CONDOR);
         }
 
+
         return jobAttr;
     }
+
 }

@@ -21,86 +21,123 @@
 
 package org.apache.airavata.jobsubmission.gram;
 
+import org.apache.airavata.jobsubmission.gram.notifier.GramJobNotifier;
 import org.apache.log4j.Logger;
+import org.globus.gram.GramException;
 import org.globus.gram.GramJob;
 import org.globus.gram.GramJobListener;
+import org.globus.gram.internal.GRAMProtocolErrorConstants;
+import org.ietf.jgss.GSSException;
+
+import java.util.List;
 
 public class JobSubmissionListener implements GramJobListener {
 
-    private static final String DELIMITER = "#";
-    private boolean finished;
-    private int error;
-    private int status;
-    private StringBuffer buffer;
+    private int currentStatus = -43;
 
-    private GramJob job;
+    private boolean isSubmitted = false;
 
     private static final Logger log = Logger.getLogger(JobSubmissionListener.class);
 
-    public JobSubmissionListener(GramJob job, StringBuffer buffer) {
-        this.buffer = buffer;
-        this.job = job;
+    private List<GramJobNotifier> gramJobNotifierList;
+
+    public JobSubmissionListener(List<GramJobNotifier> notifiers) {
+        this.gramJobNotifierList = notifiers;
     }
 
-    // waits for DONE or FAILED status
-    public void waitFor() throws InterruptedException {
-        while (!finished) {
-
-            // job status is changed but method isn't invoked
-            if (status != 0) {
-                if (job.getStatus() != status) {
-                    log.info("invoke method manually");
-                    statusChanged(job);
-                } else {
-                    log.info("job " + job.getIDAsString() + " have same status: " + GramJob.getStatusAsString(status));
-                }
-            } else {
-                log.info("Status is zero");
-            }
-
-            synchronized (this) {
-                wait(20 * 1000l);
-            }
-        }
-    }
 
     public synchronized void statusChanged(GramJob job) {
         log.debug("Listener: statusChanged triggered");
         int jobStatus = job.getStatus();
-        String jobId = job.getIDAsString();
-        String statusString = job.getStatusAsString();
-        log.info("Job Status: " + statusString + "(" + jobStatus + ")");
-        buffer.append(formatJobStatus(jobId, statusString));
-        log.debug(formatJobStatus(jobId, statusString));
 
-        status = jobStatus;
-        if (jobStatus == GramJob.STATUS_DONE) {
-            finished = true;
-        } else if (jobStatus == GramJob.STATUS_FAILED) {
-            finished = true;
-            error = job.getError();
-            log.info("Job Error Code: " + error);
-            buffer.append(DELIMITER + error);
-        }
-        buffer.append("\n");
+        if (currentStatus != jobStatus) {
+            currentStatus = jobStatus;
 
-        // notify wait thread to wake up if done
-        if (finished) {
-            notify();
+            if (currentStatus == GramJob.STATUS_FAILED) {
+                int error = job.getError();
+
+                log.debug("Job Error Code: " + error);
+
+                try {
+                    job.unbind();
+
+                    if (error == GRAMProtocolErrorConstants.USER_CANCELLED) {
+                        for(GramJobNotifier notifier : gramJobNotifierList) {
+                            notifier.OnCancel(job);
+                        }
+                    } else if (error == GRAMProtocolErrorConstants.ERROR_AUTHORIZATION) {
+                        for(GramJobNotifier notifier : gramJobNotifierList) {
+                            notifier.OnAuthorisationDenied(job);
+                        }
+                    } else {
+                        for(GramJobNotifier notifier : gramJobNotifierList) {
+                            notifier.OnError(job);
+                        }
+                    }
+
+                } catch (Exception e) {
+                    for(GramJobNotifier notifier : gramJobNotifierList) {
+                        notifier.OnListenerError(job, e);
+                    }
+                }
+            } else if (currentStatus == GramJob.STATUS_DONE) {
+                try {
+                    job.unbind();
+
+                    for(GramJobNotifier notifier : gramJobNotifierList) {
+                        notifier.OnCompletion(job);
+                    }
+
+                } catch (Exception e) {
+                    for(GramJobNotifier notifier : gramJobNotifierList) {
+                        notifier.OnListenerError(job, e);
+                    }
+                }
+            } else if (currentStatus == GramJob.STATUS_ACTIVE) {
+
+                for(GramJobNotifier notifier : gramJobNotifierList) {
+                    notifier.OnActive(job);
+                }
+            } else if (currentStatus == GramJob.STATUS_PENDING) {
+
+                for(GramJobNotifier notifier : gramJobNotifierList) {
+                    notifier.OnPending(job);
+                }
+            } else if (currentStatus == GramJob.STATUS_UNSUBMITTED) {
+
+                for(GramJobNotifier notifier : gramJobNotifierList) {
+                    notifier.OnUnSubmit(job);
+                }
+            } else if (currentStatus == GramJob.STATUS_STAGE_IN) {
+
+                for(GramJobNotifier notifier : gramJobNotifierList) {
+                    notifier.OnFilesStagedIn(job);
+                }
+            } else if (currentStatus == GramJob.STATUS_STAGE_OUT) {
+
+                for(GramJobNotifier notifier : gramJobNotifierList) {
+                    notifier.OnFilesStagedOut(job);
+                }
+            } else if (currentStatus == GramJob.STATUS_SUSPENDED) {
+
+                for(GramJobNotifier notifier : gramJobNotifierList) {
+                    notifier.OnSuspend(job);
+                }
+            }
         }
     }
 
     public static String formatJobStatus(String jobid, String jobstatus) {
-        return System.currentTimeMillis() + DELIMITER + jobid + DELIMITER + jobstatus;
+        return System.currentTimeMillis() + " " + jobid + " " + jobstatus;
     }
 
-    public int getError() {
+    /*public int getError() {
         return error;
     }
 
     public int getStatus() {
         return status;
-    }
+    }*/
 
     public void wakeup() {
         try {

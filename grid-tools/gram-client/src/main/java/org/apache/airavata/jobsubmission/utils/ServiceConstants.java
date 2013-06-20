@@ -34,7 +34,7 @@ public class ServiceConstants {
 	public static final String TESTINGHOST = "testing.host";
 	
     public static final String LONESTARGRAMEPR = "lonestar.gram.endpoint";
-    public static final String RANGERGRAMEPR = "ranger.gram.endpoint";
+    public static final String STAMPEDE_GRAM_EPR = "stampede.gram.endpoint";
     public static final String TRESTLESGRAMEPR = "trestles.gram.endpoint";
 	
 	public static final String EXECUTABLE = "executable";

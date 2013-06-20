@@ -24,16 +24,19 @@ package org.apache.airavata.jobsubmission.gram;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
+import org.apache.airavata.jobsubmission.gram.notifier.GramJobNotifier;
 import org.apache.airavata.jobsubmission.utils.ServiceConstants;
 
-public class ExectionContext {
+public class ExecutionContext {
 
     private String testingHost;
     
     private String lonestarGRAM;
-    private String rangerGRAM;
+    private String stampedeGRAM;
     private String trestlesGRAM;
     
     private String workingDir;
@@ -58,9 +61,16 @@ public class ExectionContext {
     private String jobType;
     private String arguments;
 
+    private boolean interactive;
+
+    private String userName;
+    private String password;
+
+    private List<GramJobNotifier> gramJobNotifierList = new ArrayList<GramJobNotifier>();
+
     public static final String PROPERTY_FILE = "airavata-gram-client.properties";
 
-    public ExectionContext() throws IOException {
+    public ExecutionContext() throws IOException {
         loadConfigration();
     }
 
@@ -75,7 +85,7 @@ public class ExectionContext {
             String testinghost = properties.getProperty(ServiceConstants.TESTINGHOST);
             
             String lonestargram = properties.getProperty(ServiceConstants.LONESTARGRAMEPR);
-            String rangergram = properties.getProperty(ServiceConstants.RANGERGRAMEPR);
+            String stampedeGram = properties.getProperty(ServiceConstants.STAMPEDE_GRAM_EPR);
             String trestlesgram = properties.getProperty(ServiceConstants.TRESTLESGRAMEPR);
 
             String exec = properties.getProperty(ServiceConstants.EXECUTABLE);
@@ -94,8 +104,8 @@ public class ExectionContext {
             if (lonestargram != null) {
                 this.lonestarGRAM = lonestargram;
             }
-            if (rangergram != null) {
-                this.rangerGRAM = rangergram;
+            if (stampedeGram != null) {
+                this.stampedeGRAM = stampedeGram;
             }
             if (trestlesgram != null) {
                 this.trestlesGRAM = trestlesgram;
@@ -157,16 +167,30 @@ public class ExectionContext {
         this.lonestarGRAM = lonestarGRAM;
     }
 
-    public String getRangerGRAM() {
-        return rangerGRAM;
+    public String getStampedeGRAM() {
+        return stampedeGRAM;
     }
 
-    public void setRangerGRAM(String rangerGRAM) {
-        this.rangerGRAM = rangerGRAM;
+    public void setStampedeGRAM(String stampedeGRAM) {
+        this.stampedeGRAM = stampedeGRAM;
     }
 
     public String getTrestlesGRAM() {
         return trestlesGRAM;
+    }
+
+    public String getGRAMEndPoint() {
+
+        if (this.getHost().equals("trestles")) {
+            return this.getTrestlesGRAM();
+        } else if (this.getHost().equals("stampede")) {
+            return this.getStampedeGRAM();
+        } else if (this.getHost().equals("lonestar")) {
+            return this.getLonestarGRAM();
+        } else {
+            throw new RuntimeException("Invalid host " + this.getHost() );
+        }
+
     }
 
     public void setTrestlesGRAM(String trestlesGRAM) {
@@ -458,5 +482,37 @@ public class ExectionContext {
 
     public String getArguments() {
         return arguments;
+    }
+
+    public boolean isInteractive() {
+        return interactive;
+    }
+
+    public void setInteractive(boolean interactive) {
+        this.interactive = interactive;
+    }
+
+    public void addGramJobNotifier(GramJobNotifier gramJobNotifier) {
+        this.gramJobNotifierList.add(gramJobNotifier);
+    }
+
+    public List<GramJobNotifier> getGramJobNotifierList() {
+        return Collections.unmodifiableList(gramJobNotifierList);
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
