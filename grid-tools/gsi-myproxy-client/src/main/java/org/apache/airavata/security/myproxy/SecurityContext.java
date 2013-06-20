@@ -40,6 +40,9 @@ public class SecurityContext {
     private MyProxyCredentials myProxyCredentials;
     private static final Logger log = Logger.getLogger(SecurityContext.class);
 
+    private String userName = null;
+    private String password = null;
+
     /**
      * 
      * Constructs a ApplicationGlobalContext.
@@ -52,6 +55,17 @@ public class SecurityContext {
         loadConfiguration();
 
     }
+
+    public SecurityContext(String user, String pwd) throws Exception {
+
+        this.userName = user;
+        this.password = pwd;
+
+        log.setLevel(org.apache.log4j.Level.INFO);
+        loadConfiguration();
+
+    }
+
 
     public static void main(String[] args) {
         try {
@@ -124,14 +138,18 @@ public class SecurityContext {
                         this.myProxyCredentials.setMyProxyPortNumber(MyProxy.DEFAULT_PORT);
                     }
                     String myproxyuser = properties.getProperty(ServiceConstants.MYPROXY_USERNAME);
-                    if (myproxyuser != null) {
+                    if (userName != null) {
+                        this.myProxyCredentials.setMyProxyUserName(userName);
+                    } else {
                         this.myProxyCredentials.setMyProxyUserName(myproxyuser);
                     }
 
                     System.out.println("My proxy user name " + myproxyuser);
 
                     String myproxypass = properties.getProperty(ServiceConstants.MYPROXY_PASSWD);
-                    if (myproxypass != null) {
+                    if (password != null) {
+                        this.myProxyCredentials.setMyProxyPassword(password);
+                    } else {
                         this.myProxyCredentials.setMyProxyPassword(myproxypass);
                     }
 
@@ -168,6 +186,16 @@ public class SecurityContext {
      */
     public void setProperties(Properties properties) {
         this.properties = properties;
+    }
+
+    /**
+     * Returns the raw gssCredential, without creating a proxy.
+     *
+     * @return The gssCredential
+     */
+    public GSSCredential getRawCredential() throws Exception{
+
+        return gssCredential;
     }
 
     /**
