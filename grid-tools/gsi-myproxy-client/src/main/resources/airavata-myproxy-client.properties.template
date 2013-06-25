@@ -1,7 +1,0 @@
-#Download trusted certificates from - https://software.xsede.org/security/xsede-certs.tar.gz
-trustedCertsFile=./certificates/
-myproxyServer=myproxy.teragrid.org
-myproxy_lifetime=17280000
-myProxyUserName=
-myproxyPasswd=
-myproxyPort=7512

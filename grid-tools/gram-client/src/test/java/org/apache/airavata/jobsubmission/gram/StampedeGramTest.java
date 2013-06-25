@@ -22,6 +22,7 @@
 package org.apache.airavata.jobsubmission.gram;
 
 import org.apache.airavata.jobsubmission.gram.notifier.GramJobLogger;
+import org.junit.Ignore;
 
 /**
  * User: AmilaJ (amilaj@apache.org)
@@ -29,43 +30,37 @@ import org.apache.airavata.jobsubmission.gram.notifier.GramJobLogger;
  * Time: 3:56 PM
  */
 
+//@Ignore
 public class StampedeGramTest extends GramJobSubmissionManagerTest {
 
     // ====================== Stampede ==============================//
 
-    public void testExecuteJobStampedeInteractive() throws Exception {
+    private ExecutionContext executionContext;
 
-        ExecutionContext executionContext = getDefaultExecutionContext();
+    public void setUp() throws Exception {
+        super.setUp();
 
+        executionContext = getDefaultExecutionContext();
         executionContext.setHost("stampede");
-
-        executionContext.setInteractive(true);
         executionContext.addGramJobNotifier(new GramJobLogger());
 
+    }
+
+    public void testExecuteJobStampedeInteractive() throws Exception {
+
+        executionContext.setInteractive(true);
         executeJob(executionContext);
     }
 
     public void testMonitoringRunningJobsStampede() throws Exception {
 
-        ExecutionContext executionContext = getDefaultExecutionContext();
-
-        executionContext.setHost("stampede");
-
         executionContext.setInteractive(true);
-        executionContext.addGramJobNotifier(new GramJobLogger());
-
         monitoringRunningJobs(executionContext);
     }
 
     public void testCancelJobsStampede() throws Exception {
 
-        ExecutionContext executionContext = getDefaultExecutionContext();
-
-        executionContext.setHost("stampede");
-
         executionContext.setInteractive(true);
-        executionContext.addGramJobNotifier(new GramJobLogger());
-
         cancelJob(executionContext);
     }
 

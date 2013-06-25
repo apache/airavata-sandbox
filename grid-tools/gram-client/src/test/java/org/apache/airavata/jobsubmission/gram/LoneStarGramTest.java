@@ -22,6 +22,7 @@
 package org.apache.airavata.jobsubmission.gram;
 
 import org.apache.airavata.jobsubmission.gram.notifier.GramJobLogger;
+import org.junit.Ignore;
 
 /**
  * User: AmilaJ (amilaj@apache.org)
@@ -29,45 +30,35 @@ import org.apache.airavata.jobsubmission.gram.notifier.GramJobLogger;
  * Time: 3:56 PM
  */
 
+@Ignore("Lonestar is taking too much time to run tests. Not sure why.")
 public class LoneStarGramTest extends GramJobSubmissionManagerTest {
 
+    private ExecutionContext executionContext;
 
-    // Dummy test case just avoid failures
-    public void testDummy() {}
+    public void setUp() throws Exception {
+        super.setUp();
 
-    public void xtestExecuteJobLoneStarInteractive() throws Exception {
-
-        ExecutionContext executionContext = getDefaultExecutionContext();
-
+        executionContext = getDefaultExecutionContext();
         executionContext.setHost("lonestar");
-
-        executionContext.setInteractive(true);
         executionContext.addGramJobNotifier(new GramJobLogger());
 
+    }
+
+    public void testExecuteJobLoneStarInteractive() throws Exception {
+
+        executionContext.setInteractive(true);
         executeJob(executionContext);
     }
 
-    public void xtestMonitoringRunningJobsLoneStar() throws Exception {
-
-        ExecutionContext executionContext = getDefaultExecutionContext();
-
-        executionContext.setHost("lonestar");
+    public void testMonitoringRunningJobsLoneStar() throws Exception {
 
         executionContext.setInteractive(true);
-        executionContext.addGramJobNotifier(new GramJobLogger());
-
         monitoringRunningJobs(executionContext);
     }
 
-    public void xtestCancelJobsLoneStar() throws Exception {
-
-        ExecutionContext executionContext = getDefaultExecutionContext();
-
-        executionContext.setHost("lonestar");
+    public void testCancelJobsLoneStar() throws Exception {
 
         executionContext.setInteractive(true);
-        executionContext.addGramJobNotifier(new GramJobLogger());
-
         cancelJob(executionContext);
     }
 

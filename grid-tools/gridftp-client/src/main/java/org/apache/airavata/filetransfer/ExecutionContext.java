@@ -25,32 +25,32 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.Properties;
 
 import org.apache.airavata.filetransfer.utils.ServiceConstants;
 
-public class ExectionContext {
+@SuppressWarnings("UnusedDeclaration")
+public class ExecutionContext {
 
     private String testingHost;
     
-    private String lonestarGridFTP;
+    private String loneStarGridFTP;
     private String rangerGridFTP;
     private String trestlesGridFTP;
     
     private String gridFTPServerSource;
-    private String sourcedataLocation;
-    private String gridFTPServerDest;
-    private String destdataLocation;
+    private String sourceDataLocation;
+    private String gridFTPServerDestination;
+    private String destinationDataLocation;
     private String uploadingFilePath;
 
-    public static final String PROPERTY_FILE = "airavata-gridftp-client.properties";
+    public static final String PROPERTY_FILE = "airavata-myproxy-client.properties";
 
-    public ExectionContext() throws IOException {
-        loadConfigration();
+    public ExecutionContext() throws IOException {
+        loadConfigurations();
     }
 
-    private void loadConfigration() throws IOException {
+    private void loadConfigurations() throws IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream propertyStream = classLoader.getResourceAsStream(PROPERTY_FILE);
 
@@ -58,43 +58,43 @@ public class ExectionContext {
         if (propertyStream != null) {
             properties.load(propertyStream);
             
-            String testinghost = properties.getProperty(ServiceConstants.TESTINGHOST);
+            String testingHost = properties.getProperty(ServiceConstants.TESTINGHOST);
             
-            String lonestargridftp = properties.getProperty(ServiceConstants.LONESTARGRIDFTPEPR);
-            String rangergridftp = properties.getProperty(ServiceConstants.RANGERGRIDFTPEPR);
-            String trestlesgridftp = properties.getProperty(ServiceConstants.TRESTLESGRIDFTPEPR);
+            String loneStarGridFtp = properties.getProperty(ServiceConstants.LONESTARGRIDFTPEPR);
+            String rangerGridFtp = properties.getProperty(ServiceConstants.RANGERGRIDFTPEPR);
+            String trestlesGridFtp = properties.getProperty(ServiceConstants.TRESTLESGRIDFTPEPR);
 
             String gridFTPServerSource = properties.getProperty(ServiceConstants.GRIDFTPSERVERSOURCE);
             String gridFTPSourcePath = properties.getProperty(ServiceConstants.GRIDFTPSOURCEPATH);
-            String gridFTPServerDest = properties.getProperty(ServiceConstants.GRIDFTPSERVERDEST);
-            String gridFTPDestPath = properties.getProperty(ServiceConstants.GRIDFTPDESTPATH);
+            String gridFTPServerDestination = properties.getProperty(ServiceConstants.GRIDFTPSERVERDEST);
+            String gridFTPDestinationPath = properties.getProperty(ServiceConstants.GRIDFTPDESTPATH);
             String gridFTPUploadingPath = properties.getProperty(ServiceConstants.UPLOADING_FILE_PATH);
 
-            if (testinghost != null) {
-                this.testingHost = testinghost;
+            if (testingHost != null) {
+                this.testingHost = testingHost;
             }
             
-            if (lonestargridftp != null) {
-                this.lonestarGridFTP = lonestargridftp;
+            if (loneStarGridFtp != null) {
+                this.loneStarGridFTP = loneStarGridFtp;
             }
-            if (rangergridftp != null) {
-                this.rangerGridFTP= rangergridftp;
+            if (rangerGridFtp != null) {
+                this.rangerGridFTP= rangerGridFtp;
             }
-            if (trestlesgridftp != null) {
-                this.trestlesGridFTP = trestlesgridftp;
+            if (trestlesGridFtp != null) {
+                this.trestlesGridFTP = trestlesGridFtp;
             }
             
             if (gridFTPServerSource != null && !gridFTPServerSource.isEmpty()) {
                 this.gridFTPServerSource = gridFTPServerSource;
             }
             if (gridFTPSourcePath != null && !gridFTPSourcePath.isEmpty()) {
-                this.sourcedataLocation = gridFTPSourcePath;
+                this.sourceDataLocation = gridFTPSourcePath;
             }
-            if (gridFTPServerDest != null && !gridFTPServerDest.isEmpty()) {
-                this.gridFTPServerDest = gridFTPServerDest;
+            if (gridFTPServerDestination != null && !gridFTPServerDestination.isEmpty()) {
+                this.gridFTPServerDestination = gridFTPServerDestination;
             }
-            if (gridFTPDestPath != null && !gridFTPDestPath.isEmpty()) {
-                this.destdataLocation = gridFTPDestPath;
+            if (gridFTPDestinationPath != null && !gridFTPDestinationPath.isEmpty()) {
+                this.destinationDataLocation = gridFTPDestinationPath;
             }
             if (gridFTPUploadingPath != null && !gridFTPUploadingPath.isEmpty()) {
                 this.uploadingFilePath = gridFTPUploadingPath;
@@ -111,12 +111,12 @@ public class ExectionContext {
         this.testingHost = testingHost;
     }
 
-    public String getLonestarGridFTP() {
-        return lonestarGridFTP;
+    public String getLoneStarGridFTP() {
+        return loneStarGridFTP;
     }
 
-    public void setLonestarGridFTP(String lonestarGridFTP) {
-        this.lonestarGridFTP = lonestarGridFTP;
+    public void setLoneStarGridFTP(String loneStarGridFTP) {
+        this.loneStarGridFTP = loneStarGridFTP;
     }
 
     public String getRangerGridFTP() {
@@ -144,7 +144,7 @@ public class ExectionContext {
     }
 
     public URI getSourceDataFileUri() throws URISyntaxException {
-        String file = gridFTPServerSource + getSourcedataLocation();
+        String file = gridFTPServerSource + getSourceDataLocation();
         return new URI(file);
     }
 
@@ -161,27 +161,27 @@ public class ExectionContext {
         this.uploadingFilePath = uploadingFilePath;
     }
 
-    public String getSourcedataLocation() {
-        return sourcedataLocation;
+    public String getSourceDataLocation() {
+        return sourceDataLocation;
     }
 
-    public void setSourcedataLocation(String sourcedataLocation) {
-        this.sourcedataLocation = sourcedataLocation;
+    public void setSourceDataLocation(String sourceDataLocation) {
+        this.sourceDataLocation = sourceDataLocation;
     }
 
-    public String getGridFTPServerDest() {
-        return gridFTPServerDest;
+    public String getGridFTPServerDestination() {
+        return gridFTPServerDestination;
     }
 
-    public void setGridFTPServerDest(String gridFTPServerDest) {
-        this.gridFTPServerDest = gridFTPServerDest;
+    public void setGridFTPServerDestination(String gridFTPServerDestination) {
+        this.gridFTPServerDestination = gridFTPServerDestination;
     }
 
-    public String getDestdataLocation() {
-        return destdataLocation;
+    public String getDestinationDataLocation() {
+        return destinationDataLocation;
     }
 
-    public void setDestdataLocation(String destdataLocation) {
-        this.destdataLocation = destdataLocation;
+    public void setDestinationDataLocation(String destinationDataLocation) {
+        this.destinationDataLocation = destinationDataLocation;
     }
 }

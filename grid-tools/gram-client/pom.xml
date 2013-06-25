@@ -16,24 +16,20 @@
     <!-- the version of maven's project object model -->
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.airavata</groupId>
     <artifactId>airavata-gram-client</artifactId>
     <name>Airavata Gram Client</name>
     <description>Standalone test client to experiment and test GRAM .</description>
     <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <repositories>
-        <repository>
-            <name>ogce.m2.all</name>
-            <id>ogce.m2.all</id>
-            <url>http://community.ucs.indiana.edu:9090/archiva/repository/ogce.m2.all</url>
-        </repository>
-    </repositories>
-
+    <parent>
+        <groupId>org.apache.airavata</groupId>
+        <artifactId>airavata-grid-tools</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
     <dependencies>
-
         <dependency>
             <groupId>org.apache.airavata</groupId>
             <artifactId>airavata-myproxy-client</artifactId>
@@ -43,13 +39,13 @@
         <dependency>
             <groupId>org.jglobus</groupId>
             <artifactId>gss</artifactId>
-            <version>2.0.6-rc2</version>
+            <version>${jglobus.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.jglobus</groupId>
             <artifactId>gram</artifactId>
-            <version>2.0.6-rc2</version>
+            <version>${jglobus.version}</version>
         </dependency>
 
         <dependency>
@@ -203,10 +199,7 @@
     </build>
 
     <properties>
-        <surefire.version>2.12</surefire.version>
-        <junit.version>4.7</junit.version>
         <derby.version>10.9.1.0</derby.version>
-        <skipTests>false</skipTests>
     </properties>
 
 </project>

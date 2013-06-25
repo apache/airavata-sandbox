@@ -34,6 +34,7 @@ import org.globus.gsi.SigningPolicy;
 import org.globus.gsi.SigningPolicyParser;
 import org.globus.gsi.util.CertificateIOUtil;
 import org.globus.util.GlobusResource;
+import org.junit.Ignore;
 
 import javax.security.auth.x500.X500Principal;
 import java.io.ByteArrayOutputStream;
@@ -52,39 +53,71 @@ import java.util.Map;
  * Time: 9:57 AM
  */
 
+@Ignore("This test case used to debug JGlobus-102. No need to run this test with other gridftp tests.")
 public class CertFileReadTest extends TestCase {
 
     private static MessageDigest md5;
 
+    private static String CERT_FILE_LOCATION = "/Users/thejaka/development/apache/airavata/sandbox/grid-tools/gridftp-client/certificates/";
+
     public void testCertFileRead() throws Exception {
 
-        String path1 = "/Users/thejaka/development/apache/airavata/sandbox/grid-tools/gridftp-client/certificates/e5cc84c2";
-        String path2 = "/Users/thejaka/development/apache/airavata/sandbox/grid-tools/gridftp-client/certificates/ffc3d59b";
+        String path1 = CERT_FILE_LOCATION + "ffc3d59b";
+        String path2 = CERT_FILE_LOCATION + "e5cc84c2";
+
 
         GlobusResource globusResource1 = new GlobusResource(path1 + ".signing_policy");
         GlobusResource globusResource2 = new GlobusResource(path2 + ".signing_policy");
-        GlobusResource globusResource3 = new GlobusResource("/Users/thejaka/development/apache/airavata/sandbox/grid-tools/gridftp-client/certificates/ef300431.signing_policy");
-        GlobusResource globusResource4 = new GlobusResource("/Users/thejaka/development/apache/airavata/sandbox/grid-tools/gridftp-client/certificates/01b5d333.signing_policy");
-        GlobusResource globusResource5 = new GlobusResource("/Users/thejaka/development/apache/airavata/sandbox/grid-tools/gridftp-client/certificates/081fefd0.signing_policy");
+        //GlobusResource globusResource3 = new GlobusResource("/Users/thejaka/development/apache/airavata/sandbox/grid-tools/gridftp-client/certificates/ef300431.signing_policy");
+        //GlobusResource globusResource4 = new GlobusResource("/Users/thejaka/development/apache/airavata/sandbox/grid-tools/gridftp-client/certificates/01b5d333.signing_policy");
+        //GlobusResource globusResource5 = new GlobusResource("/Users/thejaka/development/apache/airavata/sandbox/grid-tools/gridftp-client/certificates/081fefd0.signing_policy");
         //ResourceSigningPolicy resourceSigningPolicy = new ResourceSigningPolicy(globusResource);
 
-        X509Certificate crt = readCertificate(path1 + ".0");
+        // ===== Testing globusResource1 - This should pass (cos no DC components) ================ //
+        X509Certificate crt1 = readCertificate(path1 + ".0");
+        X500Principal policySubjectCert1 = getPrincipal(globusResource1);
+
+        String certHash1 = CertificateIOUtil.nameHash(crt1.getSubjectX500Principal());
+        String principalHash1 = CertificateIOUtil.nameHash(policySubjectCert1);
+
+        System.out.println("======== Printing hashes for 1 ================");
+        System.out.println(certHash1);
+        System.out.println(principalHash1);
+
+        Assert.assertEquals("Certificate hash value does not match with the hash value generated using principal name.",
+                certHash1, principalHash1);
+
+        // ===== Testing globusResource1 - This should fail (cos we have DC components) ================ //
         X509Certificate crt2 = readCertificate(path2 + ".0");
+        X500Principal policySubjectCert2 = getPrincipal(globusResource2);
 
-        System.out.println("=======================================");
-        System.out.println(crt.getIssuerX500Principal().getName());
+        String certHash2 = CertificateIOUtil.nameHash(crt2.getSubjectX500Principal());
+        String principalHash2 = CertificateIOUtil.nameHash(policySubjectCert2);
+
+        System.out.println("======== Printing hashes for 2 ================");
+        System.out.println(certHash2);
+        System.out.println(principalHash2);
+
+        Assert.assertEquals("Certificate hash value does not match with the hash value generated using principal name.",
+                certHash2, principalHash2);
+
+        //X509Certificate crt = readCertificate(path1 + ".0");
+        //X509Certificate crt2 = readCertificate(path2 + ".0");
+
+        //System.out.println("=======================================");
+        //System.out.println(crt.getIssuerX500Principal().getName());
 
 
 
 
-        X500Principal certPrincipal = crt.getSubjectX500Principal();
+        //X500Principal certPrincipal = crt.getSubjectX500Principal();
 
-        X500Principal policySubjectCert = getPrincipal(globusResource1);
+        //X500Principal policySubjectCert = getPrincipal(globusResource1);
         //"CN=TACC Classic CA,O=UT-AUSTIN,DC=TACC,DC=UTEXAS,DC=EDU"
         //X500Principal policySubjectCert = new X500Principal(certPrincipal.getName());
 
-        System.out.println(CertificateIOUtil.nameHash(certPrincipal));
-        System.out.println(CertificateIOUtil.nameHash((policySubjectCert)));
+        //System.out.println(CertificateIOUtil.nameHash(certPrincipal));
+        //System.out.println(CertificateIOUtil.nameHash((policySubjectCert)));
 
 
 

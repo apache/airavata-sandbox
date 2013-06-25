@@ -43,23 +43,42 @@ public class FileTransferTest extends TestCase {
 
     private GSSCredential gssCredential;
 
-    private ExectionContext contextExectionContext;
+    private ExecutionContext executionContext;
+
+    private static final Logger log = Logger.getLogger(FileTransferTest.class);
 
 
     public void setUp() throws Exception {
-        super.setUp();
+
+        String userName = System.getProperty("myproxy.user");
+        String password = System.getProperty("myproxy.password");
+
+        SecurityContext context = null;
+
+        if (userName == null || password == null || userName.trim().equals("") || password.trim().equals("")) {
+            log.error("myproxy.user and myproxy.password system properties are not set. Example :- " +
+                    "> mvn clean install -Dmyproxy.user=u1 -Dmyproxy.password=xxx");
+
+            Assert.fail("Please set myproxy.user and myproxy.password system properties.");
+
+        } else {
+            context = new SecurityContext(userName, password);
+        }
+
+        log.info("Using my proxy user name - " + userName);
 
         BasicConfigurator.configure();
         Logger logger = Logger.getLogger("GridFTPClient");
         Level lev = Level.toLevel("DEBUG");
         logger.setLevel(lev);
-        SecurityContext context = new SecurityContext();
+
+
         context.login();
-        contextExectionContext = new ExectionContext();
+        executionContext = new ExecutionContext();
 
 
-        String targeterp = contextExectionContext.getGridFTPServerDest();
-        String remoteDestFile = contextExectionContext.getDestdataLocation();
+        String targeterp = executionContext.getGridFTPServerDestination();
+        String remoteDestFile = executionContext.getDestinationDataLocation();
 
         URI dirLocation = GridFtp.createGsiftpURI(targeterp,
                 remoteDestFile.substring(0, remoteDestFile.lastIndexOf("/")));
@@ -70,29 +89,34 @@ public class FileTransferTest extends TestCase {
 
     public void testMakeDir() throws Exception {
 
-        String targetErp = contextExectionContext.getGridFTPServerDest();
-        String remoteDestinationFile = contextExectionContext.getDestdataLocation();
+        String targetErp = executionContext.getGridFTPServerDestination();
+        String remoteDestinationFile = executionContext.getDestinationDataLocation();
 
         URI dirLocation = GridFtp.createGsiftpURI(targetErp,
                 remoteDestinationFile.substring(0, remoteDestinationFile.lastIndexOf("/")));
 
         GridFtp ftp = new GridFtp();
         ftp.makeDir(dirLocation, gssCredential);
+
+        Assert.assertTrue(ftp.exists(dirLocation, gssCredential));
+
     }
 
     public void testTransferData() throws Exception {
 
-        String sourceERP = contextExectionContext.getGridFTPServerSource();
-        String remoteSrcFile = contextExectionContext.getSourcedataLocation();
+        String sourceERP = executionContext.getGridFTPServerSource();
+        String remoteSrcFile = executionContext.getSourceDataLocation();
 
-        String targetErp = contextExectionContext.getGridFTPServerDest();
-        String remoteDestinationFile = contextExectionContext.getDestdataLocation();
+        String targetErp = executionContext.getGridFTPServerDestination();
+        String remoteDestinationFile = executionContext.getDestinationDataLocation();
 
         URI srcURI = GridFtp.createGsiftpURI(sourceERP, remoteSrcFile);
         URI destURI = GridFtp.createGsiftpURI(targetErp, remoteDestinationFile);
 
         GridFtp ftp = new GridFtp();
         ftp.transfer(srcURI, destURI, gssCredential, true);
+
+        Assert.assertTrue(ftp.exists(destURI, gssCredential));
 
     }
 
@@ -110,7 +134,7 @@ public class FileTransferTest extends TestCase {
         File f = new File(fileName);
 
         GridFtp ftp = new GridFtp();
-        ftp.downloadFile(contextExectionContext.getSourceDataFileUri(),
+        ftp.downloadFile(executionContext.getSourceDataFileUri(),
                 gssCredential, f);
 
         Assert.assertTrue(f.exists());
@@ -120,7 +144,7 @@ public class FileTransferTest extends TestCase {
     public void testFileExists() throws Exception {
 
         GridFtp ftp = new GridFtp();
-        Assert.assertTrue(ftp.exists(contextExectionContext.getSourceDataFileUri(), gssCredential));
+        Assert.assertTrue(ftp.exists(executionContext.getSourceDataFileUri(), gssCredential));
     }
 
     public void testUpdateFile() throws Exception {
@@ -141,11 +165,13 @@ public class FileTransferTest extends TestCase {
         Assert.assertTrue(fileToUpload.canRead());
 
         GridFtp ftp = new GridFtp();
-        ftp.updateFile(contextExectionContext.getUploadingFilePathUri(), gssCredential, fileToUpload);
+        ftp.updateFile(executionContext.getUploadingFilePathUri(), gssCredential, fileToUpload);
 
-        Assert.assertTrue(ftp.exists(contextExectionContext.getUploadingFilePathUri(), gssCredential));
+        Assert.assertTrue(ftp.exists(executionContext.getUploadingFilePathUri(), gssCredential));
 
     }
+
+
 
 
 

@@ -348,10 +348,10 @@ public class GridFtp {
      * @param srchost Source file and host.
      * @param desthost Destination file and host.
      * @param gssCred Credentials to be authenticate user.
-     * @param srcActive
-     * @throws ServerException
-     * @throws ClientException
-     * @throws IOException
+     * @param srcActive Tells source to be active. i.e. asking src to connect destination.
+     * @throws ServerException If an error occurred while transferring data.
+     * @throws ClientException If an error occurred while transferring data.
+     * @throws IOException If an error occurred while transferring data.
      */
     public void transfer(URI srchost, URI desthost, GSSCredential gssCred, boolean srcActive) throws Exception {
         GridFTPClient destClient = null;

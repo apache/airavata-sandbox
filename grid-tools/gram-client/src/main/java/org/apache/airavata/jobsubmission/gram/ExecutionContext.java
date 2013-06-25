@@ -68,7 +68,7 @@ public class ExecutionContext {
 
     private List<GramJobNotifier> gramJobNotifierList = new ArrayList<GramJobNotifier>();
 
-    public static final String PROPERTY_FILE = "airavata-gram-client.properties";
+    public static final String PROPERTY_FILE = "airavata-myproxy-client.properties";
 
     public ExecutionContext() throws IOException {
         loadConfigration();

@@ -21,6 +21,7 @@
 
 package org.apache.airavata.security.myproxy;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -64,20 +65,6 @@ public class SecurityContext {
         log.setLevel(org.apache.log4j.Level.INFO);
         loadConfiguration();
 
-    }
-
-
-    public static void main(String[] args) {
-        try {
-            SecurityContext myproxy = new SecurityContext();
-            myproxy.login();
-            String proxyName = myproxy.getGssCredential().getName().toString();
-            int proxyTime = myproxy.getGssCredential().getRemainingLifetime();
-            System.out.println("Proxy Name is: " + proxyName);
-            System.out.println("Proxy Life Time is: " + proxyTime);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -137,29 +124,22 @@ public class SecurityContext {
                     } else {
                         this.myProxyCredentials.setMyProxyPortNumber(MyProxy.DEFAULT_PORT);
                     }
-                    String myproxyuser = properties.getProperty(ServiceConstants.MYPROXY_USERNAME);
-                    if (userName != null) {
-                        this.myProxyCredentials.setMyProxyUserName(userName);
-                    } else {
-                        this.myProxyCredentials.setMyProxyUserName(myproxyuser);
-                    }
 
-                    System.out.println("My proxy user name " + myproxyuser);
-
-                    String myproxypass = properties.getProperty(ServiceConstants.MYPROXY_PASSWD);
-                    if (password != null) {
-                        this.myProxyCredentials.setMyProxyPassword(password);
-                    } else {
-                        this.myProxyCredentials.setMyProxyPassword(myproxypass);
-                    }
+                    this.myProxyCredentials.setMyProxyUserName(userName);
+                    this.myProxyCredentials.setMyProxyPassword(password);
 
                     String myproxytime = properties.getProperty(ServiceConstants.MYPROXY_LIFETIME);
                     if (myproxytime != null) {
                         this.myProxyCredentials.setMyProxyLifeTime(Integer.parseInt(myproxytime));
                     }
-                    this.myProxyCredentials.setTrustedCertificatePath(properties.getProperty(ServiceConstants.TRUSTED_CERTS_FILE));
 
-                    System.out.println("Certificate path - " + properties.getProperty(ServiceConstants.TRUSTED_CERTS_FILE));
+                    String currentDirectory = System.getProperty("projectDirectory");
+                    String certificatePath = currentDirectory + File.separatorChar
+                            + properties.getProperty(ServiceConstants.TRUSTED_CERTS_FILE);
+
+                    this.myProxyCredentials.setTrustedCertificatePath(certificatePath);
+
+                    System.out.println("Certificate path - " + certificatePath);
 
                     this.myProxyCredentials.init();
                 }

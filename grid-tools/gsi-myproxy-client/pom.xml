@@ -16,19 +16,25 @@
 	<!-- the version of maven's project object model -->
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.apache.airavata</groupId>
 	<artifactId>airavata-myproxy-client</artifactId>
 	<name>Airavata MyProxy Client</name>
 	<description>Standalone test client to experiment and test MyProxy .</description>
 	<version>0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
+    <parent>
+        <groupId>org.apache.airavata</groupId>
+        <artifactId>airavata-grid-tools</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
 	<dependencies>
 
 		<dependency>
 			<groupId>org.jglobus</groupId>
 			<artifactId>myproxy</artifactId>
-			<version>2.0.6-rc2</version>
+			<version>${jglobus.version}</version>
 		</dependency>
 
 		<dependency>
@@ -61,34 +67,16 @@
                     <failIfNoTests>false</failIfNoTests>
                     <skipTests>${skipTests}</skipTests>
                     <workingDirectory>${project.build.testOutputDirectory}</workingDirectory>
+                    <systemProperties>
+                        <property>
+                            <name>projectDirectory</name>
+                            <value>${basedir}</value>
+                        </property>
+                    </systemProperties>
                 </configuration>
             </plugin>
-<!-- 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>target/lib</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
- -->		</plugins>
+		</plugins>
 	</build>
-
-    <properties>
-        <surefire.version>2.12</surefire.version>
-        <junit.version>4.7</junit.version>
-        <skipTests>false</skipTests>
-    </properties>
 
 </project>
 

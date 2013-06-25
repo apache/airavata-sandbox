@@ -56,7 +56,20 @@ public class GramJobSubmissionManagerTest extends TestCase {
     protected static String password = "admin";
     protected static String driver = "org.apache.derby.jdbc.ClientDriver";
 
+    private String myProxyUserName = System.getProperty("myproxy.user");
+    private String myProxyPassword = System.getProperty("myproxy.password");
+
     public void setUp() throws Exception{
+
+        if (myProxyUserName == null || myProxyPassword == null || myProxyUserName.trim().equals("") ||
+                myProxyPassword.trim().equals("")) {
+            logger.error("myproxy.user and myproxy.password system properties are not set. Example :- " +
+                    "> mvn clean install -Dmyproxy.user=u1 -Dmyproxy.password=xxx");
+
+            Assert.fail("Please set myproxy.user and myproxy.password system properties.");
+
+        }
+
 
         DerbyUtil.startDerbyInServerMode(getHostAddress(), getPort(), getUserName(), getPassword());
 
@@ -76,6 +89,14 @@ public class GramJobSubmissionManagerTest extends TestCase {
 
         executeSQL(createTable);
 
+        ListenerQueue listenerQueue = ListenerQueue.getInstance();
+        listenerQueue.startListenerQueue();
+    }
+
+    public void tearDown() {
+
+        ListenerQueue listenerQueue = ListenerQueue.getInstance();
+        listenerQueue.stopListenerQueue();
     }
 
     public static void executeSQL(String sql) throws Exception {
@@ -117,10 +138,7 @@ public class GramJobSubmissionManagerTest extends TestCase {
 
     public void executeJob(ExecutionContext executionContext) throws Exception {
 
-        ListenerQueue listenerQueue = ListenerQueue.getInstance();
-        listenerQueue.start();
-
-        SecurityContext context = new SecurityContext();
+        SecurityContext context = new SecurityContext(myProxyUserName, myProxyPassword);
         context.login();
 
         JobPersistenceManager jobPersistenceManager
@@ -128,15 +146,13 @@ public class GramJobSubmissionManagerTest extends TestCase {
         GramJobSubmissionManager gramJobSubmissionManager
                 = new GramJobSubmissionManager(jobPersistenceManager);
 
-
-
         String jobId = gramJobSubmissionManager.executeJob(context.getRawCredential(),
                 executionContext.getGRAMEndPoint(),
                 executionContext);
 
         Assert.assertNotNull(jobId);
 
-        listenerQueue.join(2 * 60 * 1000);
+        Thread.sleep(2 * 60 * 1000);
 
         logger.info("Checking whether job is in successful state in the persistence store");
 
@@ -144,17 +160,11 @@ public class GramJobSubmissionManagerTest extends TestCase {
         Assert.assertEquals(1, list.size());
 
         Assert.assertEquals(jobId, list.get(0).getJobId());
-
-        listenerQueue.stopListenerQueue();
-
     }
 
     public void monitoringRunningJobs(ExecutionContext executionContext) throws Exception {
 
-        ListenerQueue listenerQueue = ListenerQueue.getInstance();
-        listenerQueue.startListenerQueue();
-
-        SecurityContext context = new SecurityContext();
+        SecurityContext context = new SecurityContext(myProxyUserName, myProxyPassword);
         context.login();
 
         JobPersistenceManager jobPersistenceManager
@@ -165,11 +175,12 @@ public class GramJobSubmissionManagerTest extends TestCase {
         executionContext.addGramJobNotifier(new GramJobLogger());
 
         String jobId = gramJobSubmissionManager.executeJob(context.getRawCredential(),
-                executionContext.getTrestlesGRAM(),
+                executionContext.getGRAMEndPoint(),
                 executionContext);
 
-        listenerQueue.join(1000);
+        Thread.sleep(3000);
 
+        ListenerQueue listenerQueue = ListenerQueue.getInstance();
         listenerQueue.stopListenerQueue();
 
         logger.info("=================== Process Finished - Monitoring Stopped ==========================");
@@ -183,18 +194,12 @@ public class GramJobSubmissionManagerTest extends TestCase {
 
         gramJobSubmissionManager.startMonitoringRunningJobs(context.getRawCredential(), executionContext);
 
-        listenerQueue.join(1 * 60 * 1000);
-
-        listenerQueue.stopListenerQueue();
-
+        Thread.sleep(1 * 60 * 1000);
     }
 
     public void cancelJob(ExecutionContext executionContext) throws Exception {
 
-        ListenerQueue listenerQueue = ListenerQueue.getInstance();
-        listenerQueue.startListenerQueue();
-
-        SecurityContext context = new SecurityContext(executionContext.getUserName(), executionContext.getPassword());
+        SecurityContext context = new SecurityContext(myProxyUserName, myProxyPassword);
         context.login();
 
         JobPersistenceManager jobPersistenceManager
@@ -204,10 +209,8 @@ public class GramJobSubmissionManagerTest extends TestCase {
 
         executionContext.addGramJobNotifier(new GramJobLogger());
 
-        executionContext.setHost("trestles");
-
         String jobId = gramJobSubmissionManager.executeJob(context.getRawCredential(),
-                executionContext.getTrestlesGRAM(),
+                executionContext.getGRAMEndPoint(),
                 executionContext);
 
         Thread.sleep(30 * 1000);
@@ -219,9 +222,7 @@ public class GramJobSubmissionManagerTest extends TestCase {
 
         logger.info("========== End of test case ==============");
 
-        listenerQueue.join(1 * 30 * 1000);
-
-        listenerQueue.stopListenerQueue();
+        Thread.sleep(1 * 30 * 1000);
     }
 
 

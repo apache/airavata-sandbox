@@ -33,39 +33,32 @@ public class TrestlesGramTest extends GramJobSubmissionManagerTest {
 
     // ====================== Trestles ==============================//
 
-    public void testExecuteJobTrestlesInteractive() throws Exception {
+    private ExecutionContext executionContext;
 
-        ExecutionContext executionContext = getDefaultExecutionContext();
+    public void setUp() throws Exception {
+        super.setUp();
 
+        executionContext = getDefaultExecutionContext();
         executionContext.setHost("trestles");
-
-        executionContext.setInteractive(true);
         executionContext.addGramJobNotifier(new GramJobLogger());
 
+    }
+
+    public void testExecuteJobTrestlesInteractive() throws Exception {
+
+        executionContext.setInteractive(true);
         executeJob(executionContext);
     }
 
     public void testMonitoringRunningJobsTrestles() throws Exception {
 
-        ExecutionContext executionContext = getDefaultExecutionContext();
-
-        executionContext.setHost("trestles");
-
         executionContext.setInteractive(true);
-        executionContext.addGramJobNotifier(new GramJobLogger());
-
         monitoringRunningJobs(executionContext);
     }
 
     public void testCancelJobsTrestles() throws Exception {
 
-        ExecutionContext executionContext = getDefaultExecutionContext();
-
-        executionContext.setHost("trestles");
-
         executionContext.setInteractive(true);
-        executionContext.addGramJobNotifier(new GramJobLogger());
-
         cancelJob(executionContext);
     }
 }

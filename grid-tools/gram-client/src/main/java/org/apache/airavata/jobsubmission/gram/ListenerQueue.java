@@ -23,6 +23,7 @@ package org.apache.airavata.jobsubmission.gram;
 
 import org.globus.gram.GramException;
 import org.globus.gram.GramJob;
+import org.globus.util.deactivator.Deactivator;
 import org.ietf.jgss.GSSException;
 
 import java.util.Queue;
@@ -38,9 +39,11 @@ public class ListenerQueue extends Thread {
 
     private final Queue<JobListenerThread> qe;
 
-    private static ListenerQueue listenerQueue;
+    private volatile static ListenerQueue listenerQueue;
 
-    private boolean shutDown = false;
+    private volatile boolean shutDown = false;
+
+    private volatile boolean isWaiting = false;
 
     private ListenerQueue() {
         qe = new ConcurrentLinkedQueue<JobListenerThread>();
@@ -60,35 +63,34 @@ public class ListenerQueue extends Thread {
 
         while (!shutDown) {
 
-            startListener();
+            consume();
 
             try {
                 synchronized (qe) {
+                    isWaiting = true;
                     qe.wait();
+                    isWaiting = false;
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                //Thread.currentThread().interrupt();
             }
 
         }
     }
 
-    public void     stopListenerQueue() {
+    public void stopListenerQueue() {
         shutDown = true;
 
         synchronized (qe) {
-            qe.notify();
+
+            if (isWaiting) {
+                qe.notifyAll();
+            }
         }
 
         listenerQueue = null;
 
-        try {
-            this.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
+        Deactivator.deactivateAll();
     }
 
     public void startListenerQueue() {
@@ -96,7 +98,7 @@ public class ListenerQueue extends Thread {
         this.start();
     }
 
-    public void startListener() {
+    public void consume() {
 
         while(!qe.isEmpty()) {
             JobListenerThread jobListenerThread = qe.poll();

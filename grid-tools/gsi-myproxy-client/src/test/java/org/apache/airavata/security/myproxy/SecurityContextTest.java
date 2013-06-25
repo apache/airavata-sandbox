@@ -23,8 +23,11 @@ package org.apache.airavata.security.myproxy;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.apache.log4j.Logger;
 import org.globus.gsi.provider.GlobusProvider;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.security.Security;
 
 /**
@@ -39,23 +42,41 @@ import java.security.Security;
 
 public class SecurityContextTest extends TestCase {
 
+    private String userName;
+    private String password;
+
+    private static final Logger log = Logger.getLogger(SecurityContext.class);
+
     static {
         Security.addProvider(new GlobusProvider());
     }
 
-    public void testLogin() throws Exception {
-        Assert.assertTrue(true);
-        System.out.println("Running tests ...");
+    public void setUp() {
+        this.userName = System.getProperty("myproxy.user");
+        this.password = System.getProperty("myproxy.password");
 
-        SecurityContext myProxy = new SecurityContext();
+        if (userName == null || password == null || userName.trim().equals("") || password.trim().equals("")) {
+            log.error("===== Please set myproxy.user and myproxy.password system properties. =======");
+            Assert.fail("Please set myproxy.user and myproxy.password system properties.");
+        }
+
+        log.info("Using my proxy user name - " + userName);
+
+    }
+
+
+    public void testLogin() throws Exception {
+
+        SecurityContext myProxy = new SecurityContext(userName, password);
         myProxy.login();
 
         Assert.assertNotNull(myProxy.getGssCredential());
     }
 
+
     public void testProxyCredentials() throws Exception {
 
-        SecurityContext myProxy = new SecurityContext();
+        SecurityContext myProxy = new SecurityContext(userName, password);
         myProxy.login();
 
         Assert.assertNotNull(myProxy.getProxyCredentials(myProxy.getGssCredential()));
@@ -73,7 +94,7 @@ public class SecurityContextTest extends TestCase {
      */
     public void testRenewCredentials() throws Exception {
 
-        SecurityContext myProxy = new SecurityContext();
+        SecurityContext myProxy = new SecurityContext(userName, password);
         myProxy.login();
 
         Assert.assertNotNull(myProxy.renewCredentials(myProxy.getGssCredential()));
