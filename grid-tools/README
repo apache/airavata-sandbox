@@ -26,3 +26,4 @@ For that execute following command;
 > myproxy-logon -t 264 -s <MY PROXY SERVER> -l <MY PROXY USER NAME>
 > myproxy-init -A --cert /tmp/x509up_u501 --key /tmp/x509up_u501 -l <MY PROXY USER NAME> -s <MY PROXY SERVER>
 
+Ignore modules bes-client and jsdl-generator. These modules are not present in the root pom file also.
