@@ -1,0 +1,73 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.apache.osgi.airavata</groupId>
+    <artifactId>gfac-framework</artifactId>
+    <packaging>bundle</packaging>
+    <name>Apache Airavata GFac Framework</name>
+    <version>0.1-SNAPSHOT</version>
+    <description>
+        This bundle provides an implemention for GFac framework
+    </description>
+
+    <parent>
+        <groupId>org.apache.airavata</groupId>
+        <artifactId>gfac-parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!--dependency>
+          <groupId>${pom.groupId}</groupId>
+          <artifactId>org.osgi.compendium</artifactId>
+          <version>0.9.0-incubator-SNAPSHOT</version>
+        </dependency-->
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+                <configuration>
+                    <failIfNoTests>false</failIfNoTests>
+                    <skipTests>${skipTests}</skipTests>
+                    <workingDirectory>${project.build.testOutputDirectory}</workingDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <version>2.4.0</version>
+                <configuration>
+                    <instructions>
+                        <Export-Package>
+                            org.apache.airavata.gfac.framework.service,org.apache.airavata.gfac.framework.provider
+                        </Export-Package>
+                        <Private-Package>org.apache.airavata.gfac.framework.impl</Private-Package>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Activator>org.apache.airavata.gfac.framework.activator.GFacActivator</Bundle-Activator>
+                        <Export-Service>
+                            org.apache.airavata.gfac.framework.provider.GFacProviderService,org.apache.airavata.gfac.framework.service.GFacService
+                        </Export-Service>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

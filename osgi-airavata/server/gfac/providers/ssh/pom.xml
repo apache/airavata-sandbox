@@ -1,0 +1,50 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.osgi.airavata</groupId>
+  <artifactId>gfac-provider-ssh</artifactId>
+  <packaging>bundle</packaging>
+  <name>Apache Airavata GFac Framework Provider SSH</name>
+  <version>0.1-SNAPSHOT</version>
+  <description>
+    This bundle provides an implemention for GFac framework - Provider SSH
+  </description>
+
+  <parent>
+ 	<groupId>org.apache.airavata</groupId>
+        <artifactId>gfac-provider-parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+   </parent>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <!--dependency>
+      <groupId>${pom.groupId}</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <version>0.9.0-incubator-SNAPSHOT</version>
+    </dependency-->
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+	<version>2.4.0</version>
+        <!--configuration>
+          <instructions>
+            <Export-Package>org.osgi.service.log</Export-Package>
+            <Private-Package>org.apache.felix.log.impl</Private-Package>
+            <Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+            <Bundle-Activator>${pom.artifactId}.impl.Activator</Bundle-Activator>
+            <Export-Service>org.osgi.service.log.LogService,org.osgi.service.log.LogReaderService</Export-Service>
+          </instructions>
+        </configuration-->
+      </plugin>
+    </plugins>
+  </build>
+</project>
