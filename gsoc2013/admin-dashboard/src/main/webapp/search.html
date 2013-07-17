@@ -1,0 +1,57 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<div>
+	<button ng-click="hideSearch()" class="close">&times;</button>
+	<form>
+	<fieldset>
+		<legend>Search</legend>
+		<div class="control-group">
+			<label class="control-label">For</label>
+			<div class="controls">
+				<select class="span12" ng-model="searchFor">
+					<option>Experiment</option>
+					<option>Project</option>
+					<option>Workflow</option>
+				</select>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">By</label>
+			<div class="controls">
+				<select class="span12" ng-model="searchBy">
+					<option>Id</option>
+					<option>User</option>
+					<option>Date</option>
+				</select>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">{{searchBy}}</label>
+			<div class="controls">
+				<input class="span12" type="text" ng-model="searchText" placeholder="Value">
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<button ng-click="search(searchFor,searchBy,searchText)" class="btn">Search</button>
+			</div>
+		</div>
+	</fieldset>
+	</form>
+</div>

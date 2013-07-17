@@ -1,0 +1,63 @@
+/**
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+*/
+.dashboard-overlay {
+	background-color: #ffffff;
+	margin: auto;
+	padding: 15px;
+	border: currentColor;
+	transition: 0.25s linear;
+	left: 3%;
+	top: 5%;
+	width: 91.7%;
+	height: 86%;
+	overflow: auto;
+	border-collapse: separate;
+	position: fixed !important;
+	z-index: 10000;
+	opacity: 0;
+	-webkit-border-radius: 1px;
+	-moz-border-radius: 1px;
+	border-radius: 1px;
+	-webkit-box-shadow: 0px 3px 10px rgba(34, 25, 25, 0.4);
+	-moz-box-shadow: 0px 3px 10px rgba(34, 25, 25, 0.4);
+	box-shadow: 0px 3px 10px rgba(34, 25, 25, 0.4);
+	outline: none;
+	-webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+	-webkit-background-clip: padding-box;
+	-moz-background-clip: padding-box;
+	background-clip: padding-box;
+}
+
+.title {
+	padding: 1% 0% 1% 1%;
+	font-size: 18px;
+	font-weight: 550;
+	text-shadow: 0 1px 0 #ffffff;
+}
+
+.navbtn {
+	padding: 0.5% 0% 0% 0%;
+}
+
+a:hover,
+a:active {
+  cursor : pointer;
+}
