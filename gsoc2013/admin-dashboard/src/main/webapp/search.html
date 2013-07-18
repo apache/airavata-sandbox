@@ -21,7 +21,7 @@
 	<form>
 	<fieldset>
 		<legend>Search</legend>
-		<div class="control-group">
+		<!-- <div class="control-group">
 			<label class="control-label">For</label>
 			<div class="controls">
 				<select class="span12" ng-model="searchFor">
@@ -30,26 +30,35 @@
 					<option>Workflow</option>
 				</select>
 			</div>
-		</div>
+		</div>-->
 		<div class="control-group">
 			<label class="control-label">By</label>
 			<div class="controls">
-				<select class="span12" ng-model="searchBy">
+				<select class="span12" ng-model="attrs.searchBy">
 					<option>Id</option>
-					<option>User</option>
-					<option>Date</option>
+					<option>User/Date</option>
 				</select>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">{{searchBy}}</label>
+		<div ng-show="attrs.searchBy=='Id'" class="control-group">
+			<label class="control-label">Id</label>
 			<div class="controls">
-				<input class="span12" type="text" ng-model="searchText" placeholder="Value">
+				<input class="span12" type="text" ng-model="attrs.searchId" placeholder="Exp Id">
 			</div>
+		</div>
+		<div ng-show="attrs.searchBy=='User/Date'" class="control-group">
+			<label class="control-label">Username(Optional)</label>
+			<div class="controls">
+				<input class="span12" type="text" ng-model="attrs.searchUsername" placeholder="username">
+			</div>
+			<label class="control-label">From(Optional)</label>
+			<datepicker ng-model="attrs.fromDate" show-weeks="showWeeks" starting-day="1" date-disabled="disabled(date, mode)" min="minDate" max="'2015-06-22'"></datepicker>
+			<label class="control-label">To(Optional)</label>
+			<datepicker ng-model="attrs.toDate" show-weeks="showWeeks" starting-day="1" date-disabled="disabled(date, mode)" min="minDate" max="'2015-06-22'"></datepicker>
 		</div>
 		<div class="control-group">
 			<div class="controls">
-				<button ng-click="search(searchFor,searchBy,searchText)" class="btn">Search</button>
+				<button ng-click="search(attrs)" class="btn">Search</button>
 			</div>
 		</div>
 	</fieldset>

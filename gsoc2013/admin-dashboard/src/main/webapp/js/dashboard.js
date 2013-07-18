@@ -16,7 +16,7 @@
   specific language governing permissions and limitations
   under the License.
 */
-var app = angular.module("adminMonitorApp",["controllers"]);
+var app = angular.module("adminMonitorApp",["ui.bootstrap","controllers","util"]);
 
 app.config(['$httpProvider','$routeProvider' ,function($httpProvider, $routeProvider) {
 	$httpProvider.defaults.useXDomain = true;
@@ -24,13 +24,15 @@ app.config(['$httpProvider','$routeProvider' ,function($httpProvider, $routeProv
 	$routeProvider.
 	when('/', {controller:'LoginCtrl', templateUrl:'credentials.html'}).
 	when('/experiments/id/:expId', {controller:'ExperimentCtrl', templateUrl:'experimentDetail.html'}).
+	when('/experiments/user/:username', {controller:'ExperimentCtrl', templateUrl:'experiments.html'}).
+	when('/experiments/search/:searchQuery', {controller:'ExperimentCtrl', templateUrl:'experiments.html'}).
 	when('/experiments/errors/:expId', {controller:'ExperimentCtrl', templateUrl:'experimentErrorDetail.html'}).
 	when('/experiments/errors/:expId/workflow/:workflowId', {controller:'WorkflowCtrl', templateUrl:'workflowErrorDetail.html'}).
-	when('/experiments/user/:username', {controller:'ExperimentCtrl', templateUrl:'experiments.html'}).
 	when('/experiments/all', {controller:'ExperimentCtrl', templateUrl:'experiments.html'}).
 	when('/experiments', {controller:'ExperimentCtrl', templateUrl:'users.html'}).
 	when('/projects', {controller:'ProjectCtrl', templateUrl:'projects.html'}).
 	when('/workflows', {controller:'WorkflowCtrl', templateUrl:'workflows.html'}).
+	//when('/credentials', {controller:'LoginCtrl', templateUrl:'credentials.html'}).
 	otherwise({redirectTo:'/'});
 }]);
 
@@ -39,7 +41,7 @@ app.directive("adminboard", function() {
 		restrict : "E",
 		transclude : true,
 		scope : {},
-		controller : function($scope,$element,$location) {
+		controller : function($scope,$element,$location,Utils) {
 			$scope.backUrls = [];
 			$scope.fwdUrls = [];
 			$scope.goBack = function() {
@@ -60,30 +62,27 @@ app.directive("adminboard", function() {
 			$scope.hideSearch = function() {
 				$scope.showSearchPane = false;
 			};
-			$scope.search = function (searchFor,searchBy,searchText){
+			$scope.search = function (attrs){
 				var searchUrl = "";
-				if(searchFor==undefined || searchFor=="" || searchBy==undefined || searchBy=="" || searchText==undefined || searchText=="")
+				if(attrs.searchBy==undefined || attrs.searchBy=="")
 					return;
-				switch(searchFor) {
-				case "Experiment" :
-					searchUrl += "/experiments";
-					break;
-				case "Project" :
-					searchUrl += "/projects";
-					break;
-				case "Workflow" :
-					searchUrl += "/workflows";
-					break;
-				}
-				switch(searchBy) {
-				case "User" :
-					searchUrl += "/user";
+				searchUrl += "/experiments";
+				switch(attrs.searchBy) {
+				case "User/Date" :
+					var params = {};
+					params.username = attrs.searchUsername;
+					params.fromDate = Utils.toTimeStampString(attrs.fromDate);
+					params.toDate = Utils.toTimeStampString(attrs.toDate);
+					// Assign all the parameters to search by to an single object and pass it to this function to get the return search query
+					var searchQuery = Utils.buildSearchQuery(params);
+					searchUrl += "/search/"+searchQuery;
 					break;
 				case "Id" :
-					searchUrl += "/id";
+					if(attrs.searchId==undefined || attrs.searchId=="")
+						return;
+					searchUrl += "/id/"+attrs.searchId;
 					break;
 				}
-				searchUrl += "/"+searchText;
 				$scope.gotoUrl(searchUrl);
 			};
 		},
@@ -153,6 +152,12 @@ angular.module("controllers",["config","services"]).
 		else if($location.path().indexOf("/experiments/user/")==0) {
 			var username = $routeParams.username;
 			Experiment.getByUser(username).then(function(experiments) {
+				$scope.experiments = experiments;
+			});
+		}
+		else if($location.path().indexOf("/experiments/search/")==0) {
+			var searchQuery = $routeParams.searchQuery;
+			Experiment.search(searchQuery).then(function(experiments) {
 				$scope.experiments = experiments;
 			});
 		}
@@ -298,7 +303,17 @@ angular.module("services",["config"]).
 				}, function(error) {
 					console.log("Error occured while fetching experiment with id "+expId);
 				});
-			}
+			},
+			search : function(searchQuery) {
+				return $http({method:"GET", url:Server.getEndpoint()+"api/provenanceregistry/get/experiments?"+searchQuery,
+					cache : true, withCredentials : true}).
+				then(function(response) {
+					console.log(response);
+					return response.data.experimentDataList;
+				}, function(error) {
+					console.log("Error occured while fetching experiments !");
+				});
+			},
 		};
 	}]).
 	factory("Workflow",["$http","User","Server", function($http, User, Server) {
@@ -334,7 +349,7 @@ angular.module("services",["config"]).
 	}]);
 
 // Utils
-angular.module("config",["encoder"]).
+angular.module("config",["util"]).
 factory("User",["$http","Base64","Server", function($http,Base64,Server) {
 	var _username = "";
 	return {
@@ -394,7 +409,7 @@ factory("Server",[function() {
 	};
 }]);
 
-angular.module("encoder",[]).
+angular.module("util",[]).
 	factory('Base64', function() {
 	    var keyStr = 'ABCDEFGHIJKLMNOP' +
 	        'QRSTUVWXYZabcdef' +
@@ -478,4 +493,33 @@ angular.module("encoder",[]).
 	            return output;
 	        }
 	    };
+	}).
+	factory('Utils', function() {
+		return {
+			buildSearchQuery : function(params) {
+				var queryString = "";
+				var paramCount = 0;
+				// Find out the number of paramters with non empty values
+				for (var key in params) {
+					var value = params[key];
+					if(value!=undefined && value!="") {
+						paramCount++;
+					}
+				}
+				for (var key in params) {
+					var value = params[key];
+					if(value!=undefined && value!="") {
+						paramCount--;
+						queryString += key+"="+value;
+						// Use the parameter counts here to decide if another parameter exists
+						if(paramCount>0)
+							queryString += "&";
+					}
+				}
+				return queryString;
+			},
+			toTimeStampString : function(date) {
+				return date!=undefined ? date.toJSON().substring(0,10)+' '+date.toJSON().substring(11,19) : "";
+			}
+		};
 	});
