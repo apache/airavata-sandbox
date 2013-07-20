@@ -1,0 +1,54 @@
+{
+    "project":{
+            "name": "Workflow Execution Interface",
+            "description": "Execution Interface for Apache Airavata, part of the master project for web-based XBaya",
+            "organization": "The Apache Software Foundation",
+            "community":"Apache Airavata",
+            "url": "http://airavata.apache.org//",
+            "program": "Google Summer of Code 2013"
+    },
+    "author": {
+            "name": "Sanchit Aggarwal",
+            "email": "sanchitagarwal108@gmail.com"
+    },
+    "mentor": [
+        {
+            "name": "Suresh Marru",
+            "email": "smarru@iu.edu"
+        },
+        {
+            "name": "Heshan Suriyaarachchi",
+            "email": "heshan.suriyaarachchi@gmail.com"
+        }
+    ],
+    "contributors": [
+        {
+            "name": "Sanchit Aggarwal",
+            "email": "sanchitagarwal108@gmail.com"
+        },
+        {
+            "name": "Vijayendra R Grampurohit",
+            "email": "vijayendra.sdm@gmail.com"
+        },
+        {   "name": "Danushka Menikkumbura",
+            "email": "danushka.menikkumbura@gmail.com"
+        },
+        {
+            "name": "Subho Banerjee",
+            "email": "subs.zero@gmail.com"
+        },
+        {
+            "name": "Shameera Rathnayaka" ,
+            "email": "shameerainfo@gmail.com"
+        }
+    ],
+    "technologies": [
+        "HTML5",
+        "CSS3",
+        "jQuery",
+        "tv4",
+        "AngularJs",
+        "twitter bootstrap",
+        "AiravataAPI"
+    ]
+}
