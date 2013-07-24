@@ -1,0 +1,108 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Apache Airavata WebUI</title>
+  <title>Execution Interface, Apache Airavata</title>
+  <meta name="description" content="WebUI for Apache Airavata">
+  <meta name="viewport" content="width=device-width">
+
+  <!-- build:css({.tmp,app}) styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
+</head>
+
+<body ng-app="WebUI">
+  <!--[if lt IE 7]>
+    <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+  <![endif]-->
+
+  <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+  <![endif]-->
+
+  <!-- The Navbar -->
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <!-- Responsive Navbar -->
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+        </a>
+        <!-- Brand -->
+        <span class="brand" href="#">Apache Airavata WebUI</span>
+        <!-- Navbar -->
+        <div class="nav-collapse collapse" ui-view="navbar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- The Content -->
+  <div class="container-fluid" style="padding-top: 60px">
+    <div class="row-fluid">
+      <div class="span3">
+        <div class="well sidebar-nav" ui-view="sidenavbar"></div>
+      </div>
+      <div class="span9" ui-view="canvas"></div>
+    </div>
+  </div>
+
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+  <script>window.angular || document.write('<script src="bower_components/angular/angular.js"><\/script>')</script>
+
+  <!-- build:js({.tmp,app}) scripts/scripts.js -->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/controllers/main.js"></script>
+  <!-- endbuild -->
+
+  <!-- build:js scripts/plugins.js -->
+  <script src="bower_components/jquery/jquery.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-affix.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-alert.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-dropdown.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-tooltip.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-modal.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-transition.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-button.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-popover.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-typeahead.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-carousel.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-scrollspy.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-collapse.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-tab.js"></script>
+  <!-- endbuild -->
+
+  <!-- build:js scripts/modules.js -->
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <!-- endbuild -->
+
+</body>
+
+</html>

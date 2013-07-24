@@ -1648,11 +1648,3 @@ UserWorkflowRegistry.prototype.removeWorkflow = function (workflowName) {
     res = sendAndReceive(url, optionalBasicHeaders, type.delete, data, null);
     return res.responseText;
 }
-
-
-
-
-
-
-
-
