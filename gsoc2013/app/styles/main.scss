@@ -24,8 +24,8 @@ $FontAwesomePath: "/bower_components/font-awesome/font";
 
 /* Generic styles */
 body {
-    background: #fafafa;
-    color: #333;
+  background: #fafafa;
+  padding-bottom: 40px;
 }
 
 /* Styles dealing with the side navigation bar */
@@ -40,4 +40,11 @@ body {
     padding-left: 5px;
     padding-right: 5px;
   }
+}
+
+/* Styles relating to the editor */
+#editor {
+  background: #ddd url("../img/grid.gif");
+  border-style: solid;
+  border-width: 2px;
 }

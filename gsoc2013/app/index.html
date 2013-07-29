@@ -18,6 +18,7 @@ under the License.
 -->
 
 <!doctype html>
+<html lang="en">
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -61,62 +62,67 @@ under the License.
     </div>
 </div>
 
-<!-- The Content -->
-<div class="container-fluid" style="padding-top: 60px">
+  <!-- The Content -->
+  <div class="container-fluid" style="padding-top: 60px;">
     <div class="row-fluid">
-        <div class="span3">
-            <div class="well sidebar-nav" ui-view="sidenavbar"></div>
+      <div class="span3">
+        <div class="well sidebar-nav" ui-view="sidenavbar"></div>
+      </div>
+      <div class="span9">
+        <!-- Alerts -->
+        <div class="row"ng-controller="Alert">
+          <div ng-repeat="alert in alerts" class="alert alert-block alert-{{alert.type}} fade in">
+            <button type="button" class="close" data-dismiss="alert" ng-click="closeAlert($index)">&times;</button>
+            <h4 class="alert-heading">{{alert.head}}</h4>
+            <p>{{alert.msg}}</p>
+          </div>
         </div>
-        <div class="span9">
-            <!-- Alerts -->
-            <div class="row" ng-controller="Alert">
-                <div ng-repeat="alert in alerts" class="alert alert-block alert-{{alert.type}} fade in">
-                    <button type="button" class="close" data-dismiss="alert" ng-click="closeAlert($index)">&times;</button>
-                    <h4 class="alert-heading">{{alert.head}}</h4>
-                    <p>{{alert.msg}}</p>
-                </div>
-            </div>
-            <!-- Canvas -->
-            <div class="row" ui-view="canvas"></div>
-        </div>
+        <!-- Canvas -->
+        <div class="row" ui-view="canvas"></div>
+      </div>
     </div>
 
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
-    <script>window.angular || document.write('<script src="bower_components/angular/angular.js"><\/script>')</script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+  <script>window.angular || document.write('<script src="bower_components/angular/angular.js"><\/script>')</script>
 
-    <!-- build:js({.tmp,app}) scripts/scripts.js -->
-    <script src="scripts/app.js"></script>
-    <script src="scripts/controllers/Alert.js"></script>
-    <script src="scripts/controllers/RegistryConnection.js"></script>
-    <script src="scripts/registryAPI.js"></script>
-    <script src="scripts/controllers/executionInterfaceCntl.js"></script>
-    <script src="scripts/model/workflow_execution_context.json"></script>
-    <!-- endbuild -->
+  <!-- build:js({.tmp,app}) scripts/scripts.js -->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/controllers/Alert.js"></script>
+  <script src="scripts/controllers/RegistryConnection.js"></script>
+  <script src="scripts/controllers/WorkflowCreator.js"></script>
+  <script src="scripts/vendor/bandit.js"></script>
+  <script src="scripts/registryAPI.js"></script>
+  <script src="scripts/controllers/executionInterfaceCntl.js"></script>
+  <script src="scripts/model/workflow_execution_context.json"></script>
+  <!-- endbuild -->
 
-    <!-- build:js scripts/plugins.js -->
-    <script src="bower_components/jquery/jquery.js"></script>
-    <script src="bower_components/bootstrap-sass/js/bootstrap-affix.js"></script>
-    <script src="bower_components/bootstrap-sass/js/bootstrap-alert.js"></script>
-    <script src="bower_components/bootstrap-sass/js/bootstrap-dropdown.js"></script>
-    <script src="bower_components/bootstrap-sass/js/bootstrap-tooltip.js"></script>
-    <script src="bower_components/bootstrap-sass/js/bootstrap-modal.js"></script>
-    <script src="bower_components/bootstrap-sass/js/bootstrap-transition.js"></script>
-    <script src="bower_components/bootstrap-sass/js/bootstrap-button.js"></script>
-    <script src="bower_components/bootstrap-sass/js/bootstrap-popover.js"></script>
-    <script src="bower_components/bootstrap-sass/js/bootstrap-typeahead.js"></script>
-    <script src="bower_components/bootstrap-sass/js/bootstrap-carousel.js"></script>
-    <script src="bower_components/bootstrap-sass/js/bootstrap-scrollspy.js"></script>
-    <script src="bower_components/bootstrap-sass/js/bootstrap-collapse.js"></script>
-    <script src="bower_components/bootstrap-sass/js/bootstrap-tab.js"></script>
-    <!-- endbuild -->
+  <!-- build:js scripts/plugins.js -->
+  <script src="bower_components/jquery/jquery.js"></script>
+  <script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
+  <script src="scripts/vendor/jquery.base64.min.js"></script>
+  <script src="bower_components/raphael/raphael.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-affix.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-alert.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-dropdown.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-tooltip.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-modal.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-transition.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-button.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-popover.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-typeahead.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-carousel.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-scrollspy.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-collapse.js"></script>
+  <script src="bower_components/bootstrap-sass/js/bootstrap-tab.js"></script>
+  <!-- endbuild -->
 
-    <!-- build:js scripts/modules.js -->
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="bower_components/tv4/tv4.js"></script>
-    <!-- endbuild -->
+  <!-- build:js scripts/modules.js -->
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="bower_components/tv4/tv4.js"></script>
+  <!-- endbuild -->
 
 </body>
 
