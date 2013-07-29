@@ -1,0 +1,54 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<div class="accordion" id="executionSidebar" ng-controller="RegistryDescriptors">
+  <ul class="nav nav-list">
+  <li>
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#executionSidebar" href="#addHost">
+          <i class="icon-plus-sign"></i> Add Host
+        </a>
+      </div>
+      <div id="addHost" class="accordion-body collapse">
+        <div class="accordion-inner">
+          <form style="padding:10px;" >
+            <fieldset>
+              <legend>Register Host</legend>
+              <label for="inputHostId">Host Id</label>
+              <input type="text" id="inputHostId" placeholder="Host Id" ng-model="addHost.hostId" required>
+              <label for="inputHostAddress">Host Address</label>
+              <input type="url" id="inputHostAddress" placeholder="Host Address" ng-model="addHost.hostAddress">
+              <label for="resourceProtocol">Resource Protocol</label>
+              <select id="resourceProtocol" ng-model="addHost.resourceProtocol" ng-options="k as p for (k,p) in addHost.resourceProtocol"></select>
+              <label for="gramEndpoint">Gram Endpoint</label>
+              <input type="url" id="gramEndpoint" placeholder="Gram Endpoint" ng-model="addHost.gramEndpoint">
+              <label for="gridFTPEndpoint">Grid FTP Endpoint</label>
+              <input type="url" id="gridFTPEndpoint" placeholder="Grid FTP Endpoint" ng-model="addHost.gridFTPEndpoint">
+              <br>
+              <button type="submit" class="btn" ng-click="saveHostDescriptor()">Save</button>
+              <a class="accordion-toggle btn" data-toggle="collapse" data-parent="#executionSidebar" href="#addHost">Cancel</a>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  <li><a href="#newApplicationDeploy" role="button" data-toggle="modal"><i class="icon-plus-sign"></i> New Application Deployment</a></li>
+</ul>
+</div>

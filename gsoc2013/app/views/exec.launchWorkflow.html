@@ -1,0 +1,53 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<div class="modal hide fade" id="newApplicationDeploy" aria-labelledby="newApplicationDeploy" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>New Application Deployment</h3>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal">
+      <div class="control-group">
+        <label class="control-label" for="applicationHost">Application Host: </label>
+        <div class="controls">
+          <select id="applicationHost"  ng-model="applicationHost" ng-options="host.name for host in hostList"></select> <a href="#addHost" role="button" data-toggle="modal" title="Create New Host"><i class="icon-plus-sign icon-white"></i></a>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="executablePath">Executable Path</label>
+        <div class="controls">
+          <input type="url" id="executablePath" placeholder="Executable Path" ng-model="executablePath" required> <i class=" icon-folder-open icon-white"></i>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="scratchWorkingDirectory">Scratch Working Directory</label>
+        <div class="controls">
+          <input type="url" id="scratchWorkingDirectory" placeholder="Scratch Working Directory" ng-model="scratchWorkingDirectory" required> <i class=" icon-folder-open icon-white"></i>
+        </div>
+      </div>
+      <div>
+        <a href="#" class="btn btn-primary">Advance Application Configuration</a>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-primary">Add</a>
+    <a href="#" class="btn " data-dismiss="modal" aria-hidden="true">Cancel</a>
+  </div>
+</div>

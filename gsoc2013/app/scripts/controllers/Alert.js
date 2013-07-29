@@ -20,13 +20,22 @@
  */
 'use strict';
 
-angular.module('WebUI')
-  .controller('MainCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'Twitter Bootstrap',
-      'AngularJS',
-      'Karma',
-      'Font-Awesome'
-    ];
+/* Controller to show alerts to screen
+ * An alert is structured as {"msg": "...", "head": "...", "type": "fromBootstrap"}
+ * All alerts are communicated through the MessageQueue service under the topic 'alerts'
+ */
+
+angular.module('WebUI').controller('Alert', function ($scope, MessageQueue) {
+  // Local copy of all alerts
+  $scope.alerts = [];
+
+  // Subscribe to the MessageQueue topic "alerts"
+  MessageQueue.subscribe('alerts', function(alert) {
+    $scope.alerts.push(alert);
   });
+
+  // Remove the local copy of the alert when it is closed
+  $scope.closeAlert = function(index) {
+    $scope.alerts.splice(index, 1);
+  };
+});
