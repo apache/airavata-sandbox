@@ -1,0 +1,282 @@
+<!--
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ -->
+
+
+
+        <html>
+        <head>
+            <title>Message Monitoring</title>
+            <!--		<link type= "text/css" rel= "stylesheet" href ="css/bootstrap.css" /> -->
+            <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+            <!--	<link rel="stylesheet" type="text/css" href="monitoring.css"> -->
+
+            <style type="text/css">
+                body{
+                    background-color: #292929;
+                    color: white;
+                }
+
+                .table{
+                    border-collapse: separate;
+                    border-spacing: 0 5px;
+                    float:left;
+                    width: 20%;
+                }
+
+                    /* 1px tables inserted in between the actual  */
+
+                .padding_table{
+                    border-collapse: collapse;
+                    border-spacing: 2px;
+                    float:left;
+                    width: 1px;
+                }
+
+                .padding_table thead th {
+                    background-color: #292929;
+                    color: white;
+                    height: 50px;
+                    border-spacing: 0px 5px;
+                    text-align: center;   /*aligns header text to left */
+
+                }
+
+                .padding_table2{
+                    border-collapse: collapse;
+                    border-spacing: 2px;
+                    float:left;
+                    width: 40px;
+                }
+
+                .padding_table2 thead th {
+                    background-color: #292929;
+                    color: white;
+                    height: 50px;
+                    border-spacing: 0px 5px;
+                    text-align: center;   /*aligns header text to left */
+
+                }
+
+
+
+                .table tbody tr:nth-child(even){
+                    background: rgb(131, 89, 89);
+                }
+
+                .table tbody tr:nth-child(odd){
+                    background: rgb(121, 173, 127);
+
+                }
+
+                h1{
+                    text-align: center;
+                    color: white;
+                }
+
+                .table thead th {
+                    background-color: rgb(90, 90, 177);
+                    color: white;
+                    height: 50px;
+                    border-spacing: 0px 5px;
+                    text-align: center;   /*aligns header text to left */
+                    font-size: 24;
+
+                }
+
+                tr {
+                    display: table-row;
+                    vertical-align: inherit;
+                    border-color: inherit;
+                }
+
+                thead tr th:first-child {
+                    /*  border-top-left-radius: 6px;
+                      border-bottom-left-radius: 6px;
+                      border-top-right-radius: 6px;
+                      border-bottom-left-radius: 6px;
+                    */
+                    border-radius: 6px;
+                }
+
+
+                .well {
+                    min-height: 20px;
+                    padding: 19px;
+                    margin-bottom: 20px;
+                    background-color: #f5f5f5;
+                    border: 1px solid #e3e3e3;
+                    -webkit-border-radius: 4px;
+                    -moz-border-radius: 4px;
+                    border-radius: 4px;
+                    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+                    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+                    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+                }
+
+
+                .table th, .table td {
+                    padding: 8px;
+                    line-height: 20px;
+                    text-align: center;
+                    vertical-align: top;
+                    border-top:none;
+                    color: black;
+                    border-radius: 6px
+
+                }
+
+
+            </style>
+
+
+        </head>
+        <body>
+        <div class ="well"> </div>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <h1> MONITORING </h1>
+
+        <div id="container"></div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect('/'),
+                    container = document.getElementById('container');
+
+            socket.on('status', function (data) {
+                var row = $("<tr><td>"+data+"</td></tr>");
+                $("#status").append(row).css({width : '300px', height: '100px'});
+            });
+
+
+            socket.on('timestamp', function (data) {
+                var row = $("<tr><td>"+data+"</td></tr>");
+                $("#time").append(row).css({width : '300px', height: '100px'});
+            });
+
+            socket.on('description', function (data) {
+                if(data != null && data.trim().length != 0)
+                {
+                    var row = $("<tr><td>"+data+"</td></tr>");
+                    $("#message_content").append(row).css({width : '300px', height: '100px'});
+                }
+
+                if(data.trim().length == 0)
+                {
+                    console.log("I am in nbsp");
+                    var row = $("<tr><td>&nbsp;</td></tr>");
+                    $("#message_content").append(row).css({width : '300px', height: '100px'});
+                }});
+
+
+            socket.on('comp', function (data) {
+                if(data != null && data.trim().length != 0)
+                {
+                    var row = $("<tr><td>"+data+"</td></tr>");
+                    $("#component").append(row).css({width : '300px', height: '100px'});
+                }
+
+                if(data.trim().length == 0)
+                {
+                    console.log("I am in nbsp");
+                    var row = $("<tr><td>&nbsp;</td></tr>");
+                    $("#component").append(row).css({width : '300px', height: '100px'});
+                }});
+        </script>
+
+        <div id= "monitoring" >
+
+            <table class="padding_table">
+                <thead>
+                <tr>
+                    <th></th>
+                </tr>
+                </thead>
+
+            </table>
+
+            <table class="padding_table2">
+                <thead>
+                <tr>
+                    <th></th>
+                </tr>
+                </thead>
+            </table>
+
+            <table id="time" class= "table  table-hover">
+                <thead>
+                <tr>
+                    <th>Time</th>
+                </tr>
+                </thead>
+            </table>
+
+            <table class="padding_table">
+                <thead>
+                <tr>
+                    <th></th>
+                </tr>
+                </thead>
+            </table>
+
+            <table id="status" class= "table table-hover ">
+                <thead>
+                <tr>
+                    <th>Status</th>
+                </tr>
+                </thead>
+            </table>
+
+            <table class="padding_table">
+                <thead>
+                <tr>
+                    <th></th>
+                </tr>
+                </thead>
+
+            </table>
+
+            <table id="component" class= "table table-hover">
+                <thead>
+                <tr>
+                    <th>Component</th>
+                </tr>
+                </thead>
+            </table>
+
+            <table class="padding_table">
+                <thead>
+                <tr>
+                    <th></th>
+                </tr>
+                </thead>
+            </table>
+
+            <table id="message_content" class= "table table-hover">
+                <thead>
+                <tr>
+                    <th>Message</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        </body>
+        </html>
