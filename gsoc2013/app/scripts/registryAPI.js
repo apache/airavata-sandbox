@@ -267,6 +267,597 @@ function MethodNotImplementedException(msg) {
 
 MethodNotImplementedException.prototype = Object.create(Exception.prototype);
 
+// ====================================== AiravataClient =====================================================
+
+function AiravataJSClient() {
+    var basicRegistry = new BasicRegistry();
+    var descriptorRegistry = new DescriptorRegistry();
+    var configurationRegistry = new ConfigurationRegistry();
+    var provenanceRegistry = new ProvenanceRegistry();
+    var projectRegistry = new ProjectRegistry();
+    var publishWorkflowRegistry = new PublishWorkflowRegistry();
+    var userWorkflowRegistry = new UserWorkflowRegistry();
+    var experimentRegistry = new ExperimentRegistry();
+
+    this.getGateWay = function () {
+        return basicRegistry.getGateWay();
+    };
+
+    this.setGateway = function (gateway) {
+        return basicRegistry.setGateway(gateway);
+    };
+
+    this.getUserName = function () {
+        return basicRegistry.getUserName();
+    };
+
+    this.setAiravataUser = function (airavataUser) {
+        return basicRegistry.setAiravataUser(airavataUser);
+    };
+
+    this.getVersion = function () {
+        return basicRegistry.getVersion();
+    };
+
+    this.getConnectionURL = function () {
+        return basicRegistry.getConnectionURL();
+    };
+
+    this.setConnectionURL = function (connectionURL) {
+        return basicRegistry.setConnectionURL(connectionURL);
+    };
+
+    // =============== Descriptor wrapper =====================
+
+    this.isHostDescriptorExists = function (hostDescName) {
+        return descriptorRegistry.isHostDescriptorExists(hostDescName);
+    };
+
+    this.addHostDescriptor = function (hostDescriptor) {
+        return descriptorRegistry.addHostDescriptor(hostDescriptor);
+    };
+
+    this.updateHostDescriptor = function (updatedHostDesc) {
+        return descriptorRegistry.updateHostDescriptor(updatedHostDesc);
+    };
+
+    this.getHostDescriptor = function (hostName) {
+        return descriptorRegistry.getHostDescriptor(hostName);
+    };
+
+    this.removeHostDescriptor = function (hostName) {
+        return descriptorRegistry.removeHostDescriptor(hostName);
+    };
+
+    this.getHostDescriptors = function () {
+        return descriptorRegistry.getHostDescriptors();
+    };
+
+
+    this.getHostDescriptorNames = function () {
+        return descriptorRegistry.getHostDescriptorNames();
+    };
+
+    this.isServiceDescriptorExists = function (serviceDescName) {
+        return descriptorRegistry.isServiceDescriptorExists(serviceDescName);
+    };
+
+    this.addServiceDescriptor = function (serviceDescriptor) {
+        return descriptorRegistry.addServiceDescriptor(serviceDescriptor);
+    };
+
+    this.updateServiceDescriptor = function (serviceDescriptor) {
+        return descriptorRegistry.updateServiceDescriptor(serviceDescriptor);
+    };
+
+    this.getServiceDescriptor = function (serviceDescName) {
+        return descriptorRegistry.getServiceDescriptor(serviceDescName);
+    };
+
+    this.removeServiceDescriptor = function (serviceDescName) {
+        return descriptorRegistry.removeServiceDescriptor(serviceDescName);
+    };
+
+    this.getServiceDescriptors = function () {
+        return descriptorRegistry.getServiceDescriptors();
+    };
+
+    this.isApplicationDescriptorExists = function (appDesc, hostName, appDescName) {
+        return descriptorRegistry.isApplicationDescriptorExists(appDesc, hostName, appDescName);
+    };
+
+    this.addApplicationDescriptor = function (appDescriptor) {
+        return descriptorRegistry.addApplicationDescriptor(appDescriptor);
+    };
+
+    this.updateApplicationDescriptor = function (appDescriptor) {
+        return descriptorRegistry.updateApplicationDescriptor(appDescriptor);
+    };
+
+    this.getApplicationDescriptor = function (serviceName, hostName, applicationName) {
+        return descriptorRegistry.getApplicationDescriptor(serviceName, hostName, applicationName);
+    };
+
+    this.getApplicationDescriptorPerServiceHost = function (serviceName, hostName) {
+        return descriptorRegistry.getApplicationDescriptorPerServiceHost(serviceName, hostName);
+    };
+
+    this.getApplicationDescriptors = function (serviceName) {
+        if(serviceName) {
+            return descriptorRegistry.getApplicationDescriptors(serviceName);
+        }else{
+            return descriptorRegistry.getApplicationDescriptors();
+        }
+
+    };
+
+    this.getApplicationDescriptorNames = function () {
+        return descriptorRegistry.getApplicationDescriptorNames();
+    };
+
+    this.removeApplicationDescriptor = function (serviceName, hostName, appName) {
+        return descriptorRegistry.removeApplicationDescriptor(serviceName, hostName, appName);
+    };
+
+    // =============== Configuration wrapper =====================
+
+    this.getConfiguration = function (key) {
+        return configurationRegistry.getConfiguration(key);
+    };
+
+    this.getConfigurationList = function (key) {
+        return configurationRegistry.getConfigurationList(key);
+    };
+
+    this.setConfiguration = function (key, value, date) {
+        return configurationRegistry.setConfiguration(key, value, date);
+    };
+
+    this.updateConfiguration = function (key, value, date) {
+        return configurationRegistry.updateConfiguration(key, value, date);
+    };
+
+    this.removeAllConfiguration = function (key) {
+        return configurationRegistry.removeAllConfiguration(key);
+    };
+
+    this.removeConfiguration = function (key, value) {
+        return configurationRegistry.removeConfiguration(key, value);
+    };
+
+    this.getGFacURIs = function () {
+        return configurationRegistry.getGFacURIs();
+    };
+
+    this.getWorkflowInterpreterURIs = function () {
+        return configurationRegistry.getWorkflowInterpreterURIs();
+    };
+
+    this.getEventingServiceURI = function () {
+        return configurationRegistry.getEventingServiceURI();
+    };
+
+    this.getMessageBoxURI = function () {
+        return configurationRegistry.getMessageBoxURI();
+    };
+
+    this.addGFacURI = function (uri) {
+        return configurationRegistry.addGFacURI(uri);
+    };
+
+    this.addWorkflowInterpreterURI = function (uri) {
+        return configurationRegistry.addWorkflowInterpreterURI(uri);
+    };
+
+    this.setEventingURI = function (uri) {
+        return configurationRegistry.setEventingURI(uri);
+    };
+
+    this.setMessageBoxURI = function (uri) {
+        return configurationRegistry.setMessageBoxURI(uri);
+    };
+
+
+    this.addGFacURIByDate = function (uri, date) {
+        return configurationRegistry.addGFacURIByDate(uri, date);
+    };
+
+    this.addWorkflowInterpreterURI = function (uri, date) {
+        return configurationRegistry.addWorkflowInterpreterURI(uri, date);
+    };
+
+    this.setEventingURIByDate = function (uri, date) {
+        return configurationRegistry.setEventingURIByDate(uri, date);
+    };
+
+    this.setMessageBoxURIByDate = function (uri, date) {
+        return configurationRegistry.setMessageBoxURIByDate(uri, date);
+    };
+
+    this.removeGFacURI = function (uri) {
+        return configurationRegistry.removeGFacURI(uri);
+    };
+
+    this.removeAllGFacURI = function () {
+        return configurationRegistry.removeAllGFacURI();
+    };
+
+    this.removeWorkflowInterpreterURI = function (uri) {
+        return configurationRegistry.removeWorkflowInterpreterURI(uri);
+    };
+
+    this.removeAllWorkflowInterpreterURI = function () {
+        return configurationRegistry.removeAllWorkflowInterpreterURI();
+    };
+
+    this.unsetEventingURI = function () {
+        return configurationRegistry.unsetEventingURI();
+    };
+
+    this.unsetMessageBoxUwRI = function () {
+        return configurationRegistry.unsetMessageBoxUwRI();
+    };
+
+
+// ========================================= Provenance Wrapper ==========================================
+
+    this.updateExperimentExecutionUser = function (experimentId, user) {
+        return provenanceRegistry.updateExperimentExecutionUser(experimentId, user);
+    };
+
+    this.getExperimentExecutionUser = function (experimentId) {
+        return provenanceRegistry.getExperimentExecutionUser(experimentId);
+    };
+
+    this.getExperimentName = function (experimentId) {
+        return provenanceRegistry.getExperimentName(experimentId);
+    };
+
+    this.updateExperimentName = function (experimentId, experimentName) {
+        return provenanceRegistry.updateExperimentName(experimentId, experimentName);
+    };
+
+    this.getExperimentMetadata = function (experimentId) {
+        return provenanceRegistry.getExperimentMetadata(experimentId);
+    };
+
+
+    this.updateExperimentMetadata = function (experimentId, metadata) {
+        return provenanceRegistry.updateExperimentMetadata(experimentId, metadata);
+    };
+
+
+    this.getWorkflowExecutionTemplateName = function (workflowInstanceId) {
+        return provenanceRegistry.getWorkflowExecutionTemplateName(workflowInstanceId);
+    };
+
+
+    this.setWorkflowInstanceTemplateName = function (workflowInstanceId, templateName) {
+        return provenanceRegistry.setWorkflowInstanceTemplateName(workflowInstanceId, templateName);
+    };
+
+    this.getExperimentWorkflowInstances = function (experimentId) {
+        return provenanceRegistry.getExperimentWorkflowInstances(experimentId);
+    };
+
+    this.isWorkflowInstanceExists = function (instanceId) {
+        return provenanceRegistry.isWorkflowInstanceExists(instanceId);
+    };
+
+    this.isWorkflowInstanceExistsThenCreate = function (instanceId, createIfNotPresent) {
+        return provenanceRegistry.isWorkflowInstanceExistsThenCreate(instanceId, createIfNotPresent);
+    };
+
+    this.updateWorkflowInstanceStatusByInstance = function (instanceId, executionStatus) {
+        return provenanceRegistry.updateWorkflowInstanceStatusByInstance(instanceId, executionStatus);
+    };
+
+    this.updateWorkflowInstanceStatus = function (workflowInstanceId, executionStatus, statusUpdateTime) {
+        return provenanceRegistry.updateWorkflowInstanceStatus(workflowInstanceId, executionStatus, statusUpdateTime);
+    };
+
+    this.getWorkflowInstanceStatus = function (instanceId) {
+        return provenanceRegistry.getWorkflowInstanceStatus(instanceId);
+    };
+
+    this.updateWorkflowNodeInput = function (nodeId, workflowInstanceId, data) {
+        return provenanceRegistry.updateWorkflowNodeInput(nodeId, workflowInstanceId, data);
+    };
+
+    this.updateWorkflowNodeOutput = function (nodeId, workflowInstanceId, data) {
+        return provenanceRegistry.updateWorkflowNodeOutput(nodeId, workflowInstanceId, data);
+    };
+
+    this.getExperiment = function (experimentId) {
+        return provenanceRegistry.getExperiment(experimentId);
+    };
+
+    this.getExperimentIdByUser = function (username) {
+        return provenanceRegistry.getExperimentIdByUser(username);
+    };
+
+    this.getExperimentByUser = function (username) {
+        return provenanceRegistry.getExperimentByUser(username);
+    };
+
+
+    this.updateWorkflowNodeStatus = function (workflowInstanceId, nodeId, executionStatus) {
+        return provenanceRegistry.updateWorkflowNodeStatus(workflowInstanceId, nodeId, executionStatus);
+    };
+
+    this.getWorkflowNodeStatus = function (workflowInstanceId, nodeId) {
+        return projectRegistry.getWorkflowNodeStatus(workflowInstanceId, nodeId);
+    };
+
+    this.getWorkflowNodeStartTime = function (workflowInstanceId, nodeId) {
+        return provenanceRegistry.getWorkflowNodeStartTime(workflowInstanceId, nodeId);
+    };
+
+    this.getWorkflowStartTime = function (workflowInstanceId) {
+        return provenanceRegistry.getWorkflowStartTime(workflowInstanceId);
+    };
+
+    this.updateWorkflowNodeGramData = function (workflowNodeGramData) {
+        return provenanceRegistry.updateWorkflowNodeGramData(workflowNodeGramData);
+    };
+
+    this.getWorkflowInstanceData = function (workflowInstanceId) {
+        return provenanceRegistry.getWorkflowInstanceData(workflowInstanceId);
+    };
+
+    this.isWorkflowInstanceNodePresent = function (workflowInstanceId, nodeId) {
+        return provenanceRegistry.isWorkflowInstanceNodePresent(workflowInstanceId, nodeId);
+    };
+
+    this.isWorkflowInstanceNodePresentCreate = function (workflowInstanceId, nodeId, createIfNotPresent) {
+        return provenanceRegistry.isWorkflowInstanceNodePresentCreate(workflowInstanceId, nodeId, createIfNotPresent);
+    };
+
+    this.getWorkflowInstanceNodeData = function (workflowInstanceId, nodeId) {
+        return provenanceRegistry.getWorkflowInstanceNodeData(workflowInstanceId, nodeId);
+    };
+
+    this.addWorkflowInstance = function (experimentId, workflowInstanceId, templateName) {
+        return provenanceRegistry.addWorkflowInstance(experimentId, workflowInstanceId, templateName);
+    };
+
+    this.updateWorkflowNodeType = function (workflowInstanceId, nodeId, nodeType) {
+        return projectRegistry.updateWorkflowNodeType(workflowInstanceId, nodeId, nodeType);
+    };
+
+    this.addWorkflowInstanceNode = function (workflowInstanceId, nodeId) {
+        return projectRegistry.addWorkflowInstanceNode(workflowInstanceId, nodeId);
+    };
+
+    this.isExperimentNameExist = function (experimentName) {
+        return projectRegistry.isExperimentNameExist(experimentName);
+    };
+
+    this.getExperimentMetaInformation = function (experimentId) {
+        return projectRegistry.getExperimentMetaInformation(experimentId);
+    };
+
+    this.getAllExperimentMetaInformation = function (user) {
+        return projectRegistry.getAllExperimentMetaInformation(user);
+    };
+
+    this.searchExperiments = function (user, experimentNameRegex) {
+        return projectRegistry.searchExperiments(user, experimentNameRegex);
+    };
+
+    this.getExperimentExecutionErrors = function (experimentId) {
+        return projectRegistry.getExperimentExecutionErrors(experimentId);
+    };
+
+    this.getWorkflowExecutionErrors = function (experimentId, workflowInstanceId) {
+        return projectRegistry.getWorkflowExecutionErrors(experimentId, workflowInstanceId);
+    };
+
+    this.getNodeExecutionErrors = function (experimentId, workflowInstanceId, nodeId) {
+        return projectRegistry.getNodeExecutionErrors(experimentId, workflowInstanceId, nodeId);
+    };
+
+    this.getGFacJobErrors = function (experimentId, workflowInstanceId, nodeId, gfacJobId) {
+        return projectRegistry.getGFacJobErrors(experimentId, workflowInstanceId, nodeId, gfacJobId);
+    };
+
+    this.getAllGFacJobErrors = function (gfacJobId) {
+        return projectRegistry.getAllGFacJobErrors(gfacJobId);
+    };
+
+    this.getGFacJobErrors = function (experimentId, workflowInstanceId, nodeId, gfacJobId, sourceFilter) {
+        return projectRegistry.getGFacJobErrors(experimentId, workflowInstanceId, nodeId, gfacJobId, sourceFilter);
+    };
+
+    this.addExperimentError = function (experimentExecutionError) {
+        return projectRegistry.addExperimentError(experimentExecutionError);
+    };
+
+    this.addWorkflowError = function (workflowExecutionError) {
+        return projectRegistry.addWorkflowError(workflowExecutionError);
+    };
+
+    this.addNodeExecutionError = function (nodeExecutionError) {
+        return projectRegistry.addNodeExecutionError(nodeExecutionError);
+    };
+
+    this.addGFacJobExecutionError = function (applicationJobExecutionError) {
+        return projectRegistry.addGFacJobExecutionError(applicationJobExecutionError);
+    };
+
+    this.addApplicationJob = function (applicationJob) {
+        return projectRegistry.addApplicationJob(applicationJob);
+    };
+
+    this.updateApplicationJob = function (applicationJob) {
+        return projectRegistry.updateApplicationJob(applicationJob);
+    };
+
+    this.updateApplicationJobStatus = function (gfacJobID, gfacJobStatus, statusUpdateDate) {
+        return projectRegistry.updateApplicationJobStatus(gfacJobID, gfacJobStatus, statusUpdateDate);
+    };
+
+    this.updateApplicationJobData = function (gfacJobID, jobdata) {
+        return projectRegistry.updateApplicationJobData(gfacJobID, jobdata);
+    };
+
+    this.updateApplicationJobSubmittedTime = function (gfacJobID, submittedDate) {
+        return projectRegistry.updateApplicationJobSubmittedTime(gfacJobID, submittedDate);
+    };
+
+    this.updateApplicationJobMetadata = function (gfacJobID, metadata) {
+        return projectRegistry.updateApplicationJobMetadata(gfacJobID, metadata);
+    };
+
+    this.getApplicationJob = function (gfacJobId) {
+        return projectRegistry.getApplicationJob(gfacJobId);
+    };
+
+    this.getApplicationJobsForDescriptors = function (serviceDescriptionId, hostDescriptionId) {
+        return projectRegistry.getApplicationJobsForDescriptors(serviceDescriptionId, hostDescriptionId);
+    };
+
+    this.getApplicationJobs = function (experimentId, workflowExecutionId, nodeId) {
+        return projectRegistry.getApplicationJobs(experimentId, workflowExecutionId, nodeId);
+    };
+
+    this.isApplicationJobExists = function (gfacJobId) {
+        return projectRegistry.isApplicationJobExists(gfacJobId);
+    };
+
+    this.getApplicationJobStatusHistory = function (gfacJobId) {
+        return projectRegistry.getApplicationJobStatusHistory(gfacJobId);
+    };
+
+
+// ========================================= Experiment Wrapper ==========================================
+
+
+    this.removeExperiment = function (experimentId) {
+        return experimentRegistry.removeExperiment(experimentId);
+    };
+
+    this.getExperiments = function () {
+        return experimentRegistry.getExperiments();
+    };
+
+    this.getExperimentsByProject = function (projectName) {
+        return experimentRegistry.getExperimentsByProject(projectName);
+    };
+
+    this.getExperimentsByDate = function (fromDate, toDate) {
+        return experimentRegistry.getExperimentsByDate(fromDate, toDate);
+    };
+
+    this.getExperimentsByProjectDate = function (projectName, fromDate, toDate) {
+        return experimentRegistry.getExperimentsByProjectDate(projectName, fromDate, toDate);
+    };
+
+
+    this.addExperiment = function (projectName, experimentID, submittedDate) {
+        return experimentRegistry.addExperiment(projectName, experimentID, submittedDate);
+    };
+
+
+    this.isExperimentExists = function (experimentID) {
+        return experimentRegistry.isExperimentExists(experimentID);
+    };
+
+    this.isExperimentExistsThenCreate = function (experimentID, createIfNotPresent) {
+        return experimentRegistry.isExperimentExistsThenCreate(experimentID, createIfNotPresent);
+    };
+
+// ========================================= Project Wrapper ==========================================
+
+    this.isWorkspaceProjectExists = function (projectName) {
+        return projectRegistry.isWorkspaceProjectExists(projectName);
+    };
+
+    this.isWorkspaceProjectExistsCreate = function (projectName, createIfNotPresent) {
+        return projectRegistry.isWorkspaceProjectExistsCreate(projectName, createIfNotPresent);
+    };
+
+    this.addWorkspaceProject = function (projectName) {
+        return projectRegistry.addWorkspaceProject(projectName);
+    };
+
+    this.updateWorkspaceProject = function (projectName) {
+        return projectRegistry.updateWorkspaceProject(projectName);
+    };
+
+    this.deleteWorkspaceProject = function (projectName) {
+        return projectRegistry.deleteWorkspaceProject(projectName);
+    };
+
+    this.getWorkspaceProject = function (projectName) {
+        return projectRegistry.getWorkspaceProject(projectName);
+    };
+
+    this.getWorkspaceProjects = function () {
+        return projectRegistry.getWorkspaceProjects();
+    };
+
+
+// ========================================= PublishWorkflow wrapper ==========================================
+
+
+    this.isPublishedWorkflowExists = function (workflowName) {
+        return publishWorkflowRegistry.isPublishedWorkflowExists(workflowName);
+    };
+
+    this.publishWorkflow = function (workflowName, publishWorkflowName) {
+        return publishWorkflowRegistry.publishWorkflow(workflowName, publishWorkflowName);
+    };
+
+    this.publishDefaultWorkflow = function (workflowName) {
+        return publishWorkflowRegistry.publishDefaultWorkflow(workflowName);
+    };
+
+    this.getPublishedWorkflowGraphXML = function (workflowName) {
+        return publishWorkflowRegistry.getPublishedWorkflowGraphXML(workflowName);
+    };
+
+    this.getPublishedWorkflowNames = function () {
+        return publishWorkflowRegistry.getPublishedWorkflowNames();
+    };
+
+    this.getPublishedWorkflows = function () {
+        return publishWorkflowRegistry.getPublishedWorkflows();
+    };
+
+    this.removePublishedWorkflow = function (workflowName) {
+        return publishWorkflowRegistry.removePublishedWorkflow(workflowName);
+    };
+
+// ========================================= UserWorkflow Wrapper ==========================================
+
+
+    this.isWorkflowExists = function (workflowName) {
+        return userWorkflowRegistry.isWorkflowExists(workflowName);
+    };
+
+    this.addWorkflow = function (workflowName, workflowGraphXml) {
+        return userWorkflowRegistry.addWorkflow(workflowName, workflowGraphXml);
+    };
+
+    this.updateWorkflow = function (workflowName, workflowGraphXml) {
+        return userWorkflowRegistry.updateWorkflow(workflowName, workflowGraphXml);
+    };
+
+    this.getWorkflowGraphXML = function (workflowName) {
+        return userWorkflowRegistry.getWorkflowGraphXML(workflowName);
+    };
+
+    this.getWorkflows = function () {
+        return userWorkflowRegistry.getWorkflows();
+    };
+
+    this.removeWorkflow = function (workflowName) {
+        return userWorkflowRegistry.removeWorkflow(workflowName);
+    };
+
+} // END of AiravataClient function
+
 
 // ====================================== Basic Registry Resource =====================================================
 function BasicRegistry() {
@@ -279,7 +870,7 @@ BasicRegistry.prototype.getGateWay = function () {
     gWay = sendAndReceive(url, airavataBasicHeaders, type.get, null, null);
     return gWay.responseJSON;
 
-}
+};
 
 BasicRegistry.prototype.setGateway = function (gateway) {
     var url, data, gway;
@@ -291,7 +882,7 @@ BasicRegistry.prototype.setGateway = function (gateway) {
     } else {
         return new Exception("Expected instanceof GateWay");
     }
-}
+};
 
 BasicRegistry.prototype.getUserName = function () {
     var url, user;
@@ -307,21 +898,21 @@ BasicRegistry.prototype.setAiravataUser = function (airavataUser) {
     data = JSON.stringify(airavataUser);
     res = sendAndReceive(url, optionalBasicHeaders, type.post, data, null);
     return res;
-}
+};
 
 BasicRegistry.prototype.getVersion = function () {
     var url , res;
     url = this.basicRegistryResourcePath + basicResourcePaths.VERSION;
     res = sendAndReceive(url, airavataBasicHeaders, type.get, null, null);
     return res.responseJSON;
-}
+};
 
 BasicRegistry.prototype.getConnectionURL = function () {
     var url, res;
     url = this.basicRegistryResourcePath+ basicResourcePaths.GET_SERVICE_URL;
     res = sendAndReceive(url, optionalBasicHeaders, type.get, null, null);
     return res;
-}
+};
 
 BasicRegistry.prototype.setConnectionURL = function (connectionURL) {
     var url,formParam, res;
@@ -329,7 +920,7 @@ BasicRegistry.prototype.setConnectionURL = function (connectionURL) {
     url = this.basicRegistryResourcePath + basicResourcePaths.SET_SERVICE_URL + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res;
-}
+};
 
 // ========================================= Descriptor Registry Resource ==========================================
 
@@ -356,11 +947,11 @@ var descResourcePaths = { "DESC_RESOURCE_PATH": "/descriptorsregistry/",
     "APP_DESC_ALL_DESCRIPTORS": "applicationdescriptor/alldescriptors",
     "APP_DESC_NAMES": "applicationdescriptor/names",
     "APP_DESC_DELETE": "applicationdescriptor/delete"
-}
+};
 
 function DescriptorRegistry() {
     this.descRegistryResourcePath = baseURL.BASE_RES_PATH + descResourcePaths.DESC_RESOURCE_PATH;
-}
+};
 
 DescriptorRegistry.prototype.isHostDescriptorExists = function (hostDescName) {
     var url, data, res;
@@ -368,7 +959,7 @@ DescriptorRegistry.prototype.isHostDescriptorExists = function (hostDescName) {
     data = {hostDescriptorName: hostDescName};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res;
-}
+};
 
 DescriptorRegistry.prototype.addHostDescriptor = function (hostDescriptor) {
     var url, data, res;
@@ -380,7 +971,7 @@ DescriptorRegistry.prototype.addHostDescriptor = function (hostDescriptor) {
     } else {
         // TODO throw an exception
     }
-}
+};
 
 DescriptorRegistry.prototype.updateHostDescriptor = function (updatedHostDesc) {
     var url, data, res;
@@ -392,7 +983,7 @@ DescriptorRegistry.prototype.updateHostDescriptor = function (updatedHostDesc) {
     } else {
         // TODO throw an exception
     }
-}
+};
 
 DescriptorRegistry.prototype.getHostDescriptor = function (hostName) {
     var url , data, res;
@@ -400,7 +991,7 @@ DescriptorRegistry.prototype.getHostDescriptor = function (hostName) {
     data = {hostName: hostName};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 DescriptorRegistry.prototype.removeHostDescriptor = function (hostName) {
     var url,formParam, res;
@@ -408,14 +999,14 @@ DescriptorRegistry.prototype.removeHostDescriptor = function (hostName) {
     url = this.descRegistryResourcePath + descResourcePaths.HOST_DESC_DELETE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.delete, null, null);
     return res.responseText;
-}
+};
 
 DescriptorRegistry.prototype.getHostDescriptors = function () {
     var url, res;
     url = this.descRegistryResourcePath + descResourcePaths.GET_HOST_DESCS;
     res = sendAndReceive(url, airavataBasicHeaders, type.get, null, null);
     return res.responseJOSN;
-}
+};
 
 
 DescriptorRegistry.prototype.getHostDescriptorNames = function () {
@@ -423,7 +1014,7 @@ DescriptorRegistry.prototype.getHostDescriptorNames = function () {
     url = this.descRegistryResourcePath + descResourcePaths.GET_HOST_DESCS_NAMES;
     res = sendAndReceive(url, airavataBasicHeaders, type.get, null, null);
     return res.responseJSON;
-}
+};
 
 DescriptorRegistry.prototype.isServiceDescriptorExists = function (serviceDescName) {
     var url, data, res;
@@ -431,7 +1022,7 @@ DescriptorRegistry.prototype.isServiceDescriptorExists = function (serviceDescNa
     data = {serviceDescriptorName: serviceDescName};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 DescriptorRegistry.prototype.addServiceDescriptor = function (serviceDescriptor) {
     var url, data, res;
@@ -442,7 +1033,7 @@ DescriptorRegistry.prototype.addServiceDescriptor = function (serviceDescriptor)
     } else {
         // TODO throw an exception
     }
-}
+};
 
 DescriptorRegistry.prototype.updateServiceDescriptor = function (serviceDescriptor) {
     var url, data, res;
@@ -454,7 +1045,7 @@ DescriptorRegistry.prototype.updateServiceDescriptor = function (serviceDescript
     } else {
         // TODO throw an exception
     }
-}
+};
 
 DescriptorRegistry.prototype.getServiceDescriptor = function (serviceDescName) {
     var url, data, res;
@@ -466,7 +1057,7 @@ DescriptorRegistry.prototype.getServiceDescriptor = function (serviceDescName) {
     } else {
         // TODO throw an exception
     }
-}
+};
 
 DescriptorRegistry.prototype.removeServiceDescriptor = function (serviceDescName) {
     var url, data, res;
@@ -478,14 +1069,14 @@ DescriptorRegistry.prototype.removeServiceDescriptor = function (serviceDescName
     } else {
         // TODO throw an exception
     }
-}
+};
 
 DescriptorRegistry.prototype.getServiceDescriptors = function () {
     var url, res;
     url = this.descRegistryResourcePath + descResourcePaths.GET_SERVICE_DESCS;
     res = sendAndReceive(url, airavataBasicHeaders, type.get, null, null);
     return res.responseJSON;
-}
+};
 
 DescriptorRegistry.prototype.isApplicationDescriptorExists = function (appDesc, hostName, appDescName) {
     var url, data, res;
@@ -494,7 +1085,7 @@ DescriptorRegistry.prototype.isApplicationDescriptorExists = function (appDesc, 
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseText;
     // TODO check this function
-}
+};
 
 DescriptorRegistry.prototype.addApplicationDescriptor = function (appDescriptor) {
     var url, data, res;
@@ -506,9 +1097,9 @@ DescriptorRegistry.prototype.addApplicationDescriptor = function (appDescriptor)
     } else {
         // TODO throw an exception
     }
-}
+};
 
-DescriptorRegistry.prototype.udpateApplicationDescriptor = function (appDescriptor) {
+DescriptorRegistry.prototype.updateApplicationDescriptor = function (appDescriptor) {
     var url, data, res;
     if (appDescriptor) {
         url = this.descRegistryResourcePath + descResourcePaths.APP_DESC_UPDATE;
@@ -516,7 +1107,7 @@ DescriptorRegistry.prototype.udpateApplicationDescriptor = function (appDescript
         res = sendAndReceive(url, airavataBasicHeaders, type.post, data, null);
         return res.responseJSON;
     }
-}
+};
 
 DescriptorRegistry.prototype.getApplicationDescriptor = function (serviceName, hostName, applicationName) {
     var url, data, res;
@@ -532,7 +1123,7 @@ DescriptorRegistry.prototype.getApplicationDescriptorPerServiceHost = function (
     data = {serviceName: serviceName, hostName: hostName };
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 DescriptorRegistry.prototype.getApplicationDescriptors = function (serviceName) {
     var url, data, res;
@@ -541,22 +1132,19 @@ DescriptorRegistry.prototype.getApplicationDescriptors = function (serviceName) 
         data = {serviceName: serviceName};
         res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
         return res.responseJSON;
+    }else{
+        url = this.descRegistryResourcePath + descResourcePaths.APP_DESC_ALL_DESCRIPTORS;
+        res = sendAndReceive(url, airavataBasicHeaders, type.get, null, null);
+        return res.responseJSON;
     }
-}
-
-DescriptorRegistry.prototype.getApplicationDescriptors = function () {
-    var url , res;
-    url = this.descRegistryResourcePath + descResourcePaths.APP_DESC_ALL_DESCRIPTORS;
-    res = sendAndReceive(url, airavataBasicHeaders, type.get, null, null);
-    return res.responseJSON;
-}
+};
 
 DescriptorRegistry.prototype.getApplicationDescriptorNames = function () {
     var url , res;
     url = this.descRegistryResourcePath + descResourcePaths.APP_DESC_NAMES;
     res = sendAndReceive(url, airavataBasicHeaders, type.get, null, null);
     return res.responseJSON;
-}
+};
 
 DescriptorRegistry.prototype.removeApplicationDescriptor = function (serviceName, hostName, appName) {
     var url , data, res;
@@ -564,7 +1152,7 @@ DescriptorRegistry.prototype.removeApplicationDescriptor = function (serviceName
     data = {serviceName: serviceName, hostName: hostName, appName: appName};
     res = sendAndReceive(url, airavataBasicHeaders, type.delete, data, null);
     return res.responseJSON;
-}
+};
 
 // ========================================= Configuration Registry Resource ==========================================
 
@@ -613,7 +1201,7 @@ ConfigurationRegistry.prototype.getConfiguration = function (key) {
     } else {
         // TODO throw an exception
     }
-}
+};
 
 ConfigurationRegistry.prototype.getConfigurationList = function (key) {
     var url , data , res;
@@ -625,7 +1213,7 @@ ConfigurationRegistry.prototype.getConfigurationList = function (key) {
     } else {
         // TODO throw an exception
     }
-}
+};
 
 ConfigurationRegistry.prototype.setConfiguration = function (key, value, date) {
     var url,formParam, res;
@@ -633,7 +1221,7 @@ ConfigurationRegistry.prototype.setConfiguration = function (key, value, date) {
     url = this.configResorcePath + configResourcePathConstants.SAVE_CONFIGURATION + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.updateConfiguration = function (key, value, date) {
     var url,formParam, res;
@@ -641,7 +1229,7 @@ ConfigurationRegistry.prototype.updateConfiguration = function (key, value, date
     url = this.configResorcePath + configResourcePathConstants.UPDATE_CONFIGURATION + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.removeAllConfiguration = function (key) {
     var url , res;
@@ -649,7 +1237,7 @@ ConfigurationRegistry.prototype.removeAllConfiguration = function (key) {
     data = {key: key};
     res = sendAndReceive(url, optionalBasicHeaders, type.delete, data, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.removeConfiguration = function (key, value) {
     var url, data , res;
@@ -657,35 +1245,35 @@ ConfigurationRegistry.prototype.removeConfiguration = function (key, value) {
     data = {key: key, value: value};
     res = sendAndReceive(url, optionalBasicHeaders, type.delete, data, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.getGFacURIs = function () {
     var url, res;
     url = this.configResorcePath + configResourcePathConstants.GET_GFAC_URI_LIST;
     res = sendAndReceive(url, optionalBasicHeaders, type.get, null, null);
     return res.responseJSON;
-}
+};
 
 ConfigurationRegistry.prototype.getWorkflowInterpreterURIs = function () {
     var url, res;
     url = this.configResorcePath + configResourcePathConstants.GET_WFINTERPRETER_URI_LIST;
     res = sendAndReceive(url, airavataBasicHeaders, type.get, null, null);
     return res.responseJSON;
-}
+};
 
 ConfigurationRegistry.prototype.getEventingServiceURI = function () {
     var url, res;
     url = this.configResorcePath + configResourcePathConstants.GET_EVENTING_URI;
     res = sendAndReceive(url, optionalBasicHeaders, type.get, null, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.getMessageBoxURI = function () {
     var url, res;
     url = this.configResorcePath + configResourcePathConstants.GET_MESSAGE_BOX_URI;
     res = sendAndReceive(url, optionalBasicHeaders, type.get, null, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.addGFacURI = function (uri) {
     var url,formParam, res;
@@ -693,7 +1281,7 @@ ConfigurationRegistry.prototype.addGFacURI = function (uri) {
     url = this.configResorcePath + configResourcePathConstants.ADD_GFAC_URI + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.addWorkflowInterpreterURI = function (uri) {
     var url,formParam, res;
@@ -705,7 +1293,7 @@ ConfigurationRegistry.prototype.addWorkflowInterpreterURI = function (uri) {
     } else {
         // TODO throw an exception
     }
-}
+};
 
 ConfigurationRegistry.prototype.setEventingURI = function (uri) {
     var url,formParam, res;
@@ -717,7 +1305,7 @@ ConfigurationRegistry.prototype.setEventingURI = function (uri) {
     } else {
         // TODO throw an exception
     }
-}
+};
 
 ConfigurationRegistry.prototype.setMessageBoxURI = function (uri) {
     var url, formParam, res;
@@ -729,7 +1317,7 @@ ConfigurationRegistry.prototype.setMessageBoxURI = function (uri) {
     } else {
         // TODO throw an exception
     }
-}
+};
 
 
 ConfigurationRegistry.prototype.addGFacURIByDate = function (uri, date) {
@@ -738,7 +1326,7 @@ ConfigurationRegistry.prototype.addGFacURIByDate = function (uri, date) {
     url = this.configResorcePath + configResourcePathConstants.ADD_GFAC_URI_DATE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.addWorkflowInterpreterURI = function (uri, date) {
     var url, formParam, res;
@@ -746,7 +1334,7 @@ ConfigurationRegistry.prototype.addWorkflowInterpreterURI = function (uri, date)
     url = this.configResorcePath + configResourcePathConstants.ADD_WFINTERPRETER_URI_DATE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.setEventingURIByDate = function (uri, date) {
     var url, formParam, res;
@@ -754,7 +1342,7 @@ ConfigurationRegistry.prototype.setEventingURIByDate = function (uri, date) {
     url = this.configResorcePath + configResourcePathConstants.ADD_EVENTING_URI_DATE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.setMessageBoxURIByDate = function (uri, date) {
     var url, formParam, res;
@@ -762,7 +1350,7 @@ ConfigurationRegistry.prototype.setMessageBoxURIByDate = function (uri, date) {
     url = this.configResorcePath + configResourcePathConstants.ADD_MSG_BOX_URI_DATE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.removeGFacURI = function (uri) {
     var url, data, res;
@@ -774,14 +1362,14 @@ ConfigurationRegistry.prototype.removeGFacURI = function (uri) {
     } else {
         // TODO throw an exception
     }
-}
+};
 
 ConfigurationRegistry.prototype.removeAllGFacURI = function () {
     var url, res;
     url = this.configResorcePath + configResourcePathConstants.DELETE_ALL_GFAC_URIS;
     res = sendAndReceive(url, optionalBasicHeaders, type.delete, null, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.removeWorkflowInterpreterURI = function (uri) {
     var url, data, res;
@@ -789,28 +1377,28 @@ ConfigurationRegistry.prototype.removeWorkflowInterpreterURI = function (uri) {
     data = {uri: uri};
     res = sendAndReceive(url, optionalBasicHeaders, type.delete, data, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.removeAllWorkflowInterpreterURI = function () {
     var url, res;
     url = this.configResorcePath + configResourcePathConstants.DELETE_ALL_WFINTERPRETER_URIS;
     res = sendAndReceive(url, optionalBasicHeaders, type.delete, null, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.unsetEventingURI = function () {
     var url, res;
     url = this.configResorcePath + configResourcePathConstants.DELETE_EVENTING_URI;
     res = sendAndReceive(url, optionalBasicHeaders, type.delete, null, null);
     return res.responseText;
-}
+};
 
 ConfigurationRegistry.prototype.unsetMessageBoxUwRI = function () {
     var url, res;
     url = this.configResorcePath + configResourcePathConstants.DELETE_MSG_BOX_URI;
     res = sendAndReceive(url, optionalBasicHeaders, type.delete, null, null);
     return res.responseText;
-}
+};
 
 
 // ========================================= Provenance Registry Resource ==========================================
@@ -891,7 +1479,7 @@ ProvenanceRegistry.prototype.updateExperimentExecutionUser = function (experimen
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_EXPERIMENT_EXECUTIONUSER + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.getExperimentExecutionUser = function (experimentId) {
     var url, data, res;
@@ -899,7 +1487,7 @@ ProvenanceRegistry.prototype.getExperimentExecutionUser = function (experimentId
     data = {experimentId: experimentId};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.getExperimentName = function (experimentId) {
     var url, data, res;
@@ -907,7 +1495,7 @@ ProvenanceRegistry.prototype.getExperimentName = function (experimentId) {
     data = {experimentId: experimentId};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.updateExperimentName = function (experimentId, experimentName) {
     var url, formParam, res;
@@ -915,7 +1503,7 @@ ProvenanceRegistry.prototype.updateExperimentName = function (experimentId, expe
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_EXPERIMENTNAME + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.getExperimentMetadata = function (experimentId) {
     var url, data, res;
@@ -923,7 +1511,7 @@ ProvenanceRegistry.prototype.getExperimentMetadata = function (experimentId) {
     data = {experimentId: experimentId};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 
 ProvenanceRegistry.prototype.updateExperimentMetadata = function (experimentId, metadata) {
@@ -932,7 +1520,7 @@ ProvenanceRegistry.prototype.updateExperimentMetadata = function (experimentId, 
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_EXPERIMENTMETADATA + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 
 ProvenanceRegistry.prototype.getWorkflowExecutionTemplateName = function (workflowInstanceId) {
@@ -941,7 +1529,7 @@ ProvenanceRegistry.prototype.getWorkflowExecutionTemplateName = function (workfl
     data = {workflowInstanceId: workflowInstanceId};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 
 ProvenanceRegistry.prototype.setWorkflowInstanceTemplateName = function (workflowInstanceId, templateName) {
@@ -950,7 +1538,7 @@ ProvenanceRegistry.prototype.setWorkflowInstanceTemplateName = function (workflo
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_WORKFLOWINSTANCETEMPLATENAME + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.getExperimentWorkflowInstances = function (experimentId) {
     var url, data, res;
@@ -958,7 +1546,7 @@ ProvenanceRegistry.prototype.getExperimentWorkflowInstances = function (experime
     data = {experimentId: experimentId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.isWorkflowInstanceExists = function (instanceId) {
     var url, data, res;
@@ -966,7 +1554,7 @@ ProvenanceRegistry.prototype.isWorkflowInstanceExists = function (instanceId) {
     data = {instanceId: instanceId};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.isWorkflowInstanceExistsThenCreate = function (instanceId, createIfNotPresent) {
     var url, formParam, res;
@@ -974,7 +1562,7 @@ ProvenanceRegistry.prototype.isWorkflowInstanceExistsThenCreate = function (inst
     url = this.provenanceResourcePath + provenanceResourcePathConstants.WORKFLOWINSTANCE_EXIST_CREATE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.updateWorkflowInstanceStatusByInstance = function (instanceId, executionStatus) {
     var url, formParam, res;
@@ -982,7 +1570,7 @@ ProvenanceRegistry.prototype.updateWorkflowInstanceStatusByInstance = function (
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_WORKFLOWINSTANCESTATUS_INSTANCEID + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.updateWorkflowInstanceStatus = function (workflowInstanceId, executionStatus, statusUpdateTime) {
     var url, formParam, res;
@@ -990,7 +1578,7 @@ ProvenanceRegistry.prototype.updateWorkflowInstanceStatus = function (workflowIn
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_WORKFLOWINSTANCESTATUS + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.getWorkflowInstanceStatus = function (instanceId) {
     var url, data, res;
@@ -998,7 +1586,7 @@ ProvenanceRegistry.prototype.getWorkflowInstanceStatus = function (instanceId) {
     data = {instanceId: instanceId};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.updateWorkflowNodeInput = function (nodeId, workflowInstanceId, data) {
     var url, formParam, res;
@@ -1006,7 +1594,7 @@ ProvenanceRegistry.prototype.updateWorkflowNodeInput = function (nodeId, workflo
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_WORKFLOWNODEINPUT + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.updateWorkflowNodeOutput = function (nodeId, workflowInstanceId, data) {
     var url, formParam, res;
@@ -1014,7 +1602,7 @@ ProvenanceRegistry.prototype.updateWorkflowNodeOutput = function (nodeId, workfl
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_WORKFLOWNODEOUTPUT + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.getExperiment = function (experimentId) {
     var url, data, res;
@@ -1022,7 +1610,7 @@ ProvenanceRegistry.prototype.getExperiment = function (experimentId) {
     data = {experimentId: experimentId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.getExperimentIdByUser = function (username) {
     var url, data, res;
@@ -1030,7 +1618,7 @@ ProvenanceRegistry.prototype.getExperimentIdByUser = function (username) {
     data = {username: username};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.getExperimentByUser = function (username) {
     var url, data, res;
@@ -1038,7 +1626,7 @@ ProvenanceRegistry.prototype.getExperimentByUser = function (username) {
     data = {username: username};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 
 ProvenanceRegistry.prototype.updateWorkflowNodeStatus = function (workflowInstanceId, nodeId, executionStatus) {
@@ -1047,15 +1635,15 @@ ProvenanceRegistry.prototype.updateWorkflowNodeStatus = function (workflowInstan
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_WORKFLOWNODEOUTPUT + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
-ProvenanceRegistry.prototype.getExperimentByUser = function (workflowInstanceId, nodeId) {
+ProvenanceRegistry.prototype.getWorkflowNodeStatus = function (workflowInstanceId, nodeId) {
     var url, data, res;
     url = this.provenanceResourcePath + provenanceResourcePathConstants.GET_WORKFLOWNODE_STATUS;
     data = {workflowInstanceId: workflowInstanceId, nodeId: nodeId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.getWorkflowNodeStartTime = function (workflowInstanceId, nodeId) {
     var url, data, res;
@@ -1063,7 +1651,7 @@ ProvenanceRegistry.prototype.getWorkflowNodeStartTime = function (workflowInstan
     data = {workflowInstanceId: workflowInstanceId, nodeId: nodeId};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.getWorkflowStartTime = function (workflowInstanceId) {
     var url, data, res;
@@ -1071,7 +1659,7 @@ ProvenanceRegistry.prototype.getWorkflowStartTime = function (workflowInstanceId
     data = {workflowInstanceId: workflowInstanceId};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.updateWorkflowNodeGramData = function (workflowNodeGramData) {
     var url, data, res;
@@ -1083,7 +1671,7 @@ ProvenanceRegistry.prototype.updateWorkflowNodeGramData = function (workflowNode
     } else {
         // TODO throw an exception
     }
-}
+};
 
 ProvenanceRegistry.prototype.getWorkflowInstanceData = function (workflowInstanceId) {
     var url, data, res;
@@ -1091,7 +1679,7 @@ ProvenanceRegistry.prototype.getWorkflowInstanceData = function (workflowInstanc
     data = {workflowInstanceId: workflowInstanceId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.isWorkflowInstanceNodePresent = function (workflowInstanceId, nodeId) {
     var url, data, res;
@@ -1099,7 +1687,7 @@ ProvenanceRegistry.prototype.isWorkflowInstanceNodePresent = function (workflowI
     data = {workflowInstanceId: workflowInstanceId, nodeId: nodeId};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.isWorkflowInstanceNodePresentCreate = function (workflowInstanceId, nodeId, createIfNotPresent) {
     var url, formParam, res;
@@ -1107,7 +1695,7 @@ ProvenanceRegistry.prototype.isWorkflowInstanceNodePresentCreate = function (wor
     url = this.provenanceResourcePath + provenanceResourcePathConstants.WORKFLOWINSTANCE_NODE_EXIST_CREATE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.getWorkflowInstanceNodeData = function (workflowInstanceId, nodeId) {
     var url, data, res;
@@ -1115,7 +1703,7 @@ ProvenanceRegistry.prototype.getWorkflowInstanceNodeData = function (workflowIns
     data = {workflowInstanceId: workflowInstanceId, nodeId: nodeId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.addWorkflowInstance = function (experimentId, workflowInstanceId, templateName) {
     var url, formParam, res;
@@ -1123,23 +1711,23 @@ ProvenanceRegistry.prototype.addWorkflowInstance = function (experimentId, workf
     url = this.provenanceResourcePath + provenanceResourcePathConstants.ADD_WORKFLOWINSTANCE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
-ProvenanceRegistry.prototype.addWorkflowInstance = function (workflowInstanceId, nodeId, nodeType) {
+ProvenanceRegistry.prototype.updateWorkflowNodeType = function (workflowInstanceId, nodeId, nodeType) {
     var url, formParam, res;
     formParam = "?workflowInstanceId=" + workflowInstanceId + "&nodeId=" + nodeId + "&nodeType=" + nodeType;
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_WORKFLOWNODETYPE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
-ProvenanceRegistry.prototype.addWorkflowInstance = function (workflowInstanceId, nodeId) {
+ProvenanceRegistry.prototype.addWorkflowInstanceNode = function (workflowInstanceId, nodeId) {
     var url, formParam, res;
     formParam = "?workflowInstanceId=" + workflowInstanceId + "&nodeId=" + nodeId;
     url = this.provenanceResourcePath + provenanceResourcePathConstants.ADD_WORKFLOWINSTANCENODE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.isExperimentNameExist = function (experimentName) {
     var url, data, res;
@@ -1147,7 +1735,7 @@ ProvenanceRegistry.prototype.isExperimentNameExist = function (experimentName) {
     data = {experimentName: experimentName};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.getExperimentMetaInformation = function (experimentId) {
     var url, data, res;
@@ -1155,7 +1743,7 @@ ProvenanceRegistry.prototype.getExperimentMetaInformation = function (experiment
     data = {experimentId: experimentId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.getAllExperimentMetaInformation = function (user) {
     var url, data, res;
@@ -1163,7 +1751,7 @@ ProvenanceRegistry.prototype.getAllExperimentMetaInformation = function (user) {
     data = {user: user};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.searchExperiments = function (user, experimentNameRegex) {
     var url, data, res;
@@ -1171,7 +1759,7 @@ ProvenanceRegistry.prototype.searchExperiments = function (user, experimentNameR
     data = {user: user, experimentNameRegex: experimentNameRegex};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.getExperimentExecutionErrors = function (experimentId) {
     var url, data, res;
@@ -1179,7 +1767,7 @@ ProvenanceRegistry.prototype.getExperimentExecutionErrors = function (experiment
     data = {experimentId: experimentId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.getWorkflowExecutionErrors = function (experimentId, workflowInstanceId) {
     var url, data, res;
@@ -1187,7 +1775,7 @@ ProvenanceRegistry.prototype.getWorkflowExecutionErrors = function (experimentId
     data = {experimentId: experimentId, workflowInstanceId: workflowInstanceId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.getNodeExecutionErrors = function (experimentId, workflowInstanceId, nodeId) {
     var url, data, res;
@@ -1195,7 +1783,7 @@ ProvenanceRegistry.prototype.getNodeExecutionErrors = function (experimentId, wo
     data = {experimentId: experimentId, workflowInstanceId: workflowInstanceId, nodeId: nodeId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.getGFacJobErrors = function (experimentId, workflowInstanceId, nodeId, gfacJobId) {
     var url, data, res;
@@ -1203,7 +1791,7 @@ ProvenanceRegistry.prototype.getGFacJobErrors = function (experimentId, workflow
     data = {experimentId: experimentId, workflowInstanceId: workflowInstanceId, nodeId: nodeId, gfacJobId: gfacJobId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.getAllGFacJobErrors = function (gfacJobId) {
     var url, data, res;
@@ -1211,7 +1799,7 @@ ProvenanceRegistry.prototype.getAllGFacJobErrors = function (gfacJobId) {
     data = {gfacJobId: gfacJobId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.getGFacJobErrors = function (experimentId, workflowInstanceId, nodeId, gfacJobId, sourceFilter) {
     var url, data, res;
@@ -1219,7 +1807,7 @@ ProvenanceRegistry.prototype.getGFacJobErrors = function (experimentId, workflow
     data = {experimentId: experimentId, workflowInstanceId: workflowInstanceId, nodeId: nodeId, gfacJobId: gfacJobId, sourceFilter: sourceFilter};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.addExperimentError = function (experimentExecutionError) {
     var url, data, res;
@@ -1231,7 +1819,7 @@ ProvenanceRegistry.prototype.addExperimentError = function (experimentExecutionE
     } else {
         // TODO throw an exception
     }
-}
+};
 
 ProvenanceRegistry.prototype.addWorkflowError = function (workflowExecutionError) {
     var url, data, res;
@@ -1243,7 +1831,7 @@ ProvenanceRegistry.prototype.addWorkflowError = function (workflowExecutionError
     } else {
         // TODO throw an exception
     }
-}
+};
 
 ProvenanceRegistry.prototype.addNodeExecutionError = function (nodeExecutionError) {
     var url, data, res;
@@ -1255,7 +1843,7 @@ ProvenanceRegistry.prototype.addNodeExecutionError = function (nodeExecutionErro
     } else {
         // TODO throw an exception
     }
-}
+};
 
 ProvenanceRegistry.prototype.addGFacJobExecutionError = function (applicationJobExecutionError) {
     var url, data, res;
@@ -1267,7 +1855,7 @@ ProvenanceRegistry.prototype.addGFacJobExecutionError = function (applicationJob
     } else {
         // TODO throw an exception
     }
-}
+};
 
 ProvenanceRegistry.prototype.addApplicationJob = function (applicationJob) {
     var url, data, res;
@@ -1279,9 +1867,9 @@ ProvenanceRegistry.prototype.addApplicationJob = function (applicationJob) {
     } else {
         // TODO throw an exception
     }
-}
+};
 
-ProvenanceRegistry.prototype.addApplicationJob = function (applicationJob) {
+ProvenanceRegistry.prototype.updateApplicationJob = function (applicationJob) {
     var url, data, res;
     if (applicationJob instanceof ApplicationJob) {
         url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_APPLICATION_JOB;
@@ -1291,7 +1879,7 @@ ProvenanceRegistry.prototype.addApplicationJob = function (applicationJob) {
     } else {
         // TODO throw an exception
     }
-}
+};
 
 ProvenanceRegistry.prototype.updateApplicationJobStatus = function (gfacJobID, gfacJobStatus, statusUpdateDate) {
     var url, formParam, res;
@@ -1299,7 +1887,7 @@ ProvenanceRegistry.prototype.updateApplicationJobStatus = function (gfacJobID, g
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_APPLICATION_JOB_STATUS + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.updateApplicationJobData = function (gfacJobID, jobdata) {
     var url, formParam, res;
@@ -1307,7 +1895,7 @@ ProvenanceRegistry.prototype.updateApplicationJobData = function (gfacJobID, job
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_APPLICATION_JOB_DATA + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.updateApplicationJobSubmittedTime = function (gfacJobID, submittedDate) {
     var url, formParam, res;
@@ -1315,7 +1903,7 @@ ProvenanceRegistry.prototype.updateApplicationJobSubmittedTime = function (gfacJ
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_APPLICATION_JOB_SUBMITTED_TIME + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.updateApplicationJobMetadata = function (gfacJobID, metadata) {
     var url, formParam, res;
@@ -1323,7 +1911,7 @@ ProvenanceRegistry.prototype.updateApplicationJobMetadata = function (gfacJobID,
     url = this.provenanceResourcePath + provenanceResourcePathConstants.UPDATE_APPLICATION_JOB_METADATA + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.getApplicationJob = function (gfacJobId) {
     var url, data, res;
@@ -1331,7 +1919,7 @@ ProvenanceRegistry.prototype.getApplicationJob = function (gfacJobId) {
     data = {gfacJobId: gfacJobId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.getApplicationJobsForDescriptors = function (serviceDescriptionId, hostDescriptionId) {
     var url, data, res;
@@ -1339,7 +1927,7 @@ ProvenanceRegistry.prototype.getApplicationJobsForDescriptors = function (servic
     data = {serviceDescriptionId: serviceDescriptionId, hostDescriptionId: hostDescriptionId, applicationDescriptionId: applicationDescriptionId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.getApplicationJobs = function (experimentId, workflowExecutionId, nodeId) {
     var url, data, res;
@@ -1347,7 +1935,7 @@ ProvenanceRegistry.prototype.getApplicationJobs = function (experimentId, workfl
     data = {experimentId: experimentId, workflowExecutionId: workflowExecutionId, nodeId: nodeId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProvenanceRegistry.prototype.isApplicationJobExists = function (gfacJobId) {
     var url, data, res;
@@ -1355,7 +1943,7 @@ ProvenanceRegistry.prototype.isApplicationJobExists = function (gfacJobId) {
     data = {gfacJobId: gfacJobId};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 ProvenanceRegistry.prototype.getApplicationJobStatusHistory = function (gfacJobId) {
     var url, data, res;
@@ -1363,7 +1951,7 @@ ProvenanceRegistry.prototype.getApplicationJobStatusHistory = function (gfacJobI
     data = {gfacJobId: gfacJobId};
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 
 // ========================================= Experiment Registry Resource ==========================================
@@ -1378,7 +1966,7 @@ var experimentResourcePathConstants = {
     ADD_EXP: "add/experiment",
     EXP_EXISTS: "experiment/exist",
     EXP_EXISTS_CREATE: "experiment/notexist/create"
-}
+};
 
 function ExperimentRegistry() {
     this.experimentRegistryPath = baseURL.BASE_RES_PATH + experimentResourcePathConstants.EXP_RESOURCE_PATH;
@@ -1394,7 +1982,7 @@ ExperimentRegistry.prototype.removeExperiment = function (experimentId) {
     } else {
         // TODO throw an exception
     }
-}
+};
 
 ExperimentRegistry.prototype.getExperiments = function () {
     var url , data, res;
@@ -1402,15 +1990,15 @@ ExperimentRegistry.prototype.getExperiments = function () {
     data = { experimentId: experimentId}
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
-ExperimentRegistry.prototype.getExperimentsByDate = function (projectName) {
+ExperimentRegistry.prototype.getExperimentsByProject = function (projectName) {
     var url , data, res;
     url = this.experimentRegistryPath + experimentResourcePathConstants.GET_EXPS_BY_PROJECT;
     data = {projectName: projectName}
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ExperimentRegistry.prototype.getExperimentsByDate = function (fromDate, toDate) {
     var url , data, res;
@@ -1418,7 +2006,7 @@ ExperimentRegistry.prototype.getExperimentsByDate = function (fromDate, toDate) 
     data = {fromDate: fromDate, toDate: toDate}
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ExperimentRegistry.prototype.getExperimentsByProjectDate = function (projectName, fromDate, toDate) {
     var url , data, res;
@@ -1426,7 +2014,7 @@ ExperimentRegistry.prototype.getExperimentsByProjectDate = function (projectName
     data = {projectName: projectName, fromDate: fromDate, toDate: toDate}
     res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 
 ExperimentRegistry.prototype.addExperiment = function (projectName, experimentID, submittedDate) {
@@ -1435,7 +2023,7 @@ ExperimentRegistry.prototype.addExperiment = function (projectName, experimentID
     url = this.experimentRegistryPath + experimentResourcePathConstants.GET_EXPS_PER_PROJECT_BY_DATE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 
 ExperimentRegistry.prototype.isExperimentExists = function (experimentID) {
@@ -1444,7 +2032,7 @@ ExperimentRegistry.prototype.isExperimentExists = function (experimentID) {
     data = {experimentID: experimentID}
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 ExperimentRegistry.prototype.isExperimentExistsThenCreate = function (experimentID, createIfNotPresent) {
     var url , formParam, res;
@@ -1452,7 +2040,7 @@ ExperimentRegistry.prototype.isExperimentExistsThenCreate = function (experiment
     url = this.experimentRegistryPath + experimentResourcePathConstants.EXP_EXISTS_CREATE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 // ========================================= Project Registry Resource ==========================================
 
@@ -1466,7 +2054,7 @@ var projectResourcePathConstant = {
     DELETE_PROJECT: "delete/project",
     GET_PROJECT: "get/project",
     GET_PROJECTS: "get/projects"
-}
+};
 
 function ProjectRegistry() {
     this.projectRegistryPath = baseURL.BASE_RES_PATH + projectResourcePathConstant.REGISTRY_API_PROJECTREGISTRY;
@@ -1479,7 +2067,7 @@ ProjectRegistry.prototype.isWorkspaceProjectExists = function (projectName) {
     data = {projectName: projectName};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 ProjectRegistry.prototype.isWorkspaceProjectExistsCreate = function (projectName, createIfNotPresent) {
     var url , formParam, res;
@@ -1487,7 +2075,7 @@ ProjectRegistry.prototype.isWorkspaceProjectExistsCreate = function (projectName
     url = this.projectRegistryPath + projectResourcePathConstant.PROJECT_EXIST_CREATE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProjectRegistry.prototype.addWorkspaceProject = function (projectName) {
     var url , formParam, res;
@@ -1495,7 +2083,7 @@ ProjectRegistry.prototype.addWorkspaceProject = function (projectName) {
     url = this.projectRegistryPath + projectResourcePathConstant.PROJECT_EXIST_CREATE + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProjectRegistry.prototype.updateWorkspaceProject = function (projectName) {
     var url , formParam, res;
@@ -1503,7 +2091,7 @@ ProjectRegistry.prototype.updateWorkspaceProject = function (projectName) {
     url = this.projectRegistryPath + projectResourcePathConstant.UPDATE_PROJECT + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 ProjectRegistry.prototype.deleteWorkspaceProject = function (projectName) {
     var url, data, res;
@@ -1511,7 +2099,7 @@ ProjectRegistry.prototype.deleteWorkspaceProject = function (projectName) {
     data = {projectName: projectName};
     res = sendAndReceive(url, optionalBasicHeaders, type.delete, data, null);
     return res.responseText;
-}
+};
 
 ProjectRegistry.prototype.getWorkspaceProject = function (projectName) {
     var url, data, res;
@@ -1519,14 +2107,14 @@ ProjectRegistry.prototype.getWorkspaceProject = function (projectName) {
     data = {projectName: projectName};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseJSON;
-}
+};
 
 ProjectRegistry.prototype.getWorkspaceProjects = function () {
     var url, data, res;
     url = this.projectRegistryPath + projectResourcePathConstant.GET_PROJECTS;
     res = sendAndReceive(url, optionalBasicHeaders, type.get, null, null);
     return res.responseJSON;
-}
+};
 
 
 // ========================================= PublishWorkflow Registry Resource ==========================================
@@ -1542,7 +2130,7 @@ var publishedWFConstants = {
     GET_PUBLISHWORKFLOWNAMES: "get/publishworkflownames",
     GET_PUBLISHWORKFLOWS: "get/publishworkflows",
     REMOVE_PUBLISHWORKFLOW: "remove/publishworkflow"
-}
+};
 
 function PublishWorkflowRegistry() {
     this.publishWorkflowResourcePath = baseURL.BASE_RES_PATH + publishedWFConstants.REGISTRY_API_PUBLISHWFREGISTRY;
@@ -1554,7 +2142,7 @@ PublishWorkflowRegistry.prototype.isPublishedWorkflowExists = function (workflow
     data = {workflowName: workflowName};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 PublishWorkflowRegistry.prototype.publishWorkflow = function (workflowName, publishWorkflowName) {
     var url , formParam, res;
@@ -1562,7 +2150,7 @@ PublishWorkflowRegistry.prototype.publishWorkflow = function (workflowName, publ
     url = this.publishWorkflowResourcePath + publishedWFConstants.PUBLISH_WORKFLOW + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 PublishWorkflowRegistry.prototype.publishDefaultWorkflow = function (workflowName) {
     var url , formParam, res;
@@ -1570,7 +2158,7 @@ PublishWorkflowRegistry.prototype.publishDefaultWorkflow = function (workflowNam
     url = this.publishWorkflowResourcePath + publishedWFConstants.PUBLISH_DEFAULT_WORKFLOW + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 PublishWorkflowRegistry.prototype.getPublishedWorkflowGraphXML = function (workflowName) {
     var url, data, res;
@@ -1579,21 +2167,21 @@ PublishWorkflowRegistry.prototype.getPublishedWorkflowGraphXML = function (workf
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     // TODO this will return xml file, fix this to return JSON object
     return res.responseText;
-}
+};
 
 PublishWorkflowRegistry.prototype.getPublishedWorkflowNames = function () {
     var url, res;
     url = this.publishWorkflowResourcePath + publishedWFConstants.GET_PUBLISHWORKFLOWNAMES;
     res = sendAndReceive(url, airavataBasicHeaders, type.get, null, null);
     return res.responseJSON;
-}
+};
 
 PublishWorkflowRegistry.prototype.getPublishedWorkflows = function () {
     var url, res;
     url = this.publishWorkflowResourcePath + publishedWFConstants.GET_PUBLISHWORKFLOWS;
     res = sendAndReceive(url, airavataBasicHeaders, type.get, null, null);
     return res.responseJSON;
-}
+};
 
 PublishWorkflowRegistry.prototype.removePublishedWorkflow = function (workflowName) {
     var url, data, res;
@@ -1601,9 +2189,9 @@ PublishWorkflowRegistry.prototype.removePublishedWorkflow = function (workflowNa
     data = {workflowName: workflowName};
     res = sendAndReceive(url, optionalBasicHeaders, type.delete, data, null);
     return res.responseText;
-}
+};
 
-// ========================================= PublishWorkflow Registry Resource ==========================================
+// ========================================= UserWorkflow Registry Resource ==========================================
 
 
 var userWFConstants = {
@@ -1615,7 +2203,7 @@ var userWFConstants = {
     GET_WORKFLOWGRAPH: "get/workflowgraph",
     GET_WORKFLOWS: "get/workflows",
     REMOVE_WORKFLOW: "remove/workflow"
-}
+};
 
 function UserWorkflowRegistry() {
     this.userWorkflowResourcePath = baseURL.BASE_RES_PATH + userWFConstants.REGISTRY_API_USERWFREGISTRY;
@@ -1627,7 +2215,7 @@ UserWorkflowRegistry.prototype.isWorkflowExists = function (workflowName) {
     data = {workflowName: workflowName};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 UserWorkflowRegistry.prototype.addWorkflow = function (workflowName, workflowGraphXml) {
     var url , formParam, res;
@@ -1635,7 +2223,7 @@ UserWorkflowRegistry.prototype.addWorkflow = function (workflowName, workflowGra
     url = this.userWorkflowResourcePath + userWFConstants.ADD_WORKFLOW + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 UserWorkflowRegistry.prototype.updateWorkflow = function (workflowName, workflowGraphXml) {
     var url , formParam, res;
@@ -1643,7 +2231,7 @@ UserWorkflowRegistry.prototype.updateWorkflow = function (workflowName, workflow
     url = this.userWorkflowResourcePath + userWFConstants.UPDATE_WORKFLOW + formParam;
     res = sendAndReceive(url, formBasicHeaders, type.post, null, null);
     return res.responseText;
-}
+};
 
 UserWorkflowRegistry.prototype.getWorkflowGraphXML = function (workflowName) {
     var url, data, res;
@@ -1651,14 +2239,14 @@ UserWorkflowRegistry.prototype.getWorkflowGraphXML = function (workflowName) {
     data = {workflowName: workflowName};
     res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
     return res.responseText;
-}
+};
 
 UserWorkflowRegistry.prototype.getWorkflows = function () {
     var url, res;
     url = this.userWorkflowResourcePath + userWFConstants.GET_WORKFLOWS;
     res = sendAndReceive(url, optionalBasicHeaders, type.get, null, null);
     return res.responseJSON;
-}
+};
 
 UserWorkflowRegistry.prototype.removeWorkflow = function (workflowName) {
     var url, data, res;
@@ -1666,4 +2254,4 @@ UserWorkflowRegistry.prototype.removeWorkflow = function (workflowName) {
     data = {workflowName: workflowName};
     res = sendAndReceive(url, optionalBasicHeaders, type.delete, data, null);
     return res.responseText;
-}
+};
