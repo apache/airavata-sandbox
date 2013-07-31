@@ -17,52 +17,22 @@
   under the License.
 -->
 <div ng-controller="RegistryConnection">
-  <form style="padding:10px;" ng-model="ConnectionParams">
+  <form style="padding:10px;" ng-submit="connectToRegistry()">
     <fieldset>
       <legend>Connect to Airavata</legend>
-      <label for="field-registryUrl">Registry URL</label>
-      <input id="field-registryUrl" type="text" placeholder="http://localhost:8080/airavata-registry/api" ng-model="registry.url" required>
-      <label for="field-gateway">Gateway</label>
-      <input id="field-gateway" type="text" placeholder="default" ng-model="registry.gateway" required>
-      <label for="field-username">Username</label>
-      <input id="field-username" type="text" placeholder="admin" ng-model="registry.username" required>
-      <label for="field-password">Password</label>
-      <input id="field-password" type="password" placeholder="Password" ng-model="registry.password" required>
+      <label>Registry URL</label>
+      <input type="url" placeholder="http://localhost:8080/airavata-registry/api" ng-model="registry.url" required>
+      <label>Gateway</label>
+      <input type="text" placeholder="default" ng-model="registry.gateway" required>
+      <label>Username</label>
+      <input type="text" placeholder="admin" ng-model="registry.username" required>
+      <label>Password</label>
+      <input type="password" placeholder="Password" ng-model="registry.password" required>
+      <label class="checkbox"> <input type="checkbox" ng-model="newUserFlag">Create New User</label>
+      <label ng-show="newUserFlag">Confirm Password</label>
+      <input type="password" placeholder="Password" ng-model="confirmPassword" ng-show="newUserFlag" required>
       <br>
-      <button type="submit" class="btn" ng-click="connectToRegistry()">Connect</button>
-      <a href="#createNweUserModal" role="button" data-toggle="modal"><i class="icon-user"></i> Create New User</a>
+      <button type="submit" class="btn">Connect</button>
     </fieldset>
   </form>
-</div>
-<div class="modal hide fade" id="createNweUserModal" aria-labelledby="createNweUserModal" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="RegistryConnection">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>Register New User</h3>
-  </div>
-  <div class="modal-body">
-    <form class="form-horizontal">
-      <div class="control-group">
-        <label class="control-label" for="field-newUserName"><i class=" icon-pencil"></i></label>
-        <div class="controls">
-          <input type="text" id="field-newUserName" placeholder="User Name" ng-model="newUser.username" required>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="field-password2"><i class=" icon-key"></i></label>
-        <div class="controls">
-          <input type="password" id="field-password2" placeholder="Password" ng-model="newUser.password" required>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="field-confirmPassword"><i class=" icon-key"></i></label>
-        <div class="controls">
-          <input type="password" id="field-confirmPassword" placeholder="Confirm Password" ng-model="newUser.confirmPassword" required>
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="submit" class="btn btn-primary" ng-click="newUserRegistry()">Add</button>
-    <a href="#" class="btn " data-dismiss="modal" aria-hidden="true">Cancel</a>
-  </div>
 </div>

@@ -22,7 +22,7 @@
 'use strict';
 
 // Controller to connect to an Airavata registry
-angular.module('WebUI').controller('RegistryConnection', function ($scope,$http, MessageQueue) {
+angular.module('WebUI').controller('RegistryConnection', function ($scope, $http, MessageQueue) {
   //$httpProvider.defaults.useXDomain = true;
   $http.defaults.useXDomain = true;
   // Data required to connect to the registry
@@ -32,16 +32,32 @@ angular.module('WebUI').controller('RegistryConnection', function ($scope,$http,
     'username': 'admin',
     'password': 'admin'
   };
-  // Data required to add new user to the registry
-  $scope.newUser={
-    'username':'',
-    'password':'',
-    'confirmPassword':''
-  };
+  // Is a new user being registered?
+  $scope.newUserFlag = false;
+  $scope.confirmPassword = 'admin';
 
   // Callback to test connection
   $scope.connectToRegistry = function () {
+    if($scope.newUserFlag) {
+      if($scope.registry.password !== $scope.confirmPassword) {
+        MessageQueue.publish('alerts', [{
+          'head': 'User could not be created!',
+          'msg': 'The two passwords entered do not match',
+          'type': 'error'
+        }]);
+        return;
+      }
+      // Register new user
+      // TODO API Call to do this
+      MessageQueue.publish('alerts', [{
+        'head': 'User ' + $scope.registry.username +' was created!',
+        'msg': 'A new user has been added to the registry',
+        'type': 'success'
+      }]);
+    }
+
     // Test connection to registry
+    // TODO Check users connection to registry
     //$scope.basicRegistry= new BasicRegistry();
     //$scope.res=$scope.basicRegistry.setAiravataUser($scope.registry.username);
     $http({ // Load the initial data
@@ -62,20 +78,6 @@ angular.module('WebUI').controller('RegistryConnection', function ($scope,$http,
     MessageQueue.publish('alerts',[ {
       'head': 'Conntected',
       'msg': 'Successful connection made to '+$scope.res,
-      'type': 'success'
-    }]);
-  };
-
-  // Callback to Register New User
-  $scope.newUserRegistry = function () {
-    // Test connection to register new user
-    // TODO: Call some API method to make HTTP request
-    // Alert user to the successful creation and on success notify all other controlers
-    $('#createNweUserModal').modal('hide');
-    MessageQueue.publish('new user', $scope.newUser);
-    MessageQueue.publish('alerts', [{
-      'head': 'New User Added',
-      'msg': $scope.newUser.username +' added successfully',
       'type': 'success'
     }]);
   };

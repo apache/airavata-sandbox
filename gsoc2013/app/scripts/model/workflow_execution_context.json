@@ -1,0 +1,336 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Workflow Execution Context",
+    "description":"JSON schema for Workflow Execution Context",
+    "type": "object",
+    "id": "http://airavata.apache.org/schemas/wec/2012/05#",
+    "required": ["context-header"],
+    "properties": {
+        "context-header": {
+            "type": "object",
+            "required": ["soa-service-eprs" , "workflow-monitoring-context"],
+            "description": "Element that contains Airavata specific context information sent as a SOAP header in a SOAP message.",
+            "properties": {
+                "user-identifier": {
+                    "$ref": "#/definitions/user-identifier"
+
+                },
+                "soa-service-eprs": {
+                    "$ref": "#/definitions/soa-service-eprs"
+                },
+                "workflow-monitoring-context": {
+                    "$ref": "#/definitions/workflow-monitoring-context"
+                },
+                "workflow-scheduling-context": {
+                    "$ref": "#/definitions/workflow-scheduling-context"
+                },
+                "workflow-output-data-handling": {
+                    "$ref": "#/definitions/workflow-output-data-handling"
+                },
+                "security-context": {
+                    "$ref": "#/definitions/security-context"
+                }
+            }
+        }
+    },
+    "definitions": {
+        "user-identifier": {
+            "type": "string",
+            "description": "User that the workflow is executed on behalf of, user id is used to catalog data and for monitoring purposes"
+        },
+        "soa-service-eprs": {
+            "type": "object",
+            "required": ["gfac-url" , "registry-url"],
+            "description": "Element that contains persistent service end points within the system.",
+            "properties": {
+                "gfac-url": {
+                    "type": "string",         // any URI
+                    "description": "Location of GFac factory service to use."
+                },
+                "registry-url": {
+                    "type": "string",        // any URI
+                    "description": "Location of Registry service to use."
+                },
+                "resource-scheduler-url": {
+                    "type": "string",
+                    "description": "Resource Scheduler to use. (optional)"
+                },
+                "hostDescriptor": {
+                    "type": "string",
+                    "description": "Which Host Descriptor to be picked. (optional)"
+                }
+            }
+        },
+        "workflow-monitoring-context": {
+            "type": "object",
+            "required": ["experiment-id", "workflow-instance-id", "workflow-template-id", "workflow-node-id", "workflow-time-step", "service-instance-id", "service-replica-id", "event-publish-epr", "error-publish-epr", "msg-box-epr"],
+            "description": "Workflow context for execution of a instance used to relate the specific activity in the context of workflow and used for monitoring and illustarting the workflow progress.",
+            "properties": {
+                "experiment-id": {
+                    "type": "string",
+                    "description": "Experiment ID (REQUIRED in context), Defines the context of the workflow."
+                },
+                "workflow-instance-id": {
+                    "type": "string",
+                    "description": "URI that identifies workflow instance that originated the message."
+                },
+                "workflow-template-id": {
+                    "type": "string",
+                    "description": "URI that identifies workflow template that was used to create the workflow instance."
+                },
+                "workflow-node-id": {
+                    "type": "string",
+                    "description": "String that identifies uniqueley a node in workflow graph that originated that message."
+                },
+                "workflow-time-step": {
+                    "type": "integer",
+                    "description": "Increasing integer representing time in the workflow execution when the message originated."
+                },
+                "service-instance-id": {
+                    "type": "string",
+                    "description": "URI that identifies service instance that originated that message."
+                },
+                "service-replica-id": {
+                    "type": "string",
+                    "description": "URI that identifies the replica of service instance that originated that message, primarly used by Fault Tolerance service to overprovision."
+                },
+                "event-publish-epr": {
+                    "type": "string",
+                    "description": "EPR for WS-Eventing sink where to send event. (optional) NOTE: currently any XML is accepted as there are many versions of WS-Addressing."
+                },
+                "notification-topic": {
+                    "type": "string",
+                    "description": "A Unique String to set as the topic for events sent on an experiment. The topic may be embedded with the event-publish-epr. An experiment id being unique may be chosen as topic."
+                },
+                "error-publish-epr": {
+                    "type": "string",
+                    "description": "EPR for WS-Eventing sink where to send errors (optional) NOTE: designed good for debugging and system level warnings, errors, etc"
+                },
+                "msg-box-epr": {
+                    "type": "string",
+                    "description": "EPR for WS-Eventing sink where to send errors (optional) NOTE: designed good for debugging and system level warnings, errors, etc"
+                }
+            }
+        },
+        "workflow-scheduling-context": {
+            "type": "object",
+            "required": ["application-scheduling-context"],
+            "description": "Element that contains service specific resource scheduling information sent inside workflow context. The purpose of this context is to schedule individual activities on a different resource.",
+            "properties": {
+                "application-scheduling-context": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/application-scheduling-context"
+                    },
+                    "minItems": 1
+                },
+                "nameValuePairType": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/nameValuePairType"
+                    }
+                }
+
+            }
+        },
+        "workflow-output-data-handling": {
+            "type": "object",
+            "description": "Element that contains application specific resource scheduling information sent inside workflow context. The purpose of this context is to handle individual activities with different needs like intermediate data need not be persisted.",
+            "required": ["application-output-data-handling"],
+            "properties": {
+                "application-output-data-handling": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/application-output-data-handling"
+                    },
+                    "minItems": 1
+                }
+            }
+        },
+        "security-context": {
+            "type": "object",
+            "required": ["grid-proxy", "grid-myproxy-repository" , "ssh-authentication", "credential-management-service"],
+            "description": "Security context for execution of the workflow",
+            "properties": {
+                "grid-proxy": {
+                    "type": "string",    // base64Binary
+                    "description": "Security context for Grid Security Infrastructure X509 Proxy with trusted chain."
+                },
+                "grid-myproxy-repository": {
+                    "type": "object",
+                    "description": "Security context for Grid Security MyProxy Service",
+                    "required": ["myproxy-server", "username", "password", "life-time-inhours"],
+                    "properties": {
+                        "myproxy-server": {
+                            "type": "string",
+                            "description": "schema for an fstab entry"
+                        },
+                        "username": {
+                            "type": "string",
+                            "description": "MyProxy User Name."
+                        },
+                        "password": {
+                            "type": "string",
+                            "description": "MyProxy Password."
+                        },
+                        "life-time-inhours": {
+                            "type": "integer",
+                            "description": "MyProxy Proxy Life time."
+                        }
+                    }
+                },
+                "ssh-authentication": {
+                    "type": "object",
+                    "required": ["access-key-id", "secret-access-key"],
+                    "description": "Security context for execution of the workflow on SSH accessed resources.",
+                    "properties": {
+                        "access-key-id": {
+                            "type": "string",
+                            "description": "Amazon Web Services Public Access Key ID used to contact the AWS API's."
+                        },
+                        "secret-access-key": {
+                            "type": "string",
+                            "description": "Amazon Web Services AWS Private Secret Access Key."
+                        }
+                    }
+                },
+                "credential-management-service": {
+                    "type": "object",
+                    "required": ["token_id", "portal-user" ],
+                    "description": "Security context for execution of the workflow",
+                    "properties": {
+                        "token_id": {
+                            "type": "string",
+                            "description": "Token id used in credential-store. Represents the community user."
+                        },
+                        "portal-user": {
+                            "type": "string",
+                            "description": "The portal user id who is invoking the workflow."
+                        }
+                    }
+                },
+                "amazon-webservices": {
+                    "type": "object",
+                    "required": ["access-key-id","secret-access-key", "ami-id", "instance-id", "instance-type", "username"],
+                    "description": "Security context for execution of the workflow",
+                    "properties": {
+                        "access-key-id": {
+                            "type": "string",
+                            "description": "Amazon Web Services Public Access Key ID used to contact the AWS API's."
+                        },
+                        "secret-access-key": {
+                            "type": "string",
+                            "description": "Amazon Web Services AWS Private Secret Access Key."
+                        },
+                        "ami-id": {
+                            "type": "string",
+                            "description": "Amazon Web Services AWS Amazon Machine Image (AMI) ID"
+                        },
+                        "instance-id": {
+                            "type": "string",
+                            "description": "Amazon Web Services AWS Instance ID."
+                        },
+                        "instance-type": {
+                            "type": "string",
+                            "description": "Amazon Web Services AWS Instance Type."
+                        },
+                        "username": {
+                            "type": "string",
+                            "description": "Amazon Web Services AWS Username."
+                        }
+                    }
+                }
+            }
+        },
+        "application-scheduling-context": {
+            "type": "object",
+            "required": ["@workflow-node-id", "@job-manager" , "@queue-name"],
+            "description": "Element text contains host name for the resource.",
+            "properties": {
+                "@workflow-node-id": {
+                    "type": "string",
+                    "description": "This is workflow node ID that is mapped to a resource."
+                },
+                "@service-id": {
+                    "type": "string",    // any URI
+                    "description": "This is service ID."
+                },
+                "@host-name": {
+                    "type": "string",    // any URI
+                    "description": "head node of the resource"
+                },
+                "@wsgram-preferred": {
+                    "type": "boolean",
+                    "description": "If true then wsgram will be used, false pre-wsgram will be used."
+                },
+                "@gatekeeper-epr": {
+                    "type": "string",    // any URI
+                    "description": "GRAM EPR of the resource"
+                },
+                "@job-manager": {
+                    "type": "string",
+                    "description": "LRM job manager on the resource, ex: PBS, LSF."
+                },
+                "@cpu-count": {
+                    "type": "integer",
+                    "description": "number of CPU's allocated on the compute cluster"
+                },
+                "@node-count": {
+                    "type": "integer",
+                    "description": "number of nodes allocated on the compute cluster"
+                },
+                "@queue-name": {
+                    "type": "string",
+                    "description": "Job queue name if any."
+                },
+                "@max-wall-time": {
+                    "type": "integer",
+                    "description": "number of CPU's allocated on the compute cluster"
+                }
+            }
+        },
+        "nameValuePair": {
+            "type": "object",
+            "required": ["@name" , "@value"],
+            "description": "Name-Value pair",
+            "properties": {
+                "@workflow-node-id": {
+                    "type": "string"
+                },
+                "@name": {
+                    "type": "string"
+                },
+                "@value": {
+                    "type": "string"
+                },
+                "@description": {
+                    "type": "string"
+                }
+            }
+        },
+        "application-output-data-handling": {
+            "type": "object",
+            "required": ["node-id", "data-registry-url", "output-data-directory", "data-persistance"],
+            "description": "schema for an fstab entry",
+            "properties": {
+                "node-id": {
+                    "type": "string",
+                    "description": " If the workflow outputs are to be staged to a pre-specified location, then the output data staging directory should be provided."
+                },
+                "data-registry-url": {
+                    "type": "string",     // any URI
+                    "description": "If a seperate Data Registry is used for catlogging data, the associated location of the Data registry"
+                },
+                "output-data-directory": {
+                    "type": "string",         // any URI
+                    "description": "If the workflow outputs are to be staged to a pre-specified location, then the output data staging directory should be provided."
+                },
+                "data-persistance": {
+                    "type": "boolean",
+                    "description": "If the intermediate workflow outputs are to be discarded after execution, this flag should be set to false. By defualt this flag should be true assuming all data will be persisted."
+                }
+            }
+        }
+
+    }
+}
