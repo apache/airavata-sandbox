@@ -21,40 +21,32 @@
 'use strict';
 
 /*
- * Controller for descriptors registry resource , deals with host,service and application descriptors
+ * Controller for workflow monitoring.
  *
  */
-angular.module('WebUI').controller('RegistryDescriptors', function ($scope, $http, MessageQueue) {
+angular.module('WebUI').controller('WorkflowMonitoring', function ($scope, $http, MessageQueue) {
 
   //To enable the Cross Origin Resource Sharing in application
   $http.defaults.useXDomain = true;
-  // Resource Protocols available for the host
-  $scope.protocols=[
-    {name:'Local',configuration:false},
-    {name:'SSH',configuration:false},
-    {name:'Globus',configuration:true},
-    {name:'Unicore',configuration:true},
-    {name:'Amazone EC2',configuration:false},
-    {name:'Hadoop',configuration:false}
-  ];
-  // Data required to add new host descriptor to the registry
-  $scope.addHost={
-    'hostId':'',
-    'hostAddress':'',
-    'resourceProtocol':'',
-    'gramEndpoint':'',
-    'gridFTPEndpoint':''
-  };
-  // Callback to Add Host Descriptor to Registry
-  $scope.saveHostDescriptor = function () {
-    // Test connection to register new user
+
+  // Data required for notification configuration
+  $scope.notification={
+    'brokerURL':'http://10.1.66.76:8080/airavata-server/services/EventingService',
+    'topic':'',
+    'messageBoxURL':'http://10.1.66.76:8080/airavata-server/services/MsgBoxService',
+    'pullMode':''
+  }
+
+  // Callback to configure notification
+  $scope.configureNotification = function () {
+    // Test connection for configuration
     // TODO: Call some API method to make HTTP request
 
-    // Alert user to the successful creation and on success notify all other controlers
-    if ($scope.addhostForm.$valid){
+    // Alert user to the successful configuration and on success notify all other controlers
+    if ($scope.notificationConfigurationForm.$valid){
       MessageQueue.publish('alerts', [{
-        'head': 'Host ' + $scope.addHost.hostId +' was added!',
-        'msg': 'A new Host Descriptor has been added to the registry.',
+        'head': 'Notification Topic ' + $scope.notification.topic +' was configured!',
+        'msg': 'Notification nonfigured successfully.',
         'type': 'success'
       }]);
     }

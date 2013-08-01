@@ -74,13 +74,68 @@ app.config(function ($stateProvider, $routeProvider) { // Setup views in the web
         templateUrl: 'views/exec.canvas.html'
       }
     }
+  })
+  .state('exec.addhost', {
+    url:'/addHost',
+      views:{
+        'addHost':{
+          templateUrl: 'views/builder.addHost.html'
+      }
+    }
+  })
+  .state('exec.launchWorkflow', {
+    url:'/launchWorkflow',
+    views:{
+      'builder':{
+        templateUrl: 'views/builder.launchWorkflow.html'
+      }
+    }
+  })
+  .state('exec.newApplicationDeployment', {
+    url:'/newApplicationDeployment',
+    views:{
+      'builder':{
+          templateUrl: 'views/builder.newApplicationDeployment.html'
+      }
+    }
+  })
+  .state('exec.globusFileTransfer', {
+    url:'/globusFileTransfer',
+    views:{
+      'builder':{
+        templateUrl: 'views/builder.globusFileTransfer.html'
+      }
+    }
+  })
+  .state('exec.workflowMonitoring', {
+      url:'/workflowMonitoring',
+      views:{
+        'builder':{
+          templateUrl: 'views/builder.workflowMonitoring.html'
+        }
+      }
+    })
+  .state('exec.workflowProperties', {
+    url:'/workflowProperties',
+    views:{
+      'builder':{
+        templateUrl: 'views/builder.workflowProperties.html'
+      }
+    }
   });
+  $stateProvider.state('contacts', {
+    templateUrl: function (stateParams){
+        return '/partials/contacts.' + stateParams.filterBy + '.html';
+    },
+    controller: 'ContactsCtrl'
+  });
+
   // Views corresponding to the workflow monitoring interface
   $stateProvider.state('monitor', {
     url: '/monitor',
     views: {
       'navbar': {
-        templateUrl: 'views/monitor.navbar.html'
+        templateUrl: 'views/exec.navbar.html'
       },
       'sidenavbar': {
         templateUrl: 'views/monitor.sidenavbar.html'

@@ -39,6 +39,8 @@ body {
     float: none;
     padding-left: 5px;
     padding-right: 5px;
+    padding-bottom: 5px;
+    padding-top: 5px;
   }
 }
 
@@ -47,4 +49,9 @@ body {
   background: #ddd url("../img/grid.gif");
   border-style: solid;
   border-width: 2px;
+}
+
+/* Styles relating to the executor */
+#executor {
+  padding-left: 35px;
 }

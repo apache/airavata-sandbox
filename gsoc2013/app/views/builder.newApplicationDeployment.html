@@ -16,7 +16,30 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<div class="modal hide fade" id="newApplicationDeploy" aria-labelledby="newApplicationDeploy" tabindex="-1" role="dialog" aria-hidden="true">
+<form>
+  <div class="control-group">
+        <label class="control-label" for="applicationHost">Application Host: </label>
+        <div class="controls">
+          <select id="applicationHost"  ng-model="applicationHost" ng-options="host.name for host in hostList"></select> <a href="#addHost" role="button" data-toggle="modal" title="Create New Host"><i class="icon-plus-sign icon-white"></i></a>
+        </div>
+      </div>
+  <div class="control-group">
+        <label class="control-label" for="executablePath">Executable Path</label>
+        <div class="controls">
+          <input type="url" id="executablePath" placeholder="Executable Path" ng-model="executablePath" required> <i class=" icon-folder-open icon-white"></i>
+        </div>
+      </div>
+  <div class="control-group">
+        <label class="control-label" for="scratchWorkingDirectory">Scratch Working Directory</label>
+        <div class="controls">
+          <input type="url" id="scratchWorkingDirectory" placeholder="Scratch Working Directory" ng-model="scratchWorkingDirectory" required> <i class=" icon-folder-open icon-white"></i>
+        </div>
+      </div>
+  <div>
+        <a href="#" class="btn btn-primary">Advance Application Configuration</a>
+      </div>
+</form>
+<!--<div class="modal hide fade" id="newApplicationDeploy" aria-labelledby="newApplicationDeploy" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3>New Application Deployment</h3>
@@ -50,4 +73,4 @@ under the License.
     <a href="#" class="btn btn-primary">Add</a>
     <a href="#" class="btn " data-dismiss="modal" aria-hidden="true">Cancel</a>
   </div>
-</div>
+</div> -->

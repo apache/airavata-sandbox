@@ -35,6 +35,9 @@ angular.module('WebUI').controller('RegistryConnection', function ($scope, $http
   // Is a new user being registered?
   $scope.newUserFlag = false;
   $scope.confirmPassword = 'admin';
+  // Is a new user being registered?
+  $scope.newUserFlag = false;
+  $scope.confirmPassword = 'admin';
 
   // Callback to test connection
   $scope.connectToRegistry = function () {
@@ -60,6 +63,7 @@ angular.module('WebUI').controller('RegistryConnection', function ($scope, $http
     // TODO Check users connection to registry
     //$scope.basicRegistry= new BasicRegistry();
     //$scope.res=$scope.basicRegistry.setAiravataUser($scope.registry.username);
+    // TODO Check users connection to registry
     $http({ // Load the initial data
       url: 'http://localhost:8080/airavata-registry/api/basicregistry/set/serviceURL'+'?connectionurl='+$scope.registry.url,
       method: 'GET',

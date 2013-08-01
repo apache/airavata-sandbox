@@ -21,49 +21,45 @@
 'use strict';
 
 /*
- * Controller for descriptors registry resource , deals with host,service and application descriptors
+ * Controller for globus file transfer
  *
  */
-angular.module('WebUI').controller('RegistryDescriptors', function ($scope, $http, MessageQueue) {
+angular.module('WebUI').controller('FileTransfer', function ($scope, $http, MessageQueue) {
 
   //To enable the Cross Origin Resource Sharing in application
   $http.defaults.useXDomain = true;
-  // Resource Protocols available for the host
-  $scope.protocols=[
-    {name:'Local',configuration:false},
-    {name:'SSH',configuration:false},
-    {name:'Globus',configuration:true},
-    {name:'Unicore',configuration:true},
-    {name:'Amazone EC2',configuration:false},
-    {name:'Hadoop',configuration:false}
-  ];
-  // Data required to add new host descriptor to the registry
-  $scope.addHost={
-    'hostId':'',
-    'hostAddress':'',
-    'resourceProtocol':'',
-    'gramEndpoint':'',
-    'gridFTPEndpoint':''
+
+  // Data required for globus file tranfer
+  $scope.fileTransfer={
+    'userName':'',
+    'caFile':'',
+    'certificateFile':'',
+    'keyFile':'',
+    'sourceEndpoint':'',
+    'sourceFilePath':'',
+    'destinationEndPoint':'',
+    'destinationFilePath':''
   };
-  // Callback to Add Host Descriptor to Registry
-  $scope.saveHostDescriptor = function () {
-    // Test connection to register new user
+  // Callback to Add Globus File Transfer Details
+  $scope.saveGlobusFileTransfer = function () {
+    // Test connection to save globus file transfer details
     // TODO: Call some API method to make HTTP request
 
     // Alert user to the successful creation and on success notify all other controlers
-    if ($scope.addhostForm.$valid){
+    if ($scope.fileTransferForm.$valid){
       MessageQueue.publish('alerts', [{
-        'head': 'Host ' + $scope.addHost.hostId +' was added!',
-        'msg': 'A new Host Descriptor has been added to the registry.',
+        'head': 'Host ' + $scope.fileTransfer.userName +' was added!',
+        'msg': 'File transfer details has been added to the registry.',
         'type': 'success'
       }]);
     }
     else{
       MessageQueue.publish('alerts', [{
         'head': 'Validation Error',
-        'msg': 'There is error in form validation.',
+        'msg': 'There is error in File Transfer Form validation.',
         'type': 'error'
       }]);
     };
   }
 });
+
