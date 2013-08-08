@@ -78,7 +78,7 @@ app.config(function ($stateProvider, $routeProvider) { // Setup views in the web
   .state('exec.addhost', {
     url:'/addHost',
       views:{
-        'addHost':{
+        'builder':{
           templateUrl: 'views/builder.addHost.html'
       }
     }
@@ -88,14 +88,6 @@ app.config(function ($stateProvider, $routeProvider) { // Setup views in the web
     views:{
       'builder':{
         templateUrl: 'views/builder.launchWorkflow.html'
-      }
-    }
-  })
-  .state('exec.newApplicationDeployment', {
-    url:'/newApplicationDeployment',
-    views:{
-      'builder':{
-          templateUrl: 'views/builder.newApplicationDeployment.html'
       }
     }
   })
@@ -122,14 +114,24 @@ app.config(function ($stateProvider, $routeProvider) { // Setup views in the web
         templateUrl: 'views/builder.workflowProperties.html'
       }
     }
+  })
+  .state('exec.registerApplication', {
+    url:'/registerApplication',
+    views:{
+      'builder':{
+        templateUrl: 'views/builder.registerApplication.html'
+      }
+    }
   });
+
+  /*
   $stateProvider.state('contacts', {
     templateUrl: function (stateParams){
         return '/partials/contacts.' + stateParams.filterBy + '.html';
     },
     controller: 'ContactsCtrl'
   });
-
+  */
   // Views corresponding to the workflow monitoring interface
   $stateProvider.state('monitor', {
     url: '/monitor',

@@ -16,46 +16,69 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<div ng-controller="RegistryDescriptors">
-  <form name="addhostForm" style="padding:10px;" novalidate ng-submit="saveHostDescriptor();">
+<div ng-controller="HostDescriptor">
+  <form name="addhostForm" style="padding:10px;" novalidate ng-submit="saveHostDescriptor();" class="form-horizontal">
     <fieldset>
       <legend>Register Host</legend>
-
-      <label for="inputHostId">Host Id</label>
-      <input type="text" id="inputHostId" name="hostId" placeholder="Host Id" ng-model="addHost.hostId" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
-      <div class="text-error" ng-show="addhostForm.hostId.$dirty && addhostForm.hostId.$invalid">
-        <small class="text-error" ng-show="addhostForm.hostId.$error.required"> *Required.</small>
-        <small class="text-error" ng-show="addhostForm.hostId.$error.pattern"> Alpha-Numeric values between 4-10 characters.</small>
+      <div class="control-group">
+        <label for="inputHostId" class="control-label">Host Id</label>
+        <div class="controls">
+          <input type="text" id="inputHostId" name="hostId" placeholder="Host Id" ng-model="addHost.hostId" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
+          <div class="text-error" ng-show="addhostForm.hostId.$dirty && addhostForm.hostId.$invalid">
+            <small class="text-error" ng-show="addhostForm.hostId.$error.required"> *Required.</small>
+            <small class="text-error" ng-show="addhostForm.hostId.$error.pattern"> Alpha-Numeric values between 4-10 characters.</small>
+          </div>
+        </div>
       </div>
 
-      <label for="inputHostAddress">Host Address</label>
-      <input type="url" id="inputHostAddress" name="hostAddress" placeholder="Host Address" ng-model="addHost.hostAddress" required>
-      <div class="text-error" ng-show="addhostForm.hostAddress.$dirty && addhostForm.hostAddress.$invalid">
-        <small class="text-error" ng-show="addhostForm.hostAddress.$error.required"> *Required.</small>
-        <small class="text-error" ng-show="addhostForm.hostAddress.$error.url"> URL Expected. </small>
+      <div class="control-group">
+        <label class="control-label" for="inputHostAddress">Host Address</label>
+        <div class="controls">
+          <input type="url" id="inputHostAddress" name="hostAddress" placeholder="Host Address" ng-model="addHost.hostAddress" required>
+          <div class="text-error" ng-show="addhostForm.hostAddress.$dirty && addhostForm.hostAddress.$invalid">
+            <small class="text-error" ng-show="addhostForm.hostAddress.$error.required"> *Required.</small>
+            <small class="text-error" ng-show="addhostForm.hostAddress.$error.url"> URL Expected. </small>
+          </div>
+        </div>
       </div>
 
-      <label for="resourceProtocol">Resource Protocol</label>
-      <select id="resourceProtocol" name="rp" ng-model="addHost.resourceProtocol" ng-options="protocol.name for protocol in protocols" required>
-        <option value="">-- Select Protocol --</option>
-      </select>
-
-      <label ng-show="addHost.resourceProtocol.configuration" for="gramEndpoint">Gram Endpoint</label>
-      <input type="url" id="gramEndpoint" name="gramep" placeholder="Gram Endpoint" ng-model="addHost.gramEndpoint" ng-show="addHost.resourceProtocol.configuration" ng-required="addHost.resourceProtocol.configuration">
-      <div class="text-error" ng-show="addhostForm.gramep.$dirty && addhostForm.gramep.$invalid">
-        <small class="text-error" ng-show="addhostForm.gramep.$error.required"> *Required.</small>
-        <small class="text-error" ng-show="addhostForm.gramep.$error.url"> URL Expected. </small>
+      <div class="control-group">
+        <label class="control-label" for="resourceProtocol">Resource Protocol</label>
+        <div class="controls">
+          <select id="resourceProtocol" name="rp" ng-model="addHost.resourceProtocol" ng-options="protocol.name for protocol in protocols" required>
+            <option value="">-- Select Protocol --</option>
+          </select>
+        </div>
       </div>
 
-      <label ng-show="addHost.resourceProtocol.configuration" for="gridFTPEndpoint">Grid FTP Endpoint</label>
-      <input type="url" id="gridFTPEndpoint" name="gridep" placeholder="Grid FTP Endpoint" ng-model="addHost.gridFTPEndpoint" ng-show="addHost.resourceProtocol.configuration" ng-required="addHost.resourceProtocol.configuration">
-      <div class="text-error" ng-show="addhostForm.gridep.$dirty && addhostForm.gridep.$invalid">
-        <small class="text-error" ng-show="addhostForm.gridep.$error.required"> *Required.</small>
-        <small class="text-error" ng-show="addhostForm.gridep.$error.url"> URL Expected. </small>
+      <div class="control-group">
+        <label class="control-label" ng-show="addHost.resourceProtocol.configuration" for="gramEndpoint">Gram Endpoint</label>
+        <div class="controls">
+          <input type="url" id="gramEndpoint" name="gramep" placeholder="Gram Endpoint" ng-model="addHost.gramEndpoint" ng-show="addHost.resourceProtocol.configuration" ng-required="addHost.resourceProtocol.configuration">
+          <div class="text-error" ng-show="addhostForm.gramep.$dirty && addhostForm.gramep.$invalid">
+            <small class="text-error" ng-show="addhostForm.gramep.$error.required"> *Required.</small>
+            <small class="text-error" ng-show="addhostForm.gramep.$error.url"> URL Expected. </small>
+          </div>
+        </div>
       </div>
 
-      <button type="submit" ng-disabled="addhostForm.$invalid" class="btn">Save</button>
-      <a class="btn" href="#/exec">Cancel</a>
+      <div class="control-group">
+        <label class="control-label" ng-show="addHost.resourceProtocol.configuration" for="gridFTPEndpoint">Grid FTP Endpoint</label>
+        <div class="controls">
+          <input type="url" id="gridFTPEndpoint" name="gridep" placeholder="Grid FTP Endpoint" ng-model="addHost.gridFTPEndpoint" ng-show="addHost.resourceProtocol.configuration" ng-required="addHost.resourceProtocol.configuration">
+          <div class="text-error" ng-show="addhostForm.gridep.$dirty && addhostForm.gridep.$invalid">
+            <small class="text-error" ng-show="addhostForm.gridep.$error.required"> *Required.</small>
+            <small class="text-error" ng-show="addhostForm.gridep.$error.url"> URL Expected. </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <button type="submit" ng-disabled="addhostForm.$invalid" class="btn">Save</button>
+          <a class="btn" href="#/exec">Cancel</a>
+        </div>
+      </div>
     </fieldset>
   </form>
 </div>

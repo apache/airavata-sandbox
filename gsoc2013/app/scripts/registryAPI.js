@@ -69,7 +69,7 @@ function ApplicationDescriptor() {
     this.stdIn;
     this.stdOut;
     this.stdError;
-    this.staticWorkigDir;
+    this.staticWorkingDir;
     // int set 
     this.maxWallTime;
     this.cpuCount;
