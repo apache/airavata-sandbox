@@ -52,9 +52,21 @@
 				<input class="span12" type="text" ng-model="attrs.searchUsername" placeholder="username">
 			</div>
 			<label class="control-label">From(Optional)</label>
-			<datepicker ng-model="attrs.fromDate" show-weeks="showWeeks" starting-day="1" date-disabled="disabled(date, mode)" min="minDate" max="'2015-06-22'"></datepicker>
+			<div class="input-append">
+				<input type="text" class="span10" ng-model="attrs.fromDate" placeholder="yyyy-MM-dd HH:mm:ss">
+				<span><button type="button" class="btn" ng-click="openDateDialog('fromDate')">
+        			<i class="icon-calendar"></i>
+        			</button>
+        		</span>
+        	</div>
 			<label class="control-label">To(Optional)</label>
-			<datepicker ng-model="attrs.toDate" show-weeks="showWeeks" starting-day="1" date-disabled="disabled(date, mode)" min="minDate" max="'2015-06-22'"></datepicker>
+			<div class="input-append">
+				<input type="text" class="span10" ng-model="attrs.toDate" placeholder="yyyy-MM-dd HH:mm:ss">
+				<span><button type="button" class="btn" ng-click="openDateDialog('toDate')">
+        			<i class="icon-calendar"></i>
+        			</button>
+        		</span>
+        	</div>
 		</div>
 		<div class="control-group">
 			<div class="controls">

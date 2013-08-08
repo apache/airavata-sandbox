@@ -41,9 +41,10 @@ app.directive("adminboard", function() {
 		restrict : "E",
 		transclude : true,
 		scope : {},
-		controller : function($scope,$element,$location,Utils) {
+		controller : function($scope,$element,$location,$dialog,Utils) {
 			$scope.backUrls = [];
 			$scope.fwdUrls = [];
+			$scope.attrs = {};
 			$scope.goBack = function() {
 				$scope.fwdUrls.push($location.path());
 				$location.path($scope.backUrls.pop());
@@ -71,8 +72,8 @@ app.directive("adminboard", function() {
 				case "User/Date" :
 					var params = {};
 					params.username = attrs.searchUsername;
-					params.fromDate = Utils.toTimeStampString(attrs.fromDate);
-					params.toDate = Utils.toTimeStampString(attrs.toDate);
+					params.fromDate = attrs.fromDate;
+					params.toDate = attrs.toDate;
 					// Assign all the parameters to search by to an single object and pass it to this function to get the return search query
 					var searchQuery = Utils.buildSearchQuery(params);
 					searchUrl += "/search/"+searchQuery;
@@ -85,11 +86,32 @@ app.directive("adminboard", function() {
 				}
 				$scope.gotoUrl(searchUrl);
 			};
+			$scope.opts = {
+				keyboard: true,
+				template:  '<div><div class="modal-header"><h4>Choose a date</h4></div>' +
+					'<div class="modal-body" style="padding-left:120px"><datepicker ng-model="date" show-weeks="showWeeks" starting-day="1" date-disabled="disabled(date, mode)"></datepicker></div>'+
+				    '<div class="modal-footer"><button ng-click="close(date)" class="btn btn-primary" >Close</button></div>'+
+			        '</div>',
+			    controller: 'DateDialogController'
+			};
+			
+			$scope.openDateDialog = function(dateType){
+				var dialog = $dialog.dialog($scope.opts);
+				dialog.open().then(function(date){
+					if(date){
+						if(dateType=="fromDate") {
+							$scope.attrs.fromDate = Utils.toTimeStampString(date);
+						} else if(dateType=="toDate") {
+							$scope.attrs.toDate = Utils.toTimeStampString(date);
+						}
+					}
+				});
+			};
 		},
 		template : 
 			'<div>' +
 				'<button class="btn" href="#dashboard" role="button" data-toggle="modal">Debug</button>' +
-				'<div id="dashboard" class="dashboard-overlay hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+				'<div id="dashboard" class="dashboard-overlay hide fade" tabindex="-1" data-keyboard="false" data-backdrop="static" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
 					'<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
 					'<div class="row">' +
 					'<div class="span2 title">Airavata Dashboard </div>' +
@@ -119,6 +141,11 @@ app.directive("adminboard", function() {
 
 // Controllers
 angular.module("controllers",["config","services"]).
+	controller("DateDialogController",["$scope","dialog", function($scope, dialog){
+		$scope.close = function(date){
+			dialog.close(date);
+	    };
+	}]).
 	controller("LoginCtrl", ["$scope","User","Server",function($scope,User,Server) {
 		$scope.save = function() {
 			Server.setEndpoint($scope.url);

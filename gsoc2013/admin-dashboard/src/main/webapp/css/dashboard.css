@@ -29,7 +29,7 @@
 	overflow: auto;
 	border-collapse: separate;
 	position: fixed !important;
-	z-index: 10000;
+	z-index: 1050;
 	opacity: 0;
 	-webkit-border-radius: 1px;
 	-moz-border-radius: 1px;
