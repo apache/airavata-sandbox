@@ -196,31 +196,34 @@ angular.module("controllers",["config","services"]).
 		}
 		else if($location.path().indexOf("/experiments/errors/")==0) {
 			var expId = $routeParams.expId;
+			// Gets the error details for workflows of a particular experiment. - generally not accesible through the application. But can be accessed by the url 
 			Experiment.getById(expId).then(function(experiment) {
 				$scope.experiment = experiment;
-				var expId = experiment.experimentId;
-				var workflowId = experiment.workflowInstanceDataList[0].workflowInstance.workflowExecutionId;
+				var workflowList = experiment.workflowInstanceDataList;
 				$scope.workflowErrors = [];
-				Workflow.getWorkflowExecutionErrors(expId, workflowId).then(function(workflowErrors) {
-					for(item in workflowErrors) {
-						var error = workflowErrors[item];
-						if(error!={}) { 
-							$scope.workflowErrors.push(error);
-						}
-					}
-				});
-				var nodesList = experiment.workflowInstanceDataList[0].nodeDataList;
 				$scope.nodeErrors = [];
-				for(i in nodesList) {
-					Workflow.getNodeExecutionErrors(expId, workflowId,nodesList[i].nodeId).then(function(nodeErrors) {
-						for(item in nodeErrors) {
-							var error = nodeErrors[item];
-							if(error!={}) {
-								error.type = nodesList[i].type;
-								$scope.nodeErrors.push(error);
+				for(i in workflowList) {
+					$scope.workflow = workflowList[i];
+					Workflow.getWorkflowExecutionErrors(expId, workflowId).then(function(workflowErrors) {
+						for(item in workflowErrors) {
+							var error = workflowErrors[item];
+							if(error!={}) { 
+								$scope.workflowErrors.push(error);
 							}
 						}
 					});
+					var nodesList = workflowList[i].nodeDataList;
+					for(i in nodesList) {
+						Workflow.getNodeExecutionErrors(expId, workflowId,nodesList[i].nodeId).then(function(nodeErrors) {
+							for(item in nodeErrors) {
+								var error = nodeErrors[item];
+								if(error!={}) {
+									error.type = nodesList[i].type;
+									$scope.nodeErrors.push(error);
+								}
+							}
+						});
+					}
 				}
 			});
 		}
@@ -239,6 +242,7 @@ angular.module("controllers",["config","services"]).
 		else if($location.path().indexOf("/experiments/errors/")==0) {
 			var expId = $routeParams.expId;
 			var workflowId = $routeParams.workflowId;
+			// Gets the error details for a particular workflow
 			Experiment.getById(expId).then(function(experiment) {
 				var expId = experiment.experimentId;
 				var workflowList = experiment.workflowInstanceDataList;
