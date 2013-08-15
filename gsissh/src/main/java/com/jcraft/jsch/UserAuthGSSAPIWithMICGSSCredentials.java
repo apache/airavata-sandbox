@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.airavata.gsi.ssh.GSSContextX509;
+import org.apache.airavata.gsi.ssh.api.AuthenticationInfo;
 import org.globus.gsi.gssapi.GSSConstants;
 import org.ietf.jgss.GSSException;
 import org.ietf.jgss.Oid;
@@ -65,6 +67,7 @@ public class UserAuthGSSAPIWithMICGSSCredentials extends UserAuth {
 
     @Override
     public boolean start(Session session) throws Exception {
+
         // this.userinfo = userinfo;
         Packet packet = session.packet;
         Buffer buf = session.buf;
@@ -158,11 +161,24 @@ public class UserAuthGSSAPIWithMICGSSCredentials extends UserAuth {
         try {
             Class c = Class.forName(session.getConfig(method));
             context = (GSSContext) (c.newInstance());
-            // logger.debug( "GOT CONTEXT: " + context );
+
         } catch (Exception e) {
             // logger.error( "could not instantiate GSSContext", e );
             return false;
         }
+
+        // Get the credentials and set them
+        // Not a good way, but we dont have any choice
+        if (session instanceof ExtendedSession) {
+            AuthenticationInfo authenticationInfo = ((ExtendedSession) session).getAuthenticationInfo();
+
+            if (context instanceof GSSContextX509) {
+                ((GSSContextX509) context).setCredential(authenticationInfo.getCredentials());
+            }
+        }
+
+        // logger.debug( "GOT CONTEXT: " + context );
+
 
         // FIXME
         // if ( userinfo instanceof IX509UserInfo ) {

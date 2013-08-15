@@ -39,12 +39,16 @@
  */
 
 import com.jcraft.jsch.*;
+import org.apache.airavata.gsi.ssh.jsch.ExtendedJSch;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.InputStream;
 
-public class SSHProvider {
+/**
+ * A main class that demonstrates GSI-SSH execution.
+ */
+public class SSHDemo {
 
     static {
         JSch.setConfig("gssapi-with-mic.x509", "org.apache.airavata.gsi.ssh.GSSContextX509");
@@ -56,7 +60,7 @@ public class SSHProvider {
     public static void main(String[] arg) {
         try {
 
-            JSch jsch = new JSch();
+            JSch jsch = new ExtendedJSch();
 
             String host;
             int port = 22;

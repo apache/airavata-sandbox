@@ -66,7 +66,7 @@ public class GSSContextX509 implements com.jcraft.jsch.GSSContext {
 
             if (credential == null) {
                 try {
-                    credential = getMyProxyCredentials();
+                    credential = getCredential();
                 } catch (SecurityException t) {
                     System.out.printf("Could not get proxy: %s: %s\n", t.getClass().getSimpleName(), t.getMessage());
                     throw new JSchException(t.toString());
@@ -123,15 +123,6 @@ public class GSSContextX509 implements com.jcraft.jsch.GSSContext {
 
     private static GSSCredential getProxy() {
         return getProxy(null, GSSCredential.DEFAULT_LIFETIME);
-    }
-
-    private static GSSCredential getMyProxyCredentials() throws JSchException {
-        MyProxy myproxy = new MyProxy("myproxy.teragrid.org", 7512);
-        try {
-            return myproxy.get("xxx", "xxx", 17280000);
-        } catch (MyProxyException e) {
-            throw new JSchException("Error getting proxy credentials", e);
-        }
     }
 
     /**
@@ -210,6 +201,10 @@ public class GSSContextX509 implements com.jcraft.jsch.GSSContext {
 
     public void setCredential(GSSCredential credential) {
         this.credential = credential;
+    }
+
+    public GSSCredential getCredential() {
+        return credential;
     }
 }
 
