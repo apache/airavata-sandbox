@@ -25,6 +25,8 @@ import org.apache.airavata.gsi.ssh.api.*;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.io.File;
+
 /**
  * User: AmilaJ (amilaj@apache.org)
  * Date: 8/15/13
@@ -36,14 +38,20 @@ public class DefaultSSHApiTest {
 
     private String myProxyUserName;
     private String myProxyPassword;
-
-    private static final String CERT_LOCATION
-            = "/Users/thejaka/development/apache/airavata/sandbox/grid-tools/certificates";
+    private String certificateLocation;
 
     @BeforeTest
     public void setUp() throws Exception {
         myProxyUserName = System.getProperty("myproxy.user");
         myProxyPassword = System.getProperty("myproxy.password");
+
+        String pomDirectory = System.getProperty("basedir");
+
+        File pomFileDirectory = new File(pomDirectory);
+
+        System.out.println("POM directory ----------------- " + pomFileDirectory.getAbsolutePath());
+
+        certificateLocation = pomFileDirectory.getAbsolutePath() + "/certificates";
 
         if (myProxyUserName == null || myProxyPassword == null) {
             System.out.println(">>>>>> Please run tests with my proxy user name and password. " +
@@ -72,7 +80,7 @@ public class DefaultSSHApiTest {
         CommandOutput commandOutput = new SystemCommandOutput();
 
         // Get the API
-        SSHApi sshApi = SSHApiFactory.createSSHApi(CERT_LOCATION);
+        SSHApi sshApi = SSHApiFactory.createSSHApi(this.certificateLocation);
 
         // Execute command
         sshApi.executeCommand(commandInfo, serverInfo, authenticationInfo, commandOutput);
@@ -95,7 +103,7 @@ public class DefaultSSHApiTest {
         CommandOutput commandOutput = new SystemCommandOutput();
 
         // Get the API
-        SSHApi sshApi = SSHApiFactory.createSSHApi(CERT_LOCATION);
+        SSHApi sshApi = SSHApiFactory.createSSHApi(this.certificateLocation);
 
         // Execute command
         sshApi.executeCommand(commandInfo, serverInfo, authenticationInfo, commandOutput);
