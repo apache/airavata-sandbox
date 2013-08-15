@@ -51,7 +51,7 @@ public class DefaultSSHApi implements SSHApi {
     /**
      * Initializes default SSH API. During initialization basic configurations
      * are read.
-     * @throws IOException If an error occurred while reading basic configurations.
+     * @throws SSHApiException If an error occurred while reading basic configurations.
      */
     public DefaultSSHApi() throws SSHApiException {
         try {
