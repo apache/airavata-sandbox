@@ -71,6 +71,6 @@ public class SCPFromTest {
         ServerInfo serverInfo = new ServerInfo("ogce" ,"trestles.sdsc.edu");
         SCPFrom scpFrom = new SCPFrom(serverInfo,authenticationInfo,this.certificateLocation,new ConfigReader());
 
-        scpFrom.scpFrom(rFilePath, lFilePath);
+//        scpFrom.scpFrom(rFilePath, lFilePath);
     }
 }
