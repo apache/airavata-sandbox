@@ -39,6 +39,8 @@ public class DefaultSSHApiTest {
     private String myProxyUserName;
     private String myProxyPassword;
     private String certificateLocation;
+    private String pbsFilePath;
+    private String workingDirectory;
 
     @BeforeTest
     public void setUp() throws Exception {
@@ -53,6 +55,9 @@ public class DefaultSSHApiTest {
 
         certificateLocation = pomFileDirectory.getAbsolutePath() + "/certificates";
 
+        pbsFilePath = pomFileDirectory.getAbsolutePath() + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator +  "sleep.pbs";
+
+        workingDirectory = File.separator + "home" + File.separator + "ogce" ;
         if (myProxyUserName == null || myProxyPassword == null) {
             System.out.println(">>>>>> Please run tests with my proxy user name and password. " +
                     "E.g :- mvn clean install -Dmyproxy.user=xxx -Dmyproxy.password=xxx <<<<<<<");
@@ -87,7 +92,7 @@ public class DefaultSSHApiTest {
     }
 
     @Test
-    public void testSubmitJob() throws Exception {
+    public void testSubmitSimpleCommand() throws Exception {
         // Create authentication
         AuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
@@ -107,5 +112,28 @@ public class DefaultSSHApiTest {
 
         // Execute command
         sshApi.executeCommand(commandInfo, serverInfo, authenticationInfo, commandOutput);
+    }
+
+    @Test
+    public void testSubmitJob() throws Exception {
+        // Create authentication
+        AuthenticationInfo authenticationInfo
+                = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
+                7512, 17280000);
+
+        // Create command
+        CommandInfo commandInfo = new RawCommandInfo("/opt/torque/bin/qsub /home/ogce/sleep.pbs");
+
+        // Server info
+        ServerInfo serverInfo = new ServerInfo("ogce" ,"trestles.sdsc.edu");
+
+        // Output
+        CommandOutput commandOutput = new SystemCommandOutput();
+
+        // Get the API
+        SSHApi sshApi = SSHApiFactory.createSSHApi(this.certificateLocation);
+
+        // Execute command
+        sshApi.submitJob(commandInfo, serverInfo, authenticationInfo, commandOutput, pbsFilePath, workingDirectory);
     }
 }

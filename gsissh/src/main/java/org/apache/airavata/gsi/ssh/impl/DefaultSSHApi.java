@@ -51,6 +51,7 @@ public class DefaultSSHApi implements SSHApi {
     /**
      * Initializes default SSH API. During initialization basic configurations
      * are read.
+     *
      * @throws SSHApiException If an error occurred while reading basic configurations.
      */
     public DefaultSSHApi() throws SSHApiException {
@@ -62,8 +63,8 @@ public class DefaultSSHApi implements SSHApi {
     }
 
     public void executeCommand(CommandInfo commandInfo, ServerInfo serverInfo,
-                                        AuthenticationInfo authenticationInfo,
-                                        CommandOutput commandOutput) throws SSHApiException {
+                               AuthenticationInfo authenticationInfo,
+                               CommandOutput commandOutput) throws SSHApiException {
 
         JSch jsch = new ExtendedJSch();
 
@@ -86,7 +87,7 @@ public class DefaultSSHApi implements SSHApi {
 
         // Not a good way, but we dont have any choice
         if (session instanceof ExtendedSession) {
-            ((ExtendedSession)session).setAuthenticationInfo(authenticationInfo);
+            ((ExtendedSession) session).setAuthenticationInfo(authenticationInfo);
         }
 
         try {
@@ -114,7 +115,6 @@ public class DefaultSSHApi implements SSHApi {
         }
 
 
-
         channel.setInputStream(null);
         ((ChannelExec) channel).setErrStream(commandOutput.getStandardError());
 
@@ -138,4 +138,26 @@ public class DefaultSSHApi implements SSHApi {
 
 
     }
+
+    public void submitJob(CommandInfo commandInfo, ServerInfo serverInfo,
+                          AuthenticationInfo authenticationInfo,
+                          CommandOutput commandOutput, String pbsFilePath, String workingDirectory) throws  SSHApiException {
+        try {
+            SCPTo scpTo = new SCPTo(serverInfo, authenticationInfo, new ConfigReader());
+            scpTo.scpTo(workingDirectory, pbsFilePath);
+        } catch (JSchException e) {
+            throw new SSHApiException("An exception occurred while connecting to server." +
+                    "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
+                    " connecting user name - "
+                    + serverInfo.getUserName(), e);
+        }  catch (IOException e){
+           throw new SSHApiException("An exception occurred while connecting to server." +
+                    "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
+                    " connecting user name - "
+                    + serverInfo.getUserName(), e);
+        }
+
+        this.executeCommand(commandInfo,serverInfo,authenticationInfo,commandOutput);
+    }
+
 }

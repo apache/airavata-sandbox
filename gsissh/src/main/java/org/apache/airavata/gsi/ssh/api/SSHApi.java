@@ -44,4 +44,7 @@ public interface SSHApi {
                                  AuthenticationInfo authenticationInfo,
                                  CommandOutput commandOutput) throws SSHApiException;
 
+    void submitJob(CommandInfo commandInfo, ServerInfo serverInfo,
+                   AuthenticationInfo authenticationInfo, CommandOutput commandOutput,
+                   String pbsFilePath,String workingDirectory)throws SSHApiException;
 }
