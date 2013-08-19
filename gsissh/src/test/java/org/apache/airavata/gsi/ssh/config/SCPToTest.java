@@ -21,7 +21,7 @@
 package org.apache.airavata.gsi.ssh.config;
 
 import org.apache.airavata.gsi.ssh.api.AuthenticationInfo;
-import org.apache.airavata.gsi.ssh.api.SCPFrom;
+import org.apache.airavata.gsi.ssh.api.SCPTo;
 import org.apache.airavata.gsi.ssh.api.ServerInfo;
 import org.apache.airavata.gsi.ssh.impl.MyProxyAuthenticationInfo;
 import org.testng.annotations.BeforeTest;
@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 
-public class SCPFromTest {
+public class SCPToTest {
     private String myProxyUserName;
     private String myProxyPassword;
     private String certificateLocation;
@@ -69,8 +69,7 @@ public class SCPFromTest {
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
                 7512, 17280000);
         ServerInfo serverInfo = new ServerInfo("ogce" ,"trestles.sdsc.edu");
-        SCPFrom scpFrom = new SCPFrom(serverInfo,authenticationInfo,this.certificateLocation,new ConfigReader());
-
-//        scpFrom.scpFrom(rFilePath, lFilePath);
+        SCPTo scpTo = new SCPTo(serverInfo,authenticationInfo,this.certificateLocation,new ConfigReader());
+        scpTo.scpTo(rFilePath, lFilePath);
     }
 }
