@@ -27,6 +27,8 @@ package org.apache.airavata.gsi.ssh.api;
  * Time: 3:12 PM
  */
 
+import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
+
 /**
  * An API to executed commands/jobs using GSI-SSH or SSH.
  */
@@ -44,7 +46,11 @@ public interface SSHApi {
                                  AuthenticationInfo authenticationInfo,
                                  CommandOutput commandOutput) throws SSHApiException;
 
-    void submitJob(CommandInfo commandInfo, ServerInfo serverInfo,
-                   AuthenticationInfo authenticationInfo, CommandOutput commandOutput,
-                   String pbsFilePath,String workingDirectory)throws SSHApiException;
+    void submitAsyncJobWithPBS(ServerInfo serverInfo,
+                               AuthenticationInfo authenticationInfo,
+                               String pbsFilePath, JobDescriptor jobDescriptor) throws SSHApiException;
+//
+    void submitAsyncJob(ServerInfo serverInfo,
+                               AuthenticationInfo authenticationInfo,
+                               JobDescriptor jobDescriptor) throws SSHApiException;
 }

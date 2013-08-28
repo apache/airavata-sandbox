@@ -189,12 +189,9 @@ public class SCPTo {
         return session;
     }
 
+
     static int checkAck(InputStream in) throws IOException {
         int b = in.read();
-        // b may be 0 for success,
-        //          1 for error,
-        //          2 for fatal error,
-        //          -1
         if (b == 0) return b;
         if (b == -1) return b;
 

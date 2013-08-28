@@ -22,10 +22,19 @@
 package org.apache.airavata.gsi.ssh.impl;
 
 import org.apache.airavata.gsi.ssh.api.*;
+import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
+import org.apache.airavata.gsi.ssh.x2012.x12.ExportProperties;
+import org.apache.airavata.gsi.ssh.x2012.x12.InputList;
+import org.apache.commons.io.FilenameUtils;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * User: AmilaJ (amilaj@apache.org)
@@ -44,6 +53,9 @@ public class DefaultSSHApiTest {
 
     @BeforeTest
     public void setUp() throws Exception {
+        System.setProperty("myproxy.user", "ogce");
+        System.setProperty("myproxy.password", "Jdas7wph");
+        System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
         myProxyUserName = System.getProperty("myproxy.user");
         myProxyPassword = System.getProperty("myproxy.password");
 
@@ -55,9 +67,11 @@ public class DefaultSSHApiTest {
 
         certificateLocation = pomFileDirectory.getAbsolutePath() + "/certificates";
 
-        pbsFilePath = pomFileDirectory.getAbsolutePath() + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator +  "sleep.pbs";
+        pbsFilePath = pomFileDirectory.getAbsolutePath() + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "sleep.pbs";
 
-        workingDirectory = File.separator + "home" + File.separator + "ogce" ;
+        String randomPBSFile = Integer.toString((new Random()).nextInt());
+        workingDirectory = File.separator + "home" + File.separator + "ogce";
+
         if (myProxyUserName == null || myProxyPassword == null) {
             System.out.println(">>>>>> Please run tests with my proxy user name and password. " +
                     "E.g :- mvn clean install -Dmyproxy.user=xxx -Dmyproxy.password=xxx <<<<<<<");
@@ -70,16 +84,16 @@ public class DefaultSSHApiTest {
 
     @Test
     public void testExecuteCommand() throws Exception {
-         // Create authentication
+        // Create authentication
         AuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
                 7512, 17280000);
 
         // Create command
-        CommandInfo commandInfo = new RawCommandInfo("/opt/torque/bin/qstat");
+        CommandInfo commandInfo = new RawCommandInfo("/bin/ls");
 
         // Server info
-        ServerInfo serverInfo = new ServerInfo("ogce" ,"trestles.sdsc.edu");
+        ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
 
         // Output
         CommandOutput commandOutput = new SystemCommandOutput();
@@ -102,7 +116,7 @@ public class DefaultSSHApiTest {
         CommandInfo commandInfo = new RawCommandInfo("/opt/torque/bin/qsub /home/ogce/test.pbs");
 
         // Server info
-        ServerInfo serverInfo = new ServerInfo("ogce" ,"trestles.sdsc.edu");
+        ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
 
         // Output
         CommandOutput commandOutput = new SystemCommandOutput();
@@ -115,17 +129,17 @@ public class DefaultSSHApiTest {
     }
 
     @Test
-    public void testSubmitJob() throws Exception {
+    public void testsubmitAsyncJobWithPBS() throws Exception {
         // Create authentication
         AuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
                 7512, 17280000);
 
         // Create command
-        CommandInfo commandInfo = new RawCommandInfo("/opt/torque/bin/qsub /home/ogce/sleep.pbs");
+        CommandInfo commandInfo = new RawCommandInfo("/opt/torque/bin/qsub /home/ogce/sleep1.pbs");
 
         // Server info
-        ServerInfo serverInfo = new ServerInfo("ogce" ,"trestles.sdsc.edu");
+        ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
 
         // Output
         CommandOutput commandOutput = new SystemCommandOutput();
@@ -134,6 +148,53 @@ public class DefaultSSHApiTest {
         SSHApi sshApi = SSHApiFactory.createSSHApi(this.certificateLocation);
 
         // Execute command
-        sshApi.submitJob(commandInfo, serverInfo, authenticationInfo, commandOutput, pbsFilePath, workingDirectory);
+        System.out.println("Target PBS file path: " + workingDirectory);
+        System.out.println("Local PBS File path: " + pbsFilePath);
+        JobDescriptor jobDescriptor = new JobDescriptor(commandOutput);
+        //Here we give working directory as a file name to replace the file, to allow multiple test runs with the same
+        //file name
+        jobDescriptor.setWorkingDirectory(workingDirectory);
+        sshApi.submitAsyncJobWithPBS(serverInfo, authenticationInfo, pbsFilePath, jobDescriptor);
+        System.out.println(jobDescriptor.toXML());
+    }
+
+    @Test
+    public void testsubmitAsyncJob() throws Exception {
+        // Create authentication
+        AuthenticationInfo authenticationInfo
+                = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
+                7512, 17280000);
+
+        // Server info
+        ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
+
+        // Output
+        CommandOutput commandOutput = new SystemCommandOutput();
+
+        // Get the API
+        SSHApi sshApi = SSHApiFactory.createSSHApi(this.certificateLocation);
+
+        // Execute command
+        System.out.println("Target PBS file path: " + workingDirectory);
+        System.out.println("Local PBS File path: " + pbsFilePath);
+        String workingDirectory = File.separator + "home" + File.separator + "ogce" + File.separator + "gsissh";
+        JobDescriptor jobDescriptor = new JobDescriptor(commandOutput);
+        jobDescriptor.setWorkingDirectory(workingDirectory);
+        jobDescriptor.setShellName("/bin/bash");
+        jobDescriptor.setJobName("GSI_SSH_SLEEP_JOB");
+        jobDescriptor.setExecutablePath("/bin/echo");
+        jobDescriptor.setAllEnvExport(true);
+        jobDescriptor.setMailOptions("n");
+        jobDescriptor.setStandardOutFile(workingDirectory + File.separator + "application.out");
+        jobDescriptor.setStandardErrorFile(workingDirectory + File.separator + "application.err");
+        jobDescriptor.setNodes(1);
+        jobDescriptor.setProcessesPerNode(1);
+        jobDescriptor.setMaxWallTime("1:00:00");
+        jobDescriptor.setAcountString("sds128");
+        List<String> inputs = new ArrayList<String>();
+        inputs.add("Hello World");
+        jobDescriptor.setInputValues(inputs);
+        System.out.println(jobDescriptor.toXML());
+        sshApi.submitAsyncJob(serverInfo, authenticationInfo, jobDescriptor);
     }
 }

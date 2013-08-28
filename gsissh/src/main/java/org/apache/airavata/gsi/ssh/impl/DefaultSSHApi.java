@@ -21,16 +21,26 @@
 
 package org.apache.airavata.gsi.ssh.impl;
 
+import bsh.StringUtil;
 import com.jcraft.jsch.*;
 import org.apache.airavata.gsi.ssh.api.*;
+import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
 import org.apache.airavata.gsi.ssh.jsch.ExtendedJSch;
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.xmlbeans.impl.store.Path;
+import org.bouncycastle.crypto.prng.RandomGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.xml.transform.*;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
+import java.security.SecureRandom;
 
 /**
  * User: AmilaJ (amilaj@apache.org)
@@ -139,25 +149,72 @@ public class DefaultSSHApi implements SSHApi {
 
     }
 
-    public void submitJob(CommandInfo commandInfo, ServerInfo serverInfo,
-                          AuthenticationInfo authenticationInfo,
-                          CommandOutput commandOutput, String pbsFilePath, String workingDirectory) throws  SSHApiException {
+    public void submitAsyncJobWithPBS(ServerInfo serverInfo,
+                                      AuthenticationInfo authenticationInfo,
+                                      String pbsFilePath, JobDescriptor jobDescriptor) throws SSHApiException {
         try {
+
             SCPTo scpTo = new SCPTo(serverInfo, authenticationInfo, new ConfigReader());
-            scpTo.scpTo(workingDirectory, pbsFilePath);
+            scpTo.scpTo(jobDescriptor.getWorkingDirectory(), pbsFilePath);
+
         } catch (JSchException e) {
             throw new SSHApiException("An exception occurred while connecting to server." +
                     "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
                     " connecting user name - "
                     + serverInfo.getUserName(), e);
-        }  catch (IOException e){
-           throw new SSHApiException("An exception occurred while connecting to server." +
+        } catch (IOException e) {
+            throw new SSHApiException("An exception occurred while connecting to server." +
                     "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
                     " connecting user name - "
                     + serverInfo.getUserName(), e);
         }
 
-        this.executeCommand(commandInfo,serverInfo,authenticationInfo,commandOutput);
+        // since this is a constant we do not ask users to fill this
+        RawCommandInfo rawCommandInfo = new RawCommandInfo("/opt/torque/bin/qsub " +
+                jobDescriptor.getWorkingDirectory() + File.separator + FilenameUtils.getName(pbsFilePath));
+
+        this.executeCommand(rawCommandInfo, serverInfo, authenticationInfo, jobDescriptor.getCommandOutput());
     }
 
+    public void submitAsyncJob(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, JobDescriptor jobDescriptor) throws SSHApiException {
+        TransformerFactory factory = TransformerFactory.newInstance();
+        String xsltPath = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "PBSTemplate.xslt";
+        Source xslt = new StreamSource(new File(xsltPath));
+        Transformer transformer = null;
+        StringWriter results = new StringWriter();
+
+        try {
+            // generate the pbs script using xslt
+            transformer = factory.newTransformer(xslt);
+            Source text = new StreamSource(new ByteArrayInputStream(jobDescriptor.toXML().getBytes()));
+            transformer.transform(text, new StreamResult(results));
+
+            System.out.println("***********************************");
+            System.out.println(results.toString());
+            System.out.println("***********************************");
+
+            // creating a temporary file using pbs script generated above
+            int number = new SecureRandom().nextInt();
+            number = (number < 0 ? -number : number);
+
+            File tempPBSFile = new File(Integer.toString(number) + ".pbs");
+            FileUtils.writeStringToFile(tempPBSFile, results.toString());
+
+            //reusing submitAsyncJobWithPBS method to submit a job
+
+            this.submitAsyncJobWithPBS(serverInfo, authenticationInfo, tempPBSFile.getAbsolutePath(), jobDescriptor);
+            tempPBSFile.delete();
+        } catch (TransformerConfigurationException e) {
+            throw new SSHApiException("Error parsing PBS transformation", e);
+        } catch (TransformerException e) {
+            throw new SSHApiException("Error generating PBS script", e);
+        } catch (IOException e) {
+            throw new SSHApiException("An exception occurred while connecting to server." +
+                    "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
+                    " connecting user name - "
+                    + serverInfo.getUserName(), e);
+        }
+
+
+    }
 }

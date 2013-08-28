@@ -35,7 +35,7 @@ import java.io.OutputStream;
 public interface CommandOutput {
 
     /**
-     * Gets the output of the command as an stream.
+     * Gets the output of the command as a stream.
      * @param  channel Command output as a stream.
      */
     void onOutput(Channel channel);

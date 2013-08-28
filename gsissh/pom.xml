@@ -81,6 +81,11 @@
             <artifactId>bcgss</artifactId>
             <version>146</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.xmlbeans</groupId>
+            <artifactId>xmlbeans</artifactId>
+            <version>${xmlbeans.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -109,7 +114,26 @@
                     <testSourceDirectory>${basedir}\src\test\java\</testSourceDirectory>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>xmlbeans-maven-plugin</artifactId>
+                <version>2.3.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>xmlbeans</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <inherited>true</inherited>
+                <configuration>
+                    <schemaDirectory>src/main/resources/schemas</schemaDirectory>
+                    <xmlConfigs>
+                        <xmlConfig implementation="java.io.File">src/main/resources/schemas/gsissh-schemas.xsdconfig</xmlConfig>
+                    </xmlConfigs>
+                    <outputJar>target/generated/${project.artifactId}-${project.version}.jar</outputJar>
+                </configuration>
+            </plugin>
         </plugins>
         <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
         <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
@@ -128,6 +152,7 @@
         <log4j.version>1.2.17</log4j.version>
         <org.slf4j.version>1.7.2</org.slf4j.version>
         <skipTests>false</skipTests>
+        <xmlbeans.version>2.5.0</xmlbeans.version>
     </properties>
 </project>
 
