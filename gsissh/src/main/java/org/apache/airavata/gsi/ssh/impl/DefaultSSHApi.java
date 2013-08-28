@@ -21,21 +21,16 @@
 
 package org.apache.airavata.gsi.ssh.impl;
 
-import bsh.StringUtil;
 import com.jcraft.jsch.*;
 import org.apache.airavata.gsi.ssh.api.*;
 import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
 import org.apache.airavata.gsi.ssh.jsch.ExtendedJSch;
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.xmlbeans.impl.store.Path;
-import org.bouncycastle.crypto.prng.RandomGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
