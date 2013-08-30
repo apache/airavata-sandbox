@@ -36,6 +36,8 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: AmilaJ (amilaj@apache.org)
@@ -49,7 +51,6 @@ import java.security.SecureRandom;
 public class DefaultSSHApi implements SSHApi {
 
     private static final Logger log = LoggerFactory.getLogger(DefaultSSHApi.class);
-
 
     private ConfigReader configReader;
 
@@ -67,6 +68,14 @@ public class DefaultSSHApi implements SSHApi {
         }
     }
 
+    /**
+     * @param commandInfo        Encapsulated information about command. E.g :- executable name
+     *                           parameters etc ...
+     * @param serverInfo         The SSHing server information.
+     * @param authenticationInfo Security data needs to be communicated with remote server.
+     * @param commandOutput      The output of the command.
+     * @throws SSHApiException
+     */
     public void executeCommand(CommandInfo commandInfo, ServerInfo serverInfo,
                                AuthenticationInfo authenticationInfo,
                                CommandOutput commandOutput) throws SSHApiException {
@@ -144,9 +153,16 @@ public class DefaultSSHApi implements SSHApi {
 
     }
 
-    public void submitAsyncJobWithPBS(ServerInfo serverInfo,
-                                      AuthenticationInfo authenticationInfo,
-                                      String pbsFilePath, JobDescriptor jobDescriptor) throws SSHApiException {
+    /**
+     * @param serverInfo
+     * @param authenticationInfo
+     * @param pbsFilePath
+     * @param jobDescriptor
+     * @throws SSHApiException
+     */
+    public String submitAsyncJobWithPBS(ServerInfo serverInfo,
+                                        AuthenticationInfo authenticationInfo,
+                                        String pbsFilePath, JobDescriptor jobDescriptor) throws SSHApiException {
         try {
 
             SCPTo scpTo = new SCPTo(serverInfo, authenticationInfo, new ConfigReader());
@@ -163,21 +179,35 @@ public class DefaultSSHApi implements SSHApi {
                     " connecting user name - "
                     + serverInfo.getUserName(), e);
         }
-
         // since this is a constant we do not ask users to fill this
         RawCommandInfo rawCommandInfo = new RawCommandInfo("/opt/torque/bin/qsub " +
                 jobDescriptor.getWorkingDirectory() + File.separator + FilenameUtils.getName(pbsFilePath));
 
-        this.executeCommand(rawCommandInfo, serverInfo, authenticationInfo, jobDescriptor.getCommandOutput());
+        StandardOutReader jobIDReaderCommandOutput = new StandardOutReader();
+        this.executeCommand(rawCommandInfo, serverInfo, authenticationInfo, jobIDReaderCommandOutput);
+
+        //Check whether pbs submission is successful or not, if it failed throw and exception in submitJob method
+        // with the error thrown in qsub command
+        if (jobIDReaderCommandOutput.getErrorifAvailable().equals("")) {
+            return jobIDReaderCommandOutput.getStdOutput();
+        } else {
+            throw new SSHApiException(jobIDReaderCommandOutput.getStandardError().toString());
+        }
     }
 
-    public void submitAsyncJob(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, JobDescriptor jobDescriptor) throws SSHApiException {
+    /**
+     * @param serverInfo
+     * @param authenticationInfo
+     * @param jobDescriptor
+     * @throws SSHApiException
+     */
+    public String submitAsyncJob(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, JobDescriptor jobDescriptor) throws SSHApiException {
         TransformerFactory factory = TransformerFactory.newInstance();
         String xsltPath = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "PBSTemplate.xslt";
         Source xslt = new StreamSource(new File(xsltPath));
         Transformer transformer = null;
         StringWriter results = new StringWriter();
-
+        File tempPBSFile = null;
         try {
             // generate the pbs script using xslt
             transformer = factory.newTransformer(xslt);
@@ -192,13 +222,13 @@ public class DefaultSSHApi implements SSHApi {
             int number = new SecureRandom().nextInt();
             number = (number < 0 ? -number : number);
 
-            File tempPBSFile = new File(Integer.toString(number) + ".pbs");
+            tempPBSFile = new File(Integer.toString(number) + ".pbs");
             FileUtils.writeStringToFile(tempPBSFile, results.toString());
 
             //reusing submitAsyncJobWithPBS method to submit a job
 
-            this.submitAsyncJobWithPBS(serverInfo, authenticationInfo, tempPBSFile.getAbsolutePath(), jobDescriptor);
-            tempPBSFile.delete();
+            String jobID = this.submitAsyncJobWithPBS(serverInfo, authenticationInfo, tempPBSFile.getAbsolutePath(), jobDescriptor);
+            return jobID;
         } catch (TransformerConfigurationException e) {
             throw new SSHApiException("Error parsing PBS transformation", e);
         } catch (TransformerException e) {
@@ -208,6 +238,8 @@ public class DefaultSSHApi implements SSHApi {
                     "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
                     " connecting user name - "
                     + serverInfo.getUserName(), e);
+        } finally {
+            tempPBSFile.delete();
         }
 
 

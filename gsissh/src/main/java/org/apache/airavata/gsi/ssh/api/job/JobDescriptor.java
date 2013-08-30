@@ -41,9 +41,6 @@ public class JobDescriptor {
 
     private JobDescriptorDocument jobDescriptionDocument;
 
-    private CommandInfo commandInfo;
-
-    private CommandOutput commandOutput;
 
     public JobDescriptor() {
         jobDescriptionDocument = JobDescriptorDocument.Factory.newInstance();
@@ -58,7 +55,6 @@ public class JobDescriptor {
     public JobDescriptor(CommandOutput commandOutput) {
         jobDescriptionDocument = JobDescriptorDocument.Factory.newInstance();
         jobDescriptionDocument.addNewJobDescriptor();
-        this.commandOutput = commandOutput;
     }
 
 
@@ -78,21 +74,6 @@ public class JobDescriptor {
         return jobDescriptor;
     }
 
-    public void setCommandInfo(CommandInfo commandInfo) {
-        this.commandInfo = commandInfo;
-    }
-
-    public void setCommandOutput(CommandOutput commandOutput) {
-        this.commandOutput = commandOutput;
-    }
-
-    public CommandInfo getCommandInfo() {
-        return commandInfo;
-    }
-
-    public CommandOutput getCommandOutput() {
-        return commandOutput;
-    }
 
     //todo write bunch of setter getters to set and get jobdescription parameters
     public void setWorkingDirectory(String workingDirectory) {

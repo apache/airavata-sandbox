@@ -135,14 +135,9 @@ public class DefaultSSHApiTest {
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
                 7512, 17280000);
 
-        // Create command
-        CommandInfo commandInfo = new RawCommandInfo("/opt/torque/bin/qsub /home/ogce/sleep1.pbs");
-
         // Server info
         ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
 
-        // Output
-        CommandOutput commandOutput = new SystemCommandOutput();
 
         // Get the API
         SSHApi sshApi = SSHApiFactory.createSSHApi(this.certificateLocation);
@@ -150,12 +145,12 @@ public class DefaultSSHApiTest {
         // Execute command
         System.out.println("Target PBS file path: " + workingDirectory);
         System.out.println("Local PBS File path: " + pbsFilePath);
-        JobDescriptor jobDescriptor = new JobDescriptor(commandOutput);
+        JobDescriptor jobDescriptor = new JobDescriptor();
         //Here we give working directory as a file name to replace the file, to allow multiple test runs with the same
         //file name
         jobDescriptor.setWorkingDirectory(workingDirectory);
-        sshApi.submitAsyncJobWithPBS(serverInfo, authenticationInfo, pbsFilePath, jobDescriptor);
-        System.out.println(jobDescriptor.toXML());
+        String jobID = sshApi.submitAsyncJobWithPBS(serverInfo, authenticationInfo, pbsFilePath, jobDescriptor);
+        System.out.println("JobID returned : " + jobID);
     }
 
     @Test
@@ -168,8 +163,6 @@ public class DefaultSSHApiTest {
         // Server info
         ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
 
-        // Output
-        CommandOutput commandOutput = new SystemCommandOutput();
 
         // Get the API
         SSHApi sshApi = SSHApiFactory.createSSHApi(this.certificateLocation);
@@ -178,7 +171,7 @@ public class DefaultSSHApiTest {
         System.out.println("Target PBS file path: " + workingDirectory);
         System.out.println("Local PBS File path: " + pbsFilePath);
         String workingDirectory = File.separator + "home" + File.separator + "ogce" + File.separator + "gsissh";
-        JobDescriptor jobDescriptor = new JobDescriptor(commandOutput);
+        JobDescriptor jobDescriptor = new JobDescriptor();
         jobDescriptor.setWorkingDirectory(workingDirectory);
         jobDescriptor.setShellName("/bin/bash");
         jobDescriptor.setJobName("GSI_SSH_SLEEP_JOB");
@@ -195,6 +188,7 @@ public class DefaultSSHApiTest {
         inputs.add("Hello World");
         jobDescriptor.setInputValues(inputs);
         System.out.println(jobDescriptor.toXML());
-        sshApi.submitAsyncJob(serverInfo, authenticationInfo, jobDescriptor);
+        String jobID = sshApi.submitAsyncJob(serverInfo, authenticationInfo, jobDescriptor);
+        System.out.println("JobID returned : " + jobID);
     }
 }

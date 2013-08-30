@@ -46,11 +46,29 @@ public interface SSHApi {
                                  AuthenticationInfo authenticationInfo,
                                  CommandOutput commandOutput) throws SSHApiException;
 
-    void submitAsyncJobWithPBS(ServerInfo serverInfo,
+    /**
+     *  can be used to submit a job with a given pbs file
+     * @param serverInfo
+     * @param authenticationInfo
+     * @param pbsFilePath
+     * @param jobDescriptor
+     * @return The jobID
+     * @throws SSHApiException
+     */
+    String submitAsyncJobWithPBS(ServerInfo serverInfo,
                                AuthenticationInfo authenticationInfo,
                                String pbsFilePath, JobDescriptor jobDescriptor) throws SSHApiException;
-//
-    void submitAsyncJob(ServerInfo serverInfo,
+
+    /**
+     * can be used to submit a job without giving a pbs, but providing job attributes
+     * @param serverInfo
+     * @param authenticationInfo
+     * @param jobDescriptor
+     * @return The jobID
+     * @throws SSHApiException
+     */
+
+    String submitAsyncJob(ServerInfo serverInfo,
                                AuthenticationInfo authenticationInfo,
                                JobDescriptor jobDescriptor) throws SSHApiException;
 }
