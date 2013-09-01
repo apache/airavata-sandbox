@@ -1,0 +1,311 @@
+{
+    "type": "object",
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "http://airavata.apache.org/schemas/gfac/2012/12/applicationDeploymentDescription",
+    "properties": {
+        "applicationDeploymentDescription": {
+            "type": "object",
+            "$ref": "#definitions/applicationDeploymentDescriptionType"
+        }
+    },
+    "definitions": {
+        "applicationDeploymentDescriptionType": {
+            "type": "object",
+            "properties": {
+                "authorInfo": {
+                    "$ref": "http://airavata.apache.org/schemas/gfac/2012/12/authorInfoType"
+                },
+                "documentInfo": {
+                    "$ref": "http://airavata.apache.org/schemas/gfac/2012/12/documentInfoType"
+                },
+                "applicationName": {
+                    "@targetNamespace": {
+                        "type": "string"
+                    }
+                },
+                "executableLocation": {
+                    "type": "string"
+                },
+                "applicationEnvironment": {
+                    "type": "object",
+                    "$ref": "http://airavata.apache.org/schemas/gfac/2012/12/nameValuePairType"
+                },
+                "standardError": {
+                    "type": "string"
+                },
+                "standardInput": {
+                    "type": "string"
+                },
+                "standardOutput": {
+                    "type": "string"
+                },
+                "inputDataDirectory": {
+                    "type": "string"
+                },
+                "outputDataDirectory": {
+                    "type": "string"
+                },
+                "scratchWorkingDirectory": {
+                    "type": "string"
+                },
+                "staticWorkingDirectory": {
+                    "type": "string"
+                }
+            }
+        },
+        "ec2ApplicationDeploymentType": {
+            "type": "object",
+            "properties": {
+                "authorInfo": {
+                    "$ref": "http://airavata.apache.org/schemas/gfac/2012/12/authorInfoType"
+                },
+                "documentInfo": {
+                    "$ref": "http://airavata.apache.org/schemas/gfac/2012/12/documentInfoType"
+                },
+                "applicationName": {
+                    "@targetNamespace": {
+                        "type": "string"
+                    }
+                },
+                "executableLocation": {
+                    "type": "string"
+                },
+                "applicationEnvironment": {
+                    "type": "object",
+                    "$ref": "http://airavata.apache.org/schemas/gfac/2012/12/nameValuePairType"
+                },
+                "standardError": {
+                    "type": "string"
+                },
+                "standardInput": {
+                    "type": "string"
+                },
+                "standardOutput": {
+                    "type": "string"
+                },
+                "inputDataDirectory": {
+                    "type": "string"
+                },
+                "outputDataDirectory": {
+                    "type": "string"
+                },
+                "scratchWorkingDirectory": {
+                    "type": "string"
+                },
+                "staticWorkingDirectory": {
+                    "type": "string"
+                },
+                "jobType" :{
+                     "type":"string"
+                },
+                "executable":{
+                    "type":"string"
+                },
+                "executableType":{
+                    "type":"string"
+                }
+            }
+        },
+        "hpcApplicationDeploymentType":{
+            "type": "object",
+            "properties": {
+                "authorInfo": {
+                    "$ref": "http://airavata.apache.org/schemas/gfac/2012/12/authorInfoType"
+                },
+                "documentInfo": {
+                    "$ref": "http://airavata.apache.org/schemas/gfac/2012/12/documentInfoType"
+                },
+                "applicationName": {
+                    "@targetNamespace": {
+                        "type": "string"
+                    }
+                },
+                "executableLocation": {
+                    "type": "string"
+                },
+                "applicationEnvironment": {
+                    "type": "object",
+                    "$ref": "http://airavata.apache.org/schemas/gfac/2012/12/nameValuePairType"
+                },
+                "standardError": {
+                    "type": "string"
+                },
+                "standardInput": {
+                    "type": "string"
+                },
+                "standardOutput": {
+                    "type": "string"
+                },
+                "inputDataDirectory": {
+                    "type": "string"
+                },
+                "outputDataDirectory": {
+                    "type": "string"
+                },
+                "scratchWorkingDirectory": {
+                    "type": "string"
+                },
+                "staticWorkingDirectory": {
+                    "type": "string"
+                },
+                "jobType" :{
+                    "type":"string"
+                },
+                "projectAccount":{
+                    "$ref": "#definitions/projectAccountType"
+                },
+                "queue":{
+                    "$ref": "#definitions/queueType"
+                },
+                "maxWallTime":{
+                    "type":"integer"
+                },
+                "cpuCount":{
+                    "type":"integer"
+                },
+                "noceCount":{
+                    "type":"integer"
+                },
+                "processorsPerNode":{
+                    "type":"integer"
+                },
+                "minMemory":{
+                    "type":"integer"
+                },
+                "maxMemory":{
+                    "type":"integer"
+                },
+                "keyValuePairs":{
+                    "$ref": "#definitions/extendedKeyValueType"
+                }
+            }
+        },
+        "hadoopApplicationDeploymentDescriptionType":{
+            "type": "object",
+            "properties": {
+                "authorInfo": {
+                    "$ref": "http://airavata.apache.org/schemas/gfac/2012/12/authorInfoType"
+                },
+                "documentInfo": {
+                    "$ref": "http://airavata.apache.org/schemas/gfac/2012/12/documentInfoType"
+                },
+                "applicationName": {
+                    "@targetNamespace": {
+                        "type": "string"
+                    }
+                },
+                "executableLocation": {
+                    "type": "string"
+                },
+                "applicationEnvironment": {
+                    "type": "object",
+                    "$ref": "http://airavata.apache.org/schemas/gfac/2012/12/nameValuePairType"
+                },
+                "standardError": {
+                    "type": "string"
+                },
+                "standardInput": {
+                    "type": "string"
+                },
+                "standardOutput": {
+                    "type": "string"
+                },
+                "inputDataDirectory": {
+                    "type": "string"
+                },
+                "outputDataDirectory": {
+                    "type": "string"
+                },
+                "scratchWorkingDirectory": {
+                    "type": "string"
+                },
+                "staticWorkingDirectory": {
+                    "type": "string"
+                },
+                "jarLocation":{
+                    "type":"string"
+                },
+                "jobName":{
+                    "type":"string"
+                },
+                "combinerClass":{
+                    "type":"string"
+                },
+                "mapperClass":{
+                    "type":"string"
+                },
+                "reducerClass":{
+                    "type":"string"
+                },
+                "inputFormatClass":{
+                    "type":"string"
+                },
+                "outputFormatClass":{
+                    "type":"string"
+                },
+                "mapOutputKeyClass":{
+                    "type":"string"
+                },
+                "mapOutputValueClass":{
+                    "type":"string"
+                },
+                "outputKeyClass":{
+                    "type":"string"
+                },
+                "outputValueClass":{
+                    "type":"string"
+                },
+                "numReduceTasks":{
+                    "type":"integer"
+                },
+                "partitionerClass":{
+                    "type":"string"
+                },
+                "hdfsInputDirectory":{
+                    "type":"string"
+                },
+                "hdfsOutputDirectory":{
+                    "type":"string"
+                }
+            }
+        },
+        "projectAccountType":{
+            "type":"object",
+            "properties":{
+                "projectAccountNumber":{
+                    "type":"string"
+                },
+                "projectAccountDescription":{
+                    "type":"string"
+                },
+                "anyMetadata": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "http://airavata.apache.org/schemas/gfac/2012/12/anyMetadata"
+                    }
+                }
+            }
+        },
+        "queueType":{
+            "type":"object",
+            "require":["queueName"],
+            "properties":{
+                "queueName":{
+                    "type":"string"
+                },
+                "queueDescription":{
+                    "type":"string"
+                }
+            }
+        },
+        "extendedKeyValueType":{
+            "type":"string",
+            "require":["@name"],
+            "properties":{
+                "@name":{
+                    "type":"string"
+                }
+            }
+        }
+    }
+}
