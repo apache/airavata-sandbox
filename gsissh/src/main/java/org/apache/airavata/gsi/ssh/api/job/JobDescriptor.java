@@ -132,5 +132,30 @@ public class JobDescriptor {
         InputList inputList = this.getJobDescriptorDocument().getJobDescriptor().addNewInputs();
         inputList.setInputArray(inputValue.toArray(new String[inputValue.size()]));
     }
+
+    public void setJobID(String jobID) {
+        this.getJobDescriptorDocument().getJobDescriptor().setJobID(jobID);
+    }
+
+    public void setQueueName(String queueName) {
+        this.getJobDescriptorDocument().getJobDescriptor().setQueueName(queueName);
+    }
+     public void setStatus(String queueName) {
+        this.getJobDescriptorDocument().getJobDescriptor().setStatus(queueName);
+    }
+
+
+  public void getShellName() {
+        this.getJobDescriptorDocument().getJobDescriptor().getShellName();
+    }
+
+    public String getJobName() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getJobName();
+    }
+
+    public String getJobId(){
+        return this.getJobDescriptorDocument().getJobDescriptor().getJobID();
+    }
+
 }
 

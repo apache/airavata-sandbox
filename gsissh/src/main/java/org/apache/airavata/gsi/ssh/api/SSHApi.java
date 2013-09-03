@@ -71,4 +71,9 @@ public interface SSHApi {
     String submitAsyncJob(ServerInfo serverInfo,
                                AuthenticationInfo authenticationInfo,
                                JobDescriptor jobDescriptor) throws SSHApiException;
+
+    Cluster getCluster(ServerInfo serverInfo, AuthenticationInfo authenticationInfo) throws SSHApiException;
+
+
+    JobDescriptor getJobById(ServerInfo serverInfo,AuthenticationInfo authenticationInfo, String jobID)throws SSHApiException;
 }

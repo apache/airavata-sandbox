@@ -26,6 +26,7 @@ import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
 import org.apache.airavata.gsi.ssh.x2012.x12.ExportProperties;
 import org.apache.airavata.gsi.ssh.x2012.x12.InputList;
 import org.apache.commons.io.FilenameUtils;
+import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -53,9 +54,9 @@ public class DefaultSSHApiTest {
 
     @BeforeTest
     public void setUp() throws Exception {
-        System.setProperty("myproxy.user", "ogce");
-        System.setProperty("myproxy.password", "Jdas7wph");
-        System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
+//        System.setProperty("myproxy.user", "ogce");
+//        System.setProperty("myproxy.password", "");
+//        System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
         myProxyUserName = System.getProperty("myproxy.user");
         myProxyPassword = System.getProperty("myproxy.password");
 
@@ -129,7 +130,7 @@ public class DefaultSSHApiTest {
     }
 
     @Test
-    public void testsubmitAsyncJobWithPBS() throws Exception {
+    public void testSubmitAsyncJobWithPBS() throws Exception {
         // Create authentication
         AuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
@@ -154,7 +155,7 @@ public class DefaultSSHApiTest {
     }
 
     @Test
-    public void testsubmitAsyncJob() throws Exception {
+    public void testSubmitAsyncJob() throws Exception {
         // Create authentication
         AuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
@@ -190,5 +191,69 @@ public class DefaultSSHApiTest {
         System.out.println(jobDescriptor.toXML());
         String jobID = sshApi.submitAsyncJob(serverInfo, authenticationInfo, jobDescriptor);
         System.out.println("JobID returned : " + jobID);
+
+//        Cluster cluster = sshApi.getCluster(serverInfo, authenticationInfo);
+        JobDescriptor jobById = sshApi.getJobById(serverInfo, authenticationInfo, jobID);
+        AssertJUnit.assertEquals(jobById.getJobId(),jobID);
+    }
+
+    @Test
+    public void testGetCluster()throws Exception{
+//        AuthenticationInfo authenticationInfo
+//                = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
+//                7512, 17280000);
+//        // Server info
+//        ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
+//        // Get the API
+//        SSHApi sshApi = SSHApiFactory.createSSHApi(this.certificateLocation);
+//        Cluster cluster = sshApi.getCluster(serverInfo, authenticationInfo);
+//        System.out.println(cluster.getNodes()[0].getName());
+//        System.out.println(cluster.getNodes()[0].getNp());
+//        System.out.println(cluster.getNodes()[0].getState());
+//        System.out.println(cluster.getNodes()[0].getCores()[0].getId());
+//        System.out.println(cluster.getNodes()[0].getName());
+
+    }
+    @Test
+    public void testsubmitAsyncJobWithFailure() throws Exception {
+        // Create authentication
+        AuthenticationInfo authenticationInfo
+                = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
+                7512, 17280000);
+
+        // Server info
+        ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
+
+
+        // Get the API
+        SSHApi sshApi = SSHApiFactory.createSSHApi(this.certificateLocation);
+
+        // Execute command
+        System.out.println("Target PBS file path: " + workingDirectory);
+        System.out.println("Local PBS File path: " + pbsFilePath);
+        String workingDirectory = File.separator + "home" + File.separator + "ogce" + File.separator + "gsissh";
+        JobDescriptor jobDescriptor = new JobDescriptor();
+        jobDescriptor.setWorkingDirectory(workingDirectory);
+        jobDescriptor.setShellName("/bin/bash");
+        jobDescriptor.setJobName("GSI_SSH_SLEEP_JOB");
+        jobDescriptor.setExecutablePath("/bin/echo");
+        jobDescriptor.setAllEnvExport(true);
+        jobDescriptor.setMailOptions("n");
+        jobDescriptor.setStandardOutFile(workingDirectory + File.separator + "application.out");
+        jobDescriptor.setStandardErrorFile(workingDirectory + File.separator + "application.err");
+        jobDescriptor.setNodes(1);
+        jobDescriptor.setProcessesPerNode(100);
+        jobDescriptor.setMaxWallTime("1:00:00");
+        jobDescriptor.setAcountString("sds128");
+        List<String> inputs = new ArrayList<String>();
+        inputs.add("Hello World");
+        jobDescriptor.setInputValues(inputs);
+        System.out.println(jobDescriptor.toXML());
+        try {
+            String jobID = sshApi.submitAsyncJob(serverInfo, authenticationInfo, jobDescriptor);
+            System.out.println("JobID returned : " + jobID);
+        } catch (SSHApiException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

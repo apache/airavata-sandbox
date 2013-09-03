@@ -228,7 +228,7 @@ public class DefaultSSHApi implements SSHApi {
             //reusing submitAsyncJobWithPBS method to submit a job
 
             String jobID = this.submitAsyncJobWithPBS(serverInfo, authenticationInfo, tempPBSFile.getAbsolutePath(), jobDescriptor);
-            return jobID;
+            return jobID.replace("\n","");
         } catch (TransformerConfigurationException e) {
             throw new SSHApiException("Error parsing PBS transformation", e);
         } catch (TransformerException e) {
@@ -241,7 +241,165 @@ public class DefaultSSHApi implements SSHApi {
         } finally {
             tempPBSFile.delete();
         }
+    }
 
+    public Cluster getCluster(ServerInfo serverInfo, AuthenticationInfo authenticationInfo) throws SSHApiException {
+        RawCommandInfo rawCommandInfo = new RawCommandInfo("/opt/torque/bin/qnodes");
+
+        StandardOutReader stdOutReader = new StandardOutReader();
+        this.executeCommand(rawCommandInfo, serverInfo, authenticationInfo, stdOutReader);
+        String result = stdOutReader.getStdOutput();
+        String[] Nodes = result.split("\n");
+        String[] line;
+        String header, value;
+        Machine Node;
+        Core[] Cores = null;
+        ArrayList<Machine> Machines = new ArrayList<Machine>();
+        int i = 0;
+        while (i < Nodes.length) {
+            Node = new Machine();
+            Node.setName(Nodes[i]);
+            i++;
+
+            while (i < Nodes.length) {
+                if (!Nodes[i].startsWith(" ")) {
+                    i++;
+                    break;
+                }
+
+                line = Nodes[i].split("=");
+                header = line[0].trim();
+                value = line[1].trim();
+
+                if ("state".equals(header))
+                    Node.setState(value);
+                else if ("np".equals(header)) {
+                    Node.setNp(value);
+                    int np = Integer.parseInt(Node.getNp());
+                    Cores = new Core[np];
+                    for (int n = 0; n < np; n++) {
+                        Cores[n] = new Core("" + n);
+                    }
+                } else if ("ntype".equals(header))
+                    Node.setNtype(value);
+                else if ("jobs".equals(header)) {
+                    String[] jobs = value.split(", ");
+                    JobDescriptor jo = new JobDescriptor();
+                    //Job[] Jobs = new Job[jobs.length];
+                    for (int j = 0; j < jobs.length; j++) {
+                        String[] c = jobs[j].split("/");
+                        String Jid = c[1];
+                        jo = this.getJobById(serverInfo, authenticationInfo, Jid);
+                        int core = Integer.parseInt(c[0]);
+                        Cores[core].setJob(jo);
+
+                    }
+
+
+                }
+                i++;
+            }
+            Node.setCores(Cores);
+            Machines.add(Node);
+        }
+        Cluster c = new Cluster();
+        c.setNodes(Machines.toArray(new Machine[Machines.size()]));
+        return c;
+    }
+
+    public JobDescriptor getJobById(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, String jobID) throws SSHApiException {
+        RawCommandInfo rawCommandInfo = new RawCommandInfo("/opt/torque/bin/qstat -f " + jobID);
+
+        StandardOutReader stdOutReader = new StandardOutReader();
+        this.executeCommand(rawCommandInfo, serverInfo, authenticationInfo, stdOutReader);
+        String result = stdOutReader.getStdOutput();
+        String[] info = result.split("\n");
+        JobDescriptor jobDescriptor = new JobDescriptor();
+        String header = "";
+        String value = "";
+        String[] line;
+        for (int i = 0; i < info.length; i++) {
+            if (info[i].contains("=")) {
+                line = info[i].split("=", 2);
+            } else {
+                line = info[i].split(":", 2);
+            }
+            if (line.length >= 2) {
+                header = line[0].trim();
+                //                  System.out.println("Header = " + header);
+                value = line[1].trim();
+//                    System.out.println("value = " + value);
+
+                if (header.equals("Variable_List")) {
+                    while (info[i + 1].startsWith("\t")) {
+                        value += info[i + 1];
+                        i++;
+                    }
+                    value = value.replaceAll("\t", "");
+//                        jobDescriptor.VariablesList=value;
+//                        jobDescriptor.analyzeVariableList(value);
+                } else if ("Job Id".equals(header))
+                    jobDescriptor.setJobID(value);
+                else if ("Job_Name".equals(header))
+                    jobDescriptor.setJobName(value);
+
+                else if ("Job_Owner".equals(header)) {
+//                       jobDescriptor.setOwner(value);
+                } else if ("resources_used.cput".equals(header)) {
+//                       jobDescriptor.setUsedcput(value);
+                } else if ("resources_used.mem".equals(header)) {
+//                       jobDescriptor.setUsedMem(value);
+                } else if ("resources_used.walltime".equals(header)) {
+//                       jobDescriptor.setEllapsedTime(value);
+                } else if ("job_state".equals(header))
+                    jobDescriptor.setStatus(value);
+
+                else if ("queue".equals(header))
+                    jobDescriptor.setQueueName(value);
+                else if ("ctime".equals(header)) {
+//                       jobDescriptor.setCtime(value);
+                } else if ("qtime".equals(header)) {
+//                       jobDescriptor.setQtime(value);
+                } else if ("mtime".equals(header)) {
+//                       jobDescriptor.setMtime(value);
+                } else if ("start_time".equals(header)) {
+//                        jobDescriptor.setStime(value);
+                } else if ("comp_time".equals(header)) {
+//                            jobDescriptor.setComp_time(value);
+                } else if ("exec_host".equals(header)) {
+//                       jobDescriptor.setExecuteNode(value);
+                } else if ("Output_Path".equals(header)) {
+                    if (info[i + 1].contains("=") || info[i + 1].contains(":"))
+                        jobDescriptor.setStandardOutFile(value);
+                    else {
+                        jobDescriptor.setStandardOutFile(value + info[i + 1].trim());
+                        i++;
+                    }
+                } else if ("Error_Path".equals(header)) {
+                    if (info[i + 1].contains("=") || info[i + 1].contains(":"))
+                        jobDescriptor.setStandardErrorFile(value);
+                    else {
+                        String st = info[i + 1].trim();
+                        jobDescriptor.setStandardErrorFile(value + st);
+                        i++;
+                    }
+
+                } else if ("submit_args".equals(header)) {
+                    while (i + 1 < info.length) {
+                        if (info[i + 1].startsWith("\t")) {
+                            value += info[i + 1];
+                            i++;
+                        } else
+                            break;
+                    }
+                    value = value.replaceAll("\t", "");
+//                         jobDescriptor.setSubmitArgs (value);
+                }
+
+
+            }
+        }
+        return jobDescriptor;
 
     }
 }
