@@ -214,9 +214,7 @@ public class DefaultSSHApi implements SSHApi {
             Source text = new StreamSource(new ByteArrayInputStream(jobDescriptor.toXML().getBytes()));
             transformer.transform(text, new StreamResult(results));
 
-            System.out.println("***********************************");
-            System.out.println(results.toString());
-            System.out.println("***********************************");
+            log.info("generated PBS:" + results.toString());
 
             // creating a temporary file using pbs script generated above
             int number = new SecureRandom().nextInt();
@@ -228,7 +226,7 @@ public class DefaultSSHApi implements SSHApi {
             //reusing submitAsyncJobWithPBS method to submit a job
 
             String jobID = this.submitAsyncJobWithPBS(serverInfo, authenticationInfo, tempPBSFile.getAbsolutePath(), jobDescriptor);
-            return jobID.replace("\n","");
+            return jobID.replace("\n", "");
         } catch (TransformerConfigurationException e) {
             throw new SSHApiException("Error parsing PBS transformation", e);
         } catch (TransformerException e) {
@@ -332,9 +330,9 @@ public class DefaultSSHApi implements SSHApi {
             }
             if (line.length >= 2) {
                 header = line[0].trim();
-                //                  System.out.println("Header = " + header);
+                log.info("Header = " + header);
                 value = line[1].trim();
-//                    System.out.println("value = " + value);
+                log.info("value = " + value);
 
                 if (header.equals("Variable_List")) {
                     while (info[i + 1].startsWith("\t")) {
@@ -342,40 +340,39 @@ public class DefaultSSHApi implements SSHApi {
                         i++;
                     }
                     value = value.replaceAll("\t", "");
-//                        jobDescriptor.VariablesList=value;
-//                        jobDescriptor.analyzeVariableList(value);
-                } else if ("Job Id".equals(header)){
+                    jobDescriptor.setVariableList(value);
+                } else if ("Job Id".equals(header)) {
                     jobDescriptor.setJobID(value);
-                }else if ("Job_Name".equals(header)){
+                } else if ("Job_Name".equals(header)) {
                     jobDescriptor.setJobName(value);
-                }else if ("Account_Name".equals(header)){
+                } else if ("Account_Name".equals(header)) {
                     jobDescriptor.setAcountString(value);
-                }else if ("job_state".equals(header)){
+                } else if ("job_state".equals(header)) {
                     jobDescriptor.setStatus(value);
-                }else if ("Job_Owner".equals(header)) {
-                       jobDescriptor.setOwner(value);
+                } else if ("Job_Owner".equals(header)) {
+                    jobDescriptor.setOwner(value);
                 } else if ("resources_used.cput".equals(header)) {
-                       jobDescriptor.setUsedCPUTime(value);
+                    jobDescriptor.setUsedCPUTime(value);
                 } else if ("resources_used.mem".equals(header)) {
-                       jobDescriptor.setUsedMemory(value);
+                    jobDescriptor.setUsedMemory(value);
                 } else if ("resources_used.walltime".equals(header)) {
-                       jobDescriptor.setEllapsedTime(value);
-                } else if ("job_state".equals(header)){
+                    jobDescriptor.setEllapsedTime(value);
+                } else if ("job_state".equals(header)) {
                     jobDescriptor.setStatus(value);
-                }else if ("queue".equals(header))
+                } else if ("queue".equals(header))
                     jobDescriptor.setQueueName(value);
                 else if ("ctime".equals(header)) {
-                       jobDescriptor.setCTime(value);
+                    jobDescriptor.setCTime(value);
                 } else if ("qtime".equals(header)) {
-                       jobDescriptor.setQTime(value);
+                    jobDescriptor.setQTime(value);
                 } else if ("mtime".equals(header)) {
-                       jobDescriptor.setMTime(value);
+                    jobDescriptor.setMTime(value);
                 } else if ("start_time".equals(header)) {
-                        jobDescriptor.setSTime(value);
+                    jobDescriptor.setSTime(value);
                 } else if ("comp_time".equals(header)) {
-                            jobDescriptor.setCompTime(value);
+                    jobDescriptor.setCompTime(value);
                 } else if ("exec_host".equals(header)) {
-                       jobDescriptor.setExecuteNode(value);
+                    jobDescriptor.setExecuteNode(value);
                 } else if ("Output_Path".equals(header)) {
                     if (info[i + 1].contains("=") || info[i + 1].contains(":"))
                         jobDescriptor.setStandardOutFile(value);
@@ -401,10 +398,8 @@ public class DefaultSSHApi implements SSHApi {
                             break;
                     }
                     value = value.replaceAll("\t", "");
-//                         jobDescriptor.setSubmitArgs (value);
+                         jobDescriptor.setSubmitArgs(value);
                 }
-
-
             }
         }
         return jobDescriptor;

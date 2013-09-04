@@ -49,9 +49,9 @@ public class DefaultSSHApiTest {
 
     @BeforeTest
     public void setUp() throws Exception {
-        System.setProperty("myproxy.user", "ogce");
-        System.setProperty("myproxy.password", "Jdas7wph");
-        System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
+//        System.setProperty("myproxy.user", "ogce");
+//        System.setProperty("myproxy.password", "");
+//        System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
         myProxyUserName = System.getProperty("myproxy.user");
         myProxyPassword = System.getProperty("myproxy.password");
 
@@ -210,52 +210,23 @@ public class DefaultSSHApiTest {
 
     @Test
     public void testGetCluster()throws Exception{
-        AuthenticationInfo authenticationInfo
-                = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
-                7512, 17280000);
-        // Server info
-        ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
-        // Get the API
-        SSHApi sshApi = SSHApiFactory.createSSHApi(this.certificateLocation);
-        Cluster cluster = sshApi.getCluster(serverInfo, authenticationInfo);
-        System.out.println(cluster.getNodes()[0].getName());
-        System.out.println(cluster.getNodes()[0].getNp());
-        System.out.println(cluster.getNodes()[0].getState());
-        System.out.println(cluster.getNodes()[0].getCores()[0].getId());
-        System.out.println(cluster.getNodes()[0].getName());
+//        AuthenticationInfo authenticationInfo
+//                = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
+//                7512, 17280000);
+//        // Server info
+//        ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
+//        // Get the API
+//        SSHApi sshApi = SSHApiFactory.createSSHApi(this.certificateLocation);
+//        Cluster cluster = sshApi.getCluster(serverInfo, authenticationInfo);
+//        System.out.println(cluster.getNodes()[0].getName());
+//        System.out.println(cluster.getNodes()[0].getNp());
+//        System.out.println(cluster.getNodes()[0].getState());
+//        System.out.println(cluster.getNodes()[0].getCores()[0].getId());
+//        System.out.println(cluster.getNodes()[0].getName());
 
     }
 
-    @Test
-    public void testGetJob() throws Exception {
-        String jobID = "1584665";
-        AuthenticationInfo authenticationInfo
-                = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
-                7512, 17280000);
 
-        // Server info
-        ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
-
-
-        // Get the API
-        SSHApi sshApi = SSHApiFactory.createSSHApi(this.certificateLocation);
-        JobDescriptor jobById = sshApi.getJobById(serverInfo, authenticationInfo, jobID);
-        System.out.println(jobById.getAcountString());
-        System.out.println(jobById.getAllEnvExport());
-        System.out.println(jobById.getCompTime());
-        System.out.println(jobById.getExecutablePath());
-        System.out.println(jobById.getEllapsedTime());
-        System.out.println(jobById.getQueueName());
-        System.out.println(jobById.getJobName());
-        System.out.println(jobById.getCTime());
-        System.out.println(jobById.getSTime());
-        System.out.println(jobById.getMTime());
-        System.out.println(jobById.getCompTime());
-        System.out.println(jobById.getOwner());
-        System.out.println(jobById.getQTime());
-        System.out.println(jobById.getUsedCPUTime());
-        System.out.println(jobById.getUsedMemory());
-    }
     @Test
     public void testsubmitAsyncJobWithFailure() throws Exception {
         // Create authentication
