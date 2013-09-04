@@ -33,6 +33,20 @@
             <element name="inputs" type="gsissh:inputList" minOccurs="1" maxOccurs="1"/>
             <element name="exports" type="gsissh:exportProperties" minOccurs="1" maxOccurs="1"/>
             <element name="status" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <element name="afterAny" type="gsissh:afterAnyList" minOccurs="0" maxOccurs="1"/>
+            <element name="afterOKList" type="gsissh:afterOKList" minOccurs="0" maxOccurs="1"/>
+            <element name="cTime" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <element name="qTime" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <element name="mTime" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <element name="sTime" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <element name="compTime" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <element name="owner" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <element name="executeNode" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <element name="ellapsedTime" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <element name="usedCPUTime" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <element name="usedMem" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <element name="submitArgs" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <element name="variableList" type="xsd:string" minOccurs="0" maxOccurs="1"/>
 		</sequence>
 	</complexType>
     <complexType name="inputList">
@@ -40,6 +54,18 @@
 			<element name="input" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
 		</sequence>
     </complexType>
+    <complexType name="afterAnyList">
+        <sequence>
+			<element name="afterAny" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
+    </complexType>
+
+    <complexType name="afterOKList">
+        <sequence>
+			<element name="afterOKList" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
+    </complexType>
+
     <complexType name="exportProperties">
 		<sequence>
 

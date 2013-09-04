@@ -20,17 +20,10 @@
 */
 package org.apache.airavata.gsi.ssh.api.job;
 
-import org.apache.airavata.gsi.ssh.api.CommandInfo;
 import org.apache.airavata.gsi.ssh.api.CommandOutput;
-import org.apache.airavata.gsi.ssh.x2012.x12.InputList;
-import org.apache.airavata.gsi.ssh.x2012.x12.JobDescriptorDocument;
-import org.apache.airavata.gsi.ssh.x2012.x12.PbsParams;
-import org.apache.airavata.gsi.ssh.x2012.x12.impl.PbsParamsImpl;
+import org.apache.airavata.gsi.ssh.x2012.x12.*;
 import org.apache.xmlbeans.XmlException;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -128,7 +121,7 @@ public class JobDescriptor {
         this.getJobDescriptorDocument().getJobDescriptor().setAcountString(name);
     }
 
-    public void setInputValues(List<String> inputValue){
+    public void setInputValues(List<String> inputValue) {
         InputList inputList = this.getJobDescriptorDocument().getJobDescriptor().addNewInputs();
         inputList.setInputArray(inputValue.toArray(new String[inputValue.size()]));
     }
@@ -140,12 +133,151 @@ public class JobDescriptor {
     public void setQueueName(String queueName) {
         this.getJobDescriptorDocument().getJobDescriptor().setQueueName(queueName);
     }
-     public void setStatus(String queueName) {
+
+    public void setStatus(String queueName) {
         this.getJobDescriptorDocument().getJobDescriptor().setStatus(queueName);
     }
 
+    public void setAfterAnyList(String[] afterAnyList) {
+        AfterAnyList afterAny = this.getJobDescriptorDocument().getJobDescriptor().addNewAfterAny();
+        afterAny.setAfterAnyArray(afterAnyList);
+    }
 
-  public void getShellName() {
+    public void setAfterOKList(String[] afterOKList) {
+        AfterOKList afterAnyList = this.getJobDescriptorDocument().getJobDescriptor().addNewAfterOKList();
+        afterAnyList.setAfterOKListArray(afterOKList);
+    }
+    public void setCTime(String cTime) {
+        this.getJobDescriptorDocument().getJobDescriptor().setCTime(cTime);
+    }
+    public void setQTime(String qTime) {
+        this.getJobDescriptorDocument().getJobDescriptor().setQTime(qTime);
+    }
+    public void setMTime(String mTime) {
+        this.getJobDescriptorDocument().getJobDescriptor().setMTime(mTime);
+    }
+    public void setSTime(String sTime) {
+        this.getJobDescriptorDocument().getJobDescriptor().setSTime(sTime);
+    }
+    public void setCompTime(String compTime) {
+        this.getJobDescriptorDocument().getJobDescriptor().setCompTime(compTime);
+    }
+    public void setOwner(String owner) {
+        this.getJobDescriptorDocument().getJobDescriptor().setOwner(owner);
+    }
+    public void setExecuteNode(String executeNode) {
+        this.getJobDescriptorDocument().getJobDescriptor().setExecuteNode(executeNode);
+    }
+    public void setEllapsedTime(String ellapsedTime) {
+        this.getJobDescriptorDocument().getJobDescriptor().setEllapsedTime(ellapsedTime);
+    }
+
+    public void setUsedCPUTime(String usedCPUTime) {
+        this.getJobDescriptorDocument().getJobDescriptor().setUsedCPUTime(usedCPUTime);
+    }
+    public void setUsedMemory(String usedMemory) {
+        this.getJobDescriptorDocument().getJobDescriptor().setUsedMem(usedMemory);
+    }
+    public void setVariableList(String variableList) {
+        this.getJobDescriptorDocument().getJobDescriptor().setVariableList(variableList);
+    }
+    public void setSubmitArgs(String submitArgs) {
+        this.getJobDescriptorDocument().getJobDescriptor().setSubmitArgs(submitArgs);
+    }
+
+
+
+    public String getExecutablePath() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getExecutablePath();
+    }
+
+    public boolean getAllEnvExport() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getAllEnvExport();
+    }
+
+    public String getMailOptions() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getMailOptions();
+    }
+
+    public String getStandardOutFile() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getStandardOutFile();
+    }
+
+    public String getStandardErrorFile() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getStandardErrorFile();
+    }
+
+    public int getNodes(int name) {
+        return this.getJobDescriptorDocument().getJobDescriptor().getNodes();
+    }
+
+    public int getProcessesPerNode() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getProcessesPerNode();
+    }
+
+    public String getMaxWallTime() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getMaxWallTime();
+    }
+
+    public String getAcountString() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getAcountString();
+    }
+
+    public String[] getInputValues() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getInputs().getInputArray();
+    }
+
+    public String getJobID() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getJobID();
+    }
+
+    public String getQueueName() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getQueueName();
+    }
+
+    public String getStatus() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getStatus();
+    }
+
+    public String[] getAfterAnyList() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getAfterAny().getAfterAnyArray();
+    }
+
+    public String[] getAfterOKList() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getAfterOKList().getAfterOKListArray();
+    }
+    public String getCTime() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getCTime();
+    }
+    public String getQTime() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getQTime();
+    }
+    public String getMTime() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getMTime();
+    }
+    public String getSTime() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getSTime();
+    }
+    public String getCompTime() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getCompTime();
+    }
+    public String getOwner() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getOwner();
+    }
+    public String getExecuteNode() {
+         return this.getJobDescriptorDocument().getJobDescriptor().getExecuteNode();
+    }
+    public String getEllapsedTime() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getEllapsedTime();
+    }
+
+    public String getUsedCPUTime() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getUsedCPUTime();
+    }
+    public String getUsedMemory() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getUsedMem();
+    }
+    public void getShellName() {
         this.getJobDescriptorDocument().getJobDescriptor().getShellName();
     }
 
@@ -153,9 +285,18 @@ public class JobDescriptor {
         return this.getJobDescriptorDocument().getJobDescriptor().getJobName();
     }
 
-    public String getJobId(){
+    public String getJobId() {
         return this.getJobDescriptorDocument().getJobDescriptor().getJobID();
     }
+
+
+    public String getVariableList() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getJobID();
+    }
+    public String getSubmitArgs() {
+        return this.getJobDescriptorDocument().getJobDescriptor().getJobID();
+    }
+
 
 }
 

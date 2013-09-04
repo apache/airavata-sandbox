@@ -248,6 +248,9 @@ public class DefaultSSHApi implements SSHApi {
 
         StandardOutReader stdOutReader = new StandardOutReader();
         this.executeCommand(rawCommandInfo, serverInfo, authenticationInfo, stdOutReader);
+        if (!stdOutReader.getErrorifAvailable().equals("")) {
+            throw new SSHApiException(stdOutReader.getStandardError().toString());
+        }
         String result = stdOutReader.getStdOutput();
         String[] Nodes = result.split("\n");
         String[] line;
@@ -312,6 +315,9 @@ public class DefaultSSHApi implements SSHApi {
 
         StandardOutReader stdOutReader = new StandardOutReader();
         this.executeCommand(rawCommandInfo, serverInfo, authenticationInfo, stdOutReader);
+        if (!stdOutReader.getErrorifAvailable().equals("")) {
+            throw new SSHApiException(stdOutReader.getStandardError().toString());
+        }
         String result = stdOutReader.getStdOutput();
         String[] info = result.split("\n");
         JobDescriptor jobDescriptor = new JobDescriptor();
@@ -338,36 +344,38 @@ public class DefaultSSHApi implements SSHApi {
                     value = value.replaceAll("\t", "");
 //                        jobDescriptor.VariablesList=value;
 //                        jobDescriptor.analyzeVariableList(value);
-                } else if ("Job Id".equals(header))
+                } else if ("Job Id".equals(header)){
                     jobDescriptor.setJobID(value);
-                else if ("Job_Name".equals(header))
+                }else if ("Job_Name".equals(header)){
                     jobDescriptor.setJobName(value);
-
-                else if ("Job_Owner".equals(header)) {
-//                       jobDescriptor.setOwner(value);
-                } else if ("resources_used.cput".equals(header)) {
-//                       jobDescriptor.setUsedcput(value);
-                } else if ("resources_used.mem".equals(header)) {
-//                       jobDescriptor.setUsedMem(value);
-                } else if ("resources_used.walltime".equals(header)) {
-//                       jobDescriptor.setEllapsedTime(value);
-                } else if ("job_state".equals(header))
+                }else if ("Account_Name".equals(header)){
+                    jobDescriptor.setAcountString(value);
+                }else if ("job_state".equals(header)){
                     jobDescriptor.setStatus(value);
-
-                else if ("queue".equals(header))
+                }else if ("Job_Owner".equals(header)) {
+                       jobDescriptor.setOwner(value);
+                } else if ("resources_used.cput".equals(header)) {
+                       jobDescriptor.setUsedCPUTime(value);
+                } else if ("resources_used.mem".equals(header)) {
+                       jobDescriptor.setUsedMemory(value);
+                } else if ("resources_used.walltime".equals(header)) {
+                       jobDescriptor.setEllapsedTime(value);
+                } else if ("job_state".equals(header)){
+                    jobDescriptor.setStatus(value);
+                }else if ("queue".equals(header))
                     jobDescriptor.setQueueName(value);
                 else if ("ctime".equals(header)) {
-//                       jobDescriptor.setCtime(value);
+                       jobDescriptor.setCTime(value);
                 } else if ("qtime".equals(header)) {
-//                       jobDescriptor.setQtime(value);
+                       jobDescriptor.setQTime(value);
                 } else if ("mtime".equals(header)) {
-//                       jobDescriptor.setMtime(value);
+                       jobDescriptor.setMTime(value);
                 } else if ("start_time".equals(header)) {
-//                        jobDescriptor.setStime(value);
+                        jobDescriptor.setSTime(value);
                 } else if ("comp_time".equals(header)) {
-//                            jobDescriptor.setComp_time(value);
+                            jobDescriptor.setCompTime(value);
                 } else if ("exec_host".equals(header)) {
-//                       jobDescriptor.setExecuteNode(value);
+                       jobDescriptor.setExecuteNode(value);
                 } else if ("Output_Path".equals(header)) {
                     if (info[i + 1].contains("=") || info[i + 1].contains(":"))
                         jobDescriptor.setStandardOutFile(value);

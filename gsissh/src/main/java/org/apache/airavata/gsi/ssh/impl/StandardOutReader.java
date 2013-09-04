@@ -49,7 +49,6 @@ public class StandardOutReader implements CommandOutput {
                     break;
                 }
                 try {
-                    Thread.sleep(1000);
                 } catch (Exception ignored) {
                 }
             }
