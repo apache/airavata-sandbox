@@ -28,6 +28,7 @@ package org.apache.airavata.gsi.ssh.api;
  */
 
 import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
+import org.apache.airavata.gsi.ssh.listener.JobSubmissionListener;
 
 /**
  * An API to executed commands/jobs using GSI-SSH or SSH.
@@ -72,8 +73,34 @@ public interface SSHApi {
                                AuthenticationInfo authenticationInfo,
                                JobDescriptor jobDescriptor) throws SSHApiException;
 
+    /**
+     *
+     * @param serverInfo
+     * @param authenticationInfo
+     * @return
+     * @throws SSHApiException
+     */
     Cluster getCluster(ServerInfo serverInfo, AuthenticationInfo authenticationInfo) throws SSHApiException;
 
+    /**
+     * @param serverInfo
+     * @param authenticationInfo
+     * @param jobID
+     * @return
+     * @throws SSHApiException
+     */
+    JobDescriptor getJobById(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, String jobID) throws SSHApiException;
 
-    JobDescriptor getJobById(ServerInfo serverInfo,AuthenticationInfo authenticationInfo, String jobID)throws SSHApiException;
+    /**
+     *
+     * @param serverInfo
+     * @param authenticationInfo
+     * @param jobDescriptor
+     * @param listener
+     * @return
+     * @throws SSHApiException
+     */
+    String submitAsyncJob(ServerInfo serverInfo,
+                               AuthenticationInfo authenticationInfo,
+                               JobDescriptor jobDescriptor,JobSubmissionListener listener) throws SSHApiException;
 }

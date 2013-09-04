@@ -26,6 +26,7 @@ import org.apache.airavata.gsi.ssh.api.*;
 import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
 import org.apache.airavata.gsi.ssh.jsch.ExtendedJSch;
+import org.apache.airavata.gsi.ssh.listener.JobSubmissionListener;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -241,6 +242,13 @@ public class DefaultSSHApi implements SSHApi {
         }
     }
 
+    /**
+     *
+     * @param serverInfo
+     * @param authenticationInfo
+     * @return
+     * @throws SSHApiException
+     */
     public Cluster getCluster(ServerInfo serverInfo, AuthenticationInfo authenticationInfo) throws SSHApiException {
         RawCommandInfo rawCommandInfo = new RawCommandInfo("/opt/torque/bin/qnodes");
 
@@ -308,6 +316,14 @@ public class DefaultSSHApi implements SSHApi {
         return c;
     }
 
+    /**
+     *
+     * @param serverInfo
+     * @param authenticationInfo
+     * @param jobID
+     * @return
+     * @throws SSHApiException
+     */
     public JobDescriptor getJobById(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, String jobID) throws SSHApiException {
         RawCommandInfo rawCommandInfo = new RawCommandInfo("/opt/torque/bin/qstat -f " + jobID);
 
@@ -330,9 +346,9 @@ public class DefaultSSHApi implements SSHApi {
             }
             if (line.length >= 2) {
                 header = line[0].trim();
-                log.info("Header = " + header);
+                log.debug("Header = " + header);
                 value = line[1].trim();
-                log.info("value = " + value);
+                log.debug("value = " + value);
 
                 if (header.equals("Variable_List")) {
                     while (info[i + 1].startsWith("\t")) {
@@ -403,6 +419,31 @@ public class DefaultSSHApi implements SSHApi {
             }
         }
         return jobDescriptor;
+    }
 
+    /**
+     * @param serverInfo
+     * @param authenticationInfo
+     * @param jobDescriptor
+     * @param listener
+     * @return
+     * @throws SSHApiException
+     */
+    public String submitAsyncJob(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, JobDescriptor jobDescriptor, JobSubmissionListener listener) throws SSHApiException {
+        String jobID = this.submitAsyncJob(serverInfo, authenticationInfo, jobDescriptor);
+        while(listener.getJobStatus() != JobStatus.C) {
+            JobDescriptor jobById = this.getJobById(serverInfo, authenticationInfo, jobID);
+            if (!jobById.getStatus().equals(listener.getJobStatus().toString())) {
+               listener.setJobStatus(JobStatus.fromString(jobById.getStatus()));
+               listener.statusChanged(jobById);
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                log.error("Error during job status monitoring");
+                throw new SSHApiException("Error during job status monitoring", e);
+            }
+        }
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

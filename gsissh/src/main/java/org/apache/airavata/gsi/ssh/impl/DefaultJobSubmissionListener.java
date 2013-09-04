@@ -20,5 +20,13 @@
 */
 package org.apache.airavata.gsi.ssh.impl;
 
-public class GSISSHAPI {
+import org.apache.airavata.gsi.ssh.api.SSHApiException;
+import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
+import org.apache.airavata.gsi.ssh.listener.JobSubmissionListener;
+
+public class DefaultJobSubmissionListener extends JobSubmissionListener {
+
+    public void statusChanged(JobDescriptor jobDescriptor) throws SSHApiException {
+        System.out.println("Job status has changed : " + jobDescriptor.getStatus());
+    }
 }
