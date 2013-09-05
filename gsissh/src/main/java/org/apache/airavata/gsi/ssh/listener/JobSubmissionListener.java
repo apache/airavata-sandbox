@@ -21,7 +21,7 @@
 package org.apache.airavata.gsi.ssh.listener;
 
 import org.apache.airavata.gsi.ssh.api.SSHApiException;
-import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
+import org.apache.airavata.gsi.ssh.api.job.Job;
 import org.apache.airavata.gsi.ssh.impl.JobStatus;
 
 /**
@@ -40,7 +40,7 @@ public abstract class JobSubmissionListener {
      * @param jobDescriptor
      * @throws SSHApiException
      */
-    public abstract void statusChanged(JobDescriptor jobDescriptor) throws SSHApiException;
+    public abstract void statusChanged(Job jobDescriptor) throws SSHApiException;
 
     public JobStatus getJobStatus() {
         return jobStatus;

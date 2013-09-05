@@ -26,14 +26,17 @@ import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
 import org.ietf.jgss.GSSCredential;
 
+import java.util.Properties;
+
 /**
  * User: AmilaJ (amilaj@apache.org)
  * Date: 8/14/13
  * Time: 5:22 PM
  */
 
-public class MyProxyAuthenticationInfo implements AuthenticationInfo {
+public class MyProxyAuthenticationInfo extends AuthenticationInfo {
 
+    public static final String X509_CERT_DIR = "X509_CERT_DIR";
     private String userName;
     private String password;
     private String myProxyUrl;
@@ -41,12 +44,13 @@ public class MyProxyAuthenticationInfo implements AuthenticationInfo {
     private int lifeTime;
 
     public MyProxyAuthenticationInfo(String userName, String password, String myProxyUrl, int myProxyPort,
-                                     int life) {
+                                     int life, String certificatePath) {
         this.userName = userName;
         this.password = password;
         this.myProxyUrl = myProxyUrl;
         this.myProxyPort = myProxyPort;
         this.lifeTime = life;
+        properties.setProperty(X509_CERT_DIR, certificatePath);
     }
 
     public String getUserName() {
@@ -89,7 +93,7 @@ public class MyProxyAuthenticationInfo implements AuthenticationInfo {
         this.lifeTime = lifeTime;
     }
 
-    public GSSCredential getCredentials() throws SecurityException{
+    public GSSCredential getCredentials() throws SecurityException {
         return getMyProxyCredentials();
     }
 
@@ -101,4 +105,6 @@ public class MyProxyAuthenticationInfo implements AuthenticationInfo {
             throw new SecurityException("Error getting proxy credentials", e);
         }
     }
+
+
 }

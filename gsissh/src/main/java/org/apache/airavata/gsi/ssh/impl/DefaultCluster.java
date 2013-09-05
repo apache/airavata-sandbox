@@ -17,13 +17,12 @@
  * specific language governing permissions and limitations
  * under the License.
  *
- */
-
+*/
 package org.apache.airavata.gsi.ssh.impl;
 
 import com.jcraft.jsch.*;
 import org.apache.airavata.gsi.ssh.api.*;
-import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
+import org.apache.airavata.gsi.ssh.api.job.Job;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
 import org.apache.airavata.gsi.ssh.jsch.ExtendedJSch;
 import org.apache.airavata.gsi.ssh.listener.JobSubmissionListener;
@@ -38,58 +37,52 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * User: AmilaJ (amilaj@apache.org)
- * Date: 8/14/13
- * Time: 5:18 PM
- */
+public class DefaultCluster implements Cluster {
+    static {
+        JSch.setConfig("gssapi-with-mic.x509", "org.apache.airavata.gsi.ssh.GSSContextX509");
+        JSch.setConfig("userauth.gssapi-with-mic", "com.jcraft.jsch.UserAuthGSSAPIWithMICGSSCredentials");
 
-/**
- * Default SSH API implementation.
- */
-public class DefaultSSHApi implements SSHApi {
+    }
 
-    private static final Logger log = LoggerFactory.getLogger(DefaultSSHApi.class);
+    private static final Logger log = LoggerFactory.getLogger(DefaultCluster.class);
+    public static final String X509_CERT_DIR = "X509_CERT_DIR";
+    public static final String POLLING_FREQUENCEY = "polling.frequency";
+    public static final String SSH_SESSION_TIMEOUT = "ssh.session.timeout";
+
+    private Machine[] Nodes;
+
+    private ServerInfo serverInfo;
+
+    private AuthenticationInfo authenticationInfo;
+
+    private Session session;
+
+    private static JSch jSch;
 
     private ConfigReader configReader;
 
-    /**
-     * Initializes default SSH API. During initialization basic configurations
-     * are read.
-     *
-     * @throws SSHApiException If an error occurred while reading basic configurations.
-     */
-    public DefaultSSHApi() throws SSHApiException {
+    public DefaultCluster(ServerInfo serverInfo, AuthenticationInfo authenticationInfo) throws SSHApiException {
+
+        this.serverInfo = serverInfo;
+
+        this.authenticationInfo = authenticationInfo;
+
+        System.setProperty(X509_CERT_DIR, (String) authenticationInfo.getProperties().get(X509_CERT_DIR));
+
         try {
             this.configReader = new ConfigReader();
         } catch (IOException e) {
             throw new SSHApiException("Unable to load system configurations.", e);
         }
-    }
-
-    /**
-     * @param commandInfo        Encapsulated information about command. E.g :- executable name
-     *                           parameters etc ...
-     * @param serverInfo         The SSHing server information.
-     * @param authenticationInfo Security data needs to be communicated with remote server.
-     * @param commandOutput      The output of the command.
-     * @throws SSHApiException
-     */
-    public void executeCommand(CommandInfo commandInfo, ServerInfo serverInfo,
-                               AuthenticationInfo authenticationInfo,
-                               CommandOutput commandOutput) throws SSHApiException {
-
-        JSch jsch = new ExtendedJSch();
+        this.jSch = new ExtendedJSch();
 
         log.info("Connecting to server - " + serverInfo.getHost() + ":" + serverInfo.getPort() + " with user name - "
                 + serverInfo.getUserName());
 
-        Session session = null;
-
         try {
-            session = jsch.getSession(serverInfo.getUserName(), serverInfo.getHost(), serverInfo.getPort());
+            session = jSch.getSession(serverInfo.getUserName(), serverInfo.getHost(), serverInfo.getPort());
+            session.setTimeout(Integer.parseInt(configReader.getConfiguration(SSH_SESSION_TIMEOUT)));
         } catch (JSchException e) {
             throw new SSHApiException("An exception occurred while creating SSH session." +
                     "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
@@ -113,79 +106,21 @@ public class DefaultSSHApi implements SSHApi {
                     " connecting user name - "
                     + serverInfo.getUserName(), e);
         }
-
-        String command = commandInfo.getCommand();
-
-        Channel channel = null;
-        try {
-            channel = session.openChannel("exec");
-            ((ChannelExec) channel).setCommand(command);
-        } catch (JSchException e) {
-            session.disconnect();
-
-            throw new SSHApiException("Unable to execute command - " + command +
-                    " on server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
-                    " connecting user name - "
-                    + serverInfo.getUserName(), e);
-        }
-
-
-        channel.setInputStream(null);
-        ((ChannelExec) channel).setErrStream(commandOutput.getStandardError());
-
-        try {
-            channel.connect();
-        } catch (JSchException e) {
-
-            channel.disconnect();
-            session.disconnect();
-
-            throw new SSHApiException("Unable to retrieve command output. Command - " + command +
-                    " on server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
-                    " connecting user name - "
-                    + serverInfo.getUserName(), e);
-        }
-
-        commandOutput.onOutput(channel);
-
-        channel.disconnect();
-        session.disconnect();
-
-
+        System.out.println(session.isConnected());
     }
 
-    /**
-     * @param serverInfo
-     * @param authenticationInfo
-     * @param pbsFilePath
-     * @param jobDescriptor
-     * @throws SSHApiException
-     */
-    public String submitAsyncJobWithPBS(ServerInfo serverInfo,
-                                        AuthenticationInfo authenticationInfo,
-                                        String pbsFilePath, JobDescriptor jobDescriptor) throws SSHApiException {
-        try {
 
-            SCPTo scpTo = new SCPTo(serverInfo, authenticationInfo, new ConfigReader());
-            scpTo.scpTo(jobDescriptor.getWorkingDirectory(), pbsFilePath);
 
-        } catch (JSchException e) {
-            throw new SSHApiException("An exception occurred while connecting to server." +
-                    "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
-                    " connecting user name - "
-                    + serverInfo.getUserName(), e);
-        } catch (IOException e) {
-            throw new SSHApiException("An exception occurred while connecting to server." +
-                    "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
-                    " connecting user name - "
-                    + serverInfo.getUserName(), e);
-        }
+    public String submitAsyncJobWithPBS(String pbsFilePath, String workingDirectory) throws SSHApiException {
+
+        this.scpTo(workingDirectory, pbsFilePath);
+
         // since this is a constant we do not ask users to fill this
         RawCommandInfo rawCommandInfo = new RawCommandInfo("/opt/torque/bin/qsub " +
-                jobDescriptor.getWorkingDirectory() + File.separator + FilenameUtils.getName(pbsFilePath));
+                workingDirectory + File.separator + FilenameUtils.getName(pbsFilePath));
 
         StandardOutReader jobIDReaderCommandOutput = new StandardOutReader();
-        this.executeCommand(rawCommandInfo, serverInfo, authenticationInfo, jobIDReaderCommandOutput);
+        CommandExecutor.executeCommand(rawCommandInfo, this.session, jobIDReaderCommandOutput);
 
         //Check whether pbs submission is successful or not, if it failed throw and exception in submitJob method
         // with the error thrown in qsub command
@@ -196,13 +131,7 @@ public class DefaultSSHApi implements SSHApi {
         }
     }
 
-    /**
-     * @param serverInfo
-     * @param authenticationInfo
-     * @param jobDescriptor
-     * @throws SSHApiException
-     */
-    public String submitAsyncJob(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, JobDescriptor jobDescriptor) throws SSHApiException {
+    public String submitAsyncJob(Job jobDescriptor) throws SSHApiException {
         TransformerFactory factory = TransformerFactory.newInstance();
         String xsltPath = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "PBSTemplate.xslt";
         Source xslt = new StreamSource(new File(xsltPath));
@@ -226,7 +155,9 @@ public class DefaultSSHApi implements SSHApi {
 
             //reusing submitAsyncJobWithPBS method to submit a job
 
-            String jobID = this.submitAsyncJobWithPBS(serverInfo, authenticationInfo, tempPBSFile.getAbsolutePath(), jobDescriptor);
+            String jobID = this.submitAsyncJobWithPBS(tempPBSFile.getAbsolutePath(),
+                    jobDescriptor.getWorkingDirectory());
+            log.info("Job has successfully submitted, JobID : " + jobID);
             return jobID.replace("\n", "");
         } catch (TransformerConfigurationException e) {
             throw new SSHApiException("Error parsing PBS transformation", e);
@@ -242,18 +173,12 @@ public class DefaultSSHApi implements SSHApi {
         }
     }
 
-    /**
-     *
-     * @param serverInfo
-     * @param authenticationInfo
-     * @return
-     * @throws SSHApiException
-     */
-    public Cluster getCluster(ServerInfo serverInfo, AuthenticationInfo authenticationInfo) throws SSHApiException {
+
+    public Cluster loadCluster() throws SSHApiException {
         RawCommandInfo rawCommandInfo = new RawCommandInfo("/opt/torque/bin/qnodes");
 
         StandardOutReader stdOutReader = new StandardOutReader();
-        this.executeCommand(rawCommandInfo, serverInfo, authenticationInfo, stdOutReader);
+        CommandExecutor.executeCommand(rawCommandInfo, this.getSession(), stdOutReader);
         if (!stdOutReader.getErrorifAvailable().equals("")) {
             throw new SSHApiException(stdOutReader.getStandardError().toString());
         }
@@ -293,12 +218,12 @@ public class DefaultSSHApi implements SSHApi {
                     Node.setNtype(value);
                 else if ("jobs".equals(header)) {
                     String[] jobs = value.split(", ");
-                    JobDescriptor jo = new JobDescriptor();
+                    Job jo = new Job();
                     //Job[] Jobs = new Job[jobs.length];
                     for (int j = 0; j < jobs.length; j++) {
                         String[] c = jobs[j].split("/");
                         String Jid = c[1];
-                        jo = this.getJobById(serverInfo, authenticationInfo, Jid);
+                        jo = this.getJobById(Jid);
                         int core = Integer.parseInt(c[0]);
                         Cores[core].setJob(jo);
 
@@ -311,30 +236,21 @@ public class DefaultSSHApi implements SSHApi {
             Node.setCores(Cores);
             Machines.add(Node);
         }
-        Cluster c = new Cluster();
-        c.setNodes(Machines.toArray(new Machine[Machines.size()]));
-        return c;
+        this.setNodes(Machines.toArray(new Machine[Machines.size()]));
+        return this;
     }
 
-    /**
-     *
-     * @param serverInfo
-     * @param authenticationInfo
-     * @param jobID
-     * @return
-     * @throws SSHApiException
-     */
-    public JobDescriptor getJobById(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, String jobID) throws SSHApiException {
+    public Job getJobById(String jobID) throws SSHApiException {
         RawCommandInfo rawCommandInfo = new RawCommandInfo("/opt/torque/bin/qstat -f " + jobID);
 
         StandardOutReader stdOutReader = new StandardOutReader();
-        this.executeCommand(rawCommandInfo, serverInfo, authenticationInfo, stdOutReader);
+        CommandExecutor.executeCommand(rawCommandInfo,this.getSession(), stdOutReader);
         if (!stdOutReader.getErrorifAvailable().equals("")) {
             throw new SSHApiException(stdOutReader.getStandardError().toString());
         }
         String result = stdOutReader.getStdOutput();
         String[] info = result.split("\n");
-        JobDescriptor jobDescriptor = new JobDescriptor();
+        Job jobDescriptor = new Job();
         String header = "";
         String value = "";
         String[] line;
@@ -414,36 +330,182 @@ public class DefaultSSHApi implements SSHApi {
                             break;
                     }
                     value = value.replaceAll("\t", "");
-                         jobDescriptor.setSubmitArgs(value);
+                    jobDescriptor.setSubmitArgs(value);
                 }
             }
         }
         return jobDescriptor;
     }
 
-    /**
-     * @param serverInfo
-     * @param authenticationInfo
-     * @param jobDescriptor
-     * @param listener
-     * @return
-     * @throws SSHApiException
-     */
-    public String submitAsyncJob(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, JobDescriptor jobDescriptor, JobSubmissionListener listener) throws SSHApiException {
-        String jobID = this.submitAsyncJob(serverInfo, authenticationInfo, jobDescriptor);
-        while(listener.getJobStatus() != JobStatus.C) {
-            JobDescriptor jobById = this.getJobById(serverInfo, authenticationInfo, jobID);
+    public Session scpTo(String rFile, String lFile) throws SSHApiException {
+        FileInputStream fis = null;
+        String prefix = null;
+        if (new File(lFile).isDirectory()) {
+            prefix = lFile + File.separator;
+        }
+        boolean ptimestamp = true;
+        try {
+            // exec 'scp -t rfile' remotely
+            String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + rFile;
+            Channel channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(command);
+
+            // get I/O streams for remote scp
+            OutputStream out = channel.getOutputStream();
+            InputStream in = channel.getInputStream();
+
+            channel.connect();
+
+            if (checkAck(in) != 0) {
+                System.exit(0);
+            }
+
+            File _lfile = new File(lFile);
+
+            if (ptimestamp) {
+                command = "T " + (_lfile.lastModified() / 1000) + " 0";
+                // The access time should be sent here,
+                // but it is not accessible with JavaAPI ;-<
+                command += (" " + (_lfile.lastModified() / 1000) + " 0\n");
+                out.write(command.getBytes());
+                out.flush();
+                if (checkAck(in) != 0) {
+                    System.exit(0);
+                }
+            }
+
+            // send "C0644 filesize filename", where filename should not include '/'
+            long filesize = _lfile.length();
+            command = "C0644 " + filesize + " ";
+            if (lFile.lastIndexOf('/') > 0) {
+                command += lFile.substring(lFile.lastIndexOf('/') + 1);
+            } else {
+                command += lFile;
+            }
+            command += "\n";
+            out.write(command.getBytes());
+            out.flush();
+            if (checkAck(in) != 0) {
+                System.exit(0);
+            }
+
+            // send a content of lFile
+            fis = new FileInputStream(lFile);
+            byte[] buf = new byte[1024];
+            while (true) {
+                int len = fis.read(buf, 0, buf.length);
+                if (len <= 0) break;
+                out.write(buf, 0, len); //out.flush();
+            }
+            fis.close();
+            fis = null;
+            // send '\0'
+            buf[0] = 0;
+            out.write(buf, 0, 1);
+            out.flush();
+            if (checkAck(in) != 0) {
+                System.exit(0);
+            }
+            out.close();
+            // We are not disconnecting the session
+//            session.disconnect();
+            channel.disconnect();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new SSHApiException("Error occured during file transfer operation: " + e);
+        }
+        return session;
+    }
+
+
+    static int checkAck(InputStream in) throws IOException {
+        int b = in.read();
+        if (b == 0) return b;
+        if (b == -1) return b;
+
+        if (b == 1 || b == 2) {
+            StringBuffer sb = new StringBuffer();
+            int c;
+            do {
+                c = in.read();
+                sb.append((char) c);
+            }
+            while (c != '\n');
+            if (b == 1) { // error
+                System.out.print(sb.toString());
+            }
+            if (b == 2) { // fatal error
+                System.out.print(sb.toString());
+            }
+        }
+        return b;
+    }
+
+    public String submitAsyncJob(Job jobDescriptor, JobSubmissionListener listener) throws SSHApiException {
+        String jobID = this.submitAsyncJob(jobDescriptor);
+        try {
+            Thread.sleep(Long.parseLong(configReader.getConfiguration(POLLING_FREQUENCEY)));
+        } catch (InterruptedException e) {
+            log.error("Error during job status monitoring");
+            throw new SSHApiException("Error during job status monitoring", e);
+        }
+        // Get the job status first
+        Job jobById = this.getJobById(jobID);
+
+        while (!jobById.getStatus().equals(JobStatus.C.toString())) {
             if (!jobById.getStatus().equals(listener.getJobStatus().toString())) {
-               listener.setJobStatus(JobStatus.fromString(jobById.getStatus()));
-               listener.statusChanged(jobById);
+                listener.setJobStatus(JobStatus.fromString(jobById.getStatus()));
+                listener.statusChanged(jobById);
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(Long.parseLong(configReader.getConfiguration(POLLING_FREQUENCEY)));
             } catch (InterruptedException e) {
                 log.error("Error during job status monitoring");
                 throw new SSHApiException("Error during job status monitoring", e);
             }
+            jobById = this.getJobById(jobID);
         }
+        listener.statusChanged(jobById);
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void setServerInfo(ServerInfo serverInfo) {
+        this.serverInfo = serverInfo;
+    }
+
+    public void setAuthenticationInfo(AuthenticationInfo authenticationInfo) {
+        this.authenticationInfo = authenticationInfo;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+     /**
+     * @return cluster Nodes as array of machines
+     */
+    public Machine[] getNodes() {
+        return Nodes;
+    }
+
+    public void setNodes(Machine[] Nodes) {
+        this.Nodes = Nodes;
+    }
+
+    public ServerInfo getServerInfo() {
+        return serverInfo;
+    }
+
+    public AuthenticationInfo getAuthenticationInfo() {
+        return authenticationInfo;
+    }
+
+    /**
+     * This gaurantee to return a valid session
+     *
+     * @return
+     */
+    public Session getSession() {
+        return this.session;
     }
 }

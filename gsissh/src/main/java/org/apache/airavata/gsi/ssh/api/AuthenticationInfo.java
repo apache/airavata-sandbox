@@ -25,13 +25,26 @@ package org.apache.airavata.gsi.ssh.api;/*
  * Time: 3:38 PM
  */
 
+import apple.awt.ClientPropertyApplicator;
 import org.ietf.jgss.GSSCredential;
+
+import java.util.Properties;
 
 /**
  * Authentication data. Could be MyProxy user name, password, could be GSSCredentials
  * or could be SSH keys.
  */
-public interface AuthenticationInfo {
+public abstract class AuthenticationInfo {
 
-    GSSCredential getCredentials() throws SecurityException;
+    public Properties properties = new Properties();
+
+    public abstract GSSCredential getCredentials() throws SecurityException;
+
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
 }

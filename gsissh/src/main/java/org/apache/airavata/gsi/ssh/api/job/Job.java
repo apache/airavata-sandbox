@@ -30,22 +30,22 @@ import java.util.List;
  * This class define a job with required parameters, based on this configuration API is generating a Pbs script and
  * submit the job to the computing resource
  */
-public class JobDescriptor {
+public class Job {
 
     private JobDescriptorDocument jobDescriptionDocument;
 
 
-    public JobDescriptor() {
+    public Job() {
         jobDescriptionDocument = JobDescriptorDocument.Factory.newInstance();
         jobDescriptionDocument.addNewJobDescriptor();
     }
 
-    public JobDescriptor(JobDescriptorDocument jobDescriptorDocument) {
+    public Job(JobDescriptorDocument jobDescriptorDocument) {
         this.jobDescriptionDocument = jobDescriptorDocument;
     }
 
 
-    public JobDescriptor(CommandOutput commandOutput) {
+    public Job(CommandOutput commandOutput) {
         jobDescriptionDocument = JobDescriptorDocument.Factory.newInstance();
         jobDescriptionDocument.addNewJobDescriptor();
     }
@@ -59,11 +59,11 @@ public class JobDescriptor {
         return this.jobDescriptionDocument;
     }
 
-    public static JobDescriptor fromXML(String xml)
+    public static Job fromXML(String xml)
             throws XmlException {
         JobDescriptorDocument parse = JobDescriptorDocument.Factory
                 .parse(xml);
-        JobDescriptor jobDescriptor = new JobDescriptor(parse);
+        Job jobDescriptor = new Job(parse);
         return jobDescriptor;
     }
 

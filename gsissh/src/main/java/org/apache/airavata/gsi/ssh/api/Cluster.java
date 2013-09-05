@@ -20,19 +20,66 @@
 */
 package org.apache.airavata.gsi.ssh.api;
 
-public class Cluster {
+import com.jcraft.jsch.Session;
+import org.apache.airavata.gsi.ssh.api.job.Job;
+import org.apache.airavata.gsi.ssh.listener.JobSubmissionListener;
 
-    private Machine[] Nodes;
-/**
- *
- * @return cluster Nodes as array of machines
- */
-    public Machine[] getNodes() {
-        return Nodes;
-    }
 
-    public void setNodes(Machine[] Nodes) {
-        this.Nodes = Nodes;
-    }
+public interface Cluster {
 
+    /**
+     * This will submit a job to the cluster with a given pbs file and some parameters
+     *
+     * @param pbsFilePath
+     * @param workingDirectory
+     * @return
+     * @throws SSHApiException
+     */
+    public String submitAsyncJobWithPBS(String pbsFilePath, String workingDirectory) throws SSHApiException;
+
+    /**
+     * This will submit the given job and not performing any monitoring
+     *
+     * @param jobDescriptor
+     * @return
+     * @throws SSHApiException
+     */
+    public String submitAsyncJob(Job jobDescriptor) throws SSHApiException;
+
+    /**
+     * This will get all the information about the cluster and store them as parameters
+     * So that api user can extract required information about the cluster
+     *
+     * @return
+     * @throws SSHApiException
+     */
+    public Cluster loadCluster() throws SSHApiException;
+
+    /**
+     * This will copy the lFile to rFile location in configured cluster
+     *
+     * @param rFile
+     * @param lFile
+     * @return
+     * @throws SSHApiException
+     */
+    public Session scpTo(String rFile, String lFile) throws SSHApiException;
+
+    /**
+     * submit a job and register the listener so that status changes will be triggers
+     * and appropricate action implemented in the JobSubmissionListener will get invoked
+     *
+     * @param jobDescriptor
+     * @param listener
+     * @return
+     * @throws SSHApiException
+     */
+    public String submitAsyncJob(Job jobDescriptor, JobSubmissionListener listener) throws SSHApiException;
+
+    /**
+     * @param jobID
+     * @return
+     * @throws SSHApiException
+     */
+    public Job getJobById(String jobID) throws SSHApiException;
 }

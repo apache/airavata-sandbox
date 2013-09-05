@@ -64,7 +64,7 @@ public class SCPToTest {
          // Create authentication
         AuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
-                7512, 17280000);
+                7512, 17280000,certificateLocation);
         ServerInfo serverInfo = new ServerInfo("ogce" ,"trestles.sdsc.edu");
         SCPTo scpTo = new SCPTo(serverInfo,authenticationInfo,this.certificateLocation,new ConfigReader());
         scpTo.scpTo(rFilePath, lFilePath);

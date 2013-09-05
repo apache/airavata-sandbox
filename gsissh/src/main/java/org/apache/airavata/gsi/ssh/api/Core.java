@@ -20,10 +20,10 @@
 */
 package org.apache.airavata.gsi.ssh.api;
 
-import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
+import org.apache.airavata.gsi.ssh.api.job.Job;
 
 public class Core {
-    private JobDescriptor job;
+    private Job job;
     private String id;
 
     public Core(String id) {
@@ -45,11 +45,11 @@ public class Core {
     /**
      * @return job running on the core
      */
-    public JobDescriptor getJob() {
+    public Job getJob() {
         return job;
     }
 
-    public void setJob(JobDescriptor job) {
+    public void setJob(Job job) {
         this.job = job;
     }
 
