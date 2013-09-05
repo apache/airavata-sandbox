@@ -28,10 +28,6 @@
 
     <repositories>
         <repository>
-            <id>my-local-repo</id>
-            <url>file:./jglobus-repo/repository</url>
-        </repository>
-        <repository>
             <name>ogce.m2.all</name>
             <id>ogce.m2.all</id>
             <url>http://community.ucs.indiana.edu:9090/archiva/repository/ogce.m2.all</url>
@@ -146,7 +142,7 @@
 
 
     <properties>
-        <jglobus.version>2.0.6-rc2</jglobus.version>
+        <jglobus.version>2.0.6</jglobus.version>
         <surefire.version>2.12</surefire.version>
         <junit.version>4.7</junit.version>
         <log4j.version>1.2.17</log4j.version>
