@@ -26,6 +26,12 @@ import org.apache.airavata.gsi.ssh.jsch.ExtendedJSch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.*;
+
+/**
+ * This is a generic class which take care of command execution
+ * in a shell, this is used through out the other places of the API.
+ */
 public class CommandExecutor {
     static {
         JSch.setConfig("gssapi-with-mic.x509", "org.apache.airavata.gsi.ssh.GSSContextX509");
@@ -165,6 +171,4 @@ public class CommandExecutor {
         channel.disconnect();
         session.disconnect();
     }
-
-
 }

@@ -284,7 +284,8 @@ public class DefaultSSHApiTest {
         inputs.add("Hello World !!");
         jobDescriptor.setInputValues(inputs);
         System.out.println(jobDescriptor.toXML());
-        trestles.submitAsyncJob(jobDescriptor, new DefaultJobSubmissionListener());
+        String status = trestles.submitAsyncJob(jobDescriptor, new DefaultJobSubmissionListener());
+        System.out.println("Job has finished with the status : " + status);
     }
 
 }

@@ -18,9 +18,12 @@
  * under the License.
  *
 */
-package org.apache.airavata.gsi.ssh.api;
+package org.apache.airavata.gsi.ssh.util;
 
 import com.jcraft.jsch.*;
+import org.apache.airavata.gsi.ssh.api.AuthenticationInfo;
+import org.apache.airavata.gsi.ssh.api.SSHApiException;
+import org.apache.airavata.gsi.ssh.api.ServerInfo;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
 import org.apache.airavata.gsi.ssh.jsch.ExtendedJSch;
 import org.slf4j.*;
@@ -30,8 +33,8 @@ import java.io.*;
 /**
  * This class is going to be useful to SCP a file to a remote grid machine using my proxy credentials
  */
-public class SCPTo {
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(SCPTo.class);
+public class SCPUtils {
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(SCPUtils.class);
 
     static {
         JSch.setConfig("gssapi-with-mic.x509", "org.apache.airavata.gsi.ssh.GSSContextX509");
@@ -52,7 +55,7 @@ public class SCPTo {
      * @param certificateLocation
      * @param configReader
      */
-    public SCPTo(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, String certificateLocation, ConfigReader configReader) {
+    public SCPUtils(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, String certificateLocation, ConfigReader configReader) {
         System.setProperty("X509_CERT_DIR", certificateLocation);
         this.serverInfo = serverInfo;
         this.authenticationInfo = authenticationInfo;
@@ -65,7 +68,7 @@ public class SCPTo {
      * @param authenticationInfo
      * @param configReader
      */
-    public SCPTo(ServerInfo serverInfo, AuthenticationInfo authenticationInfo
+    public SCPUtils(ServerInfo serverInfo, AuthenticationInfo authenticationInfo
             , ConfigReader configReader) {
         this.serverInfo = serverInfo;
         this.authenticationInfo = authenticationInfo;
@@ -78,7 +81,7 @@ public class SCPTo {
      * @param lFile local file path to use in scp
      * @throws IOException
      * @throws JSchException
-     * @throws SSHApiException
+     * @throws org.apache.airavata.gsi.ssh.api.SSHApiException
      */
     public Session scpTo(String rFile, String lFile) throws IOException, JSchException, SSHApiException {
         FileInputStream fis = null;
@@ -188,8 +191,80 @@ public class SCPTo {
         session.disconnect();
         return session;
     }
+    public static Session scpTo(String rFile, String lFile,Session session) throws IOException, JSchException, SSHApiException {
+        FileInputStream fis = null;
+        String prefix = null;
+        if (new File(lFile).isDirectory()) {
+            prefix = lFile + File.separator;
+        }
+        boolean ptimestamp = true;
 
+        // exec 'scp -t rfile' remotely
+        String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + rFile;
+        Channel channel = session.openChannel("exec");
+        ((ChannelExec) channel).setCommand(command);
 
+        // get I/O streams for remote scp
+        OutputStream out = channel.getOutputStream();
+        InputStream in = channel.getInputStream();
+
+        channel.connect();
+
+        if (checkAck(in) != 0) {
+            System.exit(0);
+        }
+
+        File _lfile = new File(lFile);
+
+        if (ptimestamp) {
+            command = "T " + (_lfile.lastModified() / 1000) + " 0";
+            // The access time should be sent here,
+            // but it is not accessible with JavaAPI ;-<
+            command += (" " + (_lfile.lastModified() / 1000) + " 0\n");
+            out.write(command.getBytes());
+            out.flush();
+            if (checkAck(in) != 0) {
+                System.exit(0);
+            }
+        }
+
+        // send "C0644 filesize filename", where filename should not include '/'
+        long filesize = _lfile.length();
+        command = "C0644 " + filesize + " ";
+        if (lFile.lastIndexOf('/') > 0) {
+            command += lFile.substring(lFile.lastIndexOf('/') + 1);
+        } else {
+            command += lFile;
+        }
+        command += "\n";
+        out.write(command.getBytes());
+        out.flush();
+        if (checkAck(in) != 0) {
+            System.exit(0);
+        }
+
+        // send a content of lFile
+        fis = new FileInputStream(lFile);
+        byte[] buf = new byte[1024];
+        while (true) {
+            int len = fis.read(buf, 0, buf.length);
+            if (len <= 0) break;
+            out.write(buf, 0, len); //out.flush();
+        }
+        fis.close();
+        fis = null;
+        // send '\0'
+        buf[0] = 0;
+        out.write(buf, 0, 1);
+        out.flush();
+        if (checkAck(in) != 0) {
+            System.exit(0);
+        }
+        out.close();
+
+        channel.disconnect();
+        return session;
+    }
     static int checkAck(InputStream in) throws IOException {
         int b = in.read();
         if (b == 0) return b;

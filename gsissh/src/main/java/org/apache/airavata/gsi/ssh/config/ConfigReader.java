@@ -21,12 +21,6 @@
 
 package org.apache.airavata.gsi.ssh.config;
 
-/**
- * User: AmilaJ (amilaj@apache.org)
- * Date: 8/14/13
- * Time: 2:41 PM
- */
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;

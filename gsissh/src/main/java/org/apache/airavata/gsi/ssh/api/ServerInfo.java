@@ -20,12 +20,6 @@ package org.apache.airavata.gsi.ssh.api;/*
  */
 
 /**
- * User: AmilaJ (amilaj@apache.org)
- * Date: 8/14/13
- * Time: 4:15 PM
- */
-
-/**
  * Encapsulate server information.
  */
 public class ServerInfo {

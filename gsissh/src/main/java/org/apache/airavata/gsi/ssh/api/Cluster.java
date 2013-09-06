@@ -24,7 +24,11 @@ import com.jcraft.jsch.Session;
 import org.apache.airavata.gsi.ssh.api.job.Job;
 import org.apache.airavata.gsi.ssh.listener.JobSubmissionListener;
 
-
+/**
+ * This interface represents a Cluster machine
+ * End users of the API can implement this and come up with their own
+ * implementations, but mostly this interface is for internal usage.
+ */
 public interface Cluster {
 
     /**
@@ -63,7 +67,7 @@ public interface Cluster {
      * @return
      * @throws SSHApiException
      */
-    public Session scpTo(String rFile, String lFile) throws SSHApiException;
+    public void scpTo(String rFile, String lFile) throws SSHApiException;
 
     /**
      * submit a job and register the listener so that status changes will be triggers

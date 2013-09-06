@@ -19,13 +19,6 @@ package org.apache.airavata.gsi.ssh.api;/*
  *
  */
 
-/**
- * User: AmilaJ (amilaj@apache.org)
- * Date: 8/14/13
- * Time: 3:38 PM
- */
-
-import apple.awt.ClientPropertyApplicator;
 import org.ietf.jgss.GSSCredential;
 
 import java.util.Properties;

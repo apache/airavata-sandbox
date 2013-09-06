@@ -22,12 +22,6 @@
 package org.apache.airavata.gsi.ssh.api;
 
 /**
- * User: AmilaJ (amilaj@apache.org)
- * Date: 8/14/13
- * Time: 3:14 PM
- */
-
-/**
  * An exception class to wrap SSH command execution related errors.
  */
 public class SSHApiException extends Exception {

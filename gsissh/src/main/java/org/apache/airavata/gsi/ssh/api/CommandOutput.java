@@ -19,11 +19,6 @@ package org.apache.airavata.gsi.ssh.api;/*
  *
  */
 
-/**
- * User: AmilaJ (amilaj@apache.org)
- * Date: 8/14/13
- * Time: 3:33 PM
- */
 
 import com.jcraft.jsch.Channel;
 
