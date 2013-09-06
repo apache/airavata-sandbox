@@ -25,6 +25,7 @@ import org.apache.airavata.service.utils.help.MethodUtils;
 import org.apache.airavata.service.utils.json.ConversionUtils;
 import org.apache.airavata.service.utils.model.ApplicationDescriptorJSONFacotry;
 import org.apache.airavata.service.utils.model.DataList;
+import org.apache.airavata.service.utils.path.ApplicationPath;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -35,12 +36,12 @@ import org.codehaus.jackson.map.ObjectMapper;
  * http://127.0.0.1:9090/orders-server/orders/list
  */
 
-@Path("/applications/")
+@Path(ApplicationPath.SERVICE_PATH)
 public class ApplicationService {
 	@Context
 	UriInfo uriInfo;
 	
-	@Path("add")
+	@Path(ApplicationPath.ADD_APPLICATION)
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String add(@QueryParam("application") String application) {
@@ -56,14 +57,14 @@ public class ApplicationService {
 		
 	}
 	
-	@Path("add/help")
+	@Path(ApplicationPath.ADD_APPLICATION_HELP)
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String showHelp() {
 		HelpData helpData = new HelpData("Add Application Description","Add the details of how to access an application from Airavata");
 		try {
 			URI uri = ServiceUtils.getServiceOperationURIFromHelpURI(uriInfo);
-			helpData.setSyntax(uri.toString()+"?application=<JSONString>");
+			helpData.getSyntax().add(uri.toString()+"?application=<JSONString>");
 			helpData.getParameters().put("application", "Describes the application access data in JSON format. The supported JSON types are listed in the 'Notes' section.");
 			List<Class<?>> types = ApplicationDescriptorJSONFacotry.getInstance().getTypes();
 			for (Class<?> cl : types) {

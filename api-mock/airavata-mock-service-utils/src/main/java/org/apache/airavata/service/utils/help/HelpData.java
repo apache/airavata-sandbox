@@ -8,7 +8,7 @@ import java.util.Map;
 public class HelpData {
 	private String title;
 	private String description;
-	private String syntax;
+	private List<String> syntax;
 	private Map<String,String> parameters;
 	private List<String> examples;
 	private List<String> notes;
@@ -29,10 +29,13 @@ public class HelpData {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getSyntax() {
+	public List<String> getSyntax() {
+		if (syntax==null){
+			syntax=new ArrayList<String>();
+		}
 		return syntax;
 	}
-	public void setSyntax(String syntax) {
+	public void setSyntax(List<String> syntax) {
 		this.syntax = syntax;
 	}
 	public Map<String, String> getParameters() {

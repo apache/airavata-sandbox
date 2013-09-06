@@ -16,14 +16,15 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.airavata.core.application.ExperimentData;
+import org.apache.airavata.service.utils.path.ExperimentPath;
 
-@Path("/experiments/")
+@Path(ExperimentPath.SERVICE_PATH)
 public class ExperimentService {
 	private static Map<String,String> templates=new HashMap<String, String>();
 	private static Map<String,String> experiments=new HashMap<String, String>();
 	private static Map<String,ExperimentData> experimentData=new HashMap<String, ExperimentData>();
 
-	@Path("add/template/{templateId}")
+	@Path(ExperimentPath.ADD_TEMPLATE+"/{templateId}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String addTemplate(@PathParam("templateId") String templateId, @QueryParam("experimentTemplate") String experimentTemplate) {
@@ -33,14 +34,14 @@ public class ExperimentService {
 		return templateId;
 	}
 	
-	@Path("list/templates")
+	@Path(ExperimentPath.LIST_TEMPLATES)
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<String> getTemplates() {
 		return (Arrays.asList(templates.keySet().toArray(new String[]{})));
 	}
 
-	@Path("run/{templateId}")
+	@Path(ExperimentPath.RUN_EXPERIMENTS+"/{templateId}")
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String runExperiment(@PathParam("templateId") String templateId, @QueryParam("experimentInput") String experimentInput) {
@@ -55,14 +56,14 @@ public class ExperimentService {
 		return uuid.toString();
 	}
 	
-	@Path("list/experiments")
+	@Path(ExperimentPath.LIST_EXPERIMENTS)
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<String> getExperiments() {
 		return (Arrays.asList(experiments.keySet().toArray(new String[]{})));
 	}
 	
-	@Path("results/{experimentId}")
+	@Path(ExperimentPath.GET_RESULTS+"/{experimentId}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public ExperimentData getExperimentData(@PathParam ("experimentId") String experimentId) {
