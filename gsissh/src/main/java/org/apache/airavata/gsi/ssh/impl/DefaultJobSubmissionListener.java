@@ -29,4 +29,12 @@ public class DefaultJobSubmissionListener extends JobSubmissionListener {
     public void statusChanged(Job jobDescriptor) throws SSHApiException {
         System.out.println("Job status has changed : " + jobDescriptor.getStatus());
     }
+
+    @Override
+    public boolean isJobDone() throws SSHApiException {
+        if(getJobStatus().equals(JobStatus.C)){
+            return true;
+        }
+        return false;
+    }
 }

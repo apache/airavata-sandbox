@@ -20,13 +20,14 @@
 */
 package org.apache.airavata.gsi.ssh.impl;
 
+import bsh.This;
 import com.jcraft.jsch.*;
 import org.apache.airavata.gsi.ssh.api.*;
 import org.apache.airavata.gsi.ssh.api.job.Job;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
 import org.apache.airavata.gsi.ssh.jsch.ExtendedJSch;
 import org.apache.airavata.gsi.ssh.listener.JobSubmissionListener;
-import org.apache.airavata.gsi.ssh.util.SCPUtils;
+import org.apache.airavata.gsi.ssh.util.SSHUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -114,7 +115,6 @@ public class DefaultCluster implements Cluster {
         }
         System.out.println(session.isConnected());
     }
-
 
 
     public String submitAsyncJobWithPBS(String pbsFilePath, String workingDirectory) throws SSHApiException {
@@ -250,7 +250,7 @@ public class DefaultCluster implements Cluster {
         RawCommandInfo rawCommandInfo = new RawCommandInfo("/opt/torque/bin/qstat -f " + jobID);
 
         StandardOutReader stdOutReader = new StandardOutReader();
-        CommandExecutor.executeCommand(rawCommandInfo,this.getSession(), stdOutReader);
+        CommandExecutor.executeCommand(rawCommandInfo, this.getSession(), stdOutReader);
         if (!stdOutReader.getErrorifAvailable().equals("")) {
             throw new SSHApiException(stdOutReader.getStandardError().toString());
         }
@@ -345,13 +345,13 @@ public class DefaultCluster implements Cluster {
 
     public void scpTo(String rFile, String lFile) throws SSHApiException {
         try {
-            SCPUtils.scpTo(rFile, lFile, session);
+            SSHUtils.scpTo(rFile, lFile, session);
         } catch (IOException e) {
             new SSHApiException("Faile during scping local file:" + lFile + " to remote file "
-                    + serverInfo.getHost() + ":rFile" , e);
+                    + serverInfo.getHost() + ":rFile", e);
         } catch (JSchException e) {
             new SSHApiException("Faile during scping local file:" + lFile + " to remote file "
-                    + serverInfo.getHost() + ":rFile" , e);
+                    + serverInfo.getHost() + ":rFile", e);
         }
     }
 
@@ -380,31 +380,56 @@ public class DefaultCluster implements Cluster {
     }
 
     public String submitAsyncJob(Job jobDescriptor, JobSubmissionListener listener) throws SSHApiException {
-        String jobID = this.submitAsyncJob(jobDescriptor);
+        final Cluster cluster = this;
+        final String jobID = this.submitAsyncJob(jobDescriptor);
+        final JobSubmissionListener jobSubmissionListener = listener;
         try {
-            Thread.sleep(Long.parseLong(configReader.getConfiguration(POLLING_FREQUENCEY)));
+            // Wait 5 seconds to start the first poll, this is hard coded, user doesn't have
+            // to configure this.
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             log.error("Error during job status monitoring");
             throw new SSHApiException("Error during job status monitoring", e);
         }
         // Get the job status first
-        Job jobById = this.getJobById(jobID);
+        try {
 
-        while (!jobById.getStatus().equals(JobStatus.C.toString())) {
-            if (!jobById.getStatus().equals(listener.getJobStatus().toString())) {
-                listener.setJobStatus(JobStatus.fromString(jobById.getStatus()));
-                listener.statusChanged(jobById);
-            }
-            try {
-                Thread.sleep(Long.parseLong(configReader.getConfiguration(POLLING_FREQUENCEY)));
-            } catch (InterruptedException e) {
-                log.error("Error during job status monitoring");
-                throw new SSHApiException("Error during job status monitoring", e);
-            }
-            jobById = this.getJobById(jobID);
+            Thread t = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Job jobById = cluster.getJobById(jobID);
+                        while (true) {
+                            while (!jobById.getStatus().equals(JobStatus.C.toString())) {
+                                if (!jobById.getStatus().equals(jobSubmissionListener.getJobStatus().toString())) {
+                                    jobSubmissionListener.setJobStatus(JobStatus.fromString(jobById.getStatus()));
+                                    jobSubmissionListener.statusChanged(jobById);
+                                }
+                                Thread.sleep(Long.parseLong(configReader.getConfiguration(POLLING_FREQUENCEY)));
+
+                                jobById = cluster.getJobById(jobID);
+                            }
+                            //Set the job status to Complete
+                            jobSubmissionListener.setJobStatus(JobStatus.C);
+                            jobSubmissionListener.statusChanged(jobById);
+                            Thread.sleep(Long.parseLong(configReader.getConfiguration(POLLING_FREQUENCEY)));
+                        }
+                    } catch (InterruptedException e) {
+                        log.error("Error listening to the submitted job", e);
+                    } catch (SSHApiException e) {
+                        log.error("Error listening to the submitted job", e);
+                    }
+                }
+            };
+            //  This thread runs until the program termination, so that use can provide
+            // any action in onChange method of the listener, without worrying for waiting in the caller thread.
+            t.setDaemon(true);
+            t.start();
+        } catch (Exception e) {
+            log.error("Error during job status monitoring");
+            throw new SSHApiException("Error during job status monitoring", e);
         }
-        listener.statusChanged(jobById);
-        return listener.getJobStatus().toString();  //To change body of implemented methods use File | Settings | File Templates.
+        return jobID;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public void setServerInfo(ServerInfo serverInfo) {
@@ -419,7 +444,7 @@ public class DefaultCluster implements Cluster {
         this.session = session;
     }
 
-     /**
+    /**
      * @return cluster Nodes as array of machines
      */
     public Machine[] getNodes() {

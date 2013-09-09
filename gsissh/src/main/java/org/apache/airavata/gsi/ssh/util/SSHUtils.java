@@ -33,8 +33,8 @@ import java.io.*;
 /**
  * This class is going to be useful to SCP a file to a remote grid machine using my proxy credentials
  */
-public class SCPUtils {
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(SCPUtils.class);
+public class SSHUtils {
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(SSHUtils.class);
 
     static {
         JSch.setConfig("gssapi-with-mic.x509", "org.apache.airavata.gsi.ssh.GSSContextX509");
@@ -55,7 +55,7 @@ public class SCPUtils {
      * @param certificateLocation
      * @param configReader
      */
-    public SCPUtils(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, String certificateLocation, ConfigReader configReader) {
+    public SSHUtils(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, String certificateLocation, ConfigReader configReader) {
         System.setProperty("X509_CERT_DIR", certificateLocation);
         this.serverInfo = serverInfo;
         this.authenticationInfo = authenticationInfo;
@@ -68,7 +68,7 @@ public class SCPUtils {
      * @param authenticationInfo
      * @param configReader
      */
-    public SCPUtils(ServerInfo serverInfo, AuthenticationInfo authenticationInfo
+    public SSHUtils(ServerInfo serverInfo, AuthenticationInfo authenticationInfo
             , ConfigReader configReader) {
         this.serverInfo = serverInfo;
         this.authenticationInfo = authenticationInfo;

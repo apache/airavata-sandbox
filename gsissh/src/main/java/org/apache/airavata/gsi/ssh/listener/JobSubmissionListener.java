@@ -49,4 +49,26 @@ public abstract class JobSubmissionListener {
     public void setJobStatus(JobStatus jobStatus) {
         this.jobStatus = jobStatus;
     }
+
+    /**
+     * This method is used to block the process until the currentStatus of the job is DONE or FAILED
+     */
+    public void waitFor()  throws SSHApiException{
+        while (!isJobDone()) {
+            synchronized (this) {
+
+                try {
+                    wait();
+                } catch (InterruptedException e) {}
+            }
+        }
+    }
+
+    /**
+     * BAsed on the implementation user can define how to decide the job done
+     * scenario
+     * @return
+     * @throws SSHApiException
+     */
+    public abstract boolean isJobDone() throws SSHApiException;
 }

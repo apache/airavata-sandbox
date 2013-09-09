@@ -52,7 +52,7 @@ public class DefaultSSHApiTest {
     @BeforeTest
     public void setUp() throws Exception {
         System.setProperty("myproxy.user", "ogce");
-        System.setProperty("myproxy.password", "Jdas7wph");
+        System.setProperty("myproxy.password", "");
         System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
         myProxyUserName = System.getProperty("myproxy.user");
         myProxyPassword = System.getProperty("myproxy.password");
@@ -284,8 +284,11 @@ public class DefaultSSHApiTest {
         inputs.add("Hello World !!");
         jobDescriptor.setInputValues(inputs);
         System.out.println(jobDescriptor.toXML());
-        String status = trestles.submitAsyncJob(jobDescriptor, new DefaultJobSubmissionListener());
-        System.out.println("Job has finished with the status : " + status);
+        DefaultJobSubmissionListener listener = new DefaultJobSubmissionListener();
+        String status = trestles.submitAsyncJob(jobDescriptor, listener);
+        while(!listener.isJobDone()){
+           Thread.sleep(10000);
+        }
     }
 
 }
