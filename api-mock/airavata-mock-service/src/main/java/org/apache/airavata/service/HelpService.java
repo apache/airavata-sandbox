@@ -31,7 +31,7 @@ public class HelpService {
 	
 	@Path(MainHelpPath.ENTRY)
 	@GET
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.TEXT_HTML)
 	public String add() throws URISyntaxException {
 		URI url = ServiceUtils.getServiceOperationURIFromHelpURI(uriInfo);
 		HelpData helpData = new HTMLHelpData("Airavata Mock API", "Welcome to Airavata API!!!");
@@ -39,7 +39,7 @@ public class HelpService {
 		helpData.getParameters().put("<a href='"+url.toString()+ExperimentPath.SERVICE_PATH+ExperimentPath.ADD_TEMPLATE_HELP+"'>New Experiment Template</a>", "Add new application to Airavata system");
 		helpData.getParameters().put("<a href='"+url.toString()+ExperimentPath.SERVICE_PATH+ExperimentPath.RUN_EXPERIMENTS_HELP+"'>Launch Experiment</a>", "Launch an experiment from a experiment template in Airavata system");
 		helpData.getParameters().put("<a href='"+url.toString()+ExperimentPath.SERVICE_PATH+ExperimentPath.GET_RESULTS_HELP+"'>Get Experiment Results</a>", "Return the results of launching the experiment");
-		helpData.getParameters().put("<a href='"+url.toString()+ExperimentPath.SERVICE_PATH+ExperimentPath.LIST_TEMPLATES_HELP+"'>Templates</a>", "List of templates available.");
+		helpData.getParameters().put("<a href='"+url.toString()+ExperimentPath.SERVICE_PATH+ExperimentPath.LIST_TEMPLATES_HELP+"'>Experiment Template List</a>", "List of templates available.");
 		helpData.getParameters().put("<a href='"+url.toString()+ExperimentPath.SERVICE_PATH+ExperimentPath.LIST_EXPERIMENTS_HELP+"'>Experiments</a>", "List of experiments available.");
 		return MethodUtils.getHelpString(helpData);
 	}

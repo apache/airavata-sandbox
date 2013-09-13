@@ -20,6 +20,7 @@ import org.apache.airavata.core.application.ApplicationParameter;
 import org.apache.airavata.core.application.LocalApplicationDescriptor;
 import org.apache.airavata.core.application.ParameterType;
 import org.apache.airavata.service.utils.ServiceUtils;
+import org.apache.airavata.service.utils.help.HTMLHelpData;
 import org.apache.airavata.service.utils.help.HelpData;
 import org.apache.airavata.service.utils.help.MethodUtils;
 import org.apache.airavata.service.utils.json.ConversionUtils;
@@ -54,23 +55,22 @@ public class ApplicationService {
 		} catch (Exception e) {
 			throw new WebApplicationException(e);
 		}
-		
 	}
 	
 	@Path(ApplicationPath.ADD_APPLICATION_HELP)
 	@GET
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.TEXT_HTML)
 	public String showHelp() {
-		HelpData helpData = new HelpData("Add Application Description","Add the details of how to access an application from Airavata");
+		HelpData helpData = new HTMLHelpData("New Application","Add the details of how to access an application from Airavata");
 		try {
 			URI uri = ServiceUtils.getServiceOperationURIFromHelpURI(uriInfo);
-			helpData.getSyntax().add(uri.toString()+"?application=<JSONString>");
+			helpData.getSyntax().add(uri.toString()+"?application=&ltJSONString&gt");
 			helpData.getParameters().put("application", "Describes the application access data in JSON format. The supported JSON types are listed in the 'Notes' section.");
 			List<Class<?>> types = ApplicationDescriptorJSONFacotry.getInstance().getTypes();
 			for (Class<?> cl : types) {
 				String help="";
-				help+=ApplicationDescriptorJSONFacotry.getInstance().getTypeName(cl)+"\n";
-				help+="\t "+ApplicationDescriptorJSONFacotry.getInstance().getTypeDescription(cl)+"\n";
+				help+="<h3>"+ApplicationDescriptorJSONFacotry.getInstance().getTypeName(cl)+"</h3>\n";
+				help+="\t "+ApplicationDescriptorJSONFacotry.getInstance().getTypeDescription(cl)+"<br />\n";
 				help+="\t JSON template:\n"+"\t\t"+ApplicationDescriptorJSONFacotry.getInstance().getJSONTypeTemplate(cl)+"\n";
 				helpData.getNotes().add(help);
 			}
@@ -105,7 +105,10 @@ public class ApplicationService {
 		String s = mapper.writeValueAsString(aa);
 		System.out.println(s);
 		DataList d = new DataList();
-		d.setList(new ArrayList<String>());
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("msg_part1=Hello");
+		list.add("msg_part2=World");
+		d.setList(list);
 		System.out.println(mapper.writeValueAsString(d));
 		// A bb = mapper.readValue(s, AA.class);
 		// System.out.println(bb.getValue());
