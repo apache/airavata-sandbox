@@ -18,23 +18,23 @@
  * under the License.
  *
 */
-package org.apache.airavata.gsi.ssh.impl;
+package org.apache.airavata.gsi.ssh.util;
 
-import org.apache.airavata.gsi.ssh.api.SSHApiException;
 import org.apache.airavata.gsi.ssh.api.job.Job;
-import org.apache.airavata.gsi.ssh.listener.JobSubmissionListener;
+import org.apache.airavata.gsi.ssh.impl.JobStatus;
 
-public class DefaultJobSubmissionListener extends JobSubmissionListener {
-
-    public void statusChanged(Job jobDescriptor) throws SSHApiException {
-        System.out.println("Job status has changed to : " + jobDescriptor.getStatus());
-    }
-
-    @Override
-    public boolean isJobDone() throws SSHApiException {
-        if(getJobStatus().equals(JobStatus.C)){
+public class CommonUtils {
+    /**
+     * This returns true if the give job is finished
+     * otherwise false
+     * @param job
+     * @return
+     */
+    public static boolean isJobFinished(Job job) {
+        if (JobStatus.C.toString().equals(job.getStatus())) {
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 }

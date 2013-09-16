@@ -20,7 +20,6 @@
 */
 package org.apache.airavata.gsi.ssh.impl;
 
-import bsh.This;
 import com.jcraft.jsch.*;
 import org.apache.airavata.gsi.ssh.api.*;
 import org.apache.airavata.gsi.ssh.api.job.Job;
@@ -37,6 +36,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.net.URL;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 
@@ -56,6 +56,7 @@ public class DefaultCluster implements Cluster {
     public static final String X509_CERT_DIR = "X509_CERT_DIR";
     public static final String POLLING_FREQUENCEY = "polling.frequency";
     public static final String SSH_SESSION_TIMEOUT = "ssh.session.timeout";
+    public static final String PBSTEMPLATE_XSLT = "PBSTemplate.xslt";
 
     private Machine[] Nodes;
 
@@ -90,8 +91,8 @@ public class DefaultCluster implements Cluster {
         try {
             session = jSch.getSession(serverInfo.getUserName(), serverInfo.getHost(), serverInfo.getPort());
             session.setTimeout(Integer.parseInt(configReader.getConfiguration(SSH_SESSION_TIMEOUT)));
-        } catch (JSchException e) {
-            throw new SSHApiException("An exception occurred while creating SSH session." +
+        }  catch (Exception e){
+             throw new SSHApiException("An exception occurred while creating SSH session." +
                     "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
                     " connecting user name - "
                     + serverInfo.getUserName(), e);
@@ -139,8 +140,16 @@ public class DefaultCluster implements Cluster {
 
     public String submitAsyncJob(Job jobDescriptor) throws SSHApiException {
         TransformerFactory factory = TransformerFactory.newInstance();
-        String xsltPath = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "PBSTemplate.xslt";
-        Source xslt = new StreamSource(new File(xsltPath));
+        URL resource = this.getClass().getClassLoader().getResource(PBSTEMPLATE_XSLT);
+
+        if (resource == null) {
+            String error = "System configuration file '" + DefaultCluster.PBSTEMPLATE_XSLT
+                    + "' not found in the classpath";
+            log.error(error);
+            throw new SSHApiException(error);
+        }
+
+        Source xslt = new StreamSource(new File(resource.getPath()));
         Transformer transformer = null;
         StringWriter results = new StringWriter();
         File tempPBSFile = null;
@@ -356,7 +365,7 @@ public class DefaultCluster implements Cluster {
     }
 
 
-    static int checkAck(InputStream in) throws IOException {
+    private static int checkAck(InputStream in) throws IOException {
         int b = in.read();
         if (b == 0) return b;
         if (b == -1) return b;
@@ -380,9 +389,9 @@ public class DefaultCluster implements Cluster {
     }
 
     public String submitAsyncJob(Job jobDescriptor, JobSubmissionListener listener) throws SSHApiException {
-        final Cluster cluster = this;
-        final String jobID = this.submitAsyncJob(jobDescriptor);
-        final JobSubmissionListener jobSubmissionListener = listener;
+//        final Cluster cluster = this;
+         String jobID = this.submitAsyncJob(jobDescriptor);
+//        final JobSubmissionListener jobSubmissionListener = listener;
         try {
             // Wait 5 seconds to start the first poll, this is hard coded, user doesn't have
             // to configure this.
@@ -393,43 +402,62 @@ public class DefaultCluster implements Cluster {
         }
         // Get the job status first
         try {
-
-            Thread t = new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        Job jobById = cluster.getJobById(jobID);
+//
+//            Thread t = new Thread() {
+//                @Override
+//                public void run() {
+//                    try {
+                        Job jobById = this.getJobById(jobID);
                         while (true) {
                             while (!jobById.getStatus().equals(JobStatus.C.toString())) {
-                                if (!jobById.getStatus().equals(jobSubmissionListener.getJobStatus().toString())) {
-                                    jobSubmissionListener.setJobStatus(JobStatus.fromString(jobById.getStatus()));
-                                    jobSubmissionListener.statusChanged(jobById);
+                                if (!jobById.getStatus().equals(listener.getJobStatus().toString())) {
+                                    listener.setJobStatus(JobStatus.fromString(jobById.getStatus()));
+                                    listener.statusChanged(jobById);
                                 }
                                 Thread.sleep(Long.parseLong(configReader.getConfiguration(POLLING_FREQUENCEY)));
 
-                                jobById = cluster.getJobById(jobID);
+                                jobById = this.getJobById(jobID);
                             }
                             //Set the job status to Complete
-                            jobSubmissionListener.setJobStatus(JobStatus.C);
-                            jobSubmissionListener.statusChanged(jobById);
-                            Thread.sleep(Long.parseLong(configReader.getConfiguration(POLLING_FREQUENCEY)));
+                            listener.setJobStatus(JobStatus.C);
+                            listener.statusChanged(jobById);
+                            break;
                         }
-                    } catch (InterruptedException e) {
-                        log.error("Error listening to the submitted job", e);
-                    } catch (SSHApiException e) {
-                        log.error("Error listening to the submitted job", e);
-                    }
-                }
-            };
+//                    } catch (InterruptedException e) {
+//                        log.error("Error listening to the submitted job", e);
+//                    } catch (SSHApiException e) {
+//                        log.error("Error listening to the submitted job", e);
+//                    }
+//                }
+//            };
             //  This thread runs until the program termination, so that use can provide
             // any action in onChange method of the listener, without worrying for waiting in the caller thread.
-            t.setDaemon(true);
-            t.start();
+            //t.setDaemon(true);
+//            t.start();
         } catch (Exception e) {
             log.error("Error during job status monitoring");
             throw new SSHApiException("Error during job status monitoring", e);
         }
         return jobID;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public Job cancelJob(String jobID) throws SSHApiException {
+        RawCommandInfo rawCommandInfo = new RawCommandInfo("/opt/torque/bin/qdel " + jobID);
+
+        StandardOutReader stdOutReader = new StandardOutReader();
+        CommandExecutor.executeCommand(rawCommandInfo, this.getSession(), stdOutReader);
+        if (!stdOutReader.getErrorifAvailable().equals("")) {
+            throw new SSHApiException(stdOutReader.getStandardError().toString());
+        }
+
+        Job jobById = this.getJobById(jobID);
+        if(jobById.getStatus().equals(JobStatus.C.toString())) {
+            log.info("Job Cancel operation was successful !");
+            return jobById;
+        }else {
+            log.info("Job Cancel operation was not successful !");
+            return null;
+        }
     }
 
     public void setServerInfo(ServerInfo serverInfo) {

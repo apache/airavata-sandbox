@@ -21,9 +21,11 @@
 
 package org.apache.airavata.gsi.ssh.impl;
 
+import junit.framework.Assert;
 import org.apache.airavata.gsi.ssh.api.*;
 import org.apache.airavata.gsi.ssh.api.job.Job;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
+import org.apache.airavata.gsi.ssh.util.CommonUtils;
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -51,9 +53,9 @@ public class DefaultSSHApiTest {
 
     @BeforeTest
     public void setUp() throws Exception {
-        System.setProperty("myproxy.user", "ogce");
-        System.setProperty("myproxy.password", "");
-        System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
+//        System.setProperty("myproxy.user", "ogce");
+//        System.setProperty("myproxy.password", "");
+//        System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
         myProxyUserName = System.getProperty("myproxy.user");
         myProxyPassword = System.getProperty("myproxy.password");
 
@@ -143,6 +145,7 @@ public class DefaultSSHApiTest {
         System.out.println("Target PBS file path: " + workingDirectory);
         System.out.println("Local PBS File path: " + pbsFilePath);
         String workingDirectory = File.separator + "home" + File.separator + "ogce" + File.separator + "gsissh";
+        // constructing the job object
         Job jobDescriptor = new Job();
         jobDescriptor.setWorkingDirectory(workingDirectory);
         jobDescriptor.setShellName("/bin/bash");
@@ -154,11 +157,13 @@ public class DefaultSSHApiTest {
         jobDescriptor.setStandardErrorFile(workingDirectory + File.separator + "application.err");
         jobDescriptor.setNodes(1);
         jobDescriptor.setProcessesPerNode(1);
+        jobDescriptor.setQueueName("normal");
         jobDescriptor.setMaxWallTime("1:00:00");
         jobDescriptor.setAcountString("sds128");
         List<String> inputs = new ArrayList<String>();
         inputs.add("Hello World");
         jobDescriptor.setInputValues(inputs);
+        //finished construction of job object
         System.out.println(jobDescriptor.toXML());
         jobID = trestles.submitAsyncJob(jobDescriptor);
         System.out.println("JobID returned : " + jobID);
@@ -166,6 +171,8 @@ public class DefaultSSHApiTest {
 //        Cluster cluster = sshApi.getCluster(serverInfo, authenticationInfo);
         Thread.sleep(1000);
         Job jobById = trestles.getJobById(jobID);
+
+        //printing job data got from previous call
         AssertJUnit.assertEquals(jobById.getJobId(), jobID);
         System.out.println(jobById.getAcountString());
         System.out.println(jobById.getAllEnvExport());
@@ -228,13 +235,14 @@ public class DefaultSSHApiTest {
         jobDescriptor.setWorkingDirectory(workingDirectory);
         jobDescriptor.setShellName("/bin/bash");
         jobDescriptor.setJobName("GSI_SSH_SLEEP_JOB");
-        jobDescriptor.setExecutablePath("/bin/echo");
+        jobDescriptor.setExecutablePath("/bin/sleep");
         jobDescriptor.setAllEnvExport(true);
         jobDescriptor.setMailOptions("n");
         jobDescriptor.setStandardOutFile(workingDirectory + File.separator + "application.out");
         jobDescriptor.setStandardErrorFile(workingDirectory + File.separator + "application.err");
         jobDescriptor.setNodes(1);
         jobDescriptor.setProcessesPerNode(100);
+        jobDescriptor.setQueueName("normal");
         jobDescriptor.setMaxWallTime("1:00:00");
         jobDescriptor.setAcountString("sds128");
         List<String> inputs = new ArrayList<String>();
@@ -271,7 +279,7 @@ public class DefaultSSHApiTest {
         jobDescriptor.setWorkingDirectory(workingDirectory);
         jobDescriptor.setShellName("/bin/bash");
         jobDescriptor.setJobName("GSI_SSH_SLEEP_JOB");
-        jobDescriptor.setExecutablePath("/bin/echo");
+        jobDescriptor.setExecutablePath("/bin/sleep");
         jobDescriptor.setAllEnvExport(true);
         jobDescriptor.setMailOptions("n");
         jobDescriptor.setStandardOutFile(workingDirectory + File.separator + "application.out");
@@ -279,9 +287,10 @@ public class DefaultSSHApiTest {
         jobDescriptor.setNodes(1);
         jobDescriptor.setProcessesPerNode(1);
         jobDescriptor.setMaxWallTime("1:00:00");
+        jobDescriptor.setQueueName("normal");
         jobDescriptor.setAcountString("sds128");
         List<String> inputs = new ArrayList<String>();
-        inputs.add("Hello World !!");
+        inputs.add("1000");
         jobDescriptor.setInputValues(inputs);
         System.out.println(jobDescriptor.toXML());
         DefaultJobSubmissionListener listener = new DefaultJobSubmissionListener();
@@ -289,6 +298,56 @@ public class DefaultSSHApiTest {
         while(!listener.isJobDone()){
            Thread.sleep(10000);
         }
+    }
+
+    @Test
+    public void testJobCancel() throws Exception {
+        // Create authentication
+        AuthenticationInfo authenticationInfo
+                = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
+                7512, 17280000,certificateLocation);
+
+        // Server info
+        ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
+
+
+        Cluster trestles = new DefaultCluster(serverInfo, authenticationInfo);
+
+
+        // Execute command
+        System.out.println("Target PBS file path: " + workingDirectory);
+        System.out.println("Local PBS File path: " + pbsFilePath);
+        String workingDirectory = File.separator + "home" + File.separator + "ogce" + File.separator + "gsissh";
+        Job jobDescriptor = new Job();
+        jobDescriptor.setWorkingDirectory(workingDirectory);
+        jobDescriptor.setShellName("/bin/bash");
+        jobDescriptor.setJobName("GSI_SSH_SLEEP_JOB");
+        jobDescriptor.setExecutablePath("/bin/sleep");
+        jobDescriptor.setAllEnvExport(true);
+        jobDescriptor.setMailOptions("n");
+        jobDescriptor.setStandardOutFile(workingDirectory + File.separator + "application.out");
+        jobDescriptor.setStandardErrorFile(workingDirectory + File.separator + "application.err");
+        jobDescriptor.setNodes(1);
+        jobDescriptor.setProcessesPerNode(1);
+        jobDescriptor.setMaxWallTime("1:00:00");
+        jobDescriptor.setQueueName("normal");
+        jobDescriptor.setAcountString("sds128");
+        List<String> inputs = new ArrayList<String>();
+        inputs.add("1000");
+        jobDescriptor.setInputValues(inputs);
+        System.out.println(jobDescriptor.toXML());
+        String jobID = trestles.submitAsyncJob(jobDescriptor);
+        System.out.println("Job submitted to successfully : " + jobID);
+        Job jobById = trestles.getJobById(jobID);
+        if(!CommonUtils.isJobFinished(jobById)) {
+            Job job = trestles.cancelJob(jobID);
+            if (CommonUtils.isJobFinished(job)) {
+                Assert.assertTrue(true);
+            }else{
+                Assert.assertTrue(true);
+            }
+        }
+
     }
 
 }

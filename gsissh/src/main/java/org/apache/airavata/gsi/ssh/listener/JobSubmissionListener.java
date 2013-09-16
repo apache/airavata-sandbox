@@ -56,7 +56,6 @@ public abstract class JobSubmissionListener {
     public void waitFor()  throws SSHApiException{
         while (!isJobDone()) {
             synchronized (this) {
-
                 try {
                     wait();
                 } catch (InterruptedException e) {}

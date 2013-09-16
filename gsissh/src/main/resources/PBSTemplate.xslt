@@ -12,6 +12,7 @@
 # PBS batch job script built by Globus job manager
 #
 ##PBS -S <xsl:value-of select="ns:shellName"/>
+#PBS -q <xsl:value-of select="ns:queueName"/>
 #PBS -m <xsl:value-of select="ns:mailOptions"/>
 #PBS -A <xsl:value-of select="ns:acountString"/>
 #PBS -l walltime=<xsl:value-of select="ns:maxWallTime"/>

@@ -86,4 +86,12 @@ public interface Cluster {
      * @throws SSHApiException
      */
     public Job getJobById(String jobID) throws SSHApiException;
+
+    /**
+     * This will delete the given job from the queue
+     * @param jobID
+     * @return
+     * @throws SSHApiException
+     */
+    public Job cancelJob(String jobID) throws SSHApiException;
 }

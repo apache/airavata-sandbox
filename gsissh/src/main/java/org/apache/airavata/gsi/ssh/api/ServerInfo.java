@@ -33,7 +33,7 @@ public class ServerInfo {
         this.host = host;
     }
 
-    public ServerInfo(String host, String userName, int port) {
+    public ServerInfo(String userName,String host,  int port) {
         this.host = host;
         this.userName = userName;
         this.port = port;
