@@ -46,6 +46,7 @@ angular.module('WebUI').controller('ApplicationDescriptor', function ($scope, $h
   $scope.isHPCConfiguration = false;
   $scope.isApplicationRegister = true;
   $scope.isEditApplication = false;
+  $scope.isCancel = false;
 
   // Data required to register new application
   $scope.serviceDescriptor = {
@@ -76,18 +77,51 @@ angular.module('WebUI').controller('ApplicationDescriptor', function ($scope, $h
     'stdError':'',
     'environmentVariables':[{name:'',value:''}]         //array of object of (name,value) pair
   };
-  $scope.applicationHost=['LocalHost','lonestar','ranger','trestles'];
+  $scope.prevApplicationDescriptor;
+  $scope.applicationHost=['LocalHost','lonestar','stampede','trestles'];
+  $scope.jobTypes=['openMP','mpi','serial'];
 
-  // Callback to New Application Deployment
+  // Callback to Add New Application Deployment
   $scope.addApplicationDeployment = function() {
-    var appDesc = angular.copy($scope.applicationDescriptor);      //Json object are referenced object
+    if ($scope.isCancel) {
+      var appDesc = angular.copy($scope.prevApplicationDescriptor);      //Json object are referenced object
+      $scope.isCancel = false;
+    }
+    else {
+      var appDesc = angular.copy($scope.applicationDescriptor);
+    }
     $scope.serviceDescriptor.applicationDescriptors.push(appDesc);
     $scope.index=$scope.applicationHost.indexOf($scope.applicationDescriptor.hostDescName);
     $scope.applicationHost.splice( $scope.index,1);
-    $scope.applicationDescriptor={};
+    //$scope.applicationDescriptor={};
     $scope.isApplicationRegister=true;
     $scope.isNewDeployment=false;
   };
+  // Callback to Delete Application Deployment
+  $scope.deleteApplicationDeployment = function(index) {
+    var hostDescName = $scope.serviceDescriptor.applicationDescriptors[index].hostDescName;
+    $scope.applicationHost.push(hostDescName);
+    $scope.serviceDescriptor.applicationDescriptors.splice(index, 1);
+  };
+
+  // Callback to Edit Application Deployment
+  $scope.editApplicationDeployment = function(index) {
+    $scope.isEditApplication=true;
+    $scope.applicationDescriptor = $scope.serviceDescriptor.applicationDescriptors[index];
+    $scope.prevApplicationDescriptor=angular.copy($scope.applicationDescriptor);
+    $scope.deleteApplicationDeployment(index);
+    $scope.isNewDeployment=true;
+  };
+  // Callback to Cancel Application Deployment
+  $scope. cancelApplicationDeployment = function(index) {
+    if ($scope.isEditApplication) {
+      $scope.isCancel=true;
+      $scope.addApplicationDeployment();
+      $scope.isEditApplication=false;
+    }
+    $scope.isNewDeployment=false;
+  };
+
 
   // Callback to Add Application Descriptor to Registry
   $scope.saveApplicationDescriptor = function () {

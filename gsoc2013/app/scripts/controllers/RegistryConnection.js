@@ -27,7 +27,7 @@ angular.module('WebUI').controller('RegistryConnection', function ($scope, $http
   $http.defaults.useXDomain = true;
   // Data required to connect to the registry
   $scope.registry =  {
-    'url': 'http://localhost:8080/airavata-registry/api',
+    'url': 'http://localhost:8080/airavata/services/registry',
     'gateway': 'default',
     'username': 'admin',
     'password': 'admin'

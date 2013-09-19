@@ -83,8 +83,8 @@ under the License.
             <tbody>
             <tr ng-repeat="appDesc in serviceDescriptor.applicationDescriptors">
               <td class="col-md-4">{{appDesc.hostDescName}}</td>
-              <td class="col-md-4"><a href ng-click=""><i class="icon-edit-sign"></i></a></td>
-              <td class="col-md-4"><a href ng-click="serviceDescriptor.applicationDescriptors.splice($index, 1)"><i class="icon-remove-sign"></i></a></td>
+              <td class="col-md-4"><a href ng-click="editApplicationDeployment($index);"><i class="icon-edit-sign"></i></a></td>
+              <td class="col-md-4"><a href ng-click="deleteApplicationDeployment($index);"><i class="icon-remove-sign"></i></a></td>
             </tr>
             </tbody>
           </table>
@@ -106,15 +106,16 @@ under the License.
   <form name="newAppDeployFrom" ng-show="isNewDeployment" class="form-horizontal">
     <fieldset>
       <div class="row">
+        <legend>{{newAppDeployFromLegend}}</legend>
         <div class="col-md-4">
-          <legend>{{newAppDeployFromLegend}}</legend>
           <div class="control-group">
-            <label class="control-label" for="applicationHost"> Application Host</label>
+            <label class="control-label" for="applicationHost"> Application Host
+              <a href="#/exec/addHost" data-toggle="tooltip" data-placement="right" title="Create New Host"><i class="icon-plus-sign"></i></a>
+            </label>
             <div class="controls">
               <select id="applicationHost"  ng-model="applicationDescriptor.hostDescName" ng-options="host for host in applicationHost" required>
                 <option value="">-Select-</option>
               </select>
-              <a href="#/exec/addHost" data-toggle="tooltip" data-placement="right" title="Create New Host"><i class="icon-plus-sign"></i></a>
             </div>
           </div>
           <div class="control-group">
@@ -133,7 +134,7 @@ under the License.
           <div class="control-group">
             <label class="control-label" for="inputDirectory">Input Directory</label>
             <div class="controls">
-              <input type="url" id="inputDirectory" placeholder="Input Directory" ng-model="applicationDescriptor.inputDir">
+              <input type="text" id="inputDirectory" placeholder="Input Directory" ng-model="applicationDescriptor.inputDir">
             </div>
           </div>
           <div class="control-group">
@@ -152,7 +153,7 @@ under the License.
           <div class="control-group">
             <label class="control-label" for="inputSTDIN">STDIN</label>
             <div class="controls">
-              <input type="url" id="inputSTDIN" placeholder="Standard Input" ng-model="applicationDescriptor.stdIn">
+              <input type="text" id="inputSTDIN" placeholder="Standard Input" ng-model="applicationDescriptor.stdIn">
             </div>
           </div>
           <div class="control-group">
@@ -167,53 +168,105 @@ under the License.
               <input type="text" id="inputSTDERR" placeholder="Standard Error" ng-model="applicationDescriptor.stdError">
             </div>
           </div>
+          <h6>Environmental Variables</h6>
+          <div><a href ng-click="applicationDescriptor.environmentVariables.push({})"><i class="icon-plus-sign"> Add Environment Variable</i></a></div>
+          <div class="controls-group">
+            <table style="width: 55%" id="tblEnvironmentalVar" class="table table-striped table-bordered table-hovered table-condensed">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Value</th>
+                <th>Delete</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="variables in applicationDescriptor.environmentVariables">
+                <td class="col-md-2">
+                  <input type="text" id="VarName" name="VarName" placeholder="Variable Name" ng-model="variables.name" required>
+                </td>
+                <td class="col-md-1">
+                  <input type="number" id="VarValue" name="VarValue" placeholder="Variable Value" ng-model="variables.value" required>
+                </td>
+                <td class="col-md-1">
+                  <a href ng-click="applicationDescriptor.environmentVariables.splice($index, 1)"><i class="icon-remove-sign"></i></a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div class="col-md-4">
-          <!--<legend>Locations</legend>
+        <div class="col-md-4" ng-hide="applicationDescriptor.hostDescName=='LocalHost' || applicationDescriptor.hostDescName=='' ">
+          <h6>HPC Configurations</h6>
           <div class="control-group">
-            <label class="control-label" for="inputDirectory">Input Directory</label>
+            <label class="control-label" for="jobType">Job Type</label>
             <div class="controls">
-              <input type="url" id="inputDirectory" placeholder="Input Directory" ng-model="applicationDescriptor.inputDir">
+              <select id="jobType"  ng-model="applicationDescriptor.jobType" ng-options="job for job in jobTypes" required>
+                <option value="">-Select-</option>
+              </select>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="outputDirectory">Output Directory</label>
+            <label class="control-label" for="ProjectNumber">Project Account Number</label>
             <div class="controls">
-              <input type="text" id="outputDirectory" placeholder="Output Directory" ng-model="applicationDescriptor.outputDir">
+              <input type="text" id="ProjectNumber" placeholder="Project Account Number" ng-model="applicationDescriptor.projectNumber" required>
             </div>
           </div>
           <div class="control-group">
-            <label class="control-label" for="staticWorkingDir">Static Working Directory</label>
+            <label class="control-label" for="ProjectDescription">Project Account Description</label>
             <div class="controls">
-              <input type="text" id="staticWorkingDir" placeholder="Static Working Directory" ng-model="applicationDescriptor.staticWorkingDir">
+              <input type="text" id="ProjectDescription" placeholder="Project Account Description" ng-model="applicationDescriptor.projectDescription">
             </div>
           </div>
-        --></div>
+          <div class="control-group">
+            <label class="control-label" for="QueueType">Queue Type</label>
+            <div class="controls">
+              <input type="text" id="QueueType" placeholder="Queue Type" ng-model="applicationDescriptor.queueName" required>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="MaxWallTime">Max Wall Time</label>
+            <div class="controls">
+              <input type="number" id="MaxWallTime" placeholder="Max Wall Time" ng-model="applicationDescriptor.maxWallTime">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="CPUCount">CPU Count</label>
+            <div class="controls">
+              <input type="number" id="CPUCount" placeholder="CPU Count" ng-model="applicationDescriptor.cpuCount">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="NodeCount">Node Count</label>
+            <div class="controls">
+              <input type="number" id="NodeCount" placeholder="Node Count" ng-model="applicationDescriptor.nodeCount">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="ProcessorsPerNode">Processors Per Node</label>
+            <div class="controls">
+              <input type="number" id="ProcessorsPerNode" placeholder="Processors Per Node" ng-model="applicationDescriptor.processorsPerNode">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="MinMemory">Min Memory</label>
+            <div class="controls">
+              <input type="number" id="minMemory" placeholder="Min Memory" ng-model="applicationDescriptor.minMemory">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="MaxMemory">Max Memory</label>
+            <div class="controls">
+              <input type="number" id="MaxMemory" placeholder="Max Memory" ng-model="applicationDescriptor.maxMemory">
+            </div>
+          </div>
+        </div>
       </div>
       <div class="row control-group">
         <div class="controls">
-          <a href ng-click="addApplicationDeployment();" class="btn btn-primary">Update</a>
-          <a href ng-click="isNewDeployment=false" class="btn btn-default">Cancel</a>
+          <a href ng-click="applicationDescriptor.hostDescName == ''|| addApplicationDeployment();" class="btn btn-primary">Update</a>
+          <a href ng-click="cancelApplicationDeployment();" class="btn">Cancel</a>
         </div>
       </div>
     </fieldset>
   </form>
 </div>
-
-<!--'environmentVariables':[{name:'',value:''}]
-$scope.applicationDescriptor = {
-'hostDescName':'Localhost',
-'executablePath':'',
-'workingDir':'',
-'jobType':'',
-'projectNumber':'',
-'projectDescription':'',
-'queueName':'',
-'maxWallTime':'',
-'cpuCount':'',
-'nodeCount':'',
-'processorsPerNode':'',
-'minMemory':'',
-'maxMemory':'',
-'
-};-->
