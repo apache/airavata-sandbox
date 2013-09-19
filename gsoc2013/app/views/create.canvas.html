@@ -1,8 +1,17 @@
 <div ng-controller="WorkflowCreator">
-  <div class="navbar">
-    <div class="navbar-inner">
-      <a class="brand" href="#">Workflow Creator</a>
-      <ul class="nav">
+  <nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".createnavbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand">Workflow Creator</a>
+    </div>
+
+    <div class="collapse navbar-collapse createnavbar">
+      <ul class="nav navbar-nav">
         <li><a ng-click="addNode()" title="Add Node"><i class="icon-plus"></i></a></li>
         <li><a ng-click="addContainer()"  title="Add Container"><i class="icon-dropbox"></i></a></li>
         <li class="{{buttonState.move}}"><a ng-click="move()" title="Move Nodes"><i class="icon-hand-up"></i></a></li>
@@ -21,6 +30,6 @@
         <li><a ng-click="panRight()" title="Pan Right"><i class="icon-arrow-right"></i></a></li>
       </ul>
     </div>
-  </div>
+  </nav>
   <div class="container" id="editor"></div>
 </div>

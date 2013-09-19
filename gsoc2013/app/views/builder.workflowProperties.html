@@ -17,51 +17,33 @@ specific language governing permissions and limitations
 under the License.
 -->
 <div ng-controller="WorkflowLaunch">
-  <form name="workflowPropertiesForm" style="padding:10px;" ng-submit="saveWorkflowProperties();" class="form-horizontal">
-    <fieldset>
-      <legend>Workflow Properties</legend>
-      <div class="control-group">
-        <label class="control-label" for="inputName">Name</label>
-        <div class="controls">
-          <input style="width: 35%;" type="text" id="inputName" name="name" placeholder="name" ng-model="workflowProperties.name" required>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label class="control-label" for="inputTemplateId">Template Id</label>
-        <div class="controls">
-          <input style="width: 35%;" type="url" id="inputTemplateId" name="templateId" placeholder="Template Id" ng-model="workflowProperties.templateId" disabled>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label class="control-label" for="inputInstanceId">Instance Id</label>
-        <div class="controls">
-          <input style="width: 35%;" type="url" id="inputInstanceId" name="instanceId" placeholder="Instance Id" ng-model="workflowProperties.instanceId" disabled>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label class="control-label" for="inputDescription">Description</label>
-        <div class="controls">
-          <textarea style="width: 35%;"  id="inputDescription" name="description" placeholder="Description" ng-model="workflowProperties.description"></textarea>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label class="control-label" for="inputMetadata">Metadata</label>
-        <div class="controls">
-          <textarea rows="5" style="width: 35%;"  id="inputMetadata" name="metadata" placeholder="Metadata" ng-model="workflowProperties.metadata"></textarea>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <div class="controls">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <!--button type="submit" ng-disabled="launchWorkflowForm.$invalid" class="btn btn-primary">Run</button-->
-          <a class="btn" href="#/exec">Cancel</a>
-        </div>
-      </div>
-    </fieldset>
+  <form role="form" name="workflowPropertiesForm" style="padding:10px;" ng-submit="saveWorkflowProperties();">
+    <legend>Workflow Properties</legend>
+    <div class="form-group">
+      <label for="inputName">Name</label>
+      <input style="width: 35%;" type="text" id="inputName" name="name" placeholder="name" ng-model="workflowProperties.name" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="inputTemplateId">Template Id</label>
+      <input style="width: 35%;" type="url" id="inputTemplateId" name="templateId" placeholder="Template Id" ng-model="workflowProperties.templateId" class="form-control" disabled>
+    </div>
+    <div class="form-group">
+      <label for="inputInstanceId">Instance Id</label>
+      <input style="width: 35%;" type="url" id="inputInstanceId" name="instanceId" placeholder="Instance Id" ng-model="workflowProperties.instanceId" class="form-control" disabled>
+    </div>
+    <div class="form-group">
+      <label for="inputDescription">Description</label>
+      <textarea style="width: 35%;" class="form-control" id="inputDescription" name="description" placeholder="Description" ng-model="workflowProperties.description"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="inputMetadata">Metadata</label>
+      <textarea rows="5" style="width: 35%;" class="form-control" id="inputMetadata" name="metadata" placeholder="Metadata" ng-model="workflowProperties.metadata"></textarea>disabled>
+    </div>
+    <div class="form-group">
+      <label for="inputInstanceId">Instance Id</label>
+      <input style="width: 35%;" type="url" class="form-control" id="inputInstanceId" name="instanceId" placeholder="Instance Id" ng-model="workflowProperties.instanceId" disabled>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+    <a class="btn btn-default" href="#/exec">Cancel</a>
   </form>
 </div>

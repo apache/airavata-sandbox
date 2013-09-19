@@ -47,30 +47,34 @@ under the License.
 <![endif]-->
 
 <!-- The Navbar -->
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <!-- Responsive Navbar -->
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-            </a>
-            <!-- Brand -->
-            <span class="brand" href="#">Apache Airavata WebUI</span>
-            <!-- Navbar -->
-            <div class="nav-collapse collapse" ui-view="navbar"></div>
-        </div>
-    </div>
-</div>
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".mainnavbar">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">Apache Airavata WebUI</a>
+  </div>
+
+  <!-- The Meat -->
+  <div class="collapse navbar-collapse mainnavbar" ui-view="navbar"></div>
+</nav>
 
   <!-- The Content -->
-  <div class="container-fluid" style="padding-top: 60px;">
-    <div class="row-fluid">
-      <div class="span3">
-        <div class="well sidebar-nav" ui-view="sidenavbar"></div>
+  <div class="container" style="padding-top: 60px;">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="well sidebar-nav">
+          <div class="container" ui-view="sidenavbar"></div>
+        </div>
       </div>
-      <div class="span9">
+      <div class="col-md-9">
         <!-- Alerts -->
-        <div class="row"ng-controller="Alert">
+        <div class="row" ng-controller="Alert">
           <div ng-repeat="alert in alerts" class="alert alert-block alert-{{alert.type}} fade in">
             <button type="button" class="close" data-dismiss="alert" ng-click="closeAlert($index)">&times;</button>
             <h4 class="alert-heading">{{alert.head}}</h4>
@@ -93,7 +97,7 @@ under the License.
   <script src="scripts/registryAPI.js"></script>
   <script src="scripts/controllers/WorkflowLaunch.js"></script>
   <script src="scripts/controllers/HostDescriptor.js"></script>
-  <script src="scripts/controllers/ApplicationDescriptor.js"></script>  
+  <script src="scripts/controllers/ApplicationDescriptor.js"></script>
   <script src="scripts/controllers/FileTransfer.js"></script>
   <script src="scripts/controllers/WorkflowMonitoring.js"></script>
   <script src="scripts/NodeSubscriber.js"></script>
@@ -106,19 +110,19 @@ under the License.
   <script src="scripts/vendor/jquery.base64.min.js"></script>
   <script src="bower_components/raphael/raphael.js"></script>
   <script src="scripts/vendor/bandit.js"></script>
-  <script src="bower_components/bootstrap-sass/js/bootstrap-affix.js"></script>
-  <script src="bower_components/bootstrap-sass/js/bootstrap-alert.js"></script>
-  <script src="bower_components/bootstrap-sass/js/bootstrap-dropdown.js"></script>
-  <script src="bower_components/bootstrap-sass/js/bootstrap-tooltip.js"></script>
-  <script src="bower_components/bootstrap-sass/js/bootstrap-modal.js"></script>
-  <script src="bower_components/bootstrap-sass/js/bootstrap-transition.js"></script>
-  <script src="bower_components/bootstrap-sass/js/bootstrap-button.js"></script>
-  <script src="bower_components/bootstrap-sass/js/bootstrap-popover.js"></script>
-  <script src="bower_components/bootstrap-sass/js/bootstrap-typeahead.js"></script>
-  <script src="bower_components/bootstrap-sass/js/bootstrap-carousel.js"></script>
-  <script src="bower_components/bootstrap-sass/js/bootstrap-scrollspy.js"></script>
-  <script src="bower_components/bootstrap-sass/js/bootstrap-collapse.js"></script>
-  <script src="bower_components/bootstrap-sass/js/bootstrap-tab.js"></script>
+  <script src="bower_components/bootstrap-sass/js/affix.js"></script>
+  <script src="bower_components/bootstrap-sass/js/alert.js"></script>
+  <script src="bower_components/bootstrap-sass/js/dropdown.js"></script>
+  <script src="bower_components/bootstrap-sass/js/tooltip.js"></script>
+  <script src="bower_components/bootstrap-sass/js/modal.js"></script>
+  <script src="bower_components/bootstrap-sass/js/transition.js"></script>
+  <script src="bower_components/bootstrap-sass/js/button.js"></script>
+  <script src="bower_components/bootstrap-sass/js/popover.js"></script>
+  <script src="bower_components/bootstrap-sass/js/typeahead.js"></script>
+  <script src="bower_components/bootstrap-sass/js/carousel.js"></script>
+  <script src="bower_components/bootstrap-sass/js/scrollspy.js"></script>
+  <script src="bower_components/bootstrap-sass/js/collapse.js"></script>
+  <script src="bower_components/bootstrap-sass/js/tab.js"></script>
   <!-- endbuild -->
 
   <!-- build:js scripts/modules.js -->

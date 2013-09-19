@@ -42,23 +42,23 @@ under the License.
             </thead>
             <tbody>
             <tr ng-repeat="parameter in serviceDescriptor.parameters">
-              <td class="span2">
+              <td class="col-md-2">
                 <select style="width: 80px;" id="parameterIO" name="ParameterIO" ng-model="parameter.io" ng-options="io for io in parameterIO" required>
                   <option value="">-Select-</option>
                 </select>
               </td>
-              <td class="span3">
+              <td class="col-md-3">
                 <input type="text" id="inputParameterName" name="ParameterName" placeholder="Parameter Name" ng-model="parameter.name" required>
               </td>
-              <td class="span3">
+              <td class="col-md-3">
                 <select id="parameterType" name="ParameterType" ng-model="parameter.type" ng-options="type for type in parameterType" required>
                   <option value="">-Select-</option>
                 </select>
               </td>
-              <td class="span3">
+              <td class="col-md-3">
                 <input type="text" id="parameterDescription" name="ParameterDescription" placeholder="Parameter Description" ng-model="parameter.description">
               </td>
-              <td class="span1">
+              <td class="col-md-1">
                 <a href ng-click="serviceDescriptor.parameters.splice($index, 1)"><i class="icon-remove-sign"></i></a>
               </td>
             </tr>
@@ -82,9 +82,9 @@ under the License.
             </thead>
             <tbody>
             <tr ng-repeat="appDesc in serviceDescriptor.applicationDescriptors">
-              <td class="span4">{{appDesc.hostDescName}}</td>
-              <td class="span4"><a href ng-click=""><i class="icon-edit-sign"></i></a></td>
-              <td class="span4"><a href ng-click="serviceDescriptor.applicationDescriptors.splice($index, 1)"><i class="icon-remove-sign"></i></a></td>
+              <td class="col-md-4">{{appDesc.hostDescName}}</td>
+              <td class="col-md-4"><a href ng-click=""><i class="icon-edit-sign"></i></a></td>
+              <td class="col-md-4"><a href ng-click="serviceDescriptor.applicationDescriptors.splice($index, 1)"><i class="icon-remove-sign"></i></a></td>
             </tr>
             </tbody>
           </table>
@@ -98,7 +98,7 @@ under the License.
         <div class="controls">
           <button type="submit" class="btn btn-primary">Register</button>
           <!--button type="submit" ng-disabled="launchWorkflowForm.$invalid" class="btn btn-primary">Run</button-->
-          <a class="btn" href="#/exec">Cancel</a>
+          <a class="btn btn-default" href="#/exec">Cancel</a>
         </div>
       </div>
     </fieldset>
@@ -106,7 +106,7 @@ under the License.
   <form name="newAppDeployFrom" ng-show="isNewDeployment" class="form-horizontal">
     <fieldset>
       <div class="row">
-        <div class="span4">
+        <div class="col-md-4">
           <legend>{{newAppDeployFromLegend}}</legend>
           <div class="control-group">
             <label class="control-label" for="applicationHost"> Application Host</label>
@@ -168,7 +168,7 @@ under the License.
             </div>
           </div>
         </div>
-        <div class="span4">
+        <div class="col-md-4">
           <!--<legend>Locations</legend>
           <div class="control-group">
             <label class="control-label" for="inputDirectory">Input Directory</label>
@@ -193,7 +193,7 @@ under the License.
       <div class="row control-group">
         <div class="controls">
           <a href ng-click="addApplicationDeployment();" class="btn btn-primary">Update</a>
-          <a href ng-click="isNewDeployment=false" class="btn">Cancel</a>
+          <a href ng-click="isNewDeployment=false" class="btn btn-default">Cancel</a>
         </div>
       </div>
     </fieldset>
