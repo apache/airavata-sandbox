@@ -194,7 +194,7 @@ var optionalBasicHeaders = {"Authorization": "Basic YWRtaW46YWRtaW4=",
 var formBasicHeaders = {"Authorization": "Basic YWRtaW46YWRtaW4=",
     "Accept": "*/*", "Content-Type": "application/x-www-form-urlencoded"};
 
-var baseURL = {"BASE_RES_PATH": "/airavata-registry/api"};
+var baseURL = {"BASE_RES_PATH": "/airavata/services/registry"};
 
 var type = {get: "GET", post: "POST", delete: "DELETE"};
 
@@ -2236,15 +2236,16 @@ UserWorkflowRegistry.prototype.updateWorkflow = function (workflowName, workflow
 UserWorkflowRegistry.prototype.getWorkflowGraphXML = function (workflowName) {
     var url, data, res;
     url = this.userWorkflowResourcePath + userWFConstants.GET_WORKFLOWGRAPH;
-    data = {workflowName: workflowName};
-    res = sendAndReceive(url, optionalBasicHeaders, type.get, data, null);
+    data = {workflowName: workflowName, isJson:"true"};
+    res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseText;
 };
 
 UserWorkflowRegistry.prototype.getWorkflows = function () {
-    var url, res;
+    var url, res, data;
+    data = {isJson:"true"}
     url = this.userWorkflowResourcePath + userWFConstants.GET_WORKFLOWS;
-    res = sendAndReceive(url, optionalBasicHeaders, type.get, null, null);
+    res = sendAndReceive(url, airavataBasicHeaders, type.get, data, null);
     return res.responseJSON;
 };
 
