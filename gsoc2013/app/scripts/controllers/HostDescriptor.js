@@ -24,7 +24,7 @@
  * Controller for descriptors registry resource , deals with host,service and application descriptors
  *
  */
-angular.module('WebUI').controller('RegistryDescriptors', function ($scope, $http, MessageQueue) {
+angular.module('WebUI').controller('HostDescriptor', function ($scope, $http, MessageQueue) {
 
   //To enable the Cross Origin Resource Sharing in application
   $http.defaults.useXDomain = true;
