@@ -32,7 +32,6 @@ app.config(['$httpProvider','$routeProvider' ,function($httpProvider, $routeProv
 	when('/experiments', {controller:'ExperimentCtrl', templateUrl:'users.html'}).
 	when('/projects', {controller:'ProjectCtrl', templateUrl:'projects.html'}).
 	when('/workflows', {controller:'WorkflowCtrl', templateUrl:'workflows.html'}).
-	//when('/credentials', {controller:'LoginCtrl', templateUrl:'credentials.html'}).
 	otherwise({redirectTo:'/'});
 }]);
 
@@ -121,7 +120,7 @@ app.directive("adminboard", function() {
 					'</div>' +
 					'</div>' +
 					'<ul class="nav nav-tabs">' +
-					'<li><a ng-click="gotoUrl(\'/\')">Credentials</a></li>' +
+					'<li><a ng-click="gotoUrl(\'/\')">Login</a></li>' +
 					'<li><a ng-click="gotoUrl(\'/experiments\')">Experiments</a></li>' +
 					'<li><a ng-click="gotoUrl(\'/projects\')">Projects</a></li>' +
 					'<li><a ng-click="gotoUrl(\'/workflows\')">Workflows</a></li>' +
@@ -284,7 +283,7 @@ angular.module("services",["config"]).
 		return {
 			getAll : function() {
 				return $http({method:"GET", url:Server.getEndpoint()+"api/projectregistry/get/projects",
-					cache : true, withCredentials : true}).
+					cache : false, withCredentials : true}).
 				then(function(response) {
 					return response.data.workspaceProjects;
 				}, function(error) {
@@ -297,7 +296,7 @@ angular.module("services",["config"]).
 		return {
 			getAll : function() {
 				return $http({method:"GET", url:Server.getEndpoint()+"api/experimentregistry/get/experiments/all",
-					cache : true, withCredentials : true}).
+					cache : false, withCredentials : true}).
 				then(function(response) {
 					console.log(response);
 					var results = response.data.experiments;
@@ -318,7 +317,7 @@ angular.module("services",["config"]).
 			},
 			getByUser : function(username) {
 				return $http({method:"GET", url:Server.getEndpoint()+"api/provenanceregistry/get/experiment/user?username="+username,
-					cache : true, withCredentials : true}).
+					cache : false, withCredentials : true}).
 				then(function(response) {
 					console.log(response);
 					return response.data.experimentDataList;
@@ -337,7 +336,7 @@ angular.module("services",["config"]).
 			},
 			search : function(searchQuery) {
 				return $http({method:"GET", url:Server.getEndpoint()+"api/provenanceregistry/get/experiments?"+searchQuery,
-					cache : true, withCredentials : true}).
+					cache : false, withCredentials : true}).
 				then(function(response) {
 					console.log(response);
 					return response.data.experimentDataList;
@@ -351,7 +350,7 @@ angular.module("services",["config"]).
 		return {
 			getAll : function() {
 				return $http({method:"GET", url:Server.getEndpoint()+"api/userwfregistry/get/workflows",
-					cache : true, withCredentials : true}).
+					cache : false, withCredentials : true}).
 				then(function(response) {
 					return response.data.workflowList;
 				}, function(error) {
