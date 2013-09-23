@@ -1,0 +1,56 @@
+doctype 5
+html
+  head
+    link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Open+Sans')
+    link(rel='stylesheet', href='/css/style.css')
+    script(src='/js/socket.io.min.js')
+    script(src='/js/jquery-1.9.1.min.js')
+    script(src='/js/index.js')
+    title Monitoring Module
+
+  body	
+  h1 MONITORING MODULE
+  #monitoring
+    table.padding_table
+        thead
+          tr
+            th
+      table.padding_table2
+        thead
+          tr
+            th
+      table#time.table.table-hover
+        thead
+          tr
+            th Time
+      table.padding_table
+        thead
+          tr
+            th
+      table#status.table.table-hover
+        thead
+          tr
+            th Status
+      table.padding_table
+        thead
+          tr
+            th
+      table#component.table.table-hover
+        thead
+          tr
+            th Component
+      table.padding_table
+        thead
+          tr
+            th
+      table#message_content.table.table-hover
+        thead
+          tr
+            th Message
+
+  script(src='/socket.io/socket.io.js')
+  script(src='js/app.js')
+  script(src='js/services.js')
+  script(src='js/controllers.js')
+  script(src='js/filters.js')
+  script(src='js/directives.js')
