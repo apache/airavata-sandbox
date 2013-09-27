@@ -17,39 +17,39 @@ specific language governing permissions and limitations
 under the License.
 -->
 <div ng-controller="WorkflowLaunch">
-  <form name="launchWorkflowForm" style="padding:10px;" ng-submit="runExperiment();" class="form-horizontal">
+  <form name="launchWorkflowForm" style="padding:10px;" ng-submit="runExperiment();" class="form-horizontal" role="form">
     <fieldset>
       <legend>Launch Workflow</legend>
-      <div class="control-group" ng-repeat="input in workflowParams.workflowInputs">
-        <label class="control-label"for={{input.id}}>{{input.name}}  {{input.dataType}}</label>
-        <div class="controls">
-          <input type="text" id={{input.id}} name={{input.name}} placeholder={{input.name}} ng-model="input.value" required>
+      <div class="form-group" ng-repeat="input in workflowParams.workflowInputs">
+        <label class="col-lg-3 control-label"for={{input.id}}>{{input.name}}  {{input.dataType}}</label>
+        <div class="col-lg-9">
+          <input class="form-control" type="text" id={{input.id}} name={{input.name}} placeholder={{input.name}} ng-model="input.value" required>
         </div>
       </div>
 
-      <div class="control-group">
-        <label class="control-label" for="inputExperimentName">Experiment Name</label>
-        <div class="controls">
-          <input type="text" id="inputExperimentName" placeholder="Experiment Name" ng-model="workflowParams.experimentName" required>
+      <div class="form-group">
+        <label class="col-lg-3 control-label" for="inputExperimentName">Experiment Name</label>
+        <div class="col-lg-9">
+          <input class="form-control" type="text" id="inputExperimentName" placeholder="Experiment Name" ng-model="workflowParams.experimentName" required>
         </div>
       </div>
 
-      <div class="control-group">
-        <label class="control-label" for="inputWorkflowInterpreterURL">Workflow Interpreter URL</i></label>
-        <div class="controls">
-          <input type="url" id="inputWorkflowInterpreterURL" placeholder="Workflow Interpreter URL" ng-model="workflowParams.workflowInterpreterURL" required>
+      <div class="form-group">
+        <label class="col-lg-3 control-label" for="inputWorkflowInterpreterURL">Workflow Interpreter URL</i></label>
+        <div class="col-lg-9">
+          <input class="form-control" type="url" id="inputWorkflowInterpreterURL" placeholder="Workflow Interpreter URL" ng-model="workflowParams.workflowInterpreterURL" required>
         </div>
       </div>
 
-      <div class="control-group">
-        <label class="control-label" for="inputGFacURL">GFac URL</label>
-        <div class="controls">
-          <input type="url" id="inputGFacURL" placeholder="GFac URL" ng-model="workflowParams.gFacURL" required="">
+      <div class="form-group">
+        <label class="col-lg-3 control-label" for="inputGFacURL">GFac URL</label>
+        <div class="col-lg-9">
+          <input class="form-control" class="form-control" type="url" id="inputGFacURL" placeholder="GFac URL" ng-model="workflowParams.gFacURL" required="">
         </div>
       </div>
 
-      <div class="control-group">
-        <div class="controls">
+      <div class="form-group">
+        <div class="col-lg-offset-3 col-lg-9">
           <button type="submit" class="btn btn-primary">Run</button>
           <!--button type="submit" ng-disabled="launchWorkflowForm.$invalid" class="btn btn-primary">Run</button-->
           <a class="btn btn-default" href="#/exec">Cancel</a>

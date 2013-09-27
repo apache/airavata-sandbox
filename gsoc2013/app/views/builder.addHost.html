@@ -17,13 +17,14 @@ specific language governing permissions and limitations
 under the License.
 -->
 <div ng-controller="HostDescriptor">
-  <form name="addhostForm" style="padding:10px;" novalidate ng-submit="saveHostDescriptor();" class="form-horizontal">
+  <form class="form-horizontal" role="form" name="addhostForm" style="padding:10px;" novalidate ng-submit="saveHostDescriptor();">
     <fieldset>
       <legend>Register Host</legend>
-      <div class="control-group">
-        <label for="inputHostId" class="control-label">Host Id</label>
-        <div class="controls">
-          <input type="text" id="inputHostId" name="hostId" placeholder="Host Id" ng-model="addHost.hostId" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
+
+      <div class="form-group">
+        <label for="inputHostId" class="col-lg-3 control-label">Host Id</label>
+        <div class="col-lg-9">
+          <input class="form-control" type="text" id="inputHostId" name="hostId" placeholder="Host Id" ng-model="addHost.hostId" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
           <div class="text-error" ng-show="addhostForm.hostId.$dirty && addhostForm.hostId.$invalid">
             <small class="text-error" ng-show="addhostForm.hostId.$error.required"> *Required.</small>
             <small class="text-error" ng-show="addhostForm.hostId.$error.pattern"> Alpha-Numeric values between 4-10 characters.</small>
@@ -31,10 +32,10 @@ under the License.
         </div>
       </div>
 
-      <div class="control-group">
-        <label class="control-label" for="inputHostAddress">Host Address</label>
-        <div class="controls">
-          <input type="url" id="inputHostAddress" name="hostAddress" placeholder="Host Address" ng-model="addHost.hostAddress" required>
+      <div class="form-group">
+        <label class="col-lg-3 control-label" for="inputHostAddress">Host Address</label>
+        <div class="col-lg-9">
+          <input class="form-control" type="url" id="inputHostAddress" name="hostAddress" placeholder="Host Address" ng-model="addHost.hostAddress" required>
           <div class="text-error" ng-show="addhostForm.hostAddress.$dirty && addhostForm.hostAddress.$invalid">
             <small class="text-error" ng-show="addhostForm.hostAddress.$error.required"> *Required.</small>
             <small class="text-error" ng-show="addhostForm.hostAddress.$error.url"> URL Expected. </small>
@@ -42,19 +43,19 @@ under the License.
         </div>
       </div>
 
-      <div class="control-group">
-        <label class="control-label" for="resourceProtocol">Resource Protocol</label>
-        <div class="controls">
-          <select id="resourceProtocol" name="rp" ng-model="addHost.resourceProtocol" ng-options="protocol.name for protocol in protocols" required>
+      <div class="form-group">
+        <label class="col-lg-3 control-label" for="resourceProtocol">Resource Protocol</label>
+        <div class="col-lg-9">
+          <select class="form-control" id="resourceProtocol" name="rp" ng-model="addHost.resourceProtocol" ng-options="protocol.name for protocol in protocols" required>
             <option value="">-- Select Protocol --</option>
           </select>
         </div>
       </div>
 
-      <div class="control-group">
-        <label class="control-label" ng-show="addHost.resourceProtocol.configuration" for="gramEndpoint">Gram Endpoint</label>
-        <div class="controls">
-          <input type="url" id="gramEndpoint" name="gramep" placeholder="Gram Endpoint" ng-model="addHost.gramEndpoint" ng-show="addHost.resourceProtocol.configuration" ng-required="addHost.resourceProtocol.configuration">
+      <div class="form-group">
+        <label class="col-lg-3 control-label" ng-show="addHost.resourceProtocol.configuration" for="gramEndpoint">Gram Endpoint</label>
+        <div class="col-lg-9">
+          <input class="form-control" type="url" id="gramEndpoint" name="gramep" placeholder="Gram Endpoint" ng-model="addHost.gramEndpoint" ng-show="addHost.resourceProtocol.configuration" ng-required="addHost.resourceProtocol.configuration">
           <div class="text-error" ng-show="addhostForm.gramep.$dirty && addhostForm.gramep.$invalid">
             <small class="text-error" ng-show="addhostForm.gramep.$error.required"> *Required.</small>
             <small class="text-error" ng-show="addhostForm.gramep.$error.url"> URL Expected. </small>
@@ -62,10 +63,10 @@ under the License.
         </div>
       </div>
 
-      <div class="control-group">
-        <label class="control-label" ng-show="addHost.resourceProtocol.configuration" for="gridFTPEndpoint">Grid FTP Endpoint</label>
-        <div class="controls">
-          <input type="url" id="gridFTPEndpoint" name="gridep" placeholder="Grid FTP Endpoint" ng-model="addHost.gridFTPEndpoint" ng-show="addHost.resourceProtocol.configuration" ng-required="addHost.resourceProtocol.configuration">
+      <div class="form-group">
+        <label class="col-lg-3 control-label" ng-show="addHost.resourceProtocol.configuration" for="gridFTPEndpoint">Grid FTP Endpoint</label>
+        <div class="col-lg-9">
+          <input class="form-control" type="url" id="gridFTPEndpoint" name="gridep" placeholder="Grid FTP Endpoint" ng-model="addHost.gridFTPEndpoint" ng-show="addHost.resourceProtocol.configuration" ng-required="addHost.resourceProtocol.configuration">
           <div class="text-error" ng-show="addhostForm.gridep.$dirty && addhostForm.gridep.$invalid">
             <small class="text-error" ng-show="addhostForm.gridep.$error.required"> *Required.</small>
             <small class="text-error" ng-show="addhostForm.gridep.$error.url"> URL Expected. </small>
@@ -73,9 +74,9 @@ under the License.
         </div>
       </div>
 
-      <div class="control-group">
-        <div class="controls">
-          <button type="submit" ng-disabled="addhostForm.$invalid" class="btn btn-default">Save</button>
+      <div class="form-group">
+        <div class="col-lg-offset-3 col-lg-9">
+          <button type="submit" ng-disabled="addhostForm.$invalid" class="btn btn-primary">Save</button>
           <a class="btn btn-default" href="#/exec">Cancel</a>
         </div>
       </div>

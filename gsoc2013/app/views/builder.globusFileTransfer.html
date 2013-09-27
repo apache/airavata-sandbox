@@ -17,13 +17,13 @@ specific language governing permissions and limitations
 under the License.
 -->
 <div ng-controller="FileTransfer">
-  <form name="fileTransferForm" style="padding:10px;" novalidate ng-submit="saveGlobusFileTransfer();" class="form-horizontal">
+  <form name="fileTransferForm" style="padding:10px;" novalidate ng-submit="saveGlobusFileTransfer();" class="form-horizontal" role="form" >
     <fieldset>
       <legend>Globus File Transfer</legend>
-      <div class="control-group">
-        <label for="inputuserName" class="control-label">User Name</label>
-        <div class="controls">
-          <input type="text" id="inputuserName" name="userName" placeholder="User Name" ng-model="fileTransfer.userName" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
+      <div class="form-group">
+        <label for="inputuserName" class="col-lg-3 control-label">User Name</label>
+        <div class="col-lg-9">
+          <input class="form-control"  type="text" id="inputuserName" name="userName" placeholder="User Name" ng-model="fileTransfer.userName" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
           <div class="text-error" ng-show="fileTransferForm.userName.$dirty && fileTransferForm.userName.$invalid">
             <small class="text-error" ng-show="fileTransferForm.userName.$error.required"> *Required.</small>
             <small class="text-error" ng-show="fileTransferForm.userName.$error.pattern"> Alpha-Numeric values between 4-10 characters.</small>
@@ -31,10 +31,10 @@ under the License.
         </div>
       </div>
 
-      <div class="control-group">
-        <label for="inputCaFile" class="control-label">CA File</label>
-        <div class="controls">
-          <input type="text" id="inputCaFile" name="caFile" placeholder="CA File" ng-model="fileTransfer.caFile" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
+      <div class="form-group">
+        <label for="inputCaFile" class="col-lg-3 control-label">CA File</label>
+        <div class="col-lg-9">
+          <input class="form-control"  type="text" id="inputCaFile" name="caFile" placeholder="CA File" ng-model="fileTransfer.caFile" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
           <div class="text-error" ng-show="fileTransferForm.caFile.$dirty && fileTransferForm.caFile.$invalid">
             <small class="text-error" ng-show="fileTransferForm.caFile.$error.required"> *Required.</small>
             <small class="text-error" ng-show="fileTransferForm.caFile.$error.pattern"> Alpha-Numeric values between 4-10 characters.</small>
@@ -42,10 +42,10 @@ under the License.
         </div>
       </div>
 
-      <div class="control-group">
-        <label for="inputCertificateFile" class="control-label">Certificate File</label>
-        <div class="controls">
-          <input type="text" id="inputCertificateFile" name="certificateFile" placeholder="Certificate File" ng-model="fileTransfer.certificateFile" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
+      <div class="form-group">
+        <label for="inputCertificateFile" class="col-lg-3 control-label">Certificate File</label>
+        <div class="col-lg-9">
+          <input class="form-control"  type="text" id="inputCertificateFile" name="certificateFile" placeholder="Certificate File" ng-model="fileTransfer.certificateFile" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
           <div class="text-error" ng-show="fileTransferForm.certificateFile.$dirty && fileTransferForm.certificateFile.$invalid">
             <small class="text-error" ng-show="fileTransferForm.certificateFile.$error.required"> *Required.</small>
             <small class="text-error" ng-show="fileTransferForm.certificateFile.$error.pattern"> Alpha-Numeric values between 4-10 characters.</small>
@@ -53,10 +53,10 @@ under the License.
         </div>
       </div>
 
-      <div class="control-group">
-        <label for="inputKeyFile" class="control-label">Key File</label>
-        <div class="controls">
-          <input type="text" id="inputKeyFile" name="keyFile" placeholder="Key File" ng-model="fileTransfer.keyFile" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
+      <div class="form-group">
+        <label for="inputKeyFile" class="col-lg-3 control-label">Key File</label>
+        <div class="col-lg-9">
+          <input class="form-control"  type="text" id="inputKeyFile" name="keyFile" placeholder="Key File" ng-model="fileTransfer.keyFile" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
           <div class="text-error" ng-show="fileTransferForm.keyFile.$dirty && fileTransferForm.keyFile.$invalid">
             <small class="text-error" ng-show="fileTransferForm.keyFile.$error.required"> *Required.</small>
             <small class="text-error" ng-show="fileTransferForm.keyFile.$error.pattern"> Alpha-Numeric values between 4-10 characters.</small>
@@ -64,10 +64,10 @@ under the License.
         </div>
       </div>
 
-      <div class="control-group">
-        <label for="inputSourceEndpoint" class="control-label">Source Endpoint</label>
-        <div class="controls">
-          <input type="url" id="inputSourceEndpoint" name="sourceEndpoint" placeholder="Source Endpoint" ng-model="fileTransfer.sourceEndpoint" required>
+      <div class="form-group">
+        <label for="inputSourceEndpoint" class="col-lg-3 control-label">Source Endpoint</label>
+        <div class="col-lg-9">
+          <input class="form-control"  type="url" id="inputSourceEndpoint" name="sourceEndpoint" placeholder="Source Endpoint" ng-model="fileTransfer.sourceEndpoint" required>
           <div class="text-error" ng-show="fileTransferForm.sourceEndpoint.$dirty && fileTransferForm.sourceEndpoint.$invalid">
             <small class="text-error" ng-show="fileTransferForm.sourceEndpoint.$error.required"> *Required.</small>
             <small class="text-error" ng-show="fileTransferForm.sourceEndpoint.$error.url"> URL Expected</small>
@@ -75,10 +75,10 @@ under the License.
         </div>
       </div>
 
-      <div class="control-group">
-        <label for="inputSourceFilePath" class="control-label">Source File Path</label>
-        <div class="controls">
-          <input type="text" id="inputSourceFilePath" name="sourceFilePath" placeholder="Source File Path" ng-model="fileTransfer.sourceFilePath" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
+      <div class="form-group">
+        <label for="inputSourceFilePath" class="col-lg-3 control-label">Source File Path</label>
+        <div class="col-lg-9">
+          <input class="form-control"  type="text" id="inputSourceFilePath" name="sourceFilePath" placeholder="Source File Path" ng-model="fileTransfer.sourceFilePath" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
           <div class="text-error" ng-show="fileTransferForm.sourceFilePath.$dirty && fileTransferForm.sourceFilePath.$invalid">
             <small class="text-error" ng-show="fileTransferForm.sourceFilePath.$error.required"> *Required.</small>
             <small class="text-error" ng-show="fileTransferForm.sourceFilePath.$error.pattern"> Alpha-Numeric values between 4-10 characters.</small>
@@ -86,10 +86,10 @@ under the License.
         </div>
       </div>
 
-      <div class="control-group">
-        <label for="inputDestinationEndpoint" class="control-label">Destination Endpoint</label>
-        <div class="controls">
-          <input type="url" id="inputDestinationEndpoint" name="destinationEndpoint" placeholder="Destination Endpoint" ng-model="fileTransfer.destinationEndpoint" required>
+      <div class="form-group">
+        <label for="inputDestinationEndpoint" class="col-lg-3 control-label">Destination Endpoint</label>
+        <div class="col-lg-9">
+          <input class="form-control"  type="url" id="inputDestinationEndpoint" name="destinationEndpoint" placeholder="Destination Endpoint" ng-model="fileTransfer.destinationEndpoint" required>
           <div class="text-error" ng-show="fileTransferForm.destinationEndpoint.$dirty && fileTransferForm.destinationEndpoint.$invalid">
             <small class="text-error" ng-show="fileTransferForm.destinationEndpoint.$error.required"> *Required.</small>
             <small class="text-error" ng-show="fileTransferForm.destinationEndpoint.$error.url"> URL expected.</small>
@@ -97,10 +97,10 @@ under the License.
         </div>
       </div>
 
-      <div class="control-group">
-        <label for="inputDestinationFilePath" class="control-label">Destination File Path</label>
-        <div class="controls">
-          <input type="text" id="inputDestinationFilePath" name="destinationFilePath" placeholder="Destination File Path" ng-model="fileTransfer.destinationFilePath" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
+      <div class="form-group">
+        <label for="inputDestinationFilePath" class="col-lg-3 control-label">Destination File Path</label>
+        <div class="col-lg-9">
+          <input class="form-control"  type="text" id="inputDestinationFilePath" name="destinationFilePath" placeholder="Destination File Path" ng-model="fileTransfer.destinationFilePath" ng-pattern="/^[a-zA-Z0-9]{4,10}$/" required>
           <div class="text-error" ng-show="fileTransferForm.destinationFilePath.$dirty && fileTransferForm.destinationFilePath.$invalid">
             <small class="text-error" ng-show="fileTransferForm.destinationFilePath.$error.required"> *Required.</small>
             <small class="text-error" ng-show="fileTransferForm.destinationFilePath.$error.pattern"> Alpha-Numeric values between 4-10 characters.</small>
@@ -108,9 +108,9 @@ under the License.
         </div>
       </div>
 
-      <div class="control-group">
-        <div class="controls">
-          <button type="submit" ng-disabled="fileTransferForm.$invalid" class="btn btn-default">Save</button>
+      <div class="form-group">
+        <div class="col-lg-offset-3 col-lg-9">
+          <button type="submit" ng-disabled="fileTransferForm.$invalid" class="btn btn-primary">Save</button>
           <a class="btn btn-default" href="#/exec">Cancel</a>
         </div>
       </div>

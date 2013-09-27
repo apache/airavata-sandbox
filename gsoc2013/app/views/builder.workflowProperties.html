@@ -17,33 +17,49 @@ specific language governing permissions and limitations
 under the License.
 -->
 <div ng-controller="WorkflowLaunch">
-  <form role="form" name="workflowPropertiesForm" style="padding:10px;" ng-submit="saveWorkflowProperties();">
+  <form class="form-horizontal" role="form" name="workflowPropertiesForm" style="padding:10px;" ng-submit="saveWorkflowProperties();">
     <legend>Workflow Properties</legend>
+
     <div class="form-group">
-      <label for="inputName">Name</label>
-      <input style="width: 35%;" type="text" id="inputName" name="name" placeholder="name" ng-model="workflowProperties.name" class="form-control" required>
+      <label class="col-lg-2 control-label"for="inputName" >Name</label>
+      <div class="col-lg-10">
+        <input class="form-control" type="text" id="inputName" name="name" placeholder="name" ng-model="workflowProperties.name" class="form-control" required>
+      </div>
     </div>
+
     <div class="form-group">
-      <label for="inputTemplateId">Template Id</label>
-      <input style="width: 35%;" type="url" id="inputTemplateId" name="templateId" placeholder="Template Id" ng-model="workflowProperties.templateId" class="form-control" disabled>
+      <label class="col-lg-2 control-label" for="inputTemplateId">Template Id</label>
+      <div class="col-lg-10">
+       <input class="form-control"  type="url" id="inputTemplateId" name="templateId" placeholder="Template Id" ng-model="workflowProperties.templateId" class="form-control" disabled>
+      </div>
     </div>
+
     <div class="form-group">
-      <label for="inputInstanceId">Instance Id</label>
-      <input style="width: 35%;" type="url" id="inputInstanceId" name="instanceId" placeholder="Instance Id" ng-model="workflowProperties.instanceId" class="form-control" disabled>
+      <label class="col-lg-2 control-label" for="inputInstanceId">Instance Id</label>
+      <div class="col-lg-10">
+       <input class="form-control" type="url" id="inputInstanceId" name="instanceId" placeholder="Instance Id" ng-model="workflowProperties.instanceId" class="form-control" disabled>
+      </div>
     </div>
+
     <div class="form-group">
-      <label for="inputDescription">Description</label>
-      <textarea style="width: 35%;" class="form-control" id="inputDescription" name="description" placeholder="Description" ng-model="workflowProperties.description"></textarea>
+      <label class="col-lg-2 control-label" for="inputDescription">Description</label>
+      <div class="col-lg-10">
+       <textarea class="form-control"  class="form-control" id="inputDescription" name="description" placeholder="Description" ng-model="workflowProperties.description"></textarea>
+      </div>
     </div>
+
     <div class="form-group">
-      <label for="inputMetadata">Metadata</label>
-      <textarea rows="5" style="width: 35%;" class="form-control" id="inputMetadata" name="metadata" placeholder="Metadata" ng-model="workflowProperties.metadata"></textarea>disabled>
+      <label class="col-lg-2 control-label" for="inputMetadata">Metadata</label>
+      <div class="col-lg-10">
+       <textarea class="form-control" rows="5"  class="form-control" id="inputMetadata" name="metadata" placeholder="Metadata" ng-model="workflowProperties.metadata"></textarea>
+      </div>
     </div>
+
     <div class="form-group">
-      <label for="inputInstanceId">Instance Id</label>
-      <input style="width: 35%;" type="url" class="form-control" id="inputInstanceId" name="instanceId" placeholder="Instance Id" ng-model="workflowProperties.instanceId" disabled>
+      <div class="col-lg-offset-2 col-lg-10">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a class="btn btn-default" href="#/exec">Cancel</a>
+      </div>
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
-    <a class="btn btn-default" href="#/exec">Cancel</a>
   </form>
 </div>
