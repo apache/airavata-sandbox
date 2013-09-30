@@ -91,7 +91,7 @@ public class SSHUtils {
         }
         JSch jsch = new ExtendedJSch();
 
-        log.info("Connecting to server - " + serverInfo.getHost() + ":" + serverInfo.getPort() + " with user name - "
+        log.debug("Connecting to server - " + serverInfo.getHost() + ":" + serverInfo.getPort() + " with user name - "
                 + serverInfo.getUserName());
 
         Session session = null;

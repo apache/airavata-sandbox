@@ -21,6 +21,7 @@
 package org.apache.airavata.gsi.ssh.api.job;
 
 import org.apache.airavata.gsi.ssh.api.CommandOutput;
+import org.apache.airavata.gsi.ssh.util.CommonUtils;
 import org.apache.airavata.gsi.ssh.x2012.x12.*;
 import org.apache.xmlbeans.XmlException;
 
@@ -30,22 +31,22 @@ import java.util.List;
  * This class define a job with required parameters, based on this configuration API is generating a Pbs script and
  * submit the job to the computing resource
  */
-public class Job {
+public class JobDescriptor {
 
     private JobDescriptorDocument jobDescriptionDocument;
 
 
-    public Job() {
+    public JobDescriptor() {
         jobDescriptionDocument = JobDescriptorDocument.Factory.newInstance();
         jobDescriptionDocument.addNewJobDescriptor();
     }
 
-    public Job(JobDescriptorDocument jobDescriptorDocument) {
+    public JobDescriptor(JobDescriptorDocument jobDescriptorDocument) {
         this.jobDescriptionDocument = jobDescriptorDocument;
     }
 
 
-    public Job(CommandOutput commandOutput) {
+    public JobDescriptor(CommandOutput commandOutput) {
         jobDescriptionDocument = JobDescriptorDocument.Factory.newInstance();
         jobDescriptionDocument.addNewJobDescriptor();
     }
@@ -59,11 +60,11 @@ public class Job {
         return this.jobDescriptionDocument;
     }
 
-    public static Job fromXML(String xml)
+    public static JobDescriptor fromXML(String xml)
             throws XmlException {
         JobDescriptorDocument parse = JobDescriptorDocument.Factory
                 .parse(xml);
-        Job jobDescriptor = new Job(parse);
+        JobDescriptor jobDescriptor = new JobDescriptor(parse);
         return jobDescriptor;
     }
 
@@ -113,8 +114,14 @@ public class Job {
         this.getJobDescriptorDocument().getJobDescriptor().setProcessesPerNode(name);
     }
 
-    public void setMaxWallTime(String name) {
-        this.getJobDescriptorDocument().getJobDescriptor().setMaxWallTime(name);
+    /**
+     * Users can pass the minute count for maxwalltime
+     * @param minutes
+     */
+    public void setMaxWallTime(String minutes) {
+        this.getJobDescriptorDocument().getJobDescriptor().setMaxWallTime(
+                CommonUtils.maxWallTimeCalculator(Integer.getInteger(minutes)));
+
     }
 
     public void setAcountString(String name) {
@@ -185,7 +192,33 @@ public class Job {
         this.getJobDescriptorDocument().getJobDescriptor().setSubmitArgs(submitArgs);
     }
 
+    public void setPreJobCommands(String[] commands){
+        if(this.getJobDescriptorDocument().getJobDescriptor().getPreJobCommands() == null){
+            this.getJobDescriptorDocument().getJobDescriptor().addNewPreJobCommands();
+        }
+        this.getJobDescriptorDocument().getJobDescriptor().getPreJobCommands().setCommandArray(commands);
+    }
 
+     public void setPostJobCommands(String[] commands){
+        if(this.getJobDescriptorDocument().getJobDescriptor().getPostJobCommands() == null){
+            this.getJobDescriptorDocument().getJobDescriptor().addNewPostJobCommands();
+        }
+        this.getJobDescriptorDocument().getJobDescriptor().getPostJobCommands().setCommandArray(commands);
+    }
+
+    public void addPreJobCommand(String command){
+        if(this.getJobDescriptorDocument().getJobDescriptor().getPreJobCommands() == null){
+            this.getJobDescriptorDocument().getJobDescriptor().addNewPreJobCommands();
+        }
+        this.getJobDescriptorDocument().getJobDescriptor().getPreJobCommands().addCommand(command);
+    }
+
+     public void addPostJobCommand(String command){
+        if(this.getJobDescriptorDocument().getJobDescriptor().getPostJobCommands() == null){
+            this.getJobDescriptorDocument().getJobDescriptor().addNewPostJobCommands();
+        }
+        this.getJobDescriptorDocument().getJobDescriptor().getPostJobCommands().addCommand(command);
+    }
 
     public String getExecutablePath() {
         return this.getJobDescriptorDocument().getJobDescriptor().getExecutablePath();
@@ -297,6 +330,19 @@ public class Job {
         return this.getJobDescriptorDocument().getJobDescriptor().getJobID();
     }
 
+
+    public String[] getPostJobCommands(){
+        if(this.getJobDescriptorDocument().getJobDescriptor().getPostJobCommands() != null) {
+            return this.getJobDescriptorDocument().getJobDescriptor().getPostJobCommands().getCommandArray();
+        }
+        return null;
+    }
+    public String[] getPreJobCommands(){
+        if(this.getJobDescriptorDocument().getJobDescriptor().getPreJobCommands() != null) {
+            return this.getJobDescriptorDocument().getJobDescriptor().getPreJobCommands().getCommandArray();
+        }
+        return null;
+    }
 
 }
 

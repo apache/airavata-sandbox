@@ -21,20 +21,22 @@
 package org.apache.airavata.gsi.ssh.impl;
 
 import org.apache.airavata.gsi.ssh.api.SSHApiException;
-import org.apache.airavata.gsi.ssh.api.job.Job;
+import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
 import org.apache.airavata.gsi.ssh.listener.JobSubmissionListener;
 
 public class DefaultJobSubmissionListener extends JobSubmissionListener {
 
-    public void statusChanged(Job jobDescriptor) throws SSHApiException {
+    public void statusChanged(JobDescriptor jobDescriptor) throws SSHApiException {
         System.out.println("Job status has changed to : " + jobDescriptor.getStatus());
     }
 
     @Override
+    public void statusChanged(JobStatus jobStatus) throws SSHApiException {
+        System.out.println("Job status has changed to : " + jobStatus.toString());
+    }
+
+    @Override
     public boolean isJobDone() throws SSHApiException {
-        if(getJobStatus().equals(JobStatus.C)){
-            return true;
-        }
-        return false;
+        return getJobStatus().equals(JobStatus.C);
     }
 }

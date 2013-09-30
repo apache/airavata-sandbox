@@ -20,6 +20,7 @@
 */
 package org.apache.airavata.gsi.ssh.api;
 
+import com.jcabi.aspects.RetryOnFailure;
 import com.jcraft.jsch.*;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
 import org.apache.airavata.gsi.ssh.jsch.ExtendedJSch;
@@ -50,6 +51,7 @@ public class CommandExecutor {
      * @param commandOutput
      * @throws SSHApiException
      */
+    @RetryOnFailure(attempts = 3, delay = 1000, verbose = true)
     public static Session executeCommand(CommandInfo commandInfo, Session session,
                                          CommandOutput commandOutput) throws SSHApiException {
 
@@ -70,16 +72,15 @@ public class CommandExecutor {
 
         channel.setInputStream(null);
         ((ChannelExec) channel).setErrStream(commandOutput.getStandardError());
-
         try {
             channel.connect();
         } catch (JSchException e) {
 
             channel.disconnect();
             session.disconnect();
-
             throw new SSHApiException("Unable to retrieve command output. Command - " + command, e);
         }
+
 
         commandOutput.onOutput(channel);
         //Only disconnecting the channel, session can be reused
@@ -95,7 +96,8 @@ public class CommandExecutor {
      * @param serverInfo         The SSHing server information.
      * @param authenticationInfo Security data needs to be communicated with remote server.
      * @param commandOutput      The output of the command.
-     * @throws SSHApiException
+     * @param configReader       configuration required for ssh/gshissh connection
+     * @throws SSHApiException   throw exception when error occurs
      */
     public static void executeCommand(CommandInfo commandInfo, ServerInfo serverInfo,
                                       AuthenticationInfo authenticationInfo,
@@ -103,10 +105,10 @@ public class CommandExecutor {
         System.setProperty(X509_CERT_DIR, (String) authenticationInfo.getProperties().get("X509_CERT_DIR"));
         JSch jsch = new ExtendedJSch();
 
-        log.info("Connecting to server - " + serverInfo.getHost() + ":" + serverInfo.getPort() + " with user name - "
+        log.debug("Connecting to server - " + serverInfo.getHost() + ":" + serverInfo.getPort() + " with user name - "
                 + serverInfo.getUserName());
 
-        Session session = null;
+        Session session;
 
         try {
             session = jsch.getSession(serverInfo.getUserName(), serverInfo.getHost(), serverInfo.getPort());
@@ -136,7 +138,7 @@ public class CommandExecutor {
 
         String command = commandInfo.getCommand();
 
-        Channel channel = null;
+        Channel channel;
         try {
             channel = session.openChannel("exec");
             ((ChannelExec) channel).setCommand(command);

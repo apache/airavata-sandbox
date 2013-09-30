@@ -22,7 +22,7 @@ package org.apache.airavata.gsi.ssh.api;
 
 import java.util.HashMap;
 
-public class Machine {
+public class Node {
     private String Name;
     private Core[] Cores;
     private String state;

@@ -20,7 +20,7 @@
 */
 package org.apache.airavata.gsi.ssh.util;
 
-import org.apache.airavata.gsi.ssh.api.job.Job;
+import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
 import org.apache.airavata.gsi.ssh.impl.JobStatus;
 
 public class CommonUtils {
@@ -30,11 +30,26 @@ public class CommonUtils {
      * @param job
      * @return
      */
-    public static boolean isJobFinished(Job job) {
+    public static boolean isJobFinished(JobDescriptor job) {
         if (JobStatus.C.toString().equals(job.getStatus())) {
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * This will read
+     * @param maxWalltime
+     * @return
+     */
+    public static String maxWallTimeCalculator(int maxWalltime) {
+        if (maxWalltime < 60) {
+            return "00:" + maxWalltime + ":00";
+        } else {
+            int minutes = maxWalltime % 60;
+            int hours = maxWalltime / 60;
+            return hours + ":" + minutes + ":00";
         }
     }
 }

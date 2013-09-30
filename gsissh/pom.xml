@@ -32,6 +32,10 @@
             <id>ogce.m2.all</id>
             <url>http://community.ucs.indiana.edu:9090/archiva/repository/ogce.m2.all</url>
         </repository>
+<repository>
+			<id>ncsa</id>
+			<url>https://opensource.ncsa.illinois.edu/nexus/content/repositories/snapshots/</url>
+		</repository>
     </repositories>
 
     <dependencies>
@@ -82,6 +86,18 @@
             <artifactId>xmlbeans</artifactId>
             <version>${xmlbeans.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-aspects</artifactId>
+            <version>0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.6.12</version>
+            <scope>runtime</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -125,7 +141,8 @@
                 <configuration>
                     <schemaDirectory>src/main/resources/schemas</schemaDirectory>
                     <xmlConfigs>
-                        <xmlConfig implementation="java.io.File">src/main/resources/schemas/gsissh-schemas.xsdconfig</xmlConfig>
+                        <xmlConfig implementation="java.io.File">src/main/resources/schemas/gsissh-schemas.xsdconfig
+                        </xmlConfig>
                     </xmlConfigs>
                     <outputJar>target/generated/${project.artifactId}-${project.version}.jar</outputJar>
                 </configuration>

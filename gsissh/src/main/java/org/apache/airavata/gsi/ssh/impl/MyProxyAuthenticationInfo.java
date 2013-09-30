@@ -57,41 +57,10 @@ public class MyProxyAuthenticationInfo extends AuthenticationInfo {
         return userName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getMyProxyUrl() {
-        return myProxyUrl;
-    }
-
-    public void setMyProxyUrl(String myProxyUrl) {
-        this.myProxyUrl = myProxyUrl;
-    }
-
-    public int getMyProxyPort() {
-        return myProxyPort;
-    }
-
-    public void setMyProxyPort(int myProxyPort) {
-        this.myProxyPort = myProxyPort;
-    }
-
     public int getLifeTime() {
         return lifeTime;
     }
 
-    public void setLifeTime(int lifeTime) {
-        this.lifeTime = lifeTime;
-    }
 
     public GSSCredential getCredentials() throws SecurityException {
         return getMyProxyCredentials();

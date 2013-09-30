@@ -20,13 +20,13 @@
 */
 package org.apache.airavata.gsi.ssh.api;
 
-import org.apache.airavata.gsi.ssh.api.job.Job;
+import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
 
 /**
  * This represents a CPU core of a machine in the cluster
  */
 public class Core {
-    private Job job;
+    private JobDescriptor job;
     private String id;
 
     public Core(String id) {
@@ -48,11 +48,11 @@ public class Core {
     /**
      * @return job running on the core
      */
-    public Job getJob() {
+    public JobDescriptor getJob() {
         return job;
     }
 
-    public void setJob(Job job) {
+    public void setJob(JobDescriptor job) {
         this.job = job;
     }
 

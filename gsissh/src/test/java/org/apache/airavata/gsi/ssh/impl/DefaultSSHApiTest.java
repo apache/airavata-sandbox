@@ -23,9 +23,11 @@ package org.apache.airavata.gsi.ssh.impl;
 
 import junit.framework.Assert;
 import org.apache.airavata.gsi.ssh.api.*;
-import org.apache.airavata.gsi.ssh.api.job.Job;
+import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
 import org.apache.airavata.gsi.ssh.util.CommonUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -43,7 +45,7 @@ import java.util.Random;
 
 
 public class DefaultSSHApiTest {
-
+    private static final Logger log = LoggerFactory.getLogger(PBSCluster.class);
     private String myProxyUserName;
     private String myProxyPassword;
     private String certificateLocation;
@@ -53,9 +55,9 @@ public class DefaultSSHApiTest {
 
     @BeforeTest
     public void setUp() throws Exception {
-//        System.setProperty("myproxy.user", "ogce");
-//        System.setProperty("myproxy.password", "");
-//        System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
+        System.setProperty("myproxy.user", "ogce");
+        System.setProperty("myproxy.password", "Jdas7wph");
+        System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
         myProxyUserName = System.getProperty("myproxy.user");
         myProxyPassword = System.getProperty("myproxy.password");
 
@@ -87,7 +89,7 @@ public class DefaultSSHApiTest {
         // Create authentication
         AuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
-                7512, 17280000,certificateLocation);
+                7512, 17280000, certificateLocation);
 
         // Create command
         CommandInfo commandInfo = new RawCommandInfo("/bin/ls");
@@ -108,22 +110,22 @@ public class DefaultSSHApiTest {
         // Create authentication
         AuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
-                7512, 17280000,certificateLocation);
+                7512, 17280000, certificateLocation);
 
         // Server info
         ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
 
 
-        Cluster trestles = new DefaultCluster(serverInfo, authenticationInfo);
+        Cluster pbsCluster = new PBSCluster(serverInfo, authenticationInfo, "/opt/torque/bin/");
 
         // Execute command
         System.out.println("Target PBS file path: " + workingDirectory);
         System.out.println("Local PBS File path: " + pbsFilePath);
-        Job jobDescriptor = new Job();
+        JobDescriptor jobDescriptor = new JobDescriptor();
         //Here we give working directory as a file name to replace the file, to allow multiple test runs with the same
         //file name
         jobDescriptor.setWorkingDirectory(workingDirectory);
-        String jobID = trestles.submitAsyncJobWithPBS(pbsFilePath, workingDirectory);
+        String jobID = pbsCluster.submitBatchJobWithPBS(pbsFilePath, workingDirectory);
         System.out.println("JobID returned : " + jobID);
     }
 
@@ -132,13 +134,13 @@ public class DefaultSSHApiTest {
         // Create authentication
         AuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
-                7512, 17280000,certificateLocation);
+                7512, 17280000, certificateLocation);
 
         // Server info
         ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
 
 
-        Cluster trestles = new DefaultCluster(serverInfo, authenticationInfo);
+        Cluster pbsCluster = new PBSCluster(serverInfo, authenticationInfo, "/opt/torque/bin/");
 
 
         // Execute command
@@ -146,7 +148,7 @@ public class DefaultSSHApiTest {
         System.out.println("Local PBS File path: " + pbsFilePath);
         String workingDirectory = File.separator + "home" + File.separator + "ogce" + File.separator + "gsissh";
         // constructing the job object
-        Job jobDescriptor = new Job();
+        JobDescriptor jobDescriptor = new JobDescriptor();
         jobDescriptor.setWorkingDirectory(workingDirectory);
         jobDescriptor.setShellName("/bin/bash");
         jobDescriptor.setJobName("GSI_SSH_SLEEP_JOB");
@@ -165,12 +167,12 @@ public class DefaultSSHApiTest {
         jobDescriptor.setInputValues(inputs);
         //finished construction of job object
         System.out.println(jobDescriptor.toXML());
-        jobID = trestles.submitAsyncJob(jobDescriptor);
+        jobID = pbsCluster.submitBatchJob(jobDescriptor);
         System.out.println("JobID returned : " + jobID);
 
 //        Cluster cluster = sshApi.getCluster(serverInfo, authenticationInfo);
         Thread.sleep(1000);
-        Job jobById = trestles.getJobById(jobID);
+        JobDescriptor jobById = pbsCluster.getJobDescriptorById(jobID);
 
         //printing job data got from previous call
         AssertJUnit.assertEquals(jobById.getJobId(), jobID);
@@ -192,8 +194,6 @@ public class DefaultSSHApiTest {
         System.out.println(jobById.getUsedMemory());
         System.out.println(jobById.getVariableList());
     }
-
-
 
 
     @Test
@@ -220,18 +220,18 @@ public class DefaultSSHApiTest {
         // Create authentication
         AuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
-                7512, 17280000,certificateLocation);
+                7512, 17280000, certificateLocation);
 
         // Server info
         ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
 
-        Cluster trestles = new DefaultCluster(serverInfo, authenticationInfo);
+        Cluster pbsCluster = new PBSCluster(serverInfo, authenticationInfo, "/opt/torque/bin/");
 
         // Execute command
         System.out.println("Target PBS file path: " + workingDirectory);
         System.out.println("Local PBS File path: " + pbsFilePath);
         String workingDirectory = File.separator + "home" + File.separator + "ogce" + File.separator + "gsissh";
-        Job jobDescriptor = new Job();
+        JobDescriptor jobDescriptor = new JobDescriptor();
         jobDescriptor.setWorkingDirectory(workingDirectory);
         jobDescriptor.setShellName("/bin/bash");
         jobDescriptor.setJobName("GSI_SSH_SLEEP_JOB");
@@ -250,7 +250,7 @@ public class DefaultSSHApiTest {
         jobDescriptor.setInputValues(inputs);
         System.out.println(jobDescriptor.toXML());
         try {
-            String jobID = trestles.submitAsyncJob(jobDescriptor);
+            String jobID = pbsCluster.submitBatchJob(jobDescriptor);
             System.out.println("JobID returned : " + jobID);
         } catch (SSHApiException e) {
             System.out.println(e.getMessage());
@@ -262,20 +262,20 @@ public class DefaultSSHApiTest {
         // Create authentication
         AuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
-                7512, 17280000,certificateLocation);
+                7512, 17280000, certificateLocation);
 
         // Server info
         ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
 
 
-        Cluster trestles = new DefaultCluster(serverInfo, authenticationInfo);
+        Cluster pbsCluster = new PBSCluster(serverInfo, authenticationInfo, "/opt/torque/bin1/");
 
 
         // Execute command
         System.out.println("Target PBS file path: " + workingDirectory);
         System.out.println("Local PBS File path: " + pbsFilePath);
         String workingDirectory = File.separator + "home" + File.separator + "ogce" + File.separator + "gsissh";
-        Job jobDescriptor = new Job();
+        JobDescriptor jobDescriptor = new JobDescriptor();
         jobDescriptor.setWorkingDirectory(workingDirectory);
         jobDescriptor.setShellName("/bin/bash");
         jobDescriptor.setJobName("GSI_SSH_SLEEP_JOB");
@@ -286,7 +286,7 @@ public class DefaultSSHApiTest {
         jobDescriptor.setStandardErrorFile(workingDirectory + File.separator + "application.err");
         jobDescriptor.setNodes(1);
         jobDescriptor.setProcessesPerNode(1);
-        jobDescriptor.setMaxWallTime("1:00:00");
+//        jobDescriptor.setMaxWallTime("1:00:00");
         jobDescriptor.setQueueName("normal");
         jobDescriptor.setAcountString("sds128");
         List<String> inputs = new ArrayList<String>();
@@ -294,9 +294,56 @@ public class DefaultSSHApiTest {
         jobDescriptor.setInputValues(inputs);
         System.out.println(jobDescriptor.toXML());
         DefaultJobSubmissionListener listener = new DefaultJobSubmissionListener();
-        String status = trestles.submitAsyncJob(jobDescriptor, listener);
-        while(!listener.isJobDone()){
-           Thread.sleep(10000);
+        String jobID = pbsCluster.submitBatchJob(jobDescriptor);
+        try {
+//            // Wait 5 seconds to start the first poll, this is hard coded, user doesn't have
+//            // to configure this.
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            log.error("Error during job status monitoring");
+//            throw new SSHApiException("Error during job status monitoring", e);
+//        }
+//        // Get the job status first
+//        try {
+////
+////            Thread t = new Thread() {
+////                @Override
+////                public void run() {
+////                    try {
+            // p
+            JobStatus jobStatus = pbsCluster.getJobStatus(jobID);
+            while (true) {
+                while (!jobStatus.equals(JobStatus.C.toString())) {
+                    if (!jobStatus.equals(listener.getJobStatus().toString())) {
+                        listener.setJobStatus(jobStatus);
+                        listener.statusChanged(jobStatus);
+                    }
+                    Thread.sleep(60000);
+
+                    jobStatus = pbsCluster.getJobStatus(jobID);
+                }
+                //Set the job status to Complete
+                listener.setJobStatus(JobStatus.C);
+                listener.statusChanged(jobStatus);
+                break;
+            }
+//                    } catch (InterruptedException e) {
+//                        log.error("Error listening to the submitted job", e);
+//                    } catch (SSHApiException e) {
+//                        log.error("Error listening to the submitted job", e);
+//                    }
+//                }
+//            };
+            //  This thread runs until the program termination, so that use can provide
+//            // any action in onChange method of the listener, without worrying for waiting in the caller thread.
+            //t.setDaemon(true);
+//            t.start();
+        } catch (Exception e) {
+            log.error("Error during job status monitoring");
+            throw new SSHApiException("Error during job status monitoring", e);
+        }
+        while (!listener.isJobDone()) {
+            Thread.sleep(10000);
         }
     }
 
@@ -305,20 +352,20 @@ public class DefaultSSHApiTest {
         // Create authentication
         AuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
-                7512, 17280000,certificateLocation);
+                7512, 17280000, certificateLocation);
 
         // Server info
         ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
 
 
-        Cluster trestles = new DefaultCluster(serverInfo, authenticationInfo);
+        Cluster pbsCluster = new PBSCluster(serverInfo, authenticationInfo, "/opt/torque/bin/");
 
 
         // Execute command
         System.out.println("Target PBS file path: " + workingDirectory);
         System.out.println("Local PBS File path: " + pbsFilePath);
         String workingDirectory = File.separator + "home" + File.separator + "ogce" + File.separator + "gsissh";
-        Job jobDescriptor = new Job();
+        JobDescriptor jobDescriptor = new JobDescriptor();
         jobDescriptor.setWorkingDirectory(workingDirectory);
         jobDescriptor.setShellName("/bin/bash");
         jobDescriptor.setJobName("GSI_SSH_SLEEP_JOB");
@@ -336,14 +383,14 @@ public class DefaultSSHApiTest {
         inputs.add("1000");
         jobDescriptor.setInputValues(inputs);
         System.out.println(jobDescriptor.toXML());
-        String jobID = trestles.submitAsyncJob(jobDescriptor);
+        String jobID = pbsCluster.submitBatchJob(jobDescriptor);
         System.out.println("Job submitted to successfully : " + jobID);
-        Job jobById = trestles.getJobById(jobID);
-        if(!CommonUtils.isJobFinished(jobById)) {
-            Job job = trestles.cancelJob(jobID);
+        JobDescriptor jobById = pbsCluster.getJobDescriptorById(jobID);
+        if (!CommonUtils.isJobFinished(jobById)) {
+            JobDescriptor job = pbsCluster.cancelJob(jobID);
             if (CommonUtils.isJobFinished(job)) {
                 Assert.assertTrue(true);
-            }else{
+            } else {
                 Assert.assertTrue(true);
             }
         }
