@@ -220,6 +220,10 @@ public class JobDescriptor {
         this.getJobDescriptorDocument().getJobDescriptor().getPostJobCommands().addCommand(command);
     }
 
+    public void setJobSubmitter(String jobSubmitter){
+        this.getJobDescriptorDocument().getJobDescriptor().setJobSubmitterCommand(jobSubmitter);
+    }
+
     public String getExecutablePath() {
         return this.getJobDescriptorDocument().getJobDescriptor().getExecutablePath();
     }
@@ -330,13 +334,13 @@ public class JobDescriptor {
         return this.getJobDescriptorDocument().getJobDescriptor().getJobID();
     }
 
-
     public String[] getPostJobCommands(){
         if(this.getJobDescriptorDocument().getJobDescriptor().getPostJobCommands() != null) {
             return this.getJobDescriptorDocument().getJobDescriptor().getPostJobCommands().getCommandArray();
         }
         return null;
     }
+
     public String[] getPreJobCommands(){
         if(this.getJobDescriptorDocument().getJobDescriptor().getPreJobCommands() != null) {
             return this.getJobDescriptorDocument().getJobDescriptor().getPreJobCommands().getCommandArray();
@@ -344,5 +348,8 @@ public class JobDescriptor {
         return null;
     }
 
+    public String getJobSubmitterCommand(){
+          return this.getJobDescriptorDocument().getJobDescriptor().getJobSubmitterCommand();
+    }
 }
 
