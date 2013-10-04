@@ -19,29 +19,25 @@
  *
  */
 
-package com.jcraft.jsch;
-
-import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
+package org.apache.airavata.gsi.ssh.api.authentication;
 
 /**
  * User: AmilaJ (amilaj@apache.org)
- * Date: 8/15/13
- * Time: 10:06 AM
+ * Date: 10/4/13
+ * Time: 11:22 AM
  */
 
-public class ExtendedSession extends Session {
+/**
+ * Password authentication for vanilla SSH.
+ */
+public interface SSHPasswordAuthentication extends AuthenticationInfo {
 
-    private GSIAuthenticationInfo authenticationInfo;
+    /**
+     * Gets the password for given host name and given user name.
+     * @param userName The connecting user name name.
+     * @param hostName The connecting host.
+     * @return Password for the given user.
+     */
+    String getPassword(String userName, String hostName);
 
-    public ExtendedSession(JSch jsch, String username, String host, int port) throws JSchException {
-        super(jsch, username, host, port);
-    }
-
-    public GSIAuthenticationInfo getAuthenticationInfo() {
-        return authenticationInfo;
-    }
-
-    public void setAuthenticationInfo(GSIAuthenticationInfo authenticationInfo) {
-        this.authenticationInfo = authenticationInfo;
-    }
 }

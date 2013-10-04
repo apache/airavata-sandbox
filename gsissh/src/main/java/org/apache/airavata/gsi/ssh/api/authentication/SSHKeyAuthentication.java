@@ -1,4 +1,4 @@
-/*
+package org.apache.airavata.gsi.ssh.api.authentication;/*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,29 +19,28 @@
  *
  */
 
-package com.jcraft.jsch;
-
-import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
-
 /**
  * User: AmilaJ (amilaj@apache.org)
- * Date: 8/15/13
- * Time: 10:06 AM
+ * Date: 10/4/13
+ * Time: 2:39 PM
  */
 
-public class ExtendedSession extends Session {
+/**
+ * Abstracts out common methods for SSH key authentication.
+ */
+public interface SSHKeyAuthentication extends AuthenticationInfo {
 
-    private GSIAuthenticationInfo authenticationInfo;
+    /**
+     * This is needed only if private key and public keys are encrypted.
+     * If they are not encrypted we can just return null.
+     * @return User should return pass phrase if keys are encrypted. If not null.
+     */
+    String getPassPhrase();
 
-    public ExtendedSession(JSch jsch, String username, String host, int port) throws JSchException {
-        super(jsch, username, host, port);
-    }
-
-    public GSIAuthenticationInfo getAuthenticationInfo() {
-        return authenticationInfo;
-    }
-
-    public void setAuthenticationInfo(GSIAuthenticationInfo authenticationInfo) {
-        this.authenticationInfo = authenticationInfo;
-    }
+    /**
+     * Callback with the banner message. API user can get hold of banner message
+     * by implementing this method.
+     * @param message The banner message.
+     */
+    void bannerMessage(String message);
 }

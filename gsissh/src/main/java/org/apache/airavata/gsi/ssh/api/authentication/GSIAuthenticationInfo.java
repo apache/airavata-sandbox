@@ -1,4 +1,4 @@
-/*
+package org.apache.airavata.gsi.ssh.api.authentication;/*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,29 +19,25 @@
  *
  */
 
-package com.jcraft.jsch;
+import org.ietf.jgss.GSSCredential;
 
-import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
+import java.util.Properties;
 
 /**
- * User: AmilaJ (amilaj@apache.org)
- * Date: 8/15/13
- * Time: 10:06 AM
+ * Authentication data. Could be MyProxy user name, password, could be GSSCredentials
+ * or could be SSH keys.
  */
+public abstract class GSIAuthenticationInfo implements AuthenticationInfo {
 
-public class ExtendedSession extends Session {
+    public Properties properties = new Properties();
 
-    private GSIAuthenticationInfo authenticationInfo;
+    public abstract GSSCredential getCredentials() throws SecurityException;
 
-    public ExtendedSession(JSch jsch, String username, String host, int port) throws JSchException {
-        super(jsch, username, host, port);
+    public Properties getProperties() {
+        return properties;
     }
 
-    public GSIAuthenticationInfo getAuthenticationInfo() {
-        return authenticationInfo;
-    }
-
-    public void setAuthenticationInfo(GSIAuthenticationInfo authenticationInfo) {
-        this.authenticationInfo = authenticationInfo;
+    public void setProperties(Properties properties) {
+        this.properties = properties;
     }
 }

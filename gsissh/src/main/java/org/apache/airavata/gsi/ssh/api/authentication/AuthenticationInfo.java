@@ -1,4 +1,4 @@
-/*
+package org.apache.airavata.gsi.ssh.api.authentication;/*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,29 +19,14 @@
  *
  */
 
-package com.jcraft.jsch;
-
-import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
-
 /**
  * User: AmilaJ (amilaj@apache.org)
- * Date: 8/15/13
- * Time: 10:06 AM
+ * Date: 10/4/13
+ * Time: 11:25 AM
  */
 
-public class ExtendedSession extends Session {
-
-    private GSIAuthenticationInfo authenticationInfo;
-
-    public ExtendedSession(JSch jsch, String username, String host, int port) throws JSchException {
-        super(jsch, username, host, port);
-    }
-
-    public GSIAuthenticationInfo getAuthenticationInfo() {
-        return authenticationInfo;
-    }
-
-    public void setAuthenticationInfo(GSIAuthenticationInfo authenticationInfo) {
-        this.authenticationInfo = authenticationInfo;
-    }
+/**
+ * An empty interface that represents authentication data to the API.
+ */
+public interface AuthenticationInfo {
 }

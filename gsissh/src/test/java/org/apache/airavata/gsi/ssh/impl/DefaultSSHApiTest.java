@@ -23,8 +23,10 @@ package org.apache.airavata.gsi.ssh.impl;
 
 import junit.framework.Assert;
 import org.apache.airavata.gsi.ssh.api.*;
+import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
 import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
+import org.apache.airavata.gsi.ssh.impl.authentication.MyProxyAuthenticationInfo;
 import org.apache.airavata.gsi.ssh.util.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +89,7 @@ public class DefaultSSHApiTest {
     @Test
     public void testExecuteCommand() throws Exception {
         // Create authentication
-        AuthenticationInfo authenticationInfo
+        GSIAuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
                 7512, 17280000, certificateLocation);
 
@@ -108,7 +110,7 @@ public class DefaultSSHApiTest {
     @Test
     public void testSubmitAsyncJobWithPBS() throws Exception {
         // Create authentication
-        AuthenticationInfo authenticationInfo
+        GSIAuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
                 7512, 17280000, certificateLocation);
 
@@ -132,7 +134,7 @@ public class DefaultSSHApiTest {
     @Test
     public void testSubmitAsyncJob() throws Exception {
         // Create authentication
-        AuthenticationInfo authenticationInfo
+        GSIAuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
                 7512, 17280000, certificateLocation);
 
@@ -198,7 +200,7 @@ public class DefaultSSHApiTest {
 
     @Test
     public void testGetCluster() throws Exception {
-//        AuthenticationInfo authenticationInfo
+//        GSIAuthenticationInfo authenticationInfo
 //                = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
 //                7512, 17280000);
 //        // Server info
@@ -218,7 +220,7 @@ public class DefaultSSHApiTest {
     @Test
     public void testsubmitAsyncJobWithFailure() throws Exception {
         // Create authentication
-        AuthenticationInfo authenticationInfo
+        GSIAuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
                 7512, 17280000, certificateLocation);
 
@@ -260,7 +262,7 @@ public class DefaultSSHApiTest {
     @Test
     public void testSubmitAsyncJobWithListener() throws Exception {
         // Create authentication
-        AuthenticationInfo authenticationInfo
+        GSIAuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
                 7512, 17280000, certificateLocation);
 
@@ -350,7 +352,7 @@ public class DefaultSSHApiTest {
     @Test
     public void testJobCancel() throws Exception {
         // Create authentication
-        AuthenticationInfo authenticationInfo
+        GSIAuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
                 7512, 17280000, certificateLocation);
 

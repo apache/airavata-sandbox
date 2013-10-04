@@ -25,7 +25,7 @@ import com.jcraft.jsch.ExtendedSession;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import org.apache.airavata.gsi.ssh.api.AuthenticationInfo;
+import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
 
 /**
  * User: AmilaJ (amilaj@apache.org)
@@ -38,17 +38,17 @@ import org.apache.airavata.gsi.ssh.api.AuthenticationInfo;
  */
 public class ExtendedJSch extends JSch {
 
-    private AuthenticationInfo authenticationInfo;
+    private GSIAuthenticationInfo authenticationInfo;
 
     public ExtendedJSch() {
         super();
     }
 
-    public AuthenticationInfo getAuthenticationInfo() {
+    public GSIAuthenticationInfo getAuthenticationInfo() {
         return authenticationInfo;
     }
 
-    public void setAuthenticationInfo(AuthenticationInfo authenticationInfo) {
+    public void setAuthenticationInfo(GSIAuthenticationInfo authenticationInfo) {
         this.authenticationInfo = authenticationInfo;
     }
 

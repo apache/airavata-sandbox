@@ -21,27 +21,15 @@
 
 package com.jcraft.jsch;
 
-import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
-
 /**
  * User: AmilaJ (amilaj@apache.org)
- * Date: 8/15/13
- * Time: 10:06 AM
+ * Date: 10/4/13
+ * Time: 12:37 PM
  */
 
-public class ExtendedSession extends Session {
+public class GSISSHIdentityRepository extends LocalIdentityRepository {
 
-    private GSIAuthenticationInfo authenticationInfo;
-
-    public ExtendedSession(JSch jsch, String username, String host, int port) throws JSchException {
-        super(jsch, username, host, port);
-    }
-
-    public GSIAuthenticationInfo getAuthenticationInfo() {
-        return authenticationInfo;
-    }
-
-    public void setAuthenticationInfo(GSIAuthenticationInfo authenticationInfo) {
-        this.authenticationInfo = authenticationInfo;
+    public GSISSHIdentityRepository(JSch jsch) {
+        super(jsch);
     }
 }

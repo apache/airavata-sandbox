@@ -1,4 +1,4 @@
-package org.apache.airavata.gsi.ssh.api;/*
+/*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,25 +19,32 @@ package org.apache.airavata.gsi.ssh.api;/*
  *
  */
 
-import org.ietf.jgss.GSSCredential;
-
-import java.util.Properties;
+package org.apache.airavata.gsi.ssh.impl.authentication;
 
 /**
- * Authentication data. Could be MyProxy user name, password, could be GSSCredentials
- * or could be SSH keys.
+ * User: AmilaJ (amilaj@apache.org)
+ * Date: 9/20/13
+ * Time: 12:15 PM
  */
-public abstract class AuthenticationInfo {
 
-    public Properties properties = new Properties();
+import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
+import org.apache.airavata.gsi.ssh.api.authentication.SSHPasswordAuthentication;
+import org.ietf.jgss.*;
 
-    public abstract GSSCredential getCredentials() throws SecurityException;
+/**
+ * An authenticator used for raw SSH sessions. Gives SSH user name, password
+ * directly.
+ * This is only an example implementation.
+ */
+public class DefaultPasswordAuthenticationInfo implements SSHPasswordAuthentication {
 
-    public Properties getProperties() {
-        return properties;
+    private String password;
+
+    public DefaultPasswordAuthenticationInfo(String pwd) {
+        this.password = pwd;
     }
 
-    public void setProperties(Properties properties) {
-        this.properties = properties;
+    public String getPassword(String userName, String hostName) {
+        return password;
     }
 }

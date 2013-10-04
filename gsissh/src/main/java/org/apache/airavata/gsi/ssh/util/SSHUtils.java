@@ -21,7 +21,7 @@
 package org.apache.airavata.gsi.ssh.util;
 
 import com.jcraft.jsch.*;
-import org.apache.airavata.gsi.ssh.api.AuthenticationInfo;
+import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
 import org.apache.airavata.gsi.ssh.api.SSHApiException;
 import org.apache.airavata.gsi.ssh.api.ServerInfo;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
@@ -44,7 +44,7 @@ public class SSHUtils {
 
     private ServerInfo serverInfo;
 
-    private AuthenticationInfo authenticationInfo;
+    private GSIAuthenticationInfo authenticationInfo;
 
     private ConfigReader configReader;
 
@@ -55,7 +55,7 @@ public class SSHUtils {
      * @param certificateLocation
      * @param configReader
      */
-    public SSHUtils(ServerInfo serverInfo, AuthenticationInfo authenticationInfo, String certificateLocation, ConfigReader configReader) {
+    public SSHUtils(ServerInfo serverInfo, GSIAuthenticationInfo authenticationInfo, String certificateLocation, ConfigReader configReader) {
         System.setProperty("X509_CERT_DIR", certificateLocation);
         this.serverInfo = serverInfo;
         this.authenticationInfo = authenticationInfo;
@@ -68,7 +68,7 @@ public class SSHUtils {
      * @param authenticationInfo
      * @param configReader
      */
-    public SSHUtils(ServerInfo serverInfo, AuthenticationInfo authenticationInfo
+    public SSHUtils(ServerInfo serverInfo, GSIAuthenticationInfo authenticationInfo
             , ConfigReader configReader) {
         this.serverInfo = serverInfo;
         this.authenticationInfo = authenticationInfo;

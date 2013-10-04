@@ -20,10 +20,10 @@
 */
 package org.apache.airavata.gsi.ssh.config;
 
-import org.apache.airavata.gsi.ssh.api.AuthenticationInfo;
+import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
 import org.apache.airavata.gsi.ssh.util.SSHUtils;
 import org.apache.airavata.gsi.ssh.api.ServerInfo;
-import org.apache.airavata.gsi.ssh.impl.MyProxyAuthenticationInfo;
+import org.apache.airavata.gsi.ssh.impl.authentication.MyProxyAuthenticationInfo;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -65,7 +65,7 @@ public class SCPToTest {
     @Test
     public void testExecuteCommand() throws Exception {
          // Create authentication
-        AuthenticationInfo authenticationInfo
+        GSIAuthenticationInfo authenticationInfo
                 = new MyProxyAuthenticationInfo(myProxyUserName, myProxyPassword, "myproxy.teragrid.org",
                 7512, 17280000,certificateLocation);
         ServerInfo serverInfo = new ServerInfo("ogce" ,"trestles.sdsc.edu");

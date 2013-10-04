@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.airavata.gsi.ssh.GSSContextX509;
-import org.apache.airavata.gsi.ssh.api.AuthenticationInfo;
+import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
 import org.globus.gsi.gssapi.GSSConstants;
 import org.ietf.jgss.GSSException;
 import org.ietf.jgss.Oid;
@@ -170,7 +170,7 @@ public class UserAuthGSSAPIWithMICGSSCredentials extends UserAuth {
         // Get the credentials and set them
         // Not a good way, but we dont have any choice
         if (session instanceof ExtendedSession) {
-            AuthenticationInfo authenticationInfo = ((ExtendedSession) session).getAuthenticationInfo();
+            GSIAuthenticationInfo authenticationInfo = ((ExtendedSession) session).getAuthenticationInfo();
 
             if (context instanceof GSSContextX509) {
                 ((GSSContextX509) context).setCredential(authenticationInfo.getCredentials());

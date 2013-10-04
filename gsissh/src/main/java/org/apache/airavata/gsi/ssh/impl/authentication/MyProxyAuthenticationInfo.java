@@ -19,14 +19,12 @@
  *
  */
 
-package org.apache.airavata.gsi.ssh.impl;
+package org.apache.airavata.gsi.ssh.impl.authentication;
 
-import org.apache.airavata.gsi.ssh.api.AuthenticationInfo;
+import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
 import org.globus.myproxy.MyProxy;
 import org.globus.myproxy.MyProxyException;
 import org.ietf.jgss.GSSCredential;
-
-import java.util.Properties;
 
 /**
  * User: AmilaJ (amilaj@apache.org)
@@ -34,7 +32,7 @@ import java.util.Properties;
  * Time: 5:22 PM
  */
 
-public class MyProxyAuthenticationInfo extends AuthenticationInfo {
+public class MyProxyAuthenticationInfo extends GSIAuthenticationInfo {
 
     public static final String X509_CERT_DIR = "X509_CERT_DIR";
     private String userName;
@@ -57,10 +55,41 @@ public class MyProxyAuthenticationInfo extends AuthenticationInfo {
         return userName;
     }
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getMyProxyUrl() {
+        return myProxyUrl;
+    }
+
+    public void setMyProxyUrl(String myProxyUrl) {
+        this.myProxyUrl = myProxyUrl;
+    }
+
+    public int getMyProxyPort() {
+        return myProxyPort;
+    }
+
+    public void setMyProxyPort(int myProxyPort) {
+        this.myProxyPort = myProxyPort;
+    }
+
     public int getLifeTime() {
         return lifeTime;
     }
 
+    public void setLifeTime(int lifeTime) {
+        this.lifeTime = lifeTime;
+    }
 
     public GSSCredential getCredentials() throws SecurityException {
         return getMyProxyCredentials();

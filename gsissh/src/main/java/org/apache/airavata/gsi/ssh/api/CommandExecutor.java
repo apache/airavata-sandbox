@@ -20,14 +20,14 @@
 */
 package org.apache.airavata.gsi.ssh.api;
 
-import com.jcabi.aspects.RetryOnFailure;
 import com.jcraft.jsch.*;
+import org.apache.airavata.gsi.ssh.api.authentication.*;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
 import org.apache.airavata.gsi.ssh.jsch.ExtendedJSch;
+import org.apache.airavata.gsi.ssh.util.SSHAPIUIKeyboardInteractive;
+import org.apache.airavata.gsi.ssh.util.SSHKeyPasswordHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.*;
 
 /**
  * This is a generic class which take care of command execution
@@ -51,7 +51,6 @@ public class CommandExecutor {
      * @param commandOutput
      * @throws SSHApiException
      */
-    @RetryOnFailure(attempts = 3, delay = 1000, verbose = true)
     public static Session executeCommand(CommandInfo commandInfo, Session session,
                                          CommandOutput commandOutput) throws SSHApiException {
 
@@ -102,7 +101,13 @@ public class CommandExecutor {
     public static void executeCommand(CommandInfo commandInfo, ServerInfo serverInfo,
                                       AuthenticationInfo authenticationInfo,
                                       CommandOutput commandOutput, ConfigReader configReader) throws SSHApiException {
-        System.setProperty(X509_CERT_DIR, (String) authenticationInfo.getProperties().get("X509_CERT_DIR"));
+
+        if (authenticationInfo instanceof GSIAuthenticationInfo) {
+            System.setProperty(X509_CERT_DIR, (String) ((GSIAuthenticationInfo)authenticationInfo).getProperties().
+                    get("X509_CERT_DIR"));
+        }
+
+
         JSch jsch = new ExtendedJSch();
 
         log.debug("Connecting to server - " + serverInfo.getHost() + ":" + serverInfo.getPort() + " with user name - "
@@ -122,9 +127,98 @@ public class CommandExecutor {
         java.util.Properties config = configReader.getProperties();
         session.setConfig(config);
 
+        //=============================================================
+        // Handling vanilla SSH pieces
+        //=============================================================
+        if (authenticationInfo instanceof SSHPasswordAuthentication) {
+            String password = ((SSHPasswordAuthentication) authenticationInfo).
+                    getPassword(serverInfo.getUserName(), serverInfo.getHost());
+
+            session.setUserInfo(new SSHAPIUIKeyboardInteractive(password));
+
+            // TODO figure out why we need to set password to session
+            session.setPassword(password);
+
+        } else if (authenticationInfo instanceof SSHPublicKeyFileAuthentication) {
+            SSHPublicKeyFileAuthentication sshPublicKeyFileAuthentication
+                    = (SSHPublicKeyFileAuthentication)authenticationInfo;
+
+            String privateKeyFile = sshPublicKeyFileAuthentication.
+                    getPrivateKeyFile(serverInfo.getUserName(), serverInfo.getHost());
+
+            logDebug("The private key file for vanilla SSH " + privateKeyFile);
+
+            String publicKeyFile = sshPublicKeyFileAuthentication.
+                    getPrivateKeyFile(serverInfo.getUserName(), serverInfo.getHost());
+
+            logDebug("The public key file for vanilla SSH " + publicKeyFile);
+
+            Identity identityFile;
+
+            try {
+                identityFile = GSISSHIdentityFile.newInstance(privateKeyFile, null, jsch);
+            } catch (JSchException e) {
+                throw new SSHApiException("An exception occurred while initializing keys using files. " +
+                        "(private key and public key)." +
+                        "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
+                        " connecting user name - "
+                        + serverInfo.getUserName() + " private key file - " + privateKeyFile + ", public key file - " +
+                        publicKeyFile, e);
+            }
+
+            // Add identity to identity repository
+            GSISSHIdentityRepository identityRepository = new GSISSHIdentityRepository(jsch);
+            identityRepository.add(identityFile);
+
+            // Set repository to session
+            session.setIdentityRepository(identityRepository);
+
+            // Set the user info
+            SSHKeyPasswordHandler sshKeyPasswordHandler
+                    = new SSHKeyPasswordHandler((SSHKeyAuthentication)authenticationInfo);
+
+            session.setUserInfo(sshKeyPasswordHandler);
+
+        } else if (authenticationInfo instanceof SSHPublicKeyAuthentication) {
+
+            SSHPublicKeyAuthentication sshPublicKeyAuthentication
+                    = (SSHPublicKeyAuthentication)authenticationInfo;
+
+            Identity identityFile;
+
+            try {
+                String name = serverInfo.getUserName() + "_" + serverInfo.getHost();
+                identityFile = GSISSHIdentityFile.newInstance(name,
+                        sshPublicKeyAuthentication.getPrivateKey(serverInfo.getUserName(), serverInfo.getHost()),
+                        sshPublicKeyAuthentication.getPublicKey(serverInfo.getUserName(), serverInfo.getHost()), jsch);
+            } catch (JSchException e) {
+                throw new SSHApiException("An exception occurred while initializing keys using byte arrays. " +
+                        "(private key and public key)." +
+                        "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
+                        " connecting user name - "
+                        + serverInfo.getUserName(), e);
+            }
+
+            // Add identity to identity repository
+            GSISSHIdentityRepository identityRepository = new GSISSHIdentityRepository(jsch);
+            identityRepository.add(identityFile);
+
+            // Set repository to session
+            session.setIdentityRepository(identityRepository);
+
+            // Set the user info
+            SSHKeyPasswordHandler sshKeyPasswordHandler
+                    = new SSHKeyPasswordHandler((SSHKeyAuthentication)authenticationInfo);
+
+            session.setUserInfo(sshKeyPasswordHandler);
+
+        }
+
         // Not a good way, but we dont have any choice
         if (session instanceof ExtendedSession) {
-            ((ExtendedSession) session).setAuthenticationInfo(authenticationInfo);
+            if (authenticationInfo instanceof GSIAuthenticationInfo) {
+                ((ExtendedSession) session).setAuthenticationInfo((GSIAuthenticationInfo)authenticationInfo);
+            }
         }
 
         try {
@@ -173,4 +267,12 @@ public class CommandExecutor {
         channel.disconnect();
         session.disconnect();
     }
+
+    private static void logDebug(String message) {
+        if (log.isDebugEnabled()) {
+            log.debug(message);
+        }
+    }
+
+
 }
