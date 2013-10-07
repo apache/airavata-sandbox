@@ -1,0 +1,13 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "AnyMetadata Schema",
+    "description":"JSON schema for AnyMetadata",
+    "type": "object",
+    "id": "http://airavata.apache.org/schemas/gfac/2012/12/anyMetadata",
+    "required": ["anyMetadata"],
+    "properties": {
+        "anyMetadata":{
+            "type": "object"
+        }
+    }
+}

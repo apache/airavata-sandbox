@@ -1,0 +1,34 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "AuthorInfoType Schema",
+    "description": "JSON schema for AuthorInfoType",
+    "type": "object",
+    "id": "http://airavata.apache.org/schemas/gfac/2012/12#authorInfo",
+    "required": ["authorInfoType"],
+    "properties": {
+        "authorInfoType": {
+            "type": "object",
+            "id": "http://airavata.apache.org/schemas/gfac/2012/12/authorInfoType",
+            "properties": {
+                "author": {
+                    "type": "string"
+                },
+                "modificationDate": {
+                    "type": "string"
+                },
+                "organization": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "contactInfo": {
+                    "type": "string"
+                },
+                "anyMetadata": {
+                    "type": "object"
+                }
+            }
+        }
+    }
+}

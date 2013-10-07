@@ -1,0 +1,27 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Name Value Pair Type schema",
+    "description": "JSON schema for Name Value Pair Type",
+    "type": "object",
+    "id": "http://airavata.apache.org/schemas/gfac/2012/12#nameValuePairType",
+    "required": ["authorInfoType"],
+    "properties": {
+        "nameValuePairType": {
+            "type": "object",
+            "id": "http://jsonschema.net/applicationDeploymentDescription/applicationEnvironment",
+            "required": ["name" , "value"],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+
+}
