@@ -21,10 +21,13 @@
 package org.apache.airavata.gsi.ssh.util;
 
 import com.jcraft.jsch.*;
+import com.sun.tools.javac.util.Paths;
+import org.apache.airavata.gsi.ssh.api.CommandOutput;
 import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
 import org.apache.airavata.gsi.ssh.api.SSHApiException;
 import org.apache.airavata.gsi.ssh.api.ServerInfo;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
+import org.apache.airavata.gsi.ssh.impl.SystemCommandOutput;
 import org.apache.airavata.gsi.ssh.jsch.ExtendedJSch;
 import org.slf4j.*;
 
@@ -50,6 +53,7 @@ public class SSHUtils {
 
     /**
      * We need to pass certificateLocation when we use SCPTo method standalone
+     *
      * @param serverInfo
      * @param authenticationInfo
      * @param certificateLocation
@@ -64,6 +68,7 @@ public class SSHUtils {
 
     /**
      * This can be used when use SCPTo method within SSHAPi because SSHApiFactory already set the system property certificateLocation
+     *
      * @param serverInfo
      * @param authenticationInfo
      * @param configReader
@@ -74,6 +79,7 @@ public class SSHUtils {
         this.authenticationInfo = authenticationInfo;
         this.configReader = configReader;
     }
+
     /**
      * This  method will scp the lFile to the rFile location
      *
@@ -82,8 +88,9 @@ public class SSHUtils {
      * @throws IOException
      * @throws JSchException
      * @throws org.apache.airavata.gsi.ssh.api.SSHApiException
+     *
      */
-    public Session scpTo(String rFile, String lFile) throws IOException, JSchException, SSHApiException {
+    public String scpTo(String rFile, String lFile) throws IOException, JSchException, SSHApiException {
         FileInputStream fis = null;
         String prefix = null;
         if (new File(lFile).isDirectory()) {
@@ -189,9 +196,12 @@ public class SSHUtils {
 
         channel.disconnect();
         session.disconnect();
-        return session;
+        int i = lFile.lastIndexOf("\\");
+        String substring = lFile.substring(i + 1);
+        return rFile + File.separator + substring;
     }
-    public static Session scpTo(String rFile, String lFile,Session session) throws IOException, JSchException, SSHApiException {
+
+    public static String scpTo(String rFile, String lFile, Session session) throws IOException, JSchException, SSHApiException {
         FileInputStream fis = null;
         String prefix = null;
         if (new File(lFile).isDirectory()) {
@@ -263,8 +273,45 @@ public class SSHUtils {
         out.close();
 
         channel.disconnect();
+        int i = lFile.lastIndexOf("\\");
+        String substring = lFile.substring(i + 1);
+        return rFile + File.separator + substring;
+    }
+
+    public static Session makeDirectory(String path, Session session) throws IOException, JSchException, SSHApiException {
+
+        // exec 'scp -t rfile' remotely
+        String command = "mkdir " + path;
+        Channel channel = session.openChannel("exec");
+        CommandOutput commandOutput = new SystemCommandOutput();
+        ((ChannelExec) channel).setCommand(command);
+
+        // get I/O streams for remote scp
+        OutputStream out = channel.getOutputStream();
+        InputStream in = channel.getInputStream();
+        ((ChannelExec) channel).setErrStream(commandOutput.getStandardError());
+        try {
+            channel.connect();
+        } catch (JSchException e) {
+
+            channel.disconnect();
+            session.disconnect();
+
+            throw new SSHApiException("Unable to retrieve command output. Command - " + command +
+                    " on server - " + session.getHost() + ":" + session.getPort() +
+                    " connecting user name - "
+                    + session.getUserName(), e);
+        }
+
+        commandOutput.onOutput(channel);
+
+        channel.disconnect();
+        session.disconnect();
+
+        channel.disconnect();
         return session;
     }
+
     static int checkAck(InputStream in) throws IOException {
         int b = in.read();
         if (b == 0) return b;

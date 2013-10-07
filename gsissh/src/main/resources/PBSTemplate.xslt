@@ -11,15 +11,31 @@
 #! /bin/sh
 # PBS batch job script built by Globus job manager
 #
+    <xsl:if test="shellName != @xsl:nil">
 ##PBS -S <xsl:value-of select="ns:shellName"/>
+    </xsl:if>
+    <xsl:if test="queueName != @xsl:nil">
 #PBS -q <xsl:value-of select="ns:queueName"/>
+    </xsl:if>
+    <xsl:if test="mailOptions != @xsl:nil">
 #PBS -m <xsl:value-of select="ns:mailOptions"/>
+    </xsl:if>
+<xsl:if test="acountString != @xsl:nil">
 #PBS -A <xsl:value-of select="ns:acountString"/>
+    </xsl:if>
+    <xsl:if test="maxWallTime != @xsl:nil">
 #PBS -l walltime=<xsl:value-of select="ns:maxWallTime"/>
+    </xsl:if>
+    <xsl:if test="standardOutFile != @xsl:nil">
 #PBS -o <xsl:value-of select="ns:standardOutFile"/>
+    </xsl:if>
+    <xsl:if test="standardOutFile != @xsl:nil">
 #PBS -e <xsl:value-of select="ns:standardErrorFile"/>
+    </xsl:if>
+    <xsl:if test="(nodes != @xsl:nil) and (processesPerNode != @xsl:nil)">
 #PBS -l nodes=<xsl:value-of select="ns:nodes"/>:ppn=<xsl:value-of select="ns:processesPerNode"/>
 <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 <xsl:for-each select="ns:exports/ns:name">
 <xsl:value-of select="."/>=<xsl:value-of select="./@value"/><xsl:text>&#xa;</xsl:text>
 export<xsl:text>   </xsl:text><xsl:value-of select="."/>

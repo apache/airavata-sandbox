@@ -78,12 +78,14 @@ public class PBSCluster implements Cluster {
 
         this.authenticationInfo = authenticationInfo;
 
-        System.setProperty(X509_CERT_DIR, (String) ((GSIAuthenticationInfo)authenticationInfo).getProperties().
-                get(X509_CERT_DIR));
+        if (authenticationInfo instanceof GSIAuthenticationInfo) {
+            System.setProperty(X509_CERT_DIR, (String) ((GSIAuthenticationInfo) authenticationInfo).getProperties().
+                    get("X509_CERT_DIR"));
+        }
 
-        if(installedPath.endsWith("/")){
+        if (installedPath.endsWith("/")) {
             this.installedPath = installedPath;
-        }else {
+        } else {
             this.installedPath = installedPath + "/";
         }
 
@@ -125,7 +127,7 @@ public class PBSCluster implements Cluster {
 
         } else if (authenticationInfo instanceof SSHPublicKeyFileAuthentication) {
             SSHPublicKeyFileAuthentication sshPublicKeyFileAuthentication
-                    = (SSHPublicKeyFileAuthentication)authenticationInfo;
+                    = (SSHPublicKeyFileAuthentication) authenticationInfo;
 
             String privateKeyFile = sshPublicKeyFileAuthentication.
                     getPrivateKeyFile(serverInfo.getUserName(), serverInfo.getHost());
@@ -159,14 +161,14 @@ public class PBSCluster implements Cluster {
 
             // Set the user info
             SSHKeyPasswordHandler sshKeyPasswordHandler
-                    = new SSHKeyPasswordHandler((SSHKeyAuthentication)authenticationInfo);
+                    = new SSHKeyPasswordHandler((SSHKeyAuthentication) authenticationInfo);
 
             session.setUserInfo(sshKeyPasswordHandler);
 
         } else if (authenticationInfo instanceof SSHPublicKeyAuthentication) {
 
             SSHPublicKeyAuthentication sshPublicKeyAuthentication
-                    = (SSHPublicKeyAuthentication)authenticationInfo;
+                    = (SSHPublicKeyAuthentication) authenticationInfo;
 
             Identity identityFile;
 
@@ -192,7 +194,7 @@ public class PBSCluster implements Cluster {
 
             // Set the user info
             SSHKeyPasswordHandler sshKeyPasswordHandler
-                    = new SSHKeyPasswordHandler((SSHKeyAuthentication)authenticationInfo);
+                    = new SSHKeyPasswordHandler((SSHKeyAuthentication) authenticationInfo);
 
             session.setUserInfo(sshKeyPasswordHandler);
 
@@ -200,7 +202,9 @@ public class PBSCluster implements Cluster {
 
         // Not a good way, but we dont have any choice
         if (session instanceof ExtendedSession) {
-            ((ExtendedSession) session).setAuthenticationInfo((GSIAuthenticationInfo)authenticationInfo);
+            if (authenticationInfo instanceof GSIAuthenticationInfo) {
+                ((ExtendedSession) session).setAuthenticationInfo((GSIAuthenticationInfo) authenticationInfo);
+            }
         }
 
         try {
@@ -281,7 +285,7 @@ public class PBSCluster implements Cluster {
                     " connecting user name - "
                     + serverInfo.getUserName(), e);
         } finally {
-            if(tempPBSFile != null){
+            if (tempPBSFile != null) {
                 tempPBSFile.delete();
             }
         }
