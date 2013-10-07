@@ -119,7 +119,8 @@ public class JobDescriptor {
      * @param minutes
      */
     public void setMaxWallTime(String minutes) {
-        this.getJobDescriptorDocument().getJobDescriptor().setMaxWallTime(minutes);
+        this.getJobDescriptorDocument().getJobDescriptor().setMaxWallTime(
+                CommonUtils.maxWallTimeCalculator(Integer.parseInt(minutes)));
 
     }
 

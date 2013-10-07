@@ -21,7 +21,6 @@
 
 package org.apache.airavata.gsi.ssh.impl;
 
-import com.jcraft.jsch.UserInfo;
 import org.apache.airavata.gsi.ssh.api.*;
 import org.apache.airavata.gsi.ssh.api.authentication.AuthenticationInfo;
 import org.apache.airavata.gsi.ssh.api.job.JobDescriptor;
@@ -32,10 +31,11 @@ import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * User: AmilaJ (amilaj@apache.org)
@@ -56,10 +56,10 @@ public class VanilaSSHTest {
 
         this.hostName = "bigred2.uits.iu.edu";
         System.setProperty("my.ssh.user", "lginnali");
-        System.setProperty("my.ssh.user.password","");
-//        System.setProperty("my.ssh.user","i want to be free");
+        System.setProperty("my.ssh.user.password", "");
         this.userName = System.getProperty("my.ssh.user");
         this.password = System.getProperty("my.ssh.user.password");
+        System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
 //        this.passPhrase = System.getProperty("my.ssh.user.pass.phrase");
 
         if (this.userName == null || this.password == null) {
@@ -72,7 +72,7 @@ public class VanilaSSHTest {
 
 
     @Test
-    public void testSimpleCommand1() throws Exception{
+    public void testSimpleCommand1() throws Exception {
 
         System.out.println("Starting vanila SSH test ....");
 
@@ -94,7 +94,7 @@ public class VanilaSSHTest {
     }
 
     @Test
-    public void testSimpleCommand2() throws Exception{
+    public void testSimpleCommand2() throws Exception {
 
         System.out.println("Starting vanila SSH test ....");
 
@@ -120,17 +120,34 @@ public class VanilaSSHTest {
     }
 
     @Test
-    public void testSimplePBSJob() throws Exception{
+    public void testSimplePBSJob() throws Exception {
 
         AuthenticationInfo authenticationInfo = new DefaultPasswordAuthenticationInfo(this.password);
-         // Server info
+        // Server info
         ServerInfo serverInfo = new ServerInfo(this.userName, this.hostName);
         Cluster pbsCluster = new PBSCluster(serverInfo, authenticationInfo, "/opt/torque/torque-4.2.3.1/bin/");
 
+        String date = new Date().toString();
+        date = date.replaceAll(" ", "_");
+        date = date.replaceAll(":", "_");
 
-        // Execute command
+        String pomFile = System.getProperty("basedir") + File.separator + "pom.xml";
+
+        // Constructing theworking directory for demonstration and creating directories in the remote
+        // resource
         String workingDirectory = File.separator + "N" + File.separator + "u" + File.separator +
-                "lginnali" + File.separator + "BigRed2" + File.separator + "myjob";
+                "lginnali" + File.separator + "BigRed2";
+        workingDirectory = workingDirectory + File.separator
+                + date + "_" + UUID.randomUUID();
+        pbsCluster.makeDirectory(workingDirectory);
+        Thread.sleep(1000);
+        pbsCluster.makeDirectory(workingDirectory + File.separator + "inputs");
+        Thread.sleep(1000);
+        pbsCluster.makeDirectory(workingDirectory + File.separator +  "outputs");
+
+
+        // doing file transfer to the remote resource
+        String s = pbsCluster.scpTo(workingDirectory + File.separator + "inputs", pomFile);
         // constructing the job object
         JobDescriptor jobDescriptor = new JobDescriptor();
         jobDescriptor.setWorkingDirectory(workingDirectory);
@@ -147,7 +164,7 @@ public class VanilaSSHTest {
         jobDescriptor.setMaxWallTime("5");
         jobDescriptor.setJobSubmitter("aprun -n 1");
         List<String> inputs = new ArrayList<String>();
-        inputs.add("Hello World");
+        inputs.add(s);
         jobDescriptor.setInputValues(inputs);
         //finished construction of job object
         System.out.println(jobDescriptor.toXML());

@@ -196,7 +196,7 @@ public class SSHUtils {
 
         channel.disconnect();
         session.disconnect();
-        int i = lFile.lastIndexOf("\\");
+        int i = lFile.lastIndexOf(File.separator);
         String substring = lFile.substring(i + 1);
         return rFile + File.separator + substring;
     }
@@ -273,7 +273,7 @@ public class SSHUtils {
         out.close();
 
         channel.disconnect();
-        int i = lFile.lastIndexOf("\\");
+        int i = lFile.lastIndexOf(File.separator);
         String substring = lFile.substring(i + 1);
         return rFile + File.separator + substring;
     }
@@ -281,7 +281,7 @@ public class SSHUtils {
     public static Session makeDirectory(String path, Session session) throws IOException, JSchException, SSHApiException {
 
         // exec 'scp -t rfile' remotely
-        String command = "mkdir " + path;
+        String command = "mkdir -p " + path;
         Channel channel = session.openChannel("exec");
         CommandOutput commandOutput = new SystemCommandOutput();
         ((ChannelExec) channel).setCommand(command);
@@ -304,9 +304,6 @@ public class SSHUtils {
         }
 
         commandOutput.onOutput(channel);
-
-        channel.disconnect();
-        session.disconnect();
 
         channel.disconnect();
         return session;

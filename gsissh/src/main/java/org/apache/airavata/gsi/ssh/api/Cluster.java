@@ -63,9 +63,17 @@ public interface Cluster {
      *
      * @param rFile remote file location
      * @param lFile local file path of the file which needs to copy to remote location
+     * @return the successful remote file path of the transfer
      * @throws SSHApiException throws exception during error
      */
-    public void scpTo(String rFile, String lFile) throws SSHApiException;
+    public String scpTo(String rFile, String lFile) throws SSHApiException;
+
+    /**
+     * This will create directories in computing resources
+     * @param directoryPath the full qualified path for the directory user wants to create
+     * @throws SSHApiException throws during error
+     */
+    public void makeDirectory(String directoryPath) throws SSHApiException;
 
     /**
      * This will get the job description of a job which is there in the cluster

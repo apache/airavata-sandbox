@@ -10,32 +10,46 @@
 <xsl:template match="/ns:JobDescriptor">
 #! /bin/sh
 # PBS batch job script built by Globus job manager
-#
-    <xsl:if test="shellName != @xsl:nil">
+#   <xsl:choose>
+    <xsl:when test="ns:shellName">
 ##PBS -S <xsl:value-of select="ns:shellName"/>
-    </xsl:if>
-    <xsl:if test="queueName != @xsl:nil">
+    </xsl:when></xsl:choose>
+    <xsl:choose>
+    <xsl:when test="ns:queueName">
 #PBS -q <xsl:value-of select="ns:queueName"/>
-    </xsl:if>
-    <xsl:if test="mailOptions != @xsl:nil">
+    </xsl:when>
+    </xsl:choose>
+    <xsl:choose>
+    <xsl:when test="ns:mailOptions">
 #PBS -m <xsl:value-of select="ns:mailOptions"/>
-    </xsl:if>
-<xsl:if test="acountString != @xsl:nil">
+    </xsl:when>
+    </xsl:choose>
+    <xsl:choose>
+<xsl:when test="ns:acountString">
 #PBS -A <xsl:value-of select="ns:acountString"/>
-    </xsl:if>
-    <xsl:if test="maxWallTime != @xsl:nil">
+    </xsl:when>
+    </xsl:choose>
+    <xsl:choose>
+    <xsl:when test="ns:maxWallTime">
 #PBS -l walltime=<xsl:value-of select="ns:maxWallTime"/>
-    </xsl:if>
-    <xsl:if test="standardOutFile != @xsl:nil">
+    </xsl:when>
+    </xsl:choose>
+    <xsl:choose>
+    <xsl:when test="ns:standardOutFile">
 #PBS -o <xsl:value-of select="ns:standardOutFile"/>
-    </xsl:if>
-    <xsl:if test="standardOutFile != @xsl:nil">
+    </xsl:when>
+    </xsl:choose>
+    <xsl:choose>
+    <xsl:when test="ns:standardOutFile">
 #PBS -e <xsl:value-of select="ns:standardErrorFile"/>
-    </xsl:if>
-    <xsl:if test="(nodes != @xsl:nil) and (processesPerNode != @xsl:nil)">
+    </xsl:when>
+    </xsl:choose>
+    <xsl:choose>
+    <xsl:when test="(ns:nodes) and (ns:processesPerNode)">
 #PBS -l nodes=<xsl:value-of select="ns:nodes"/>:ppn=<xsl:value-of select="ns:processesPerNode"/>
 <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    </xsl:when>
+    </xsl:choose>
 <xsl:for-each select="ns:exports/ns:name">
 <xsl:value-of select="."/>=<xsl:value-of select="./@value"/><xsl:text>&#xa;</xsl:text>
 export<xsl:text>   </xsl:text><xsl:value-of select="."/>
@@ -45,7 +59,8 @@ export<xsl:text>   </xsl:text><xsl:value-of select="."/>
       <xsl:value-of select="."/><xsl:text>   </xsl:text>
     </xsl:for-each>
 cd <xsl:text>   </xsl:text><xsl:value-of select="ns:workingDirectory"/><xsl:text>&#xa;</xsl:text>
-<xsl:value-of select="ns:jobSubmitterCommand"/><xsl:text>   </xsl:text><xsl:value-of select="ns:executablePath"/><xsl:text>   </xsl:text>
+    <xsl:choose><xsl:when test="ns:jobSubmitterCommand">
+<xsl:value-of select="ns:jobSubmitterCommand"/><xsl:text>   </xsl:text></xsl:when></xsl:choose><xsl:value-of select="ns:executablePath"/><xsl:text>   </xsl:text>
 <xsl:for-each select="ns:inputs/ns:input">
       <xsl:value-of select="."/><xsl:text>   </xsl:text>
     </xsl:for-each>

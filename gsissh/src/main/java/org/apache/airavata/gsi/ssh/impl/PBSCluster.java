@@ -260,7 +260,8 @@ public class PBSCluster implements Cluster {
             Source text = new StreamSource(new ByteArrayInputStream(jobDescriptor.toXML().getBytes()));
             transformer.transform(text, new StreamResult(results));
 
-            log.debug("generated PBS:" + results.toString());
+            System.out.println(results.toString());
+//            log.debug("generated PBS:" + results.toString());
 
             // creating a temporary file using pbs script generated above
             int number = new SecureRandom().nextInt();
@@ -455,14 +456,26 @@ public class PBSCluster implements Cluster {
         return jobDescriptor;
     }
 
-    public void scpTo(String rFile, String lFile) throws SSHApiException {
+    public String scpTo(String rFile, String lFile) throws SSHApiException {
         try {
-            SSHUtils.scpTo(rFile, lFile, session);
+            return SSHUtils.scpTo(rFile, lFile, session);
         } catch (IOException e) {
             throw new SSHApiException("Failed during scping local file:" + lFile + " to remote file "
                     + serverInfo.getHost() + ":rFile", e);
         } catch (JSchException e) {
             throw new SSHApiException("Failed during scping local file:" + lFile + " to remote file "
+                    + serverInfo.getHost() + ":rFile", e);
+        }
+    }
+
+    public void makeDirectory(String directoryPath) throws SSHApiException {
+        try {
+            SSHUtils.makeDirectory(directoryPath, session);
+        } catch (IOException e) {
+            throw new SSHApiException("Failed during creating directory:" + directoryPath + " to remote file "
+                    + serverInfo.getHost() + ":rFile", e);
+        } catch (JSchException e) {
+            throw new SSHApiException("Failed during creating directory :" + directoryPath + " to remote file "
                     + serverInfo.getHost() + ":rFile", e);
         }
     }

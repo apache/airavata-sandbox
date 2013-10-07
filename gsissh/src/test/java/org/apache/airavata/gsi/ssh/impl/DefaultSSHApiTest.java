@@ -162,7 +162,7 @@ public class DefaultSSHApiTest {
         jobDescriptor.setNodes(1);
         jobDescriptor.setProcessesPerNode(1);
         jobDescriptor.setQueueName("normal");
-        jobDescriptor.setMaxWallTime("1:00:00");
+        jobDescriptor.setMaxWallTime("60");
         jobDescriptor.setAcountString("sds128");
         List<String> inputs = new ArrayList<String>();
         inputs.add("Hello World");
@@ -245,7 +245,7 @@ public class DefaultSSHApiTest {
         jobDescriptor.setNodes(1);
         jobDescriptor.setProcessesPerNode(100);
         jobDescriptor.setQueueName("normal");
-        jobDescriptor.setMaxWallTime("1:00:00");
+        jobDescriptor.setMaxWallTime("60");
         jobDescriptor.setAcountString("sds128");
         List<String> inputs = new ArrayList<String>();
         inputs.add("Hello World");
@@ -270,7 +270,7 @@ public class DefaultSSHApiTest {
         ServerInfo serverInfo = new ServerInfo("ogce", "trestles.sdsc.edu");
 
 
-        Cluster pbsCluster = new PBSCluster(serverInfo, authenticationInfo, "/opt/torque/bin1/");
+        Cluster pbsCluster = new PBSCluster(serverInfo, authenticationInfo, "/opt/torque/bin/");
 
 
         // Execute command
@@ -378,7 +378,7 @@ public class DefaultSSHApiTest {
         jobDescriptor.setStandardErrorFile(workingDirectory + File.separator + "application.err");
         jobDescriptor.setNodes(1);
         jobDescriptor.setProcessesPerNode(1);
-        jobDescriptor.setMaxWallTime("1:00:00");
+        jobDescriptor.setMaxWallTime("60");
         jobDescriptor.setQueueName("normal");
         jobDescriptor.setAcountString("sds128");
         List<String> inputs = new ArrayList<String>();
