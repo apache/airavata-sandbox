@@ -456,14 +456,26 @@ public class PBSCluster implements Cluster {
         return jobDescriptor;
     }
 
-    public String scpTo(String rFile, String lFile) throws SSHApiException {
+    public String scpTo(String remoteFile, String localFile) throws SSHApiException {
         try {
-            return SSHUtils.scpTo(rFile, lFile, session);
+            return SSHUtils.scpTo(remoteFile, localFile, session);
         } catch (IOException e) {
-            throw new SSHApiException("Failed during scping local file:" + lFile + " to remote file "
+            throw new SSHApiException("Failed during scping local file:" + localFile + " to remote file "
                     + serverInfo.getHost() + ":rFile", e);
         } catch (JSchException e) {
-            throw new SSHApiException("Failed during scping local file:" + lFile + " to remote file "
+            throw new SSHApiException("Failed during scping local file:" + localFile + " to remote file "
+                    + serverInfo.getHost() + ":rFile", e);
+        }
+    }
+
+    public String scpFrom(String remoteFile, String localFile) throws SSHApiException {
+        try {
+            return SSHUtils.scpFrom(remoteFile, localFile, session);
+        } catch (IOException e) {
+            throw new SSHApiException("Failed during scping local file:" + localFile + " to remote file "
+                    + serverInfo.getHost() + ":rFile", e);
+        } catch (JSchException e) {
+            throw new SSHApiException("Failed during scping local file:" + localFile + " to remote file "
                     + serverInfo.getHost() + ":rFile", e);
         }
     }

@@ -201,16 +201,27 @@ public class SSHUtils {
         return rFile + File.separator + substring;
     }
 
-    public static String scpTo(String rFile, String lFile, Session session) throws IOException, JSchException, SSHApiException {
+    /**
+     * This will copy a local file to a remote location
+     *
+     * @param remoteFile remote location you want to transfer the file, this can be a directory
+     * @param localFile  Local file to transfer, this can be a directory
+     * @param session
+     * @return returns the final remote file path, so that users can use the new file location
+     * @throws IOException
+     * @throws JSchException
+     * @throws SSHApiException
+     */
+    public static String scpTo(String remoteFile, String localFile, Session session) throws IOException, JSchException, SSHApiException {
         FileInputStream fis = null;
         String prefix = null;
-        if (new File(lFile).isDirectory()) {
-            prefix = lFile + File.separator;
+        if (new File(localFile).isDirectory()) {
+            prefix = localFile + File.separator;
         }
         boolean ptimestamp = true;
 
         // exec 'scp -t rfile' remotely
-        String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + rFile;
+        String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + remoteFile;
         Channel channel = session.openChannel("exec");
         ((ChannelExec) channel).setCommand(command);
 
@@ -224,7 +235,7 @@ public class SSHUtils {
             System.exit(0);
         }
 
-        File _lfile = new File(lFile);
+        File _lfile = new File(localFile);
 
         if (ptimestamp) {
             command = "T " + (_lfile.lastModified() / 1000) + " 0";
@@ -241,10 +252,10 @@ public class SSHUtils {
         // send "C0644 filesize filename", where filename should not include '/'
         long filesize = _lfile.length();
         command = "C0644 " + filesize + " ";
-        if (lFile.lastIndexOf('/') > 0) {
-            command += lFile.substring(lFile.lastIndexOf('/') + 1);
+        if (localFile.lastIndexOf('/') > 0) {
+            command += localFile.substring(localFile.lastIndexOf('/') + 1);
         } else {
-            command += lFile;
+            command += localFile;
         }
         command += "\n";
         out.write(command.getBytes());
@@ -254,7 +265,7 @@ public class SSHUtils {
         }
 
         // send a content of lFile
-        fis = new FileInputStream(lFile);
+        fis = new FileInputStream(localFile);
         byte[] buf = new byte[1024];
         while (true) {
             int len = fis.read(buf, 0, buf.length);
@@ -273,9 +284,271 @@ public class SSHUtils {
         out.close();
 
         channel.disconnect();
-        int i = lFile.lastIndexOf(File.separator);
-        String substring = lFile.substring(i + 1);
-        return rFile + File.separator + substring;
+        if(new File(remoteFile).isDirectory()){
+        int i = localFile.lastIndexOf(File.separator);
+        String substring = localFile.substring(i + 1);
+            return remoteFile + File.separator + substring;
+        }else{
+            return remoteFile;
+        }
+    }
+
+    /**
+     * This method will copy a remote file to a local directory
+     *
+     * @param remoteFile remote file path, this has to be a full qualified path
+     * @param localFile  This is the local file to copy, this can be a directory too
+     * @param session
+     * @return returns the final local file path of the new file came from the remote resource
+     */
+    public static String scpFrom(String remoteFile, String localFile, Session session)throws IOException, JSchException, SSHApiException {
+        FileOutputStream fos = null;
+        try {
+            String prefix = null;
+            if (new File(localFile).isDirectory()) {
+                prefix = localFile + File.separator;
+            }
+            session.connect();
+
+            // exec 'scp -f remotefile' remotely
+            String command = "scp -f " + remoteFile;
+            Channel channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(command);
+
+            // get I/O streams for remote scp
+            OutputStream out = channel.getOutputStream();
+            InputStream in = channel.getInputStream();
+
+            channel.connect();
+
+            byte[] buf = new byte[1024];
+
+            // send '\0'
+            buf[0] = 0;
+            out.write(buf, 0, 1);
+            out.flush();
+
+            while (true) {
+                int c = checkAck(in);
+                if (c != 'C') {
+                    break;
+                }
+
+                // read '0644 '
+                in.read(buf, 0, 5);
+
+                long filesize = 0L;
+                while (true) {
+                    if (in.read(buf, 0, 1) < 0) {
+                        // error
+                        break;
+                    }
+                    if (buf[0] == ' ') break;
+                    filesize = filesize * 10L + (long) (buf[0] - '0');
+                }
+
+                String file = null;
+                for (int i = 0; ; i++) {
+                    in.read(buf, i, 1);
+                    if (buf[i] == (byte) 0x0a) {
+                        file = new String(buf, 0, i);
+                        break;
+                    }
+                }
+
+                //System.out.println("filesize="+filesize+", file="+file);
+
+                // send '\0'
+                buf[0] = 0;
+                out.write(buf, 0, 1);
+                out.flush();
+
+                // read a content of lfile
+                fos = new FileOutputStream(prefix == null ? localFile : prefix + file);
+                int foo;
+                while (true) {
+                    if (buf.length < filesize) foo = buf.length;
+                    else foo = (int) filesize;
+                    foo = in.read(buf, 0, foo);
+                    if (foo < 0) {
+                        // error
+                        break;
+                    }
+                    fos.write(buf, 0, foo);
+                    filesize -= foo;
+                    if (filesize == 0L) break;
+                }
+                fos.close();
+                fos = null;
+
+                if (checkAck(in) != 0) {
+                    System.exit(0);
+                }
+
+                // send '\0'
+                buf[0] = 0;
+                out.write(buf, 0, 1);
+                out.flush();
+            }
+
+            session.disconnect();
+
+            System.exit(0);
+        } catch (Exception e) {
+            System.out.println(e);
+            try {
+                if (fos != null) fos.close();
+            } catch (Exception ee) {
+            }
+        }
+
+        if(new File(localFile).isDirectory()){
+        int i = remoteFile.lastIndexOf(File.separator);
+        String substring = remoteFile.substring(i + 1);
+            return localFile + File.separator + substring;
+        }else{
+            return localFile;
+        }
+    }
+
+    /**
+     * This method will copy a remote file to a local directory
+     *
+     * @param remoteFile remote file path, this has to be a full qualified path
+     * @param localFile  This is the local file to copy, this can be a directory too
+     */
+    public void scpFrom(String remoteFile, String localFile) throws SSHApiException {
+        JSch jsch = new ExtendedJSch();
+
+        log.debug("Connecting to server - " + serverInfo.getHost() + ":" + serverInfo.getPort() + " with user name - "
+                + serverInfo.getUserName());
+
+        Session session = null;
+
+        try {
+            session = jsch.getSession(serverInfo.getUserName(), serverInfo.getHost(), serverInfo.getPort());
+        } catch (JSchException e) {
+            throw new SSHApiException("An exception occurred while creating SSH session." +
+                    "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
+                    " connecting user name - "
+                    + serverInfo.getUserName(), e);
+        }
+
+        java.util.Properties config = this.configReader.getProperties();
+        session.setConfig(config);
+
+        // Not a good way, but we dont have any choice
+        if (session instanceof ExtendedSession) {
+            ((ExtendedSession) session).setAuthenticationInfo(authenticationInfo);
+        }
+
+        try {
+            session.connect();
+        } catch (JSchException e) {
+            throw new SSHApiException("An exception occurred while connecting to server." +
+                    "Connecting server - " + serverInfo.getHost() + ":" + serverInfo.getPort() +
+                    " connecting user name - "
+                    + serverInfo.getUserName(), e);
+        }
+
+        FileOutputStream fos = null;
+        try {
+            String prefix = null;
+            if (new File(localFile).isDirectory()) {
+                prefix = localFile + File.separator;
+            }
+
+            // exec 'scp -f remotefile' remotely
+            String command = "scp -f " + remoteFile;
+            Channel channel = session.openChannel("exec");
+            ((ChannelExec) channel).setCommand(command);
+
+            // get I/O streams for remote scp
+            OutputStream out = channel.getOutputStream();
+            InputStream in = channel.getInputStream();
+
+            channel.connect();
+
+            byte[] buf = new byte[1024];
+
+            // send '\0'
+            buf[0] = 0;
+            out.write(buf, 0, 1);
+            out.flush();
+
+            while (true) {
+                int c = checkAck(in);
+                if (c != 'C') {
+                    break;
+                }
+
+                // read '0644 '
+                in.read(buf, 0, 5);
+
+                long filesize = 0L;
+                while (true) {
+                    if (in.read(buf, 0, 1) < 0) {
+                        // error
+                        break;
+                    }
+                    if (buf[0] == ' ') break;
+                    filesize = filesize * 10L + (long) (buf[0] - '0');
+                }
+
+                String file = null;
+                for (int i = 0; ; i++) {
+                    in.read(buf, i, 1);
+                    if (buf[i] == (byte) 0x0a) {
+                        file = new String(buf, 0, i);
+                        break;
+                    }
+                }
+
+                //System.out.println("filesize="+filesize+", file="+file);
+
+                // send '\0'
+                buf[0] = 0;
+                out.write(buf, 0, 1);
+                out.flush();
+
+                // read a content of lfile
+                fos = new FileOutputStream(prefix == null ? localFile : prefix + file);
+                int foo;
+                while (true) {
+                    if (buf.length < filesize) foo = buf.length;
+                    else foo = (int) filesize;
+                    foo = in.read(buf, 0, foo);
+                    if (foo < 0) {
+                        // error
+                        break;
+                    }
+                    fos.write(buf, 0, foo);
+                    filesize -= foo;
+                    if (filesize == 0L) break;
+                }
+                fos.close();
+                fos = null;
+
+                if (checkAck(in) != 0) {
+                    System.exit(0);
+                }
+
+                // send '\0'
+                buf[0] = 0;
+                out.write(buf, 0, 1);
+                out.flush();
+            }
+
+            session.disconnect();
+
+            System.exit(0);
+        } catch (Exception e) {
+            System.out.println(e);
+            try {
+                if (fos != null) fos.close();
+            } catch (Exception ee) {
+            }
+        }
     }
 
     public static Session makeDirectory(String path, Session session) throws IOException, JSchException, SSHApiException {
