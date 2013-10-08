@@ -21,7 +21,6 @@
 package org.apache.airavata.gsi.ssh.util;
 
 import com.jcraft.jsch.*;
-import com.sun.tools.javac.util.Paths;
 import org.apache.airavata.gsi.ssh.api.CommandOutput;
 import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
 import org.apache.airavata.gsi.ssh.api.SSHApiException;
