@@ -21,12 +21,11 @@
 package org.apache.airavata.gsi.ssh.util;
 
 import com.jcraft.jsch.*;
-import org.apache.airavata.gsi.ssh.api.CommandOutput;
 import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
 import org.apache.airavata.gsi.ssh.api.SSHApiException;
 import org.apache.airavata.gsi.ssh.api.ServerInfo;
 import org.apache.airavata.gsi.ssh.config.ConfigReader;
-import org.apache.airavata.gsi.ssh.impl.SystemCommandOutput;
+import org.apache.airavata.gsi.ssh.impl.StandardOutReader;
 import org.apache.airavata.gsi.ssh.jsch.ExtendedJSch;
 import org.slf4j.*;
 
@@ -89,7 +88,7 @@ public class SSHUtils {
      * @throws org.apache.airavata.gsi.ssh.api.SSHApiException
      *
      */
-    public String scpTo(String rFile, String lFile) throws IOException, JSchException, SSHApiException {
+    public void scpTo(String rFile, String lFile) throws IOException, JSchException, SSHApiException {
         FileInputStream fis = null;
         String prefix = null;
         if (new File(lFile).isDirectory()) {
@@ -133,6 +132,9 @@ public class SSHUtils {
         // exec 'scp -t rfile' remotely
         String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + rFile;
         Channel channel = session.openChannel("exec");
+
+        StandardOutReader stdOutReader = new StandardOutReader();
+        ((ChannelExec) channel).setErrStream(stdOutReader.getStandardError());
         ((ChannelExec) channel).setCommand(command);
 
         // get I/O streams for remote scp
@@ -142,7 +144,9 @@ public class SSHUtils {
         channel.connect();
 
         if (checkAck(in) != 0) {
-            System.exit(0);
+            String error = "Error transfering the file content";
+            log.error(error);
+            throw new SSHApiException(error);
         }
 
         File _lfile = new File(lFile);
@@ -193,17 +197,22 @@ public class SSHUtils {
         }
         out.close();
 
+        stdOutReader.onOutput(channel);
+
+
+        if (!stdOutReader.getStdErrorString().equals("")) {
+            throw new SSHApiException(stdOutReader.getStdErrorString());
+        }
         channel.disconnect();
         session.disconnect();
-        int i = lFile.lastIndexOf(File.separator);
-        String substring = lFile.substring(i + 1);
-        return rFile + File.separator + substring;
     }
 
     /**
      * This will copy a local file to a remote location
      *
-     * @param remoteFile remote location you want to transfer the file, this can be a directory
+     * @param remoteFile remote location you want to transfer the file, this cannot be a directory, if user pass
+     *                   a dirctory we do copy it to that directory but we simply return the directory name
+     *                   todo handle the directory name as input and return the proper final output file name
      * @param localFile  Local file to transfer, this can be a directory
      * @param session
      * @return returns the final remote file path, so that users can use the new file location
@@ -222,6 +231,9 @@ public class SSHUtils {
         // exec 'scp -t rfile' remotely
         String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + remoteFile;
         Channel channel = session.openChannel("exec");
+
+        StandardOutReader stdOutReader = new StandardOutReader();
+        ((ChannelExec) channel).setErrStream(stdOutReader.getStandardError());
         ((ChannelExec) channel).setCommand(command);
 
         // get I/O streams for remote scp
@@ -281,15 +293,15 @@ public class SSHUtils {
             System.exit(0);
         }
         out.close();
+        stdOutReader.onOutput(channel);
+
 
         channel.disconnect();
-        if(new File(remoteFile).isDirectory()){
-        int i = localFile.lastIndexOf(File.separator);
-        String substring = localFile.substring(i + 1);
-            return remoteFile + File.separator + substring;
-        }else{
-            return remoteFile;
+        if (!stdOutReader.getStdErrorString().equals("")) {
+            throw new SSHApiException(stdOutReader.getStdErrorString());
         }
+        //since remote file is always a file  we just return the file
+        return remoteFile;
     }
 
     /**
@@ -300,20 +312,21 @@ public class SSHUtils {
      * @param session
      * @return returns the final local file path of the new file came from the remote resource
      */
-    public static String scpFrom(String remoteFile, String localFile, Session session)throws IOException, JSchException, SSHApiException {
+    public static void scpFrom(String remoteFile, String localFile, Session session) throws IOException, JSchException, SSHApiException {
         FileOutputStream fos = null;
         try {
             String prefix = null;
             if (new File(localFile).isDirectory()) {
                 prefix = localFile + File.separator;
             }
-            session.connect();
 
             // exec 'scp -f remotefile' remotely
             String command = "scp -f " + remoteFile;
             Channel channel = session.openChannel("exec");
             ((ChannelExec) channel).setCommand(command);
 
+            StandardOutReader stdOutReader = new StandardOutReader();
+            ((ChannelExec) channel).setErrStream(stdOutReader.getStandardError());
             // get I/O streams for remote scp
             OutputStream out = channel.getOutputStream();
             InputStream in = channel.getInputStream();
@@ -381,7 +394,9 @@ public class SSHUtils {
                 fos = null;
 
                 if (checkAck(in) != 0) {
-                    System.exit(0);
+                    String error = "Error transfering the file content";
+                    log.error(error);
+                    throw new SSHApiException(error);
                 }
 
                 // send '\0'
@@ -389,24 +404,18 @@ public class SSHUtils {
                 out.write(buf, 0, 1);
                 out.flush();
             }
+            stdOutReader.onOutput(channel);
+            if (!stdOutReader.getStdErrorString().equals("")) {
+            throw new SSHApiException(stdOutReader.getStdErrorString());
+        }
 
-            session.disconnect();
-
-            System.exit(0);
         } catch (Exception e) {
-            System.out.println(e);
+            log.error(e.getMessage(), e);
+        } finally {
             try {
                 if (fos != null) fos.close();
             } catch (Exception ee) {
             }
-        }
-
-        if(new File(localFile).isDirectory()){
-        int i = remoteFile.lastIndexOf(File.separator);
-        String substring = remoteFile.substring(i + 1);
-            return localFile + File.separator + substring;
-        }else{
-            return localFile;
         }
     }
 
@@ -458,10 +467,11 @@ public class SSHUtils {
             }
 
             // exec 'scp -f remotefile' remotely
+            StandardOutReader stdOutReader = new StandardOutReader();
             String command = "scp -f " + remoteFile;
             Channel channel = session.openChannel("exec");
             ((ChannelExec) channel).setCommand(command);
-
+            ((ChannelExec) channel).setErrStream(stdOutReader.getStandardError());
             // get I/O streams for remote scp
             OutputStream out = channel.getOutputStream();
             InputStream in = channel.getInputStream();
@@ -529,7 +539,9 @@ public class SSHUtils {
                 fos = null;
 
                 if (checkAck(in) != 0) {
-                    System.exit(0);
+                    String error = "Error transfering the file content";
+                    log.error(error);
+                    throw new SSHApiException(error);
                 }
 
                 // send '\0'
@@ -540,9 +552,13 @@ public class SSHUtils {
 
             session.disconnect();
 
-            System.exit(0);
+            stdOutReader.onOutput(channel);
+            if (!stdOutReader.getStdErrorString().equals("")) {
+                throw new SSHApiException(stdOutReader.getStdErrorString());
+            }
         } catch (Exception e) {
-            System.out.println(e);
+            log.error(e.getMessage(), e);
+        } finally {
             try {
                 if (fos != null) fos.close();
             } catch (Exception ee) {
@@ -550,18 +566,17 @@ public class SSHUtils {
         }
     }
 
-    public static Session makeDirectory(String path, Session session) throws IOException, JSchException, SSHApiException {
+    public static void makeDirectory(String path, Session session) throws IOException, JSchException, SSHApiException {
 
         // exec 'scp -t rfile' remotely
         String command = "mkdir -p " + path;
         Channel channel = session.openChannel("exec");
-        CommandOutput commandOutput = new SystemCommandOutput();
+        StandardOutReader stdOutReader = new StandardOutReader();
+
         ((ChannelExec) channel).setCommand(command);
 
-        // get I/O streams for remote scp
-        OutputStream out = channel.getOutputStream();
-        InputStream in = channel.getInputStream();
-        ((ChannelExec) channel).setErrStream(commandOutput.getStandardError());
+
+        ((ChannelExec) channel).setErrStream(stdOutReader.getStandardError());
         try {
             channel.connect();
         } catch (JSchException e) {
@@ -574,11 +589,12 @@ public class SSHUtils {
                     " connecting user name - "
                     + session.getUserName(), e);
         }
-
-        commandOutput.onOutput(channel);
+        stdOutReader.onOutput(channel);
+        if (!stdOutReader.getStdErrorString().equals("")) {
+            throw new SSHApiException(stdOutReader.getStdErrorString());
+        }
 
         channel.disconnect();
-        return session;
     }
 
     static int checkAck(InputStream in) throws IOException {
