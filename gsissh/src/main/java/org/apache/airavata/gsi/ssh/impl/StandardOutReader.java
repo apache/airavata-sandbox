@@ -21,6 +21,7 @@
 package org.apache.airavata.gsi.ssh.impl;
 
 import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelExec;
 import org.apache.airavata.gsi.ssh.api.CommandOutput;
 
 import java.io.ByteArrayOutputStream;
@@ -30,12 +31,12 @@ import java.io.OutputStream;
 
 public class StandardOutReader implements CommandOutput {
 
-    String stdOutput = null;
-    ByteArrayOutputStream os = new ByteArrayOutputStream();
+    String stdOutputString = null;
+    ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
     public void onOutput(Channel channel) {
         try {
             StringBuffer pbsOutput = new StringBuffer("");
-            InputStream inputStream = channel.getInputStream();
+            InputStream inputStream =  channel.getInputStream();
             byte[] tmp = new byte[1024];
             while (true) {
                 while (inputStream.available() > 0) {
@@ -45,37 +46,37 @@ public class StandardOutReader implements CommandOutput {
                 }
                 if (channel.isClosed()) {
                     String output = pbsOutput.toString();
-                    this.setStdOutput(output);
+                    this.setStdOutputString(output);
                     break;
                 }
                 try {
                 } catch (Exception ignored) {
                 }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    public OutputStream getStandardError() {
-        return os;
-    }
-
-    public String getErrorifAvailable(){
-        return os.toString();
-    }
 
     public void exitCode(int code) {
         System.out.println("Program exit code - " + code);
     }
 
-    public String getStdOutput() {
-        return stdOutput;
+    public String getStdOutputString() {
+        return stdOutputString;
     }
 
-    public void setStdOutput(String stdOutput) {
-        this.stdOutput = stdOutput;
+    public void setStdOutputString(String stdOutputString) {
+        this.stdOutputString = stdOutputString;
+    }
+
+    public String getStdErrorString() {
+        return errorStream.toString();
+    }
+
+    public OutputStream getStandardError() {
+        return errorStream;
     }
 }

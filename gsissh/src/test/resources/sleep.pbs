@@ -6,7 +6,7 @@
 #$ -pe 1way 32
 #$ -m n
 #$ -q normal
-#$ -A <ACCOUNT>
+#$ -A
 #$ -l h_rt=0:60:00
 #$ -o application.stdout
 #$ -e application.stderr

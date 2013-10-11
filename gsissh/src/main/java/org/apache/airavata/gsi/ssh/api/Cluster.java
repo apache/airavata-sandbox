@@ -61,21 +61,19 @@ public interface Cluster {
     /**
      * This will copy the localFile to remoteFile location in configured cluster
      *
-     * @param remoteFile remote file location
+     * @param remoteFile remote file location, this can be a directory too
      * @param localFile local file path of the file which needs to copy to remote location
-     * @return the successful remote file path of the transfer
      * @throws SSHApiException throws exception during error
      */
-    public String scpTo(String remoteFile, String localFile) throws SSHApiException;
+    public void scpTo(String remoteFile, String localFile) throws SSHApiException;
 
     /**
      * This will copy a remote file in path rFile to local file lFile
      * @param remoteFile remote file path, this has to be a full qualified path
      * @param localFile This is the local file to copy, this can be a directory too
-     * @return
      * @throws SSHApiException
      */
-    public String scpFrom(String remoteFile, String localFile) throws SSHApiException;
+    public void scpFrom(String remoteFile, String localFile) throws SSHApiException;
 
     /**
      * This will create directories in computing resources

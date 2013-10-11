@@ -232,11 +232,12 @@ public class PBSCluster implements Cluster {
 
         //Check whether pbs submission is successful or not, if it failed throw and exception in submitJob method
         // with the error thrown in qsub command
-        if (jobIDReaderCommandOutput.getErrorifAvailable().equals("")) {
-            return jobIDReaderCommandOutput.getStdOutput();
-        } else {
-            //todo during failure do try
+        //
+
+        if (!jobIDReaderCommandOutput.getStdErrorString().equals("")) {
             throw new SSHApiException(jobIDReaderCommandOutput.getStandardError().toString());
+        } else {
+            return jobIDReaderCommandOutput.getStdOutputString();
         }
     }
 
@@ -298,10 +299,10 @@ public class PBSCluster implements Cluster {
 
         StandardOutReader stdOutReader = new StandardOutReader();
         CommandExecutor.executeCommand(rawCommandInfo, this.getSession(), stdOutReader);
-        if (!stdOutReader.getErrorifAvailable().equals("")) {
+        if (stdOutReader.getStdErrorString() != null) {
             throw new SSHApiException(stdOutReader.getStandardError().toString());
         }
-        String result = stdOutReader.getStdOutput();
+        String result = stdOutReader.getStdOutputString();
         String[] Nodes = result.split("\n");
         String[] line;
         String header, value;
@@ -366,10 +367,10 @@ public class PBSCluster implements Cluster {
 
         StandardOutReader stdOutReader = new StandardOutReader();
         CommandExecutor.executeCommand(rawCommandInfo, this.getSession(), stdOutReader);
-        if (!stdOutReader.getErrorifAvailable().equals("")) {
+        if (!stdOutReader.getStdErrorString().equals("")) {
             throw new SSHApiException(stdOutReader.getStandardError().toString());
         }
-        String result = stdOutReader.getStdOutput();
+        String result = stdOutReader.getStdOutputString();
         String[] info = result.split("\n");
         JobDescriptor jobDescriptor = new JobDescriptor();
         String[] line;
@@ -456,9 +457,9 @@ public class PBSCluster implements Cluster {
         return jobDescriptor;
     }
 
-    public String scpTo(String remoteFile, String localFile) throws SSHApiException {
+    public void scpTo(String remoteFile, String localFile) throws SSHApiException {
         try {
-            return SSHUtils.scpTo(remoteFile, localFile, session);
+             SSHUtils.scpTo(remoteFile, localFile, session);
         } catch (IOException e) {
             throw new SSHApiException("Failed during scping local file:" + localFile + " to remote file "
                     + serverInfo.getHost() + ":rFile", e);
@@ -468,9 +469,9 @@ public class PBSCluster implements Cluster {
         }
     }
 
-    public String scpFrom(String remoteFile, String localFile) throws SSHApiException {
+    public void scpFrom(String remoteFile, String localFile) throws SSHApiException {
         try {
-            return SSHUtils.scpFrom(remoteFile, localFile, session);
+             SSHUtils.scpFrom(remoteFile, localFile, session);
         } catch (IOException e) {
             throw new SSHApiException("Failed during scping local file:" + localFile + " to remote file "
                     + serverInfo.getHost() + ":rFile", e);
@@ -552,25 +553,20 @@ public class PBSCluster implements Cluster {
         StandardOutReader stdOutReader = new StandardOutReader();
         CommandExecutor.executeCommand(rawCommandInfo, this.getSession(), stdOutReader);
         // check the standard error, incase user gave wrong jobID
-        if (!stdOutReader.getErrorifAvailable().equals("")) {
+        if (!stdOutReader.getStdErrorString().equals("")) {
             throw new SSHApiException(stdOutReader.getStandardError().toString());
         }
-        String result = stdOutReader.getStdOutput();
+        String result = stdOutReader.getStdOutputString();
         String[] info = result.split("\n");
-        String header = "";
-        String value = "";
-        String[] line;
+        String[] line = null;
         for (String anInfo : info) {
             if (anInfo.contains("=")) {
                 line = anInfo.split("=", 2);
-            } else {
-                line = anInfo.split(":", 2);
-            }
-            if (line.length >= 2) {
-            } else if ("job_state".equals(header)) {
-                return JobStatus.valueOf(value);
-            } else {
-                throw new SSHApiException(stdOutReader.getStandardError().toString());
+                if (line.length != 0) {
+                    if (line[0].contains("job_state")) {
+                        return JobStatus.valueOf(line[1].replaceAll(" ", ""));
+                    }
+                }
             }
         }
         return null;
@@ -581,7 +577,7 @@ public class PBSCluster implements Cluster {
 
         StandardOutReader stdOutReader = new StandardOutReader();
         CommandExecutor.executeCommand(rawCommandInfo, this.getSession(), stdOutReader);
-        if (!stdOutReader.getErrorifAvailable().equals("")) {
+        if (!stdOutReader.getStdErrorString().equals("")) {
             throw new SSHApiException(stdOutReader.getStandardError().toString());
         }
 

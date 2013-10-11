@@ -49,25 +49,34 @@ public class VanilaSSHTest {
     private String password;
     private String passPhrase;
     private String hostName;
+    private String workingDirectory;
+    private String privateKeyPath;
+    private String publicKeyPath;
 
     @BeforeTest
     public void setUp() throws Exception {
-
-
         this.hostName = "bigred2.uits.iu.edu";
-        System.setProperty("my.ssh.user", "lginnali");
-        System.setProperty("my.ssh.user.password", "");
+
+//        this.userName = System.setProperty("my.ssh.user", "lginnali");
+//        this.password = System.setProperty("my.ssh.password", "");
+//        this.workingDirectory = System.setProperty("working.directory", "/N/u/lginnali/BigRed2/myjob");
+//        System.setProperty("basedir","/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
         this.userName = System.getProperty("my.ssh.user");
-        this.password = System.getProperty("my.ssh.user.password");
-        System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
-//        this.passPhrase = System.getProperty("my.ssh.user.pass.phrase");
+        this.password = System.getProperty("my.ssh.password");
+        this.privateKeyPath = System.getProperty("my.private.key.path");
+        this.publicKeyPath = System.getProperty("my.public.key.path");
+        this.passPhrase = System.getProperty("my.ssh.user.pass.phrase");
+        this.workingDirectory = System.getProperty("ssh.working.directory");
 
-        if (this.userName == null || this.password == null) {
-            System.out.println("########### In order to run tests you need to set password and " +
-                    "passphrase ###############");
-            System.out.println("Use -Dmy.ssh.user=xxx -Dmy.ssh.user.password=yyy -Dmy.ssh.user.pass.phrase=zzz");
+        System.out.println();
+
+
+        if (this.userName == null || (this.userName != null && this.password == null)
+                || (this.password==null && (this.publicKeyPath == null || this.privateKeyPath == null)) || this.workingDirectory == null) {
+            System.out.println("########### In order to test you have to either username password or private,public keys");
+            System.out.println("Use -Dmy.ssh.user=xxx -Dmy.ssh.user.password=yyy -Dmy.ssh.user.pass.phrase=zzz " +
+                    "-Dmy.private.key.path -Dmy.public.key.path -Dssh.working.directory ");
         }
-
     }
 
 
@@ -75,34 +84,13 @@ public class VanilaSSHTest {
     public void testSimpleCommand1() throws Exception {
 
         System.out.println("Starting vanila SSH test ....");
-
-        AuthenticationInfo authenticationInfo = new DefaultPasswordAuthenticationInfo(this.password);
-
-        // Create command
-        CommandInfo commandInfo = new RawCommandInfo("/opt/torque/torque-4.2.3.1/bin/qstat");
-
-        // Server info
-        ServerInfo serverInfo = new ServerInfo(this.userName, this.hostName);
-
-        // Output
-        CommandOutput commandOutput = new SystemCommandOutput();
-
-        // Execute command
-        CommandExecutor.executeCommand(commandInfo, serverInfo, authenticationInfo, commandOutput, new ConfigReader());
-
-
-    }
-
-    @Test
-    public void testSimpleCommand2() throws Exception {
-
-        System.out.println("Starting vanila SSH test ....");
-
-        String privateKeyFile = "/Users/lahirugunathilake/.ssh/id_dsa";
-        String publicKeyFile = "/Users/lahirugunathilake/.ssh/id_dsa.pub";
-
-        AuthenticationInfo authenticationInfo = new DefaultPublicKeyFileAuthentication(publicKeyFile, privateKeyFile,
-                this.passPhrase);
+        AuthenticationInfo authenticationInfo = null;
+        if (password != null) {
+            authenticationInfo = new DefaultPasswordAuthenticationInfo(this.password);
+        } else {
+            new DefaultPublicKeyFileAuthentication(this.publicKeyPath, this.privateKeyPath,
+                    this.passPhrase);
+        }
 
         // Create command
         CommandInfo commandInfo = new RawCommandInfo("/opt/torque/torque-4.2.3.1/bin/qstat");
@@ -118,11 +106,18 @@ public class VanilaSSHTest {
 
 
     }
+
 
     @Test
     public void testSimplePBSJob() throws Exception {
 
-        AuthenticationInfo authenticationInfo = new DefaultPasswordAuthenticationInfo(this.password);
+        AuthenticationInfo authenticationInfo = null;
+        if (password != null) {
+            authenticationInfo = new DefaultPasswordAuthenticationInfo(this.password);
+        } else {
+            new DefaultPublicKeyFileAuthentication(this.publicKeyPath, this.privateKeyPath,
+                    this.passPhrase);
+        }
         // Server info
         ServerInfo serverInfo = new ServerInfo(this.userName, this.hostName);
         Cluster pbsCluster = new PBSCluster(serverInfo, authenticationInfo, "/opt/torque/torque-4.2.3.1/bin/");
@@ -133,21 +128,21 @@ public class VanilaSSHTest {
 
         String pomFile = System.getProperty("basedir") + File.separator + "pom.xml";
 
-        // Constructing theworking directory for demonstration and creating directories in the remote
-        // resource
-        String workingDirectory = File.separator + "N" + File.separator + "u" + File.separator +
-                "lginnali" + File.separator + "BigRed2";
         workingDirectory = workingDirectory + File.separator
                 + date + "_" + UUID.randomUUID();
         pbsCluster.makeDirectory(workingDirectory);
         Thread.sleep(1000);
         pbsCluster.makeDirectory(workingDirectory + File.separator + "inputs");
         Thread.sleep(1000);
-        pbsCluster.makeDirectory(workingDirectory + File.separator +  "outputs");
+        pbsCluster.makeDirectory(workingDirectory + File.separator + "outputs");
 
 
         // doing file transfer to the remote resource
-        String s = pbsCluster.scpTo(workingDirectory + File.separator + "inputs", pomFile);
+        String remoteLocation = workingDirectory + File.separator + "inputs";
+        pbsCluster.scpTo(remoteLocation, pomFile);
+
+        int i = pomFile.lastIndexOf(File.separator);
+        String fileName = pomFile.substring(i + 1);
         // constructing the job object
         JobDescriptor jobDescriptor = new JobDescriptor();
         jobDescriptor.setWorkingDirectory(workingDirectory);
@@ -164,7 +159,7 @@ public class VanilaSSHTest {
         jobDescriptor.setMaxWallTime("5");
         jobDescriptor.setJobSubmitter("aprun -n 1");
         List<String> inputs = new ArrayList<String>();
-        inputs.add(s);
+        inputs.add(remoteLocation + File.separator + fileName);
         jobDescriptor.setInputValues(inputs);
         //finished construction of job object
         System.out.println(jobDescriptor.toXML());
@@ -195,5 +190,36 @@ public class VanilaSSHTest {
         System.out.println(jobById.getUsedMemory());
         System.out.println(jobById.getVariableList());
     }
+
+    @Test
+    public void testSCPFrom() throws Exception {
+
+        AuthenticationInfo authenticationInfo = null;
+        if (password != null) {
+            authenticationInfo = new DefaultPasswordAuthenticationInfo(this.password);
+        } else {
+            new DefaultPublicKeyFileAuthentication(this.publicKeyPath, this.privateKeyPath,
+                    this.passPhrase);
+        }
+        // Server info
+        ServerInfo serverInfo = new ServerInfo(this.userName, this.hostName);
+        Cluster pbsCluster = new PBSCluster(serverInfo, authenticationInfo, "/opt/torque/torque-4.2.3.1/bin/");
+
+        String date = new Date().toString();
+        date = date.replaceAll(" ", "_");
+        date = date.replaceAll(":", "_");
+
+        String pomFile = System.getProperty("basedir") + File.separator + "pom.xml";
+
+        // Constructing theworking directory for demonstration and creating directories in the remote
+        // resource
+        workingDirectory = workingDirectory + File.separator
+                + date + "_" + UUID.randomUUID();
+        pbsCluster.makeDirectory(workingDirectory);
+        pbsCluster.scpTo(workingDirectory, pomFile);
+        Thread.sleep(1000);
+        pbsCluster.scpFrom(workingDirectory + File.separator + "pom.xml", System.getProperty("basedir"));
+    }
+
 
 }

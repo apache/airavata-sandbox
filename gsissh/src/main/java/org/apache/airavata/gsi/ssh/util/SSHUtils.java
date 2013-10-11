@@ -144,9 +144,15 @@ public class SSHUtils {
         channel.connect();
 
         if (checkAck(in) != 0) {
+<<<<<<< .mine
+            String error = "Error Reading input Stream";
+            log.error(error);
+            throw new SSHApiException(error);
+=======
             String error = "Error transfering the file content";
             log.error(error);
             throw new SSHApiException(error);
+>>>>>>> .r1531420
         }
 
         File _lfile = new File(lFile);
@@ -159,7 +165,9 @@ public class SSHUtils {
             out.write(command.getBytes());
             out.flush();
             if (checkAck(in) != 0) {
-                System.exit(0);
+                 String error = "Error Reading input Stream";
+            log.error(error);
+            throw new SSHApiException(error);
             }
         }
 
@@ -175,7 +183,9 @@ public class SSHUtils {
         out.write(command.getBytes());
         out.flush();
         if (checkAck(in) != 0) {
-            System.exit(0);
+            String error = "Error Reading input Stream";
+            log.error(error);
+            throw new SSHApiException(error);
         }
 
         // send a content of lFile
@@ -193,7 +203,9 @@ public class SSHUtils {
         out.write(buf, 0, 1);
         out.flush();
         if (checkAck(in) != 0) {
-            System.exit(0);
+             String error = "Error Reading input Stream";
+            log.error(error);
+            throw new SSHApiException(error);
         }
         out.close();
 
@@ -243,7 +255,9 @@ public class SSHUtils {
         channel.connect();
 
         if (checkAck(in) != 0) {
-            System.exit(0);
+             String error = "Error Reading input Stream";
+            log.error(error);
+            throw new SSHApiException(error);
         }
 
         File _lfile = new File(localFile);
@@ -256,7 +270,9 @@ public class SSHUtils {
             out.write(command.getBytes());
             out.flush();
             if (checkAck(in) != 0) {
-                System.exit(0);
+                 String error = "Error Reading input Stream";
+            log.error(error);
+            throw new SSHApiException(error);
             }
         }
 
@@ -272,7 +288,9 @@ public class SSHUtils {
         out.write(command.getBytes());
         out.flush();
         if (checkAck(in) != 0) {
-            System.exit(0);
+            String error = "Error Reading input Stream";
+            log.error(error);
+            throw new SSHApiException(error);
         }
 
         // send a content of lFile
@@ -290,7 +308,9 @@ public class SSHUtils {
         out.write(buf, 0, 1);
         out.flush();
         if (checkAck(in) != 0) {
-            System.exit(0);
+            String error = "Error Reading input Stream";
+            log.error(error);
+            throw new SSHApiException(error);
         }
         out.close();
         stdOutReader.onOutput(channel);

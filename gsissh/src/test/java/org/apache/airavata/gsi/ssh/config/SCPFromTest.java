@@ -20,7 +20,9 @@
 */
 package org.apache.airavata.gsi.ssh.config;
 
+import org.apache.airavata.gsi.ssh.api.authentication.AuthenticationInfo;
 import org.apache.airavata.gsi.ssh.api.authentication.GSIAuthenticationInfo;
+import org.apache.airavata.gsi.ssh.impl.authentication.DefaultPasswordAuthenticationInfo;
 import org.apache.airavata.gsi.ssh.util.SSHUtils;
 import org.apache.airavata.gsi.ssh.api.ServerInfo;
 import org.apache.airavata.gsi.ssh.impl.authentication.MyProxyAuthenticationInfo;
@@ -38,12 +40,11 @@ public class SCPFromTest {
 
     @BeforeTest
     public void setUp() throws Exception {
-        System.setProperty("myproxy.user", "ogce");
-        System.setProperty("myproxy.password", "");
-        System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
+//        System.setProperty("myproxy.user", "ogce");
+//        System.setProperty("myproxy.password", "");
+//        System.setProperty("basedir", "/Users/lahirugunathilake/work/airavata/sandbox/gsissh");
         myProxyUserName = System.getProperty("myproxy.user");
         myProxyPassword = System.getProperty("myproxy.password");
-
         String pomDirectory = System.getProperty("basedir");
 
         File pomFileDirectory = new File(pomDirectory);
@@ -52,11 +53,7 @@ public class SCPFromTest {
 
         certificateLocation = pomFileDirectory.getAbsolutePath() + "/certificates";
 
-        if (myProxyUserName == null || myProxyPassword == null) {
-            System.out.println(">>>>>> Please run tests with my proxy user name and password. " +
-                    "E.g :- mvn clean install -Dmyproxy.user=xxx -Dmyproxy.password=xxx <<<<<<<");
-            throw new Exception("Need my proxy user name password to run tests.");
-        }
+
         lFilePath = pomDirectory + File.separator + "pom.xml";
         rFilePath = "/tmp/";
     }
@@ -74,4 +71,6 @@ public class SCPFromTest {
         Thread.sleep(1000);
         SSHUtils.scpFrom(File.separator + "tmp" + File.separator + "pom.xml", System.getProperty("basedir"));
     }
+
+
 }
