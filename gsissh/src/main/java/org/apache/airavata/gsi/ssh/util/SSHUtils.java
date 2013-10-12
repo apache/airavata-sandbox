@@ -144,15 +144,9 @@ public class SSHUtils {
         channel.connect();
 
         if (checkAck(in) != 0) {
-<<<<<<< .mine
             String error = "Error Reading input Stream";
             log.error(error);
             throw new SSHApiException(error);
-=======
-            String error = "Error transfering the file content";
-            log.error(error);
-            throw new SSHApiException(error);
->>>>>>> .r1531420
         }
 
         File _lfile = new File(lFile);
