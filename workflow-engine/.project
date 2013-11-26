@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+  <name>airavata-workflow-engine</name>
+  <comment>The Apache Software Foundation provides support for the Apache community of open-source software projects.
+    The Apache projects are characterized by a collaborative, consensus based development process, an open and
+    pragmatic software license, and a desire to create high quality software that leads the way in its field.
+    We consider ourselves not simply a group of projects sharing a server, but rather a community of developers
+    and users. NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <projects>
+    <project>airavata-workflow-model-core</project>
+    <project>airavata-common-utils</project>
+    <project>airavata-workflow-model-component</project>
+    <project>airavata-client-api</project>
+    <project>airavata-registry-api</project>
+    <project>airavata-gfac-schema-utils</project>
+    <project>airavata-message-monitor</project>
+    <project>airavata-messenger-commons</project>
+    <project>airavata-messenger-client</project>
+    <project>airavata-workflow-execution-context</project>
+    <project>airavata-message-broker</project>
+    <project>airavata-workflow-tracking</project>
+    <project>airavata-jpa-registry</project>
+    <project>airavata-rest-client</project>
+    <project>airavata-rest-mappings</project>
+    <project>airavata-gfac-core</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+  </natures>
+</projectDescription>
