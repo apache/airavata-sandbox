@@ -15,7 +15,7 @@ the License. -->
 	<groupId>org.apache.airavata</groupId>
 	<artifactId>airavata</artifactId>
         <version>0.11-SNAPSHOT</version>
-	<relativePath>../../pom.xml</relativePath>
+	<relativePath>../../../trunk/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>airavata-orchestrator-service</artifactId>
@@ -24,12 +24,15 @@ the License. -->
     <url>http://airavata.apache.org/</url>
 
     <dependencies>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.5</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.airavata</groupId>
+            <artifactId>airavata-registry-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
