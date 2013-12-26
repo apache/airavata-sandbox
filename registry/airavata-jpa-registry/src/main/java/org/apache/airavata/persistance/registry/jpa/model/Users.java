@@ -18,25 +18,36 @@
  * under the License.
  *
 */
-package org.apache.airavata.orchestrator.core.context;
+package org.apache.airavata.persistance.registry.jpa.model;
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-import java.util.ArrayList;
-import java.util.List;
+@Entity
+public class Users {
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
+    @Id
+    private String user_name;
+    private String password;
 
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
+
+    public String getUser_name() {
+        return user_name;
     }
 
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

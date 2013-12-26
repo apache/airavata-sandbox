@@ -17,26 +17,25 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-*/
-package org.apache.airavata.orchestrator.core.context;
+ */
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+package org.apache.airavata.registry.api.exception;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.airavata.registry.api.exception.RegistryException;
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
+public class RegistryAPIVersionIncompatibleException extends RegistryException {
 
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
+    private static final long serialVersionUID = -2679914107485739141L;
+
+    public RegistryAPIVersionIncompatibleException() {
+        this("Incompatible versions with Airavata registry and Airavata API");
     }
 
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
+    public RegistryAPIVersionIncompatibleException(String message) {
+        this(message,null);
     }
 
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
+    public RegistryAPIVersionIncompatibleException(String message, Exception e){
+        super(message, e);
     }
 }

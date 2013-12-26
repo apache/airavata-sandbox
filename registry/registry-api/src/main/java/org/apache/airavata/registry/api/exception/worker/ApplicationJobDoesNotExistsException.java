@@ -17,26 +17,18 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-*/
-package org.apache.airavata.orchestrator.core.context;
+ */
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+package org.apache.airavata.registry.api.exception.worker;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.airavata.registry.api.exception.RegistryException;
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
+public class ApplicationJobDoesNotExistsException extends RegistryException {
 
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
-    }
+	private static final long serialVersionUID = -8006347245307495767L;
 
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
-    }
+	public ApplicationJobDoesNotExistsException(String jobId) {
+		super("There is no Application job corresponding to ID '"+jobId+"' present in the registry!!!");
+	}
 
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
-    }
 }

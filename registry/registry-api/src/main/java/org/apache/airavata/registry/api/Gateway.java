@@ -17,26 +17,31 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-*/
-package org.apache.airavata.orchestrator.core.context;
+ */
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+package org.apache.airavata.registry.api;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement
+public class Gateway {
+	private String gatewayName = "default";
 
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
+    public Gateway() {
     }
 
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
-    }
+    public Gateway(String gatewayName) {
+		setGatewayName(gatewayName);
+	}
+	
+	public String getGatewayName() {
+		return gatewayName;
+	}
 
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
-    }
+	public void setGatewayName(String gatewayName) {
+		this.gatewayName = gatewayName;
+	}
 }

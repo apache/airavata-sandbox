@@ -17,26 +17,16 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-*/
-package org.apache.airavata.orchestrator.core.context;
+ */
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+package org.apache.airavata.registry.api.exception;
 
-import java.util.ArrayList;
-import java.util.List;
+public class AiravataRegistryUninitializedException extends RegistryException {
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
+	public AiravataRegistryUninitializedException(String message, Throwable e) {
+		super(message, e);
+	}
 
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
-    }
+	private static final long serialVersionUID = -6873054164386608256L;
 
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
-    }
-
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
-    }
 }

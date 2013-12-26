@@ -21,4 +21,5 @@
 package org.apache.airavata.orchestrator.core;
 
 public class JobRequest {
+
 }

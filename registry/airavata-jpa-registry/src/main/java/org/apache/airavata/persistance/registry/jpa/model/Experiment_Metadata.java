@@ -18,25 +18,33 @@
  * under the License.
  *
 */
-package org.apache.airavata.orchestrator.core.context;
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+package org.apache.airavata.persistance.registry.jpa.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Lob;
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
+@Entity
+public class Experiment_Metadata {
+    @Id
+    private String experiment_ID;
+    @Lob
+    private byte[] metadata;
 
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
+    public String getExperiment_ID() {
+        return experiment_ID;
     }
 
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
+    public byte[] getMetadata() {
+        return metadata;
     }
 
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
+    public void setMetadata(byte[] metadata) {
+        this.metadata = metadata;
+    }
+
+    public void setExperiment_ID(String experiment_ID) {
+        this.experiment_ID = experiment_ID;
     }
 }

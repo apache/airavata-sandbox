@@ -17,26 +17,34 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-*/
-package org.apache.airavata.orchestrator.core.context;
+ */
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+package org.apache.airavata.registry.api;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
+import org.apache.airavata.registry.api.exception.RegistryException;
+import org.apache.airavata.commons.gfac.type.ActualParameter;
 
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
-    }
+public interface DataRegistry {
 
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
-    }
+    /**
+     * Save output from workflow execution.
+     * 
+     * @param workflowId
+     * @param parameters
+     * @return
+     * @throws RegistryException 
+     */
+    public String saveOutput(String workflowId, List<ActualParameter> parameters) throws RegistryException;
 
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
-    }
+    /**
+     * Load output from workflow execution.
+     * 
+     * @param workflowId
+     * @return List of parameters
+     * @throws RegistryException 
+     */
+    public List<ActualParameter> loadOutput(String workflowId) throws RegistryException;
+
 }

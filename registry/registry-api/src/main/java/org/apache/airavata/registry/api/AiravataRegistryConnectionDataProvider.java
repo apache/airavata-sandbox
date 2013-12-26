@@ -17,26 +17,14 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-*/
-package org.apache.airavata.orchestrator.core.context;
+ */
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+package org.apache.airavata.registry.api;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.airavata.registry.api.exception.RegistrySettingsException;
+import org.apache.airavata.registry.api.exception.UnknownRegistryConnectionDataException;
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
-
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
-    }
-
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
-    }
-
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
-    }
+public interface AiravataRegistryConnectionDataProvider {
+	public void setIdentity(Gateway gateway, AiravataUser use);
+	public Object getValue(String key) throws RegistrySettingsException;
 }

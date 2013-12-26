@@ -18,25 +18,45 @@
  * under the License.
  *
 */
-package org.apache.airavata.orchestrator.core.context;
+package org.apache.airavata.persistance.registry.jpa.model;
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+import javax.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+@Entity
+public class Project {
+    @Id
+    private String project_name;
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
+    @ManyToOne(cascade=CascadeType.MERGE)
+    @JoinColumn(name = "gateway_name")
+    private Gateway gateway;
 
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
+    @ManyToOne(cascade=CascadeType.MERGE)
+    @JoinColumn(name = "user_name")
+    private Users users;
+
+    public String getProject_name() {
+        return project_name;
     }
 
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
+    public Gateway getGateway() {
+        return gateway;
     }
 
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
+    public void setProject_name(String project_name) {
+        this.project_name = project_name;
+    }
+
+    public void setGateway(Gateway gateway) {
+        this.gateway = gateway;
+    }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
     }
 }
+

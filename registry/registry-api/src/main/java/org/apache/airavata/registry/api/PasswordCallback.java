@@ -1,4 +1,4 @@
-/*
+package org.apache.airavata.registry.api;/*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,26 +17,9 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-*/
-package org.apache.airavata.orchestrator.core.context;
+ */
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+public interface PasswordCallback {
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
-
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
-    }
-
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
-    }
-
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
-    }
+    public String getPassword (String username);
 }

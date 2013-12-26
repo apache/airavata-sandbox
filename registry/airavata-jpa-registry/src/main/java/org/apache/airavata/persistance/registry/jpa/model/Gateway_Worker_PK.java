@@ -18,25 +18,45 @@
  * under the License.
  *
 */
-package org.apache.airavata.orchestrator.core.context;
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+package org.apache.airavata.persistance.registry.jpa.model;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Gateway_Worker_PK {
+    private String gateway_name;
+    private String user_name;
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
-
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
+    public Gateway_Worker_PK(String gateway_name, String user_name) {
+        this.gateway_name = gateway_name;
+        this.user_name = user_name;
     }
 
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
+    public Gateway_Worker_PK() {
+        ;
     }
 
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
+    @Override
+    public boolean equals(Object o) {
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getGateway_name() {
+        return gateway_name;
+    }
+
+    public void setGateway_name(String gateway_name) {
+        this.gateway_name = gateway_name;
     }
 }

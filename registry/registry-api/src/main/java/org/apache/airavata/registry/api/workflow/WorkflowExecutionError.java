@@ -17,26 +17,33 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-*/
-package org.apache.airavata.orchestrator.core.context;
+ */
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+package org.apache.airavata.registry.api.workflow;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class WorkflowExecutionError extends ExecutionError {
+	private String experimentId;
+	private String workflowInstanceId;
 
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
-    }
+	public String getExperimentId() {
+		return experimentId;
+	}
 
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
-    }
+	public void setExperimentId(String experimentId) {
+		this.experimentId = experimentId;
+	}
 
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
-    }
+	public String getWorkflowInstanceId() {
+		return workflowInstanceId;
+	}
+
+	public void setWorkflowInstanceId(String workflowInstanceId) {
+		this.workflowInstanceId = workflowInstanceId;
+	}
 }

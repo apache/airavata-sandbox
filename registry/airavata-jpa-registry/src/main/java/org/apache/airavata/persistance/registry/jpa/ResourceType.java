@@ -18,25 +18,27 @@
  * under the License.
  *
 */
-package org.apache.airavata.orchestrator.core.context;
+package org.apache.airavata.persistance.registry.jpa;
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+public enum ResourceType {
+    GATEWAY,
+    PROJECT,
+    USER,
+    SERVICE_DESCRIPTOR,
+    PUBLISHED_WORKFLOW,
+    USER_WORKFLOW,
+    HOST_DESCRIPTOR,
+    APPLICATION_DESCRIPTOR,
+    EXPERIMENT,
+    CONFIGURATION,
+    GATEWAY_WORKER,
+    EXPERIMENT_DATA,
+    EXPERIMENT_METADATA,
+    WORKFLOW_DATA,
+    NODE_DATA,
+    GRAM_DATA,
+    EXECUTION_ERROR,
+    GFAC_JOB_DATA,
+    GFAC_JOB_STATUS
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
-
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
-    }
-
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
-    }
-
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
-    }
 }

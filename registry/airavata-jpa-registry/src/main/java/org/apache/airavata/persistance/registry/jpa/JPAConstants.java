@@ -17,26 +17,16 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-*/
-package org.apache.airavata.orchestrator.core.context;
+ */
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+package org.apache.airavata.persistance.registry.jpa;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
-
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
-    }
-
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
-    }
-
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
-    }
+public class JPAConstants {
+	public static final String KEY_JDBC_URL = "registry.jdbc.url";
+	public static final String KEY_JDBC_USER = "registry.jdbc.user";
+	public static final String KEY_JDBC_PASSWORD = "registry.jdbc.password";
+	public static final String KEY_JDBC_DRIVER = "registry.jdbc.driver";
+	public static final String KEY_DERBY_START_ENABLE = "start.derby.server.mode";
+    public static final String VALIDATION_QUERY = "validationQuery";
+    public static final String CONNECTION_JPA_PROPERTY = "jpa.connection.properties";
 }

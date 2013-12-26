@@ -17,26 +17,32 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-*/
-package org.apache.airavata.orchestrator.core.context;
+ */
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+package org.apache.airavata.registry.api;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement
+public class AiravataUser {
+	private String userName;
 
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
+    public AiravataUser() {
     }
 
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
-    }
+    public AiravataUser(String userName) {
+		setUserName(userName);
+	}
+	
+	public String getUserName() {
+		return userName;
+	}
 
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
-    }
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
 }

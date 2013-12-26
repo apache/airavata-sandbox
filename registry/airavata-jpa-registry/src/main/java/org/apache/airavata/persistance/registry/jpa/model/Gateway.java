@@ -18,25 +18,30 @@
  * under the License.
  *
 */
-package org.apache.airavata.orchestrator.core.context;
+package org.apache.airavata.persistance.registry.jpa.model;
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-import java.util.ArrayList;
-import java.util.List;
+@Entity
+public class Gateway {
+    @Id
+    private String gateway_name;
+    private String owner;
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
-
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
+    public String getGateway_name() {
+        return gateway_name;
     }
 
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
+    public void setGateway_name(String gateway_name) {
+        this.gateway_name = gateway_name;
     }
 
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

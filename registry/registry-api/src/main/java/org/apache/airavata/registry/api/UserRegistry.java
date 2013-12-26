@@ -17,26 +17,23 @@
  * specific language governing permissions and limitations
  * under the License.
  *
-*/
-package org.apache.airavata.orchestrator.core.context;
+ */
 
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+package org.apache.airavata.registry.api;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class OrchestratorContext {
-    private List<GFACInstance> gfacInstanceList;
+import org.apache.airavata.registry.api.exception.RegistryException;
 
-    public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
-        this.gfacInstanceList = new ArrayList<GFACInstance>();
-    }
+public interface UserRegistry extends AiravataSubRegistry{
 
-    public List<GFACInstance> getGfacInstanceList() {
-        return gfacInstanceList;
-    }
-
-    public void addGfacInstanceList(GFACInstance instance) {
-        this.gfacInstanceList.add(instance);
-    }
+		
+	/**
+	 * Retrieve all the users in the registry
+	 * @return a list of airavata users from the registry
+	 * @throws RegistryException
+	 */
+	
+	public List<AiravataUser> getUsers() throws RegistryException;
+    
 }
