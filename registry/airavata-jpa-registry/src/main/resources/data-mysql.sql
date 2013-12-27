@@ -21,7 +21,7 @@
 create table Gateway
 (
         gateway_name varchar(255),
-	      owner varchar(255),
+	    owner varchar(255),
         PRIMARY KEY (gateway_name)
 );
 
@@ -32,6 +32,15 @@ create table Configuration
         expire_date TIMESTAMP DEFAULT '0000-00-00 00:00:00',
         category_id varchar (255),
         PRIMARY KEY(config_key, config_val, category_id)
+);
+
+create table GFacInstance
+(
+        instance_id varchar(255),
+        url varchar(255),
+        last_update TIMESTAMP DEFAULT '0000-00-00 00:00:00',
+        current_load varchar (255),
+        PRIMARY KEY(instance_id,url)
 );
 
 INSERT INTO Configuration (config_key, config_val, expire_date, category_id) VALUES('registry.version', '0.11', CURRENT_TIMESTAMP ,'SYSTEM');

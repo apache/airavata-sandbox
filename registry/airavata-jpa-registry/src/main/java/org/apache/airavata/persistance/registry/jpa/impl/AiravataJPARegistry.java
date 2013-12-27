@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.airavata.common.exception.AiravataConfigurationException;
+import org.apache.airavata.common.utils.AiravataJobState;
 import org.apache.airavata.common.utils.DBUtil;
 import org.apache.airavata.common.utils.Version;
 import org.apache.airavata.commons.gfac.type.ApplicationDescription;
@@ -2584,5 +2585,49 @@ public class AiravataJPARegistry extends AiravataRegistry2{
         	logger.error("Error while reading registrty settings ", e);
         	throw new RegistryException("Error while accesing registrty settings ", e);
 		}
+    }
+
+    /**
+     *These are the methods inherited from Orchestrator Registry
+     */
+
+     public List<URI> getLiveGFacURIs() throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public boolean storeExperiment(String userName, String experimentID) throws RegistryException {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public boolean changeStatus(String userName, String experimentID, AiravataJobState state) throws RegistryException {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public AiravataJobState getState(String experimentID) throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public List<String> getAllJobsWithState(AiravataJobState state) throws RuntimeException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public List<String> getAllAcceptedJobs() throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public String fetchAJob() throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public List<String> getAllHangedJobs() throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public int getHangedJobCount() throws RegistryException {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public boolean resetHangedJob(String experimentID) throws RegistryException {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

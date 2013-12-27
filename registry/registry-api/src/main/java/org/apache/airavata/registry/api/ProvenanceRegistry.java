@@ -30,7 +30,7 @@ import org.apache.airavata.registry.api.workflow.*;
 import org.apache.airavata.registry.api.workflow.ApplicationJob.ApplicationJobStatus;
 import org.apache.airavata.registry.api.workflow.WorkflowExecutionStatus.State;
 
-public interface    ProvenanceRegistry extends AiravataSubRegistry{
+public interface ProvenanceRegistry extends AiravataSubRegistry{
 
 	/*------------------------------------------- Experiment data ---------------------------------------------*/
 	
