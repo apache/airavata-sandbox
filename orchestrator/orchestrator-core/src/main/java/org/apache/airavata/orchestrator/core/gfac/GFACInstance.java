@@ -20,5 +20,29 @@
 */
 package org.apache.airavata.orchestrator.core.gfac;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class GFACInstance {
+    private final static Logger logger = LoggerFactory.getLogger(GFACInstance.class);
+
+    private String gfacURL;
+
+    private int currentLoad;
+
+    public String getGfacURL() {
+        return gfacURL;
+    }
+
+    public void setGfacURL(String gfacURL) {
+        this.gfacURL = gfacURL;
+    }
+
+    public int getCurrentLoad() {
+        return currentLoad;
+    }
+
+    public void setCurrentLoad(int currentLoad) {
+        this.currentLoad = currentLoad;
+    }
 }

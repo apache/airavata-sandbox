@@ -18,21 +18,20 @@
  * under the License.
  *
 */
-package org.apache.airavata.orchestrator.core.impl;
+package org.apache.airavata.orchestrator.core.exception;
 
-import org.apache.airavata.orchestrator.core.context.OrchestratorContext;
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
-import org.apache.airavata.orchestrator.core.job.JobSubmitter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public class OrchestratorException extends Exception{
+    private static final long serialVersionUID = -2849422320139467602L;
 
-public class SimpleJobSubmitter implements JobSubmitter{
-    private final static Logger logger = LoggerFactory.getLogger(SimpleJobSubmitter.class);
-    public GFACInstance selectGFACInstance(OrchestratorContext context) {
-        return null;
+    public OrchestratorException(Throwable e) {
+        super(e);
     }
 
-    public boolean submitJob(GFACInstance gfac) {
-        return false;
+    public OrchestratorException(String message) {
+        super(message, null);
+    }
+
+    public OrchestratorException(String message, Throwable e) {
+        super(message, e);
     }
 }

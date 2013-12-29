@@ -20,6 +20,9 @@
 */
 package org.apache.airavata.orchestrator.core;
 
-public class JobRequest {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class JobRequest {
+    private final static Logger logger = LoggerFactory.getLogger(JobRequest.class);
 }

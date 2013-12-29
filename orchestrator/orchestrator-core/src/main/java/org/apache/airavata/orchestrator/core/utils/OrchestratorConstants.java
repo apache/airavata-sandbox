@@ -18,21 +18,9 @@
  * under the License.
  *
 */
-package org.apache.airavata.orchestrator.core.impl;
+package org.apache.airavata.orchestrator.core.utils;
 
-import org.apache.airavata.orchestrator.core.context.OrchestratorContext;
-import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
-import org.apache.airavata.orchestrator.core.job.JobSubmitter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public class SimpleJobSubmitter implements JobSubmitter{
-    private final static Logger logger = LoggerFactory.getLogger(SimpleJobSubmitter.class);
-    public GFACInstance selectGFACInstance(OrchestratorContext context) {
-        return null;
-    }
-
-    public boolean submitJob(GFACInstance gfac) {
-        return false;
-    }
+public class OrchestratorConstants {
+    private static final String SUBMITTER_PROPERTY = "job.submitter";
+    public static final String ORCHESTRATOR_PROPERTIES = "orchestrator.properties";
 }
