@@ -24,8 +24,18 @@ import org.apache.airavata.common.utils.AiravataJobState;
 import org.apache.airavata.registry.api.exception.RegistryException;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrchestratorRegistry extends AiravataSubRegistry {
+
+
+    /**
+     * this return information about GFAC instances running in the system.
+     * @return
+     * @throws RegistryException
+     */
+    Map<String, Integer> getGFACNodeList() throws RegistryException;
+
 
     /**
      * This method will add an entry to job management table in database

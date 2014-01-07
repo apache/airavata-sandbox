@@ -2587,11 +2587,16 @@ public class AiravataJPARegistry extends AiravataRegistry2{
 		}
     }
 
+    public Map<String, Integer> getGFACNodeList() throws RegistryException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     /**
      *These are the methods inherited from Orchestrator Registry
      */
 
-     public List<URI> getLiveGFacURIs() throws RegistryException {
+
+    public List<URI> getLiveGFacURIs() throws RegistryException {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
