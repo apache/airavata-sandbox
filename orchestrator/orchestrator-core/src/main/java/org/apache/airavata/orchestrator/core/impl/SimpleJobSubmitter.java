@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 public class SimpleJobSubmitter implements JobSubmitter{
     private final static Logger logger = LoggerFactory.getLogger(SimpleJobSubmitter.class);
+
     public GFACInstance selectGFACInstance(OrchestratorContext context) {
         return null;
     }

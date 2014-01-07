@@ -20,6 +20,7 @@
 */
 package org.apache.airavata.orchestrator.core.context;
 
+import org.apache.airavata.orchestrator.core.OrchestratorConfiguration;
 import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
 
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ import java.util.List;
 
 public class OrchestratorContext {
     private List<GFACInstance> gfacInstanceList;
+
+    private OrchestratorConfiguration orchestratorConfiguration;
 
     public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
         this.gfacInstanceList = new ArrayList<GFACInstance>();
@@ -38,5 +41,13 @@ public class OrchestratorContext {
 
     public void addGfacInstanceList(GFACInstance instance) {
         this.gfacInstanceList.add(instance);
+    }
+
+    public OrchestratorConfiguration getOrchestratorConfiguration() {
+        return orchestratorConfiguration;
+    }
+
+    public void setOrchestratorConfiguration(OrchestratorConfiguration orchestratorConfiguration) {
+        this.orchestratorConfiguration = orchestratorConfiguration;
     }
 }

@@ -20,25 +20,39 @@
 */
 package org.apache.airavata.orchestrator.core;
 
+import org.apache.airavata.orchestrator.core.exception.OrchestratorException;
+
 /*
-    This is the interface for orchestrator functionality exposed to the out side of the
-    module
- */
+   This is the interface for orchestrator functionality exposed to the out side of the
+   module
+*/
 public interface Orchestrator {
+
+    /** This method will initialize the Orchestrator, during restart this will
+     * get called and do init tasks
+     * @return
+     */
+    boolean initialize() throws OrchestratorException;
     /**
      *
      * @return
      */
-    String createExperiment(ExperimentRequest request);
+    String createExperiment(ExperimentRequest request)throws OrchestratorException;
 
     /**
      *
      * @return
      */
-    boolean acceptExperiment(JobRequest request);
+    boolean acceptExperiment(JobRequest request)throws OrchestratorException;
 
     /**
      *
      */
-    void startJobSubmitter();
+    void startJobSubmitter()throws OrchestratorException;
+
+    /*
+    This method will get called during graceful shutdown of Orchestrator
+    This can be used to handle the shutdown of orchestrator gracefully.
+     */
+    boolean shutdown()throws OrchestratorException;
 }

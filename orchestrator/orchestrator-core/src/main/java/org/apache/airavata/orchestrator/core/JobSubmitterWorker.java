@@ -22,6 +22,7 @@ package org.apache.airavata.orchestrator.core;
 
 import org.apache.airavata.orchestrator.core.context.OrchestratorContext;
 import org.apache.airavata.orchestrator.core.exception.OrchestratorException;
+import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
 import org.apache.airavata.orchestrator.core.job.JobSubmitter;
 import org.apache.airavata.orchestrator.core.utils.OrchestratorConstants;
 import org.slf4j.Logger;
@@ -31,32 +32,24 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 
-public class JobSubmitterWorker implements Runnable{
+public class JobSubmitterWorker implements Runnable {
     private final static Logger logger = LoggerFactory.getLogger(JobSubmitterWorker.class);
 
-    OrchestratorContext orchestratorContext;
+    private OrchestratorContext orchestratorContext;
 
-    JobSubmitter jobSubmitter;
+    private JobSubmitter jobSubmitter;
 
-    public JobSubmitterWorker(OrchestratorContext orchestratorContext) throws OrchestratorException{
+    // Set the default submit interval value
+    private int submitInterval = 1000;
 
+
+    public JobSubmitterWorker(OrchestratorContext orchestratorContext) throws OrchestratorException {
         this.orchestratorContext = orchestratorContext;
-
-        URL resource =
-                JobSubmitterWorker.class.getClassLoader().getResource(OrchestratorConstants.ORCHESTRATOR_PROPERTIES);
-
-        if(resource == null){
-            throw new OrchestratorException("orchestrator.properties cannot found");
-        }
-        Properties orchestratorProps = new Properties();
         try {
-            orchestratorProps.load(resource.openStream());
-            String submitterClass = (String)orchestratorProps.get("job.submitter");
+            String submitterClass = this.orchestratorContext.getOrchestratorConfiguration().getSubmitterClass();
+            submitInterval = this.orchestratorContext.getOrchestratorConfiguration().getSubmitterInterval();
             Class<? extends JobSubmitter> aClass = Class.forName(submitterClass.trim()).asSubclass(JobSubmitter.class);
             jobSubmitter = aClass.newInstance();
-        } catch (IOException e) {
-            logger.error("Error reading orchestrator.properties");
-            throw new OrchestratorException(e);
         } catch (ClassNotFoundException e) {
             logger.error("Error while loading Job Submitter");
         } catch (InstantiationException e) {
@@ -70,7 +63,20 @@ public class JobSubmitterWorker implements Runnable{
     }
 
     public void run() {
-         /* implement logic to submit job batches time to time */
+        /* implement logic to submit job batches time to time */
+        while (true) {
+            try {
+                Thread.sleep(submitInterval);
+            } catch (InterruptedException e) {
+                logger.error("Error in JobSubmitter during sleeping process before submit jobs");
+                e.printStackTrace();
+            }
+            /* Here the worker pick bunch of jobs available to submit and submit that to a single
+              GFAC instance, we do not handle job by job submission to each gfac instance
+            */
+            GFACInstance gfacInstance = jobSubmitter.selectGFACInstance(orchestratorContext);
+            jobSubmitter.submitJob(gfacInstance);
+        }
     }
 
     public OrchestratorContext getOrchestratorContext() {

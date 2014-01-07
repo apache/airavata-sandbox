@@ -30,6 +30,11 @@ public class GFACInstance {
 
     private int currentLoad;
 
+    public GFACInstance(String gfacURL, int currentLoad) {
+        this.gfacURL = gfacURL;
+        this.currentLoad = currentLoad;
+    }
+
     public String getGfacURL() {
         return gfacURL;
     }
