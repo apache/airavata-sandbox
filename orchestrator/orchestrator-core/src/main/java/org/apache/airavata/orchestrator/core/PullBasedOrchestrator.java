@@ -21,11 +21,13 @@
 package org.apache.airavata.orchestrator.core;
 
 import org.apache.airavata.common.exception.AiravataConfigurationException;
+import org.apache.airavata.common.utils.AiravataJobState;
 import org.apache.airavata.orchestrator.core.context.OrchestratorContext;
 import org.apache.airavata.orchestrator.core.exception.OrchestratorException;
 import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
 import org.apache.airavata.orchestrator.core.utils.OrchestratorConstants;
 import org.apache.airavata.orchestrator.core.utils.OrchestratorUtils;
+import org.apache.airavata.persistance.registry.jpa.impl.AiravataJPARegistry;
 import org.apache.airavata.registry.api.*;
 import org.apache.airavata.registry.api.exception.RegistryException;
 import org.slf4j.Logger;
@@ -43,9 +45,9 @@ public class PullBasedOrchestrator implements Orchestrator {
 
     OrchestratorContext orchestratorContext;
 
-    OrchestratorRegistry airavataRegistry;
+    AiravataRegistry2 airavataRegistry;
 
-    Executor executor;
+    ExecutorService executor;
 
     public boolean initialize() throws OrchestratorException {
         try {
@@ -94,8 +96,9 @@ public class PullBasedOrchestrator implements Orchestrator {
     }
 
 
-    public boolean shutdown() throws OrchestratorException {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    public void shutdown() throws OrchestratorException {
+        executor.shutdown();
+
     }
 
     //todo decide whether to return an error or do what
@@ -105,6 +108,7 @@ public class PullBasedOrchestrator implements Orchestrator {
         String username = request.getUserName();
         try {
             airavataRegistry.storeExperiment(username, experimentID);
+            airavataRegistry.changeStatus(username, experimentID, AiravataJobState.State.CREATED);
         } catch (RegistryException e) {
             //todo put more meaningful error message
             logger.error("Failed to create experiment for the request from " + request.getUserName());
@@ -122,7 +126,7 @@ public class PullBasedOrchestrator implements Orchestrator {
         String experimentID = request.getExperimentID();
         String username = request.getUserName();
         try {
-            airavataRegistry.storeExperiment(username, experimentID);
+            airavataRegistry.changeStatus(username, experimentID, AiravataJobState.State.ACCEPTED);
         } catch (RegistryException e) {
             //todo put more meaningful error message
             logger.error("Failed to create experiment for the request from " + request.getUserName());

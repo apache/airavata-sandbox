@@ -22,6 +22,8 @@ package org.apache.airavata.orchestrator.core.context;
 
 import org.apache.airavata.orchestrator.core.OrchestratorConfiguration;
 import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
+import org.apache.airavata.registry.api.AiravataRegistry2;
+import org.apache.airavata.registry.api.OrchestratorRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,8 @@ public class OrchestratorContext {
     private List<GFACInstance> gfacInstanceList;
 
     private OrchestratorConfiguration orchestratorConfiguration;
+
+    private AiravataRegistry2 registry;
 
     public OrchestratorContext(List<GFACInstance> gfacInstanceList) {
         this.gfacInstanceList = new ArrayList<GFACInstance>();
@@ -49,5 +53,13 @@ public class OrchestratorContext {
 
     public void setOrchestratorConfiguration(OrchestratorConfiguration orchestratorConfiguration) {
         this.orchestratorConfiguration = orchestratorConfiguration;
+    }
+
+    public OrchestratorRegistry getRegistry() {
+        return registry;
+    }
+
+    public void setRegistry(AiravataRegistry2 registry) {
+        this.registry = registry;
     }
 }

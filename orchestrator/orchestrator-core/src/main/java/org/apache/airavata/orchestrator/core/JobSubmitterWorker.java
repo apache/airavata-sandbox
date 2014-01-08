@@ -25,11 +25,13 @@ import org.apache.airavata.orchestrator.core.exception.OrchestratorException;
 import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
 import org.apache.airavata.orchestrator.core.job.JobSubmitter;
 import org.apache.airavata.orchestrator.core.utils.OrchestratorConstants;
+import org.apache.airavata.registry.api.exception.RegistryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Properties;
 
 public class JobSubmitterWorker implements Runnable {
@@ -64,6 +66,7 @@ public class JobSubmitterWorker implements Runnable {
 
     public void run() {
         /* implement logic to submit job batches time to time */
+        int idleCount = 0;
         while (true) {
             try {
                 Thread.sleep(submitInterval);
@@ -75,7 +78,34 @@ public class JobSubmitterWorker implements Runnable {
               GFAC instance, we do not handle job by job submission to each gfac instance
             */
             GFACInstance gfacInstance = jobSubmitter.selectGFACInstance(orchestratorContext);
-            jobSubmitter.submitJob(gfacInstance);
+
+            // Now we have picked a gfac instance to submit set of jobs at this time, now its time to
+            // select what are the jobs available to submit
+
+            try {
+                List<String> allAcceptedJobs = orchestratorContext.getRegistry().getAllAcceptedJobs();
+                List<String> allHangedJobs = orchestratorContext.getRegistry().getAllHangedJobs();
+                if (allAcceptedJobs.size() == 0) {
+                    idleCount++;
+
+                    if (idleCount == 10) {
+                        try {
+                            Thread.sleep(submitInterval*2);
+                        } catch (InterruptedException e) {
+                            logger.error("Error in JobSubmitter during sleeping process before submit jobs");
+                            e.printStackTrace();
+                        }
+                        idleCount=0;
+                    }
+                    continue;
+                }
+                jobSubmitter.submitJob(gfacInstance,allAcceptedJobs);
+
+                /* After submitting available jobs try to schedule again and then submit*/
+                jobSubmitter.submitJob(jobSubmitter.selectGFACInstance(orchestratorContext),allHangedJobs);
+            } catch (RegistryException e) {
+                logger.error("Error while trying to retrieve available ");
+            }
         }
     }
 

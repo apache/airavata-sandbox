@@ -28,31 +28,47 @@ import org.apache.airavata.orchestrator.core.exception.OrchestratorException;
 */
 public interface Orchestrator {
 
-    /** This method will initialize the Orchestrator, during restart this will
+
+    /**
+     * This method will initialize the Orchestrator, during restart this will
      * get called and do init tasks
      * @return
+     * @throws OrchestratorException
      */
     boolean initialize() throws OrchestratorException;
+
+
     /**
-     *
+     *  This method is the very first method which create an entry in
+     * database for a given experiment, this return the experiment ID, so
+     * user have full control for the experiment
+     * @param request
      * @return
+     * @throws OrchestratorException
      */
-    String createExperiment(ExperimentRequest request)throws OrchestratorException;
+    String createExperiment(ExperimentRequest request) throws OrchestratorException;
 
     /**
-     *
+     * After creating the experiment user has the experimentID, then user
+     * can create the JobRequest and send the Job input parameters to Orchestrator
+     * @param request
      * @return
+     * @throws OrchestratorException
      */
-    boolean acceptExperiment(JobRequest request)throws OrchestratorException;
+    boolean acceptExperiment(JobRequest request) throws OrchestratorException;
 
     /**
-     *
+     * This is like a cron job which runs continuously and take available jobs to
+     * submit to GFAC and submit them to GFAC
+     * @throws OrchestratorException
      */
-    void startJobSubmitter()throws OrchestratorException;
+    void startJobSubmitter() throws OrchestratorException;
 
-    /*
-    This method will get called during graceful shutdown of Orchestrator
-    This can be used to handle the shutdown of orchestrator gracefully.
+    /**
+     * This method will get called during graceful shutdown of Orchestrator
+     * This can be used to handle the shutdown of orchestrator gracefully.
+     * @return
+     * @throws OrchestratorException
      */
-    boolean shutdown()throws OrchestratorException;
+    void shutdown() throws OrchestratorException;
 }

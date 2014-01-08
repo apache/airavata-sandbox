@@ -23,6 +23,8 @@ package org.apache.airavata.orchestrator.core.job;
 import org.apache.airavata.orchestrator.core.context.OrchestratorContext;
 import org.apache.airavata.orchestrator.core.gfac.GFACInstance;
 
+import java.util.List;
+
 public interface JobSubmitter {
 
     /**
@@ -35,5 +37,5 @@ public interface JobSubmitter {
      * @param gfac
      * @return
      */
-    boolean submitJob(GFACInstance gfac);
+    boolean submitJob(GFACInstance gfac,List<String> experimentIDList);
 }
