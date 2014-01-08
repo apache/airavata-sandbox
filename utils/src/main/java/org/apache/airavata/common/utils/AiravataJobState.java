@@ -26,7 +26,12 @@ gfac instances
  */
 public class AiravataJobState {
     public enum State {
-        STARTED {
+        CREATED {
+            public String toString() {
+                return "CREATED";
+            }
+        },
+        ACCEPTED {
             public String toString() {
                 return "ACCEPTED";
             }
