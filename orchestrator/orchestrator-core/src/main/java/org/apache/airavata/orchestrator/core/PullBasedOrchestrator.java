@@ -77,7 +77,6 @@ public class PullBasedOrchestrator implements Orchestrator {
             executor = Executors.newFixedThreadPool(orchestratorConfiguration.getThreadPoolSize());
 
 
-
         } catch (RegistryException e) {
             logger.error("Failed to initializing Orchestrator");
             OrchestratorException orchestratorException = new OrchestratorException(e);
@@ -99,18 +98,43 @@ public class PullBasedOrchestrator implements Orchestrator {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    //todo decide whether to return an error or do what
+
     public String createExperiment(ExperimentRequest request) throws OrchestratorException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        String experimentID = UUID.randomUUID().toString();
+        String username = request.getUserName();
+        try {
+            airavataRegistry.storeExperiment(username, experimentID);
+        } catch (RegistryException e) {
+            //todo put more meaningful error message
+            logger.error("Failed to create experiment for the request from " + request.getUserName());
+            throw new OrchestratorException(e);
+        }
+        return experimentID;
     }
 
     public boolean acceptExperiment(JobRequest request) throws OrchestratorException {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        // validate the jobRequest first
+        if (!OrchestratorUtils.validateJobRequest(request)) {
+            logger.error("Invalid Job request sent, Experiment creation failed");
+            return false;
+        }
+        String experimentID = request.getExperimentID();
+        String username = request.getUserName();
+        try {
+            airavataRegistry.storeExperiment(username, experimentID);
+        } catch (RegistryException e) {
+            //todo put more meaningful error message
+            logger.error("Failed to create experiment for the request from " + request.getUserName());
+            return false;
+        }
+        return true;
     }
 
     public void startJobSubmitter() throws OrchestratorException {
         for (int i = 0; i < orchestratorContext.getOrchestratorConfiguration().getThreadPoolSize(); i++) {
-                JobSubmitterWorker jobSubmitterWorker = new JobSubmitterWorker(orchestratorContext);
-                executor.execute(jobSubmitterWorker);
+            JobSubmitterWorker jobSubmitterWorker = new JobSubmitterWorker(orchestratorContext);
+            executor.execute(jobSubmitterWorker);
         }
     }
 }

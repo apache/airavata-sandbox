@@ -25,4 +25,24 @@ import org.slf4j.LoggerFactory;
 
 public class JobRequest {
     private final static Logger logger = LoggerFactory.getLogger(JobRequest.class);
+
+    private String userName;
+
+    private String experimentID;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getExperimentID() {
+        return experimentID;
+    }
+
+    public void setExperimentID(String experimentID) {
+        this.experimentID = experimentID;
+    }
 }

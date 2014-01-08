@@ -25,4 +25,14 @@ import org.slf4j.LoggerFactory;
 
 public class ExperimentRequest {
     private final static Logger logger = LoggerFactory.getLogger(ExperimentRequest.class);
+
+    private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }

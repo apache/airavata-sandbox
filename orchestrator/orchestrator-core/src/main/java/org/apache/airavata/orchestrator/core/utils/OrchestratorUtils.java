@@ -20,6 +20,7 @@
 */
 package org.apache.airavata.orchestrator.core.utils;
 
+import org.apache.airavata.orchestrator.core.JobRequest;
 import org.apache.airavata.orchestrator.core.JobSubmitterWorker;
 import org.apache.airavata.orchestrator.core.OrchestratorConfiguration;
 import org.apache.airavata.orchestrator.core.exception.OrchestratorException;
@@ -49,6 +50,12 @@ public class OrchestratorUtils {
         orchestratorConfiguration.setThreadPoolSize((Integer) orchestratorProps.get(OrchestratorConstants.THREAD_POOL_SIZE));
         orchestratorConfiguration.setStartSubmitter(Boolean.valueOf(orchestratorProps.getProperty(OrchestratorConstants.START_SUBMITTER)));
         return orchestratorConfiguration;
+    }
+
+    public static boolean validateJobRequest(JobRequest request){
+        /* todo implement a job request validation */
+
+        return true;
     }
 
 }
