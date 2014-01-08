@@ -55,7 +55,7 @@ public interface OrchestratorRegistry extends AiravataSubRegistry {
      * @return
      * @throws RegistryException
      */
-    boolean changeStatus(String userName,String experimentID,AiravataJobState state)throws RegistryException;
+    boolean changeStatus(String userName,String experimentID,AiravataJobState.State state)throws RegistryException;
 
 
     /**

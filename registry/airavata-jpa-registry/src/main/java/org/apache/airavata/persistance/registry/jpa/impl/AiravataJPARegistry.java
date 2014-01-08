@@ -2604,7 +2604,7 @@ public class AiravataJPARegistry extends AiravataRegistry2{
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public boolean changeStatus(String userName, String experimentID, AiravataJobState state) throws RegistryException {
+    public boolean changeStatus(String userName, String experimentID, AiravataJobState.State state) throws RegistryException {
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
