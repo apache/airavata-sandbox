@@ -13,7 +13,9 @@
     <path id="javac.classpath">
         <pathelement path="${build}"/>
         <fileset dir="${airavata.home}/lib">
-            <include name="airavata-gfac-core-0.12-SNAPSHOT.jar"/>
+            <include name="airavata-gfac-core-*.jar"/>
+            <include name="airavata-gfac-schema-utils-*.jar"/>
+            <include name="xmlbeans*.jar"/>
         </fileset>
         <fileset dir="src/main/resources">
             <include name="*.jar"/>
