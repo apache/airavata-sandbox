@@ -23,8 +23,6 @@ package org.apache.airavata.gfac.local.handler;
 import org.apache.airavata.gfac.core.context.JobExecutionContext;
 import org.apache.airavata.gfac.core.handler.GFacHandler;
 import org.apache.airavata.gfac.core.handler.GFacHandlerException;
-import org.xmlsoap.schemas.soap.encoding.*;
-
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -33,38 +31,35 @@ import java.util.Map;
 import java.util.Properties;
 
 public class InputEmailHandler implements GFacHandler {
+    private Properties props;
 
-    Properties props;
-
-    public void initProperties(Map<String, String> stringStringMap) throws GFacHandlerException {
-        // we get all the required properties for email configuration
-        props = new Properties();
-        props.putAll((Map<String, String>)stringStringMap.entrySet());
+    public void initProperties(Properties properties) throws GFacHandlerException {
+        props = properties;
     }
 
     public void invoke(JobExecutionContext jobExecutionContext) throws GFacHandlerException {
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication((String) props.get("username")+"@gmail.com", (String) props.get("username"));
+                        return new PasswordAuthentication((String) props.get("username") + "@gmail.com", (String) props.get("username"));
                     }
                 });
 
-            Message message = new MimeMessage(session);
-            try {
-                message.setFrom(new InternetAddress((String) props.get("username")));
-                message.setRecipients(Message.RecipientType.TO,
-                        InternetAddress.parse((String) props.get("username")));
-                message.setSubject("GFAC Input Email");
+        Message message = new MimeMessage(session);
+        try {
+            message.setFrom(new InternetAddress((String) props.get("username")));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse((String) props.get("username")));
+            message.setSubject("GFAC Input Email");
 
-                Map<String, Object> parameters = jobExecutionContext.getInMessageContext().getParameters();
-                StringBuffer buffer = new StringBuffer();
-                for(String input:parameters.keySet()) {
-                    buffer.append("Input Name: input: Input Value: " + parameters.get(input) + "\n");
-                }
-                Transport.send(message);
-            } catch (MessagingException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            Map<String, Object> parameters = jobExecutionContext.getInMessageContext().getParameters();
+            StringBuffer buffer = new StringBuffer();
+            for (String input : parameters.keySet()) {
+                buffer.append("Input Name: input: Input Value: " + parameters.get(input) + "\n");
             }
+            Transport.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 }
