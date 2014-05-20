@@ -1,0 +1,48 @@
+<project default="run">
+
+    <property name="airavata.home" value="/Users/lahirugunathilake/work/airavata/git/airavata/modules/distribution/server/target/apache-airavata-server-0.12-SNAPSHOT"/>
+    <property name="src.dir" value="src/main/java"/>
+    <property name="resources.dir" value="src/main/resources"/>
+    <property name="temp.dir" value="temp"/>
+    <property name="class.dir" value="${temp.dir}/classes"/>
+    <property name="main-class" value="org.apache.airavata.client.RunEchoLocalHost"/>
+
+    <path id="javac.classpath">
+        <pathelement path="${class.dir}"/>
+        <fileset dir="${airavata.home}/lib/">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+
+    <target name="clean">
+        <!--<delete dir="target" quiet="true"/>-->
+        <delete dir="${class.dir}" quiet="true"/>
+        <delete dir="${temp.dir}"/>
+    </target>
+
+    <target name="init">
+        <mkdir dir="${temp.dir}"/>
+        <mkdir dir="${class.dir}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${class.dir}">
+            <include name="*/**"/>
+            <classpath refid="javac.classpath"/>
+        </javac>
+        <copy todir="${class.dir}" overwrite="true">
+            <fileset dir="${resources.dir}">
+                <include name="*.properties"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="run" depends="compile">
+        <echo>To configure host, port, username, password and No. of events use -Dhost=xxxx -Dport=xxxx -Dusername=xxxx -Dpassword=xxxx -Devents=xx</echo>
+        <java classname="${main-class}"
+              classpathref="javac.classpath" fork="true">
+        </java>
+    </target>
+
+</project>
