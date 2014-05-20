@@ -120,7 +120,7 @@ public class InputEmailHandler implements GFacHandler {
                 if ("String".equals(paramDataType)) {
                     String stringPrm = ((StringParameterType) inParam.getType())
                             .getValue();
-                    buffer.append("Input Name: input: Input Value: " + stringPrm + "\n");
+                    buffer.append("Input Name:" +  input + " Input Value: " + stringPrm + "\n");
                 }
             }
             message.setText(buffer.toString());
