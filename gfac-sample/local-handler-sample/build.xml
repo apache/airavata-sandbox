@@ -39,7 +39,7 @@
     <target name="dist" depends="compile"
             description="generate the distribution">
         <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-        <jar jarfile="${dist}/lib/airavata-gfac-handler-sample-${DSTAMP}.jar" basedir="${build}"/>
+        <jar jarfile="${dist}/lib/airavata-gfac-handler-sample.jar" basedir="${build}"/>
     </target>
 
     <target name="clean"
