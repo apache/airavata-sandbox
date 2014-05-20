@@ -41,7 +41,7 @@ public class OutputEmailHandler implements GFacHandler {
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(((String) props.get("username")) + "@gmail.com", (String) props.get("username"));
+                        return new PasswordAuthentication((String) props.get("username"), (String) props.get("password"));
                     }
                 });
 
@@ -57,6 +57,7 @@ public class OutputEmailHandler implements GFacHandler {
             for (String input : parameters.keySet()) {
                 buffer.append("Input Name: input: Input Value: " + parameters.get(input) + "\n");
             }
+            message.setText(buffer.toString());
             Transport.send(message);
         } catch (MessagingException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

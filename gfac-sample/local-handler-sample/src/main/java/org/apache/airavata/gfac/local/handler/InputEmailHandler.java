@@ -41,7 +41,7 @@ public class InputEmailHandler implements GFacHandler {
         Session session = Session.getInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication((String) props.get("username") + "@gmail.com", (String) props.get("username"));
+                        return new PasswordAuthentication((String) props.get("username"), (String) props.get("password"));
                     }
                 });
 
