@@ -137,11 +137,6 @@ public class RunEchoLocalHost {
         try {
             DocumentCreator documentCreator = new DocumentCreator(getAiravataAPI());
             documentCreator.createLocalHostDocs();
-            documentCreator.createSSHHostDocs();
-            documentCreator.createGramDocs();
-            documentCreator.createPBSDocsForOGCE();
-            documentCreator.createSlurmDocs();
-            documentCreator.createSGEDocs();
         } catch (AiravataAPIInvocationException e) {
             logger.error("Unable to create airavata API", e.getMessage());
             throw new AiravataAPIInvocationException(e);
