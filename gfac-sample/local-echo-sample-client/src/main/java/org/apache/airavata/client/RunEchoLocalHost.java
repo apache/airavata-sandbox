@@ -63,71 +63,7 @@ public class RunEchoLocalHost {
             System.out.println("Experiment ID : " + expId);
 
             launchExperiment(airavata, expId);
-            System.out.println("Launched successfully");
-            List<Experiment> experiments = getExperimentsForUser(airavata, "admin");
-            List<Project> projects = getAllUserProject(airavata, "admin");
-            for (Experiment exp : experiments){
-                System.out.println(" exp id : " + exp.getExperimentID());
-                System.out.println(" exp status : " + exp.getExperimentStatus().getExperimentState().toString());
-            }
-
-            for (Project pr : projects){
-                System.out.println(" project name : " + pr.getName());
-            }
-
-            Thread monitor = (new Thread(){
-                 public void run() {
-                     Map<String, JobStatus> jobStatuses = null;
-                     while (true) {
-                         try {
-                             jobStatuses = airavata.getJobStatuses(expId);
-                             Set<String> strings = jobStatuses.keySet();
-                             for (String key : strings) {
-                                 JobStatus jobStatus = jobStatuses.get(key);
-                                 if(jobStatus == null){
-                                     return;
-                                 }else {
-                                     if (JobState.COMPLETE.equals(jobStatus.getJobState())) {
-                                         System.out.println("Job completed Job ID: " + key);
-                                         return;
-                                     }else{
-                                        System.out.println("Job ID:" + key + jobStatuses.get(key).getJobState().toString());
-                                     }
-                                 }
-                             }
-                             System.out.println(airavata.getExperimentStatus(expId));
-                             Thread.sleep(5000);
-                         } catch (Exception e) {
-                             e.printStackTrace();
-                         }
-                     }
-
-                 }
-            });
-            monitor.start();
-            try {
-                monitor.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				e.printStackTrace(); // To change body of catch statement use
-										// File | Settings | File Templates.
-			}
-
-            System.out.println(airavata.getExperimentStatus(expId));
-            List<DataObjectType> output = airavata.getExperimentOutputs(expId);
-            for (DataObjectType dataObjectType : output) {
-                System.out.println(dataObjectType.getKey() + " : " + dataObjectType.getType() + " : " + dataObjectType.getValue());
-
-
-			}
-            String clonedExpId = cloneExperiment(airavata, expId);
-            System.out.println("Cloned Experiment ID : " + clonedExpId);
-//            System.out.println("retrieved exp id : " + experiment.getExperimentID());
-        } catch (Exception e) {
+       } catch (Exception e) {
             logger.error("Error while connecting with server", e.getMessage());
             e.printStackTrace();
         }
