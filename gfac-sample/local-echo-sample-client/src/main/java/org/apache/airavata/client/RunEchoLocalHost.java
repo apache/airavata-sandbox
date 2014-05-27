@@ -58,7 +58,6 @@ public class RunEchoLocalHost {
         try {
             AiravataUtils.setExecutionAsClient();
             final Airavata.Client airavata = AiravataClientFactory.createAiravataClient(THRIFT_SERVER_HOST, THRIFT_SERVER_PORT);
-            System.out.println("API version is " + airavata.GetAPIVersion());
             addDescriptors();
             final String expId = createExperimentForLocalHost(airavata);
             System.out.println("Experiment ID : " + expId);
