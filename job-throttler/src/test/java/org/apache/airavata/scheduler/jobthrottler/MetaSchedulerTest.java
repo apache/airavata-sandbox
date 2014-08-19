@@ -20,9 +20,11 @@
  *
  */
 
+package org.apache.airavata.scheduler.jobthrottler;
+
 import java.util.*;
 
-public class MetaScheduleTest {
+public class MetaSchedulerTest {
 
     public static void main(String[] args) {
         ArrayList<String> experimentData = new ArrayList<String>(); 
