@@ -174,8 +174,7 @@ generate_java_stubs() {
     # Using thrift Java generator, generate the java classes based on Airavata API. This
     #   The airavataAPI.thrift includes rest of data models.
     thrift ${THRIFT_ARGS} --gen java mock-credential-management-api.thrift || fail unable to generate java thrift classes on AiravataAPI
-
-    #thrift ${THRIFT_ARGS} --gen java ${THRIFT_IDL_DIR}/workflowAPI.thrift || fail unable to generate java thrift classes on WorkflowAPI
+    thrift ${THRIFT_ARGS} --gen java mock-gateway-management-api.thrift || fail unable to generate java thrift classes on AiravataAPI
 
     # For the generated java classes add the ASF V2 License header
     add_license_header $JAVA_GEN_DIR

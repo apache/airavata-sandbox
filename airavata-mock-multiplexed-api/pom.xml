@@ -26,7 +26,7 @@
 	</parent>
 
 	<groupId>org.apache.airavata</groupId>
-	<artifactId>airavata-mock-api</artifactId>
+	<artifactId>mock-airavata-api</artifactId>
 	<packaging>pom</packaging>
 	<name>Airavata Mock API</name>
 	<version>0.15-SNAPSHOT</version>
@@ -68,10 +68,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<org.slf4j.version>1.7.6</org.slf4j.version>
+		<org.slf4j.version>1.7.10</org.slf4j.version>
 		<log4j.version>1.2.16</log4j.version>
-		<surefire.version>2.12</surefire.version>
-		<junit.version>4.7</junit.version>
+		<surefire.version>2.18.1</surefire.version>
+		<junit.version>4.12</junit.version>
         <thrift.version>0.9.2</thrift.version>
 	</properties>
 
@@ -140,10 +140,10 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
-						<version>3.1</version>
+						<version>3.2</version>
 						<configuration>
-							<source>1.6</source>
-							<target>1.6</target>
+							<source>1.8</source>
+							<target>1.8</target>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -154,6 +154,7 @@
 			<modules>
 				<module>mock-airavata-api-java-stubs</module>
 				<module>mock-airavata-api-server</module>
+                <module>mock-airavata-api-client</module>
 			</modules>
 		</profile>
 
