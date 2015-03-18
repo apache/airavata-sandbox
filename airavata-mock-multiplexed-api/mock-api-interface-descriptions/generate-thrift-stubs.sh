@@ -57,8 +57,8 @@ fi
 BASE_TARGET_DIR='target'
 DATAMODEL_SRC_DIR='airavata-data-models/src/main/java'
 JAVA_API_SDK_DIR='../mock-airavata-api-java-stubs/src/main/java'
+PHP_SDK_DIR='../mock-airavata-api-php-stubs/src/main/resources/lib'
 CPP_SDK_DIR='airavata-client-sdks/airavata-cpp-sdk/src/main/resources/lib/airavata/'
-PHP_SDK_DIR='airavata-client-sdks/airavata-php-sdk/src/main/resources/lib'
 
 # Initialize the thrift arguments.
 #  Since most of the Airavata API and Data Models have includes, use recursive option by default.
@@ -187,6 +187,36 @@ generate_java_stubs() {
 }
 
 ####################################
+# Generate/Update PHP Stubs #
+####################################
+
+generate_php_stubs() {
+
+    #PHP generation directory
+    PHP_GEN_DIR=${BASE_TARGET_DIR}/gen-php
+
+    # As a precaution  remove and previously generated files if exists
+    rm -rf ${PHP_GEN_DIR}
+
+    thrift ${THRIFT_ARGS} --gen php:autoload mock-credential-management-api.thrift || fail unable to generate PHP thrift classes
+    thrift ${THRIFT_ARGS} --gen php:autoload mock-gateway-management-api.thrift || fail unable to generate PHP thrift classes
+
+    # For the generated java classes add the ASF V2 License header
+    ## TODO Write PHP license parser
+
+    # Compare the newly generated classes with existing java generated skeleton/stub sources and replace the changed ones.
+    #  Only copying the API related classes and avoiding copy of any data models which already exist in the data-models.
+    copy_changed_files ${PHP_GEN_DIR} ${PHP_SDK_DIR}
+
+    ####################
+    # Cleanup and Exit #
+    ####################
+    # CleanUp: Delete the base target build directory
+    #rm -rf ${BASE_TARGET_DIR}
+
+}
+
+####################################
 # Generate/Update C++ Client Stubs #
 ####################################
 
@@ -212,42 +242,12 @@ generate_cpp_stubs() {
 
 }
 
-####################################
-# Generate/Update PHP Stubs #
-####################################
-
-generate_cpp_stubs() {
-
-    #PHP generation directory
-    PHP_GEN_DIR=${BASE_TARGET_DIR}/gen-php
-
-    # As a precaution  remove and previously generated files if exists
-    rm -rf ${PHP_GEN_DIR}
-
-    # Using thrift Java generator, generate the java classes based on Airavata API. This
-    #   The airavataAPI.thrift includes rest of data models.
-    #thrift ${THRIFT_ARGS} --gen php:autoload ${THRIFT_IDL_DIR}/airavataAPI.thrift || fail unable to generate PHP thrift classes
-
-    #thrift ${THRIFT_ARGS} --gen php:autoload ${THRIFT_IDL_DIR}/workflowAPI.thrift || fail unable to generate PHP thrift classes for WorkflowAPI
-    # For the generated java classes add the ASF V2 License header
-    ## TODO Write PHP license parser
-
-    # Compare the newly generated classes with existing java generated skeleton/stub sources and replace the changed ones.
-    #  Only copying the API related classes and avoiding copy of any data models which already exist in the data-models.
-    copy_changed_files ${PHP_GEN_DIR} ${PHP_SDK_DIR}
-
-    ####################
-    # Cleanup and Exit #
-    ####################
-    # CleanUp: Delete the base target build directory
-    #rm -rf ${BASE_TARGET_DIR}
-
-}
-
 for arg in "$@"
 do
     case "$arg" in
     all)    echo "Generate all stubs (Java, PHP, C++, Python) Stubs"
+            generate_java_stubs
+            generate_php_stubs
             ;;
     java)   echo "Generating Java Stubs"
             generate_java_stubs
