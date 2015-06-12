@@ -1,0 +1,470 @@
+
+<form id="center">
+<span id="center_input_area"></span>
+<script>
+
+input_eval = "";
+input_html = "<table>";
+input_repeats = "";
+input_trees = [];
+skipped_row = 0;
+center_done_eval = "";
+_jmol_info = {};
+// jmol = "jmol";
+ga.pull.clearPull();
+$('#center').on("keyup keypress", function(e) { var code = e.keyCode || e.which;  if (code  == 13) { e.preventDefault(); return false; }});
+this_html = '<tr><td><label for="input1">Center value 1 </label></td><td><input type="number" name="input1" id="input1" value="0" min="0" max="1e+50" required step="0.01"><span id="input1_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 
+'ga.value.setLastValue( "center", "#input1" );'
+ + '$( "#input1" ).blur( function() { ga.valid.checkFloat( "#input1" ); });'
+ + '$( "#input1" ).keypress( function() { $( "#input1_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="runminutes">Minutes to run </label></td><td><input type="number" name="runminutes" id="runminutes" value="1" min="0" max="10000" required><span id="runminutes_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 
+'ga.value.setLastValue( "center", "#runminutes" );'
+ + '$( "#runminutes" ).blur( function() { ga.valid.checkFloat( "#runminutes" ); });'
+ + '$( "#runminutes" ).keypress( function() { $( "#runminutes_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="usemessage" class="highlight">Message results </label></td><td><input type="checkbox" name="usemessage" id="usemessage" data-repeater="checkbox" checked></td></tr>'
++ '<tr><td></td><td colspan="4"><span id="usemessage-repeater"></span></td></tr>'
+;
+this_eval = 
+'ga.value.setLastValue( "center", "#usemessage" );'
+
+
+
+ + 'ga.repeat.repeater( "center", "usemessage", "checkbox" );$( "#usemessage" ).change( function() { ga.repeat.change( "center", "usemessage" ); } );'
+
+
+
+ input_repeats += 'ga.repeat.change( "center", "usemessage", 1 );';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="usemessagebox" class="highlight">Message box results </label></td><td><input type="checkbox" name="usemessagebox" id="usemessagebox" data-repeater="checkbox"></td></tr>'
++ '<tr><td></td><td colspan="4"><span id="usemessagebox-repeater"></span></td></tr>'
+;
+this_eval = 
+'ga.value.setLastValue( "center", "#usemessagebox" );'
+
+
+
+ + 'ga.repeat.repeater( "center", "usemessagebox", "checkbox" );$( "#usemessagebox" ).change( function() { ga.repeat.change( "center", "usemessagebox" ); } );'
+
+
+
+ input_repeats += 'ga.repeat.change( "center", "usemessagebox", 1 );';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+ga.tmp.html = '';
+
+
+this_html = '<tr>' +
+'<td><label for="messagesecs">Results interval in seconds </label></td>' + 
+'<td><input type="number" name="messagesecs" id="messagesecs" value="10" min="5" max="1000"' +
+'><span id="messagesecs_msg" class="warning field_msg" > </span></td></tr>'
+
+;
+
+this_eval = 
+'ga.value.setLastValue( "center", "#messagesecs" );'
+
++ '$( "#messagesecs" ).on("change blur", function() { ga.valid.checkInt( "#messagesecs" );'
+
+
++ '});'
+
++ '$( "#messagesecs" ).keypress( function() { $( "#messagesecs_msg" ).html( "" ); });'
+
+
+
+;
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+this_html = ga.repeat.repeat( "center", "messagesecs", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("center", "messagesecs", "usemessage" );';
+
+input_html += this_html;
+input_eval += this_eval;
+if( skipped_row == 1 ){ input_html += "</tr>"; }
+input_html += '</table>';
+$( '#center_input_area' ).html( input_html );
+eval( input_eval );
+</script>
+<p><button id="center_submit" class="help_link"><span class="buttontext">Submit</span></button>
+<span class="help">this is help for the submit button</span>
+<button id="center_reset" class="help_link"><span class="buttontext">Reset to default values</span></button>
+<span class="help">this is help for the reset to default values button</span>
+
+</p>
+<span id="center_progress"></span>
+<script>
+
+
+
+
+var center_output_msgs = $("#center_output_msgs");
+center_output_msgs.text( "" );
+
+var center_timeout_handler = "unset";
+
+function get_results_center( id, last_timeout, getlastmsg, getinput )
+{
+
+//             url:"ajax/get_results.php?_window=" +  window.name + "&_logon=" +$( "#_state" ).data( "_logon" ) + '&_uuid=' + id,
+    var job_status = "";
+    $.getJSON( 
+             "ajax/get_results.php",
+             {
+                tagmode: "any",
+                format: "json",
+                _window : window.name,
+                _logon : $( "#_state" ).data( "_logon" ),
+                _uuid : id,
+                _getlastmsg : getlastmsg,
+                _getinput : getinput ? true : false
+             } )
+    .done( function( data, status, xhr ) {
+
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( id );
+           }
+
+           job_status = ga.data.update( "center", data ).job_status;
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+              if ( center_timeout_handler != "unset" )
+              {
+                  clearTimeout( center_timeout_handler );
+                  center_timeout_handler = "unset";
+              }
+              unsubMsging( id, "center" );
+              eval( center_done_eval );
+           } else {
+               if ( !last_timeout || last_timeout < 2000 )
+               { 
+                  last_timeout = 2000;
+               } else {
+                  if ( last_timeout < 16000 )
+                  {
+                      last_timeout *= 2;
+                  } else {
+                      last_timeout = 16000;
+                  }
+               }
+
+               center_timeout_handler =  setTimeout( get_results_center, last_timeout, id, last_timeout, 0 );
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+           $( "#center_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/center.php </span>" );
+           $('#center_progress').html( "" );
+           if ( center_timeout_handler != "unset" )
+           {
+               clearTimeout( center_timeout_handler );
+               center_timeout_handler = "unset";
+           }
+           unsubMsging( id, "center" );
+           eval( center_done_eval );
+          } );
+    return false;
+};
+
+function msg_center ( id, data )
+{
+   ga.data.update( "center", data, get_results_center, id );
+};
+
+$( "#center_submit" ).click( function( e ) {
+   e.preventDefault();
+   e.returnValue = false;
+
+   var $ok = 0;
+   
+   
+
+   ga.event( "", "center", "submit clicked" );
+
+   
+
+
+
+
+
+   if ( !ga.valid.checksubmit( "center" ) ) {
+       return false;
+   }
+
+   var $form = $(this);
+
+   $.ajax({
+       type: 'get'
+       ,url: "ajax/sys_config/sys_joblocked.php?_window=" +  window.name + "&_logon=" + $( "#_state" ).data( "_logon" )
+ + "&_submitpolicy=all"
+       ,context: $form
+       ,success: function( data ) { // your success handler
+
+          if ( !$ok )
+          {
+          switch ( data )
+          {
+             case "1" :
+             {
+                 messagebox( { icon:"warning.png", text:"This project directory is currently locked by another project.\nYou can wait until it completes, change the project in user configuration or clear the lock in the job manager." } );
+                 return;
+             } break;
+             case "2" :
+             {
+                 messagebox( { icon:"warning.png", text:"You must be logged in to submit this module." } );
+                 return;
+             } break;
+             default :
+             {
+
+                 $ok = 1;
+             }
+          }
+          }
+       }
+       ,error: function() { // your error handler
+          messagebox( { icon:"toast.png", text:"Checking the project lock failed. This is possibly a server or network issue" } );
+       }
+       ,complete: function() { 
+          this.off('submit');
+          if ( $ok )
+          {
+
+
+              $( "#center_results" ).text( "" );
+
+              ga.value.saveLastValues( "center" );
+              ga.value.resetDefaultValues( "center_output", true );
+
+              var found_errors = 0;
+              $("#center").find("input").each(function(i){
+                 if ( $(this).attr( 'required' ) && $(this).val().length == 0 )
+                 {
+                    var tag =  "#center " + "#" + $(this).attr('id') + "_msg";
+
+                    $( tag ).html( "missing required field" );
+                    found_errors = 1;
+                 }
+              });
+              if ( found_errors ) {
+                  return;
+              }
+
+    var tree_html = "";
+    $( "._hidden_tree_selects" ).remove( );
+    $.each( input_trees, function( k, v ){
+
+        $( 'input[type=hidden][name="' + v + '[]"]' ).remove();
+        var selectedElms = $('#' + v).jstree("get_selected", true);
+        var i = 0;
+        $.each(selectedElms, function() {
+           tree_html += '<input type="hidden" name="' + v + '[]" value="' + this.id + '" class="_hidden_tree_selects"/>';
+
+        });
+    });
+
+    $( this ).append( tree_html );
+
+
+    var logonadd = $("<input>").attr("type", "hidden").attr("name", "_logon").val( $( "#_state" ).data( "_logon" ) );$( this ).append($(logonadd));
+    var projectadd = $("<input>").attr("type", "hidden").attr("name", "_project").val( $( "#_state" ).data( "_project" ) );$( this ).append($(projectadd));
+    var windowadd = $("<input>").attr("type", "hidden").attr("name", "_window").val( window.name );$( this ).append($(windowadd));
+    var vuuid = uuid.v1();
+
+
+
+
+
+
+    var uuidadd = $("<input>").attr("type", "hidden").attr("name", "_uuid").val( vuuid );$( this ).append($(uuidadd));
+//    ga.altfile.add( "center" );
+    ga.valuen.addhtml( "center" );
+
+    subMsging( vuuid, msg_center, "center" );
+
+    var formData = new FormData($('form')[0]);
+
+
+    $('#center_progress').html( "Uploading:<progress></progress>" );
+
+    var job_status = "";
+
+    ga.event( "", "center", "submit: passed submit checks, submitting" );
+
+    $.ajax( {
+             dataType: "json",
+             cache:false,
+//             timeout:3000,  // for testing
+             type:"POST",
+             url:"ajax/tools/center.php",
+             data: formData,
+             xhr: function() {  // Custom XMLHttpRequest
+                 var myXhr = $.ajaxSettings.xhr();
+                 if(myXhr.upload){ // Check if upload property exists
+                     myXhr.upload.addEventListener('progress',
+                         function(e) {
+                         if(e.lengthComputable){
+                           $('#center_progress progress').attr({value:e.loaded,max:e.total});
+                         } }
+//                     progressHandlingFunction
+                    , false);
+                 }
+                 return myXhr;
+             },
+             contentType: false,
+             processData: false
+            } )
+    .done( function( data, status, xhr ) {
+
+
+
+
+// refresh cache for this project
+           $('#center_progress').html( "" );
+   
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( vuuid );
+           }
+           
+// loop through data pairs
+           center_output_msgs.text( "" );
+           job_status = ga.data.update( "center", data ).job_status;
+
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+               if ( center_timeout_handler != "unset" )
+               {
+                   clearTimeout( center_timeout_handler );
+                   center_timeout_handler = "unset";
+               }
+               unsubMsging( vuuid, "center" );
+               eval( center_done_eval );
+           } else {
+               center_timeout_handler = setTimeout( get_results_center, 2000, vuuid, 2000, 0 );
+
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+
+
+
+           $( "#center_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/center.php </span>" );
+           $('#center_progress').html( "" );
+           if ( center_timeout_handler != "unset" )
+           {
+               clearTimeout( center_timeout_handler );
+               center_timeout_handler = "unset";
+           }
+           unsubMsging( vuuid, "center" );
+           eval( center_done_eval );
+          } );
+          } else {
+
+          }
+       }
+   });
+}); 
+
+$( "#center_reset" ).click( function() {
+    
+    
+    ga.event( "", "center", "reset clicked" );
+    //    ga.value.resetDefaultValues( "center" );
+    ga.valuen.restore.dflt(  "center" );
+    ga.value.resetDefaultValues( "center_output", true );
+    
+    eval( input_repeats );
+    return false;
+});
+setHoverHelp();
+
+
+eval( input_repeats );
+ga.pull.doPull();
+</script>
+</form>
+<div id="center_results"></div>
+<script>
+ga.tmp.html = "<hr>";
+
+$("#center").append( ga.tmp.html );
+</script>
+<form id="center_output">
+<div id="center_output_msgs" class="warning" type="msgs"></div>
+<script>
+ga.value.setLastValueOutput( "center_output" );
+ga.value.extra_resets.clear();
+</script>
+
+<table>
+<tr>
+<td colspan="4" style="vertical-align:top"><label hidden id="center_output_textarea_label" for="center_output_textarea" class="header3 ">Report:</label>
+<textarea readonly hidden id="center_output_textarea" rows="10" cols="60" class="help_link"></textarea>
+<span class="help">general textarea help</span>
+</td>
+</tr>
+<tr><td><label for="output2">Message text </label></td><td><textarea name="output2" id="output2" cols="60" readonly></textarea>
+</td></tr>
+<script>
+$( "#global_data" ).data( "_append:center_output_output2", 1 );
+ga.value.setLastValue( "center_output", "#output2" );
+</script>
+<tr><td><label for="output1">Output value 1 </label></td><td><input type="text" name="output1" id="output1" readonly size="60"></td></tr>
+<script>
+ga.value.setLastValue( "center_output", "#output1" );
+</script>
+<tr><td><label for="output3">Progress </label></td><td><progress name="output3" id="output3" value="0" max="1"></progress></td></tr>
+<script>
+ga.value.setLastValue( "center_output", "#output3" );
+</script>
+</table>
+</form>
+

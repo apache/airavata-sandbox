@@ -1,0 +1,45 @@
+<style>
+#panel_simulate {
+    position: relative;
+    display: block;  
+}
+</style>
+<p>
+<center>
+
+    <button id="simulate_simulate_1" class="help_link">Simulate 1</button><span class="help">help for Simulate_1</span>
+<script>
+    $( "#simulate_simulate_1" ).click(function() {
+        var d=$( "#tab_docs > a" );
+        if ( d.length ) { d.attr( "href", "__docsbaseurl__/simulate/simulate_1/simulate_1.html" ); };
+    
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+
+        if ( ga.valuen.lastload != "simulate_1" || !$( "#" + ga.valuen.lastload ).is( ":visible" ) ) {
+            $( "#panel_simulate" ).load( "ajax/simulate/simulate_1.html", function() { ga.valuen.save( "simulate_1", true ); ga.valuen.restore( "simulate_1" ); ga.valuen.lastload = "simulate_1"; });
+        }
+    });
+</script>
+    <button id="simulate_simulate_2" class="help_link">Simulate 2</button><span class="help">help for simulate_2</span>
+<script>
+    $( "#simulate_simulate_2" ).click(function() {
+        var d=$( "#tab_docs > a" );
+        if ( d.length ) { d.attr( "href", "__docsbaseurl__/simulate/simulate_2/simulate_2.html" ); };
+    
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+
+        if ( ga.valuen.lastload != "simulate_2" || !$( "#" + ga.valuen.lastload ).is( ":visible" ) ) {
+            $( "#panel_simulate" ).load( "ajax/simulate/simulate_2.html", function() { ga.valuen.save( "simulate_2", true ); ga.valuen.restore( "simulate_2" ); ga.valuen.lastload = "simulate_2"; });
+        }
+    });
+</script>
+</center>
+</p>
+
+<div id="panel_simulate">
+</div>
+
+
+<script>
+    $( "#panel_simulate" ).text("");
+</script>

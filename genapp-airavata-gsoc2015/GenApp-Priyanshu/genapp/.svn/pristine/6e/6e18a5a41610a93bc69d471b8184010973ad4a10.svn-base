@@ -1,0 +1,3 @@
+this_html = '<input hidden="text" name="__fields:id__" id="__fields:id__"__~fields:default{ value="__fields:default__"}>';
+input_html += this_html;
+

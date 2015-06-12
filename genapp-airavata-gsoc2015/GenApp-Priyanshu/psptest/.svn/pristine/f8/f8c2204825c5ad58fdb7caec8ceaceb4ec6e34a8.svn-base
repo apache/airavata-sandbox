@@ -1,0 +1,44 @@
+# this is a module file, any module specific info belongs here
+{
+    "moduleid" : "align",
+    "label"    : "Align",
+    "help"     : "help for Align",
+    "fields"   : [
+                  {
+                   "role"       : "input",
+                   "id"         : "input1",
+                   "label"      : "Align value 1",
+                   "type"       : "float",
+                   "default"    : 0.0,
+                   "min"        : 0.0,
+                   "max"        : 1e50,
+                   "required"   : "true"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input2",
+                   "label"   : "Align value 2",
+                   "type"    : "integer",
+                   "default" : 1,
+                   "min"     : -10,
+                   "max"     : 10,
+                   "required" : "false"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input3",
+                   "label"   : "Align value 3",
+                   "type"    : "checkbox",
+                   "checked" : "true"
+                   },
+                   {
+                   "role"  : "output",
+                   "id"    : "output1",
+                   "label" : "Output value 1",
+                   "type"  : "float"
+                   }
+                  ],
+# the executable will take inputs in json and produce output in json
+    "executable"   : "align",
+    "submitpolicy" : "all"
+}

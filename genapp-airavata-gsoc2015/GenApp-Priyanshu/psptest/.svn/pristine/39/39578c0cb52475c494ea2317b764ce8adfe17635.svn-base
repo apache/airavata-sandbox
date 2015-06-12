@@ -1,0 +1,35 @@
+#!/usr/bin/perl
+
+use JSON;
+use Data::Dumper;
+
+if ( !@ARGV )
+{
+    print "\{\"error\":\"$0 called with no arguments\"\}\n";
+    exit;
+}
+
+$json = shift;
+$ref = decode_json( $json );
+$p = $$ref{ "_base_directory" };
+
+$res = {};
+$$res{ "hi" } = "calculate_2 executable";
+
+$$res{ "p" } = $p;
+
+open OUT, ">$p/logref.txt";
+print OUT Dumper($ref);
+close OUT;
+
+$$res{ "outputref" } = "$p/logref.txt";
+
+open OUT, ">$p/logres.txt";
+print OUT Dumper($res);
+print OUT "--- as json output string ---\n";
+print OUT $json;
+close OUT;
+
+$$res{ "outputres" } = "$p/logres.txt";
+
+print encode_json( $res ) . "\n";

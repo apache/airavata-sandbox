@@ -1,0 +1,121 @@
+
+   reset_last_values();
+
+   gl->setColumnStretch( 0, 0 );
+   gl->setColumnStretch( 1, 0 );
+   gl->setColumnStretch( 2, 1 );
+   gl_panel1->addLayout( gl, 2, 0, 1, 3 );
+   panel1_sub_layouts.push_back( gl );
+   for ( int i = 0; i < (int) panel1_inputs.size(); ++i )
+   {
+      panel1_is_input[ panel1_inputs[ i ] ] = true;
+   }
+}
+
+void __application__::module_reset___menu:id_____menu:modules:id__()
+{
+   reset_default_values();
+}
+
+void __application__::module_submit___menu:id_____menu:modules:id__()
+{
+   save_last_values();
+   reset_output_values( "default_value" );
+   
+   // we should check if process already running
+
+   QString program = "__executable_path:qt5__/__executable__";
+
+   QFileInfo qfi( program );
+   if ( !qfi.exists() || !qfi.isExecutable() || qfi.isDir() )
+   {
+      QString id = "__menu:modules:id__";
+      QString key = id + ":_errorMessages";    
+      global_data[ key + ":last_value" ] = QVariant( "Unexpected results:\n   error => command not found or not executable" );
+      if ( current_module_id == id &&
+           global_data_types.count( key ) )
+      {
+         reset_value( key, "last_value" );
+      }
+      return;
+   }
+   
+
+   process_json[ "__menu:modules:id__" ] = "";
+   qDebug() << "process started";
+   string tprojId = createProject("user", "__menu:modules:id__");
+   char *projId = new char[tprojId.length() + 1];
+   strcpy(projId, tprojId.c_str());
+   QString tmp = input_to_json( "__menu:modules:id__" );
+   string tjson = tmp.toUtf8().constData();
+   char *json = new char[tjson.length() + 1];
+   strcpy(json, tjson.c_str());
+   Register* register_;
+   register_ = Register::getInstance();
+   string module = "__menu:modules:id__";
+   string experiment = "Experiment";
+   char* expName = new char[module.length() + experiment.length() + 1];
+   strcpy(expName,module.c_str());
+   strcat(expName,experiment.c_str());
+   string tappId = register_->getInterfaceId("__menu:modules:label__");
+   char* appId = new char[tappId.length()+1];
+   strcpy(appId,tappId.c_str());
+   string texpId = createExperiment("user", expName , projId, appId, json);  
+   char *expId = new char[texpId.length() + 1];
+   strcpy(expId, texpId.c_str());
+   launchExperiment(expId);
+   while((getExperimentStatus(expId))!=8){   
+   cout << "status" << getExperimentStatus(expId) << endl;
+   if(getExperimentStatus(expId)==9)
+   {
+     cout << "Experiment Failed" << endl;
+     break;
+   }
+   unsigned int microseconds = 30000;
+   usleep(microseconds);
+   }
+
+   if(getExperimentStatus(expId)==8)
+   {
+     unsigned int microseconds = 500000;
+     usleep(microseconds);
+     string output = getExperimentOutput(expId);  
+     QString qoutput = QString::fromStdString(output);
+     process_json[ "__menu:modules:id__" ] = qoutput;
+     qDebug() << "process___menu:id_____menu:modules:id__->finished()";
+     qDebug() << qoutput;   
+     process_results( "__menu:modules:id__" );
+   }
+  
+   if(getExperimentStatus(expId)==9)
+    exit(1);
+
+}
+
+void __application__::readyReadStandardOutput___menu:id_____menu:modules:id__()
+{
+   process_json[ "__menu:modules:id__" ] += QString( process___menu:id_____menu:modules:id__->readAllStandardOutput() );
+}
+
+void __application__::readyReadStandardError___menu:id_____menu:modules:id__()
+{
+   qDebug() << process___menu:id_____menu:modules:id__->readAllStandardError();
+}
+
+void __application__::error___menu:id_____menu:modules:id__( QProcess::ProcessError e )
+{
+   qDebug() << "process___menu:id_____menu:modules:id__->error()" << e;
+}
+
+void __application__::finished___menu:id_____menu:modules:id__( int, QProcess::ExitStatus )
+{
+   qDebug() << "process___menu:id_____menu:modules:id__->finished()";
+   readyReadStandardOutput___menu:id_____menu:modules:id__();
+   readyReadStandardError___menu:id_____menu:modules:id__();
+
+   disconnect( process___menu:id_____menu:modules:id__, 0, 0, 0 );
+   // post process data into output fields, add unexpected data etc
+   // delete process___menu:id_____menu:modules:id__;
+   // process___menu:id_____menu:modules:id__ = (QProcess *) 0;
+   process_results( "__menu:modules:id__" );
+}

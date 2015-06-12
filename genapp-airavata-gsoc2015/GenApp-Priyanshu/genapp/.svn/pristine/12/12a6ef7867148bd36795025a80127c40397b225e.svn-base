@@ -1,0 +1,10 @@
+</center>
+</p>
+
+<div id="panel___menu:id__">
+</div>
+
+
+<script>
+    $( "#panel___menu:id__" ).text("");
+</script>

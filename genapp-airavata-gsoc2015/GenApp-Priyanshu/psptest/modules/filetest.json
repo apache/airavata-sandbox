@@ -1,0 +1,146 @@
+# this is a module file, any module specific info belongs here
+{
+    "moduleid"   : "filetest",
+    "label"      : "Filetest",
+    "help"       : "help for Filetest",
+    "executable" : "filetest",
+    "fields"   : [
+                  {
+                   "role"     : "input",
+                   "id"       : "file1",
+                   "label"    : "Choose a file",
+                   "type"     : "lrfile"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "file2",
+                   "label"    : "Choose another file",
+                   "type"     : "lrfile"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "cbfile3cb",
+                   "label"    : "How about yet another file",
+                   "type"     : "checkbox",
+                   "repeater" : "true"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "file3cb",
+                   "label"    : "Choose a CB file",
+                   "type"     : "lrfile",
+                   "repeat"   : "cbfile3cb"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "file4i",
+                   "label"    : "How about a bunch of files",
+                   "type"     : "integer",
+                   "default"  : 0,
+                   "min"      : 0,
+                   "max"      : 5,
+                   "repeater" : "true"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "file4if",
+                   "label"    : "Choose a numbered file",
+                   "type"     : "lrfile",
+                   "repeat"   : "file4i"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "path1",
+                   "label"    : "Choose a path",
+                   "type"     : "rpath",
+                   "help"     : "Choose path is an optional field"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "path2",
+                   "label"    : "Choose another path",
+                   "type"     : "rpath",
+                   "help"     : "Choose another path help"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "cbpath3cb",
+                   "label"    : "How about yet another path",
+                   "type"     : "checkbox",
+                   "repeater" : "true"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "path3cb",
+                   "label"    : "Choose a CB path",
+                   "type"     : "rpath",
+                   "repeat"   : "cbpath3cb",
+                   "help"     : "Choose a CB path is for a CB repeat path"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "path4i",
+                   "label"    : "How about a bunch of paths",
+                   "type"     : "integer",
+                   "default"  : 0,
+                   "min"      : 0,
+                   "max"      : 5,
+                   "repeater" : "true"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "path4if",
+                   "label"    : "Choose a numbered path",
+                   "type"     : "rpath",
+                   "repeat"   : "path4i",
+                   "help"     : "Choose a numbered path is for a integer repeat path"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "rfile1",
+                   "label"    : "Choose a remote file",
+                   "type"     : "rfile",
+                   "help"     : "Choose remote file is an optional field"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "rfile2",
+                   "label"    : "Choose another remote file",
+                   "type"     : "rfile",
+                   "help"     : "Choose another remote file"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "cbfile3cb",
+                   "label"    : "How about yet another remote file",
+                   "type"     : "checkbox",
+                   "repeater" : "true"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "rfile3cb",
+                   "label"    : "Choose a CB remote file",
+                   "type"     : "rfile",
+                   "repeat"   : "cbfile3cb",
+                   "help"     : "Choose a CB remote file is for a CB repeat remote file"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "rfile4i",
+                   "label"    : "How about a bunch of remote files",
+                   "type"     : "integer",
+                   "default"  : 0,
+                   "min"      : 0,
+                   "max"      : 5,
+                   "repeater" : "true"
+                   }
+                  ,{
+                   "role"     : "input",
+                   "id"       : "rfile4if",
+                   "label"    : "Choose a numbered remote file",
+                   "type"     : "rfile",
+                   "repeat"   : "rfile4i",
+                   "help"     : "Choose a numbered remote file is for a integer repeat remote file"
+                   }
+                  ]
+}

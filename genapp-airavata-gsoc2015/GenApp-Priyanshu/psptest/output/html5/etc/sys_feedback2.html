@@ -1,0 +1,443 @@
+
+<form id="sys_feedback2">
+<span id="sys_feedback2_input_area"></span>
+<script>
+
+input_eval = "";
+input_html = "<table>";
+input_repeats = "";
+input_trees = [];
+skipped_row = 0;
+sys_feedback2_done_eval = "";
+_jmol_info = {};
+// jmol = "jmol";
+ga.pull.clearPull();
+$('#sys_feedback2').on("keyup keypress", function(e) { var code = e.keyCode || e.which;  if (code  == 13) { e.preventDefault(); return false; }});
+this_html = '<tr><td colspan="4"><label id="label1_label" class="header3 ">Please give your feedback</label>' + 
+'</td>' +
+'<td><div id="label1"></div>' +
+'</td></tr>';
+this_eval = '';
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="email">Email address </label></td><td><input type="email" name="email" id="email" required size="50" class="help_link"><span class="help">Please verify your email address</span><span id="email_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 'ga.pull.toPull( "sys_feedback2", "#email", "email", "email", "#__fields:repeat__" );' + 
+'ga.value.setLastValue( "sys_feedback2", "#email" );$( "#email" ).keypress( function() { $( "#email_msg" ).html( "" ); });'
+;
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="email2">Repeat email address </label></td><td><input type="email" name="email2" id="email2" required size="50" class="help_link"><span class="help">Please repeat your email address</span><span id="email2_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 'ga.pull.toPull( "sys_feedback2", "#email2", "email", "email", "#__fields:repeat__" );' + 
+'ga.value.setLastValue( "sys_feedback2", "#email2" );$( "#email2" ).keypress( function() { $( "#email2_msg" ).html( "" ); });'
+ + '$( "#email2" ).blur( function() { ga.valid.checkMatch( "#email2", "#email" ); } );';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="subject">Subject </label></td><td><input type="text" name="subject" id="subject" required size="50" class="help_link"><span class="help">Please enter a subject for this message.</span><span id="subject_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 
+
+'ga.value.setLastValue( "sys_feedback2", "#subject" );$( "#subject" ).keypress( function() { $( "#subject_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="suggestion" class="highlight">Suggestion </label></td><td><input type="radio" name="level" id="suggestion" value="suggestion" checked class="help_link"><span class="help">Check this if your comment is a suggestion.</span></td></tr>';
+this_eval = 'ga.value.setLastValue( "sys_feedback2", "#suggestion" );';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="important" class="highlight">Important </label></td><td><input type="radio" name="level" id="important" value="important" class="help_link"><span class="help">Check this if your comment is important to aid your work.</span></td></tr>';
+this_eval = 'ga.value.setLastValue( "sys_feedback2", "#important" );';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="critical" class="highlight">Critical </label></td><td><input type="radio" name="level" id="critical" value="critical" class="help_link"><span class="help">Check this if your comment is critical and you can not proceeed with your work.</span></td></tr>';
+this_eval = 'ga.value.setLastValue( "sys_feedback2", "#critical" );';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="text1">Your comments </label></td><td><textarea name="text1" id="text1" rows="10" cols="60" class="help_link"></textarea>'
++ '<span class="help">Please take as much space as needed.  You can expand the text area at the bottom right.</span>'
++ '<span id="text1_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = ' ' +
+'ga.value.setLastValue( "sys_feedback2", "#text1" );' +
+'$( "#text1" ).keypress( function() { $( "#text1_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+if( skipped_row == 1 ){ input_html += "</tr>"; }
+input_html += '</table>';
+$( '#sys_feedback2_input_area' ).html( input_html );
+eval( input_eval );
+</script>
+<p><button id="sys_feedback2_submit" class="help_link"><span class="buttontext">Submit</span></button>
+<span class="help">this is help for the submit button</span>
+<button id="sys_feedback2_reset" class="help_link"><span class="buttontext">Reset to default values</span></button>
+<span class="help">this is help for the reset to default values button</span>
+
+</p>
+<span id="sys_feedback2_progress"></span>
+<script>
+$( "#sys_feedback2_reset" ).remove();
+
+
+
+var sys_feedback2_output_msgs = $("#sys_feedback2_output_msgs");
+sys_feedback2_output_msgs.text( "" );
+
+var sys_feedback2_timeout_handler = "unset";
+
+function get_results_sys_feedback2( id, last_timeout, getlastmsg, getinput )
+{
+
+//             url:"ajax/get_results.php?_window=" +  window.name + "&_logon=" +$( "#_state" ).data( "_logon" ) + '&_uuid=' + id,
+    var job_status = "";
+    $.getJSON( 
+             "ajax/get_results.php",
+             {
+                tagmode: "any",
+                format: "json",
+                _window : window.name,
+                _logon : $( "#_state" ).data( "_logon" ),
+                _uuid : id,
+                _getlastmsg : getlastmsg,
+                _getinput : getinput ? true : false
+             } )
+    .done( function( data, status, xhr ) {
+
+           var do_refresh = 1;
+           do_refresh = 0;
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( id );
+           }
+
+           job_status = ga.data.update( "sys_feedback2", data ).job_status;
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+              if ( sys_feedback2_timeout_handler != "unset" )
+              {
+                  clearTimeout( sys_feedback2_timeout_handler );
+                  sys_feedback2_timeout_handler = "unset";
+              }
+              unsubMsging( id, "sys_feedback2" );
+              eval( sys_feedback2_done_eval );
+           } else {
+               if ( !last_timeout || last_timeout < 2000 )
+               { 
+                  last_timeout = 2000;
+               } else {
+                  if ( last_timeout < 16000 )
+                  {
+                      last_timeout *= 2;
+                  } else {
+                      last_timeout = 16000;
+                  }
+               }
+
+               sys_feedback2_timeout_handler =  setTimeout( get_results_sys_feedback2, last_timeout, id, last_timeout, 0 );
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+           $( "#sys_feedback2_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/center.php </span>" );
+           $('#sys_feedback2_progress').html( "" );
+           if ( sys_feedback2_timeout_handler != "unset" )
+           {
+               clearTimeout( sys_feedback2_timeout_handler );
+               sys_feedback2_timeout_handler = "unset";
+           }
+           unsubMsging( id, "sys_feedback2" );
+           eval( sys_feedback2_done_eval );
+          } );
+    return false;
+};
+
+function msg_sys_feedback2 ( id, data )
+{
+   ga.data.update( "sys_feedback2", data, get_results_sys_feedback2, id );
+};
+
+$( "#sys_feedback2_submit" ).click( function( e ) {
+   e.preventDefault();
+   e.returnValue = false;
+
+   var $ok = 0;
+      $ok = 1;
+   
+
+   ga.event( "", "sys_feedback2", "submit clicked" );
+
+   
+
+
+
+
+
+   if ( !ga.valid.checksubmit( "sys_feedback2" ) ) {
+       return false;
+   }
+
+   var $form = $(this);
+
+   $.ajax({
+       type: 'get'
+       ,url: "ajax/sys_config/sys_joblocked.php?_window=" +  window.name + "&_logon=" + $( "#_state" ).data( "_logon" )
+ + "&_submitpolicy=all"
+       ,context: $form
+       ,success: function( data ) { // your success handler
+
+          if ( !$ok )
+          {
+          switch ( data )
+          {
+             case "1" :
+             {
+                 messagebox( { icon:"warning.png", text:"This project directory is currently locked by another project.\nYou can wait until it completes, change the project in user configuration or clear the lock in the job manager." } );
+                 return;
+             } break;
+             case "2" :
+             {
+                 messagebox( { icon:"warning.png", text:"You must be logged in to submit this module." } );
+                 return;
+             } break;
+             default :
+             {
+
+                 $ok = 1;
+             }
+          }
+          }
+       }
+       ,error: function() { // your error handler
+          messagebox( { icon:"toast.png", text:"Checking the project lock failed. This is possibly a server or network issue" } );
+       }
+       ,complete: function() { 
+          this.off('submit');
+          if ( $ok )
+          {
+
+
+              $( "#sys_feedback2_results" ).text( "" );
+
+              ga.value.saveLastValues( "sys_feedback2" );
+              ga.value.resetDefaultValues( "sys_feedback2_output", true );
+
+              var found_errors = 0;
+              $("#sys_feedback2").find("input").each(function(i){
+                 if ( $(this).attr( 'required' ) && $(this).val().length == 0 )
+                 {
+                    var tag =  "#sys_feedback2 " + "#" + $(this).attr('id') + "_msg";
+
+                    $( tag ).html( "missing required field" );
+                    found_errors = 1;
+                 }
+              });
+              if ( found_errors ) {
+                  return;
+              }
+
+    var tree_html = "";
+    $( "._hidden_tree_selects" ).remove( );
+    $.each( input_trees, function( k, v ){
+
+        $( 'input[type=hidden][name="' + v + '[]"]' ).remove();
+        var selectedElms = $('#' + v).jstree("get_selected", true);
+        var i = 0;
+        $.each(selectedElms, function() {
+           tree_html += '<input type="hidden" name="' + v + '[]" value="' + this.id + '" class="_hidden_tree_selects"/>';
+
+        });
+    });
+
+    $( this ).append( tree_html );
+
+
+    var logonadd = $("<input>").attr("type", "hidden").attr("name", "_logon").val( $( "#_state" ).data( "_logon" ) );$( this ).append($(logonadd));
+    var projectadd = $("<input>").attr("type", "hidden").attr("name", "_project").val( $( "#_state" ).data( "_project" ) );$( this ).append($(projectadd));
+    var windowadd = $("<input>").attr("type", "hidden").attr("name", "_window").val( window.name );$( this ).append($(windowadd));
+    var vuuid = uuid.v1();
+
+
+
+
+
+
+    var uuidadd = $("<input>").attr("type", "hidden").attr("name", "_uuid").val( vuuid );$( this ).append($(uuidadd));
+//    ga.altfile.add( "sys_feedback2" );
+    ga.valuen.addhtml( "sys_feedback2" );
+
+    subMsging( vuuid, msg_sys_feedback2, "sys_feedback2" );
+
+    var formData = new FormData($('form')[0]);
+
+
+    $('#sys_feedback2_progress').html( "Uploading:<progress></progress>" );
+
+    var job_status = "";
+
+    ga.event( "", "sys_feedback2", "submit: passed submit checks, submitting" );
+
+    $.ajax( {
+             dataType: "json",
+             cache:false,
+//             timeout:3000,  // for testing
+             type:"POST",
+             url:"ajax/sys_config/sys_feedback2.php",
+             data: formData,
+             xhr: function() {  // Custom XMLHttpRequest
+                 var myXhr = $.ajaxSettings.xhr();
+                 if(myXhr.upload){ // Check if upload property exists
+                     myXhr.upload.addEventListener('progress',
+                         function(e) {
+                         if(e.lengthComputable){
+                           $('#sys_feedback2_progress progress').attr({value:e.loaded,max:e.total});
+                         } }
+//                     progressHandlingFunction
+                    , false);
+                 }
+                 return myXhr;
+             },
+             contentType: false,
+             processData: false
+            } )
+    .done( function( data, status, xhr ) {
+
+
+
+
+// refresh cache for this project
+           $('#sys_feedback2_progress').html( "" );
+   
+           var do_refresh = 1;
+           do_refresh = 0;
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( vuuid );
+           }
+           
+// loop through data pairs
+           sys_feedback2_output_msgs.text( "" );
+           job_status = ga.data.update( "sys_feedback2", data ).job_status;
+
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+               if ( sys_feedback2_timeout_handler != "unset" )
+               {
+                   clearTimeout( sys_feedback2_timeout_handler );
+                   sys_feedback2_timeout_handler = "unset";
+               }
+               unsubMsging( vuuid, "sys_feedback2" );
+               eval( sys_feedback2_done_eval );
+           } else {
+               sys_feedback2_timeout_handler = setTimeout( get_results_sys_feedback2, 2000, vuuid, 2000, 0 );
+
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+
+
+
+           $( "#sys_feedback2_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/sys_config/sys_feedback2.php </span>" );
+           $('#sys_feedback2_progress').html( "" );
+           if ( sys_feedback2_timeout_handler != "unset" )
+           {
+               clearTimeout( sys_feedback2_timeout_handler );
+               sys_feedback2_timeout_handler = "unset";
+           }
+           unsubMsging( vuuid, "sys_feedback2" );
+           eval( sys_feedback2_done_eval );
+          } );
+          } else {
+
+          }
+       }
+   });
+}); 
+
+$( "#sys_feedback2_reset" ).click( function() {
+    
+    
+    ga.event( "", "sys_feedback2", "reset clicked" );
+    //    ga.value.resetDefaultValues( "sys_feedback2" );
+    ga.valuen.restore.dflt(  "sys_feedback2" );
+    ga.value.resetDefaultValues( "sys_feedback2_output", true );
+    
+    eval( input_repeats );
+    return false;
+});
+setHoverHelp();
+ga.value.resetDefaultValues( "sys_feedback2" );ga.value.resetDefaultValues( "sys_feedback2_output" ); ga.value.resetDefaultValue( "sys_feedback2_output", "sys_feedback2_output_msgs" );
+
+eval( input_repeats );
+ga.pull.doPull();
+</script>
+</form>
+<div id="sys_feedback2_results"></div>
+<script>
+ga.tmp.html = "<hr>";
+
+$("#sys_feedback2").append( ga.tmp.html );
+</script>
+<form id="sys_feedback2_output">
+<div id="sys_feedback2_output_msgs" class="warning" type="msgs"></div>
+<script>
+ga.value.setLastValueOutput( "sys_feedback2_output" );
+ga.value.extra_resets.clear();
+</script>
+
+<table>
+<tr>
+<td colspan="4" style="vertical-align:top"><label hidden id="sys_feedback2_output_textarea_label" for="sys_feedback2_output_textarea" class="header3 ">Report:</label>
+<textarea readonly hidden id="sys_feedback2_output_textarea" rows="10" cols="60" class="help_link"></textarea>
+<span class="help">general textarea help</span>
+</td>
+</tr>
+</table>
+</form>
+

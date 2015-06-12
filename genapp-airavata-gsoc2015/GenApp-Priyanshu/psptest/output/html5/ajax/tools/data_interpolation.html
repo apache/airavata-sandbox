@@ -1,0 +1,519 @@
+
+<form id="data_interpolation">
+<span id="data_interpolation_input_area"></span>
+<script>
+
+input_eval = "";
+input_html = "<table>";
+input_repeats = "";
+input_trees = [];
+skipped_row = 0;
+data_interpolation_done_eval = "";
+_jmol_info = {};
+// jmol = "jmol";
+ga.pull.clearPull();
+$('#data_interpolation').on("keyup keypress", function(e) { var code = e.keyCode || e.which;  if (code  == 13) { e.preventDefault(); return false; }});
+this_html = '<tr><td><label for="startx">Start x </label></td><td><input type="number" name="startx" id="startx" value="0" required><span id="startx_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 
+'ga.value.setLastValue( "data_interpolation", "#startx" );'
+ + '$( "#startx" ).blur( function() { ga.valid.checkFloat( "#startx" ); });'
+ + '$( "#startx" ).keypress( function() { $( "#startx_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="endx">End x </label></td><td><input type="number" name="endx" id="endx" value="26" required><span id="endx_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 
+'ga.value.setLastValue( "data_interpolation", "#endx" );'
+ + '$( "#endx" ).blur( function() { ga.valid.checkFloat( "#endx" ); });'
+ + '$( "#endx" ).keypress( function() { $( "#endx_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="deltax">Delta x </label></td><td><input type="number" name="deltax" id="deltax" value="0.1" required><span id="deltax_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 
+'ga.value.setLastValue( "data_interpolation", "#deltax" );'
+ + '$( "#deltax" ).blur( function() { ga.valid.checkFloat( "#deltax" ); });'
+ + '$( "#deltax" ).keypress( function() { $( "#deltax_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="abs" class="highlight">abs </label></td><td><input type="checkbox" name="abs" id="abs"></td></tr>'
+
+;
+this_eval = 
+'ga.value.setLastValue( "data_interpolation", "#abs" );'
+
+
+
+
+
+
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+if( skipped_row == 1 ){ input_html += "</tr>"; }
+input_html += '</table>';
+$( '#data_interpolation_input_area' ).html( input_html );
+eval( input_eval );
+</script>
+<p><button id="data_interpolation_submit" class="help_link"><span class="buttontext">Submit</span></button>
+<span class="help">this is help for the submit button</span>
+<button id="data_interpolation_reset" class="help_link"><span class="buttontext">Reset to default values</span></button>
+<span class="help">this is help for the reset to default values button</span>
+
+</p>
+<span id="data_interpolation_progress"></span>
+<script>
+
+
+
+
+var data_interpolation_output_msgs = $("#data_interpolation_output_msgs");
+data_interpolation_output_msgs.text( "" );
+
+var data_interpolation_timeout_handler = "unset";
+
+function get_results_data_interpolation( id, last_timeout, getlastmsg, getinput )
+{
+
+//             url:"ajax/get_results.php?_window=" +  window.name + "&_logon=" +$( "#_state" ).data( "_logon" ) + '&_uuid=' + id,
+    var job_status = "";
+    $.getJSON( 
+             "ajax/get_results.php",
+             {
+                tagmode: "any",
+                format: "json",
+                _window : window.name,
+                _logon : $( "#_state" ).data( "_logon" ),
+                _uuid : id,
+                _getlastmsg : getlastmsg,
+                _getinput : getinput ? true : false
+             } )
+    .done( function( data, status, xhr ) {
+
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( id );
+           }
+
+           job_status = ga.data.update( "data_interpolation", data ).job_status;
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+              if ( data_interpolation_timeout_handler != "unset" )
+              {
+                  clearTimeout( data_interpolation_timeout_handler );
+                  data_interpolation_timeout_handler = "unset";
+              }
+              unsubMsging( id, "data_interpolation" );
+              eval( data_interpolation_done_eval );
+           } else {
+               if ( !last_timeout || last_timeout < 2000 )
+               { 
+                  last_timeout = 2000;
+               } else {
+                  if ( last_timeout < 16000 )
+                  {
+                      last_timeout *= 2;
+                  } else {
+                      last_timeout = 16000;
+                  }
+               }
+
+               data_interpolation_timeout_handler =  setTimeout( get_results_data_interpolation, last_timeout, id, last_timeout, 0 );
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+           $( "#data_interpolation_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/center.php </span>" );
+           $('#data_interpolation_progress').html( "" );
+           if ( data_interpolation_timeout_handler != "unset" )
+           {
+               clearTimeout( data_interpolation_timeout_handler );
+               data_interpolation_timeout_handler = "unset";
+           }
+           unsubMsging( id, "data_interpolation" );
+           eval( data_interpolation_done_eval );
+          } );
+    return false;
+};
+
+function msg_data_interpolation ( id, data )
+{
+   ga.data.update( "data_interpolation", data, get_results_data_interpolation, id );
+};
+
+$( "#data_interpolation_submit" ).click( function( e ) {
+   e.preventDefault();
+   e.returnValue = false;
+
+   var $ok = 0;
+   
+   
+
+   ga.event( "", "data_interpolation", "submit clicked" );
+
+   
+
+
+
+
+
+   if ( !ga.valid.checksubmit( "data_interpolation" ) ) {
+       return false;
+   }
+
+   var $form = $(this);
+
+   $.ajax({
+       type: 'get'
+       ,url: "ajax/sys_config/sys_joblocked.php?_window=" +  window.name + "&_logon=" + $( "#_state" ).data( "_logon" )
+
+       ,context: $form
+       ,success: function( data ) { // your success handler
+
+          if ( !$ok )
+          {
+          switch ( data )
+          {
+             case "1" :
+             {
+                 messagebox( { icon:"warning.png", text:"This project directory is currently locked by another project.\nYou can wait until it completes, change the project in user configuration or clear the lock in the job manager." } );
+                 return;
+             } break;
+             case "2" :
+             {
+                 messagebox( { icon:"warning.png", text:"You must be logged in to submit this module." } );
+                 return;
+             } break;
+             default :
+             {
+
+                 $ok = 1;
+             }
+          }
+          }
+       }
+       ,error: function() { // your error handler
+          messagebox( { icon:"toast.png", text:"Checking the project lock failed. This is possibly a server or network issue" } );
+       }
+       ,complete: function() { 
+          this.off('submit');
+          if ( $ok )
+          {
+
+
+              $( "#data_interpolation_results" ).text( "" );
+
+              ga.value.saveLastValues( "data_interpolation" );
+              ga.value.resetDefaultValues( "data_interpolation_output", true );
+
+              var found_errors = 0;
+              $("#data_interpolation").find("input").each(function(i){
+                 if ( $(this).attr( 'required' ) && $(this).val().length == 0 )
+                 {
+                    var tag =  "#data_interpolation " + "#" + $(this).attr('id') + "_msg";
+
+                    $( tag ).html( "missing required field" );
+                    found_errors = 1;
+                 }
+              });
+              if ( found_errors ) {
+                  return;
+              }
+
+    var tree_html = "";
+    $( "._hidden_tree_selects" ).remove( );
+    $.each( input_trees, function( k, v ){
+
+        $( 'input[type=hidden][name="' + v + '[]"]' ).remove();
+        var selectedElms = $('#' + v).jstree("get_selected", true);
+        var i = 0;
+        $.each(selectedElms, function() {
+           tree_html += '<input type="hidden" name="' + v + '[]" value="' + this.id + '" class="_hidden_tree_selects"/>';
+
+        });
+    });
+
+    $( this ).append( tree_html );
+
+
+    var logonadd = $("<input>").attr("type", "hidden").attr("name", "_logon").val( $( "#_state" ).data( "_logon" ) );$( this ).append($(logonadd));
+    var projectadd = $("<input>").attr("type", "hidden").attr("name", "_project").val( $( "#_state" ).data( "_project" ) );$( this ).append($(projectadd));
+    var windowadd = $("<input>").attr("type", "hidden").attr("name", "_window").val( window.name );$( this ).append($(windowadd));
+    var vuuid = uuid.v1();
+
+
+
+
+
+
+    var uuidadd = $("<input>").attr("type", "hidden").attr("name", "_uuid").val( vuuid );$( this ).append($(uuidadd));
+//    ga.altfile.add( "data_interpolation" );
+    ga.valuen.addhtml( "data_interpolation" );
+
+    subMsging( vuuid, msg_data_interpolation, "data_interpolation" );
+
+    var formData = new FormData($('form')[0]);
+
+
+    $('#data_interpolation_progress').html( "Uploading:<progress></progress>" );
+
+    var job_status = "";
+
+    ga.event( "", "data_interpolation", "submit: passed submit checks, submitting" );
+
+    $.ajax( {
+             dataType: "json",
+             cache:false,
+//             timeout:3000,  // for testing
+             type:"POST",
+             url:"ajax/tools/data_interpolation.php",
+             data: formData,
+             xhr: function() {  // Custom XMLHttpRequest
+                 var myXhr = $.ajaxSettings.xhr();
+                 if(myXhr.upload){ // Check if upload property exists
+                     myXhr.upload.addEventListener('progress',
+                         function(e) {
+                         if(e.lengthComputable){
+                           $('#data_interpolation_progress progress').attr({value:e.loaded,max:e.total});
+                         } }
+//                     progressHandlingFunction
+                    , false);
+                 }
+                 return myXhr;
+             },
+             contentType: false,
+             processData: false
+            } )
+    .done( function( data, status, xhr ) {
+
+
+
+
+// refresh cache for this project
+           $('#data_interpolation_progress').html( "" );
+   
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( vuuid );
+           }
+           
+// loop through data pairs
+           data_interpolation_output_msgs.text( "" );
+           job_status = ga.data.update( "data_interpolation", data ).job_status;
+
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+               if ( data_interpolation_timeout_handler != "unset" )
+               {
+                   clearTimeout( data_interpolation_timeout_handler );
+                   data_interpolation_timeout_handler = "unset";
+               }
+               unsubMsging( vuuid, "data_interpolation" );
+               eval( data_interpolation_done_eval );
+           } else {
+               data_interpolation_timeout_handler = setTimeout( get_results_data_interpolation, 2000, vuuid, 2000, 0 );
+
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+
+
+
+           $( "#data_interpolation_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/data_interpolation.php </span>" );
+           $('#data_interpolation_progress').html( "" );
+           if ( data_interpolation_timeout_handler != "unset" )
+           {
+               clearTimeout( data_interpolation_timeout_handler );
+               data_interpolation_timeout_handler = "unset";
+           }
+           unsubMsging( vuuid, "data_interpolation" );
+           eval( data_interpolation_done_eval );
+          } );
+          } else {
+
+          }
+       }
+   });
+}); 
+
+$( "#data_interpolation_reset" ).click( function() {
+    
+    
+    ga.event( "", "data_interpolation", "reset clicked" );
+    //    ga.value.resetDefaultValues( "data_interpolation" );
+    ga.valuen.restore.dflt(  "data_interpolation" );
+    ga.value.resetDefaultValues( "data_interpolation_output", true );
+    
+    eval( input_repeats );
+    return false;
+});
+setHoverHelp();
+
+
+eval( input_repeats );
+ga.pull.doPull();
+</script>
+</form>
+<div id="data_interpolation_results"></div>
+<script>
+ga.tmp.html = "<hr>";
+
+$("#data_interpolation").append( ga.tmp.html );
+</script>
+<form id="data_interpolation_output">
+<div id="data_interpolation_output_msgs" class="warning" type="msgs"></div>
+<script>
+ga.value.setLastValueOutput( "data_interpolation_output" );
+ga.value.extra_resets.clear();
+</script>
+
+<table>
+<tr>
+<td colspan="4" style="vertical-align:top"><label hidden id="data_interpolation_output_textarea_label" for="data_interpolation_output_textarea" class="header3 ">Report:</label>
+<textarea readonly hidden id="data_interpolation_output_textarea" rows="10" cols="60" class="help_link"></textarea>
+<span class="help">general textarea help</span>
+</td>
+</tr>
+<tr><td><label for="output1">output integer</label></td><td><input type="number" name="output1" id="output1" readonly></td></tr>
+<script>
+ga.value.setLastValue( "data_interpolation_output", "#output1" );
+</script>
+<tr><td><label for="output2">output float </label></td><td><input type="number" name="output2" id="output2" readonly></td></tr>
+<script>
+ga.value.setLastValue( "data_interpolation_output", "#output2" );
+</script>
+<tr><td><label for="output3">output text </label></td><td><input type="text" name="output3" id="output3" readonly></td></tr>
+<script>
+ga.value.setLastValue( "data_interpolation_output", "#output3" );
+</script>
+</table>
+<p>
+
+<label for="plotout4">plot 2d</label></tr><tr>
+<table class="help_link">
+<tr>
+   <td></td>
+   <td id="plotout4_title" style="text-align:center"></td>
+   <td id="plotout4_xy" class="coord"></td>
+</tr>
+<tr>
+   <td id="plotout4_ylabel" style="text-align:center"></td>
+   <td id="plotout4" type="plot2d" class="plot2ddef" style=""></td>
+   <td id="plotout4_legend"></td>
+</tr>
+<tr>
+   <td></td>
+   <td id="plotout4_xlabel" style="text-align:center"></td>
+   <td></td>
+</tr>
+</table>
+<span class="help">this is a plot</span>
+</p>
+
+<script>
+var tmp = $.plot( $( "#plotout4" ), [[]], gd.data( "_plot_options" ) );
+ga.value.set.plot2d.pan( "#plotout4", 0 );
+ga.value.set.plot2d.zoom( "#plotout4", 0 );
+ga.value.set.plot2d.hover( "#plotout4", 0 );
+ga.value.set.plot2d.pkg( "data_interpolation_output", "#plotout4" );
+
+ga.value.setLastValue( "data_interpolation_output", "#plotout4" );
+ga.value.extra_resets( "plotout4" );
+</script>
+<table>
+<tr><td><label for="outputref">input json reference </label>
+</td>
+<td><div id="outputref" type="filelink" readonly><span id="outputref_filelink"></span></div>
+</td></tr>
+<script>
+ga.value.setLastValue( "data_interpolation_output", "#outputref" );
+ga.value.extra_resets( "outputref" );
+</script>
+<tr><td><label for="outputres">results json reference </label>
+</td>
+<td><div id="outputres" type="filelink" readonly><span id="outputres_filelink"></span></div>
+</td></tr>
+<script>
+ga.value.setLastValue( "data_interpolation_output", "#outputres" );
+ga.value.extra_resets( "outputres" );
+</script>
+</table>
+<p><label for="outputpdb">test pdb output <div id="outputpdb" type="atomicstructure" ></div>
+</label></p>
+<p><div id="_jmol_panel_outputpdb"></div></p>
+<script>
+_jmol_info[ "outputpdb" ] = {
+   width: 850,
+   height: 850,
+        disableJ2SLoadMonitor: true,
+        disableInitialConsole: true,
+	use: "HTML5",
+	j2sPath: "j2s",
+	isSigned: false,
+	addSelectionOptions: false,
+	readyFunction: null,
+	defaultModel: null,
+	debug: false
+};
+ga.value.setLastValue( "data_interpolation_output", "#outputpdb" );
+ga.value.extra_resets( "outputpdb" );
+</script>
+<table>
+</table>
+<p><label for="outputpdb2">test pdb output2 <div id="outputpdb2" type="atomicstructure" ></div>
+</label></p>
+<p><div id="_jmol_panel_outputpdb2"></div></p>
+<script>
+_jmol_info[ "outputpdb2" ] = {
+   width: 850,
+   height: 850,
+        disableJ2SLoadMonitor: true,
+        disableInitialConsole: true,
+	use: "HTML5",
+	j2sPath: "j2s",
+	isSigned: false,
+	addSelectionOptions: false,
+	readyFunction: null,
+	defaultModel: null,
+	debug: false
+};
+ga.value.setLastValue( "data_interpolation_output", "#outputpdb2" );
+ga.value.extra_resets( "outputpdb2" );
+</script>
+<table>
+</table>
+</form>
+

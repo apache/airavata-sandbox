@@ -1,0 +1,22 @@
+{
+  "mail"     : {
+                "admin"    : "emre@biochem.uthscsa.edu"
+                ,"feedback" : "emre@biochem.uthscsa.edu"
+                ,"from"     : "genapp.ehb1.net"
+               }
+  ,"hostip"   : "192.168.3.44"
+  ,"hostname" : "192.168.3.44"
+  ,"messaging" : {
+                  "wsport"     : 37777
+                  ,"wssport"   : 443
+                  ,"zmqhostip" : "127.0.0.1"
+                  ,"zmqport"   : 37778
+                  ,"udphostip" : "127.0.0.1"
+                  ,"udpport"   : 37779
+                 }
+  ,"resources" : {
+                  "local"      : ""
+                 }
+  ,"resourcedefault" : "local"
+  ,"submitpolicy"    : "login"
+}

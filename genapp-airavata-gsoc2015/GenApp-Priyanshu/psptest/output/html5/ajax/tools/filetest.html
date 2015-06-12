@@ -1,0 +1,778 @@
+
+<form id="filetest">
+<span id="filetest_input_area"></span>
+<script>
+
+input_eval = "";
+input_html = "<table>";
+input_repeats = "";
+input_trees = [];
+skipped_row = 0;
+filetest_done_eval = "";
+_jmol_info = {};
+// jmol = "jmol";
+ga.pull.clearPull();
+$('#filetest').on("keyup keypress", function(e) { var code = e.keyCode || e.which;  if (code  == 13) { e.preventDefault(); return false; }});
+this_html = '<tr><td><label for="file1" >Choose a file </label></td>' +
+'<td><input type="file" name="file1" id="file1" data-add="file1_altval">' +
+' or <button id="file1_button" name="file1_button" data-type="lrfile"><span class="buttontext">Browse server</span></button>' +
+
+' <span id="file1_altval"></span>' +
+'<span id="file1_msg" class="warning field_msg" > </span></td><input type="hidden" name="_selaltval_file1" value="file1_altval"</input></tr>';
+
+this_eval = 'ga.value.setLastValue( "filetest", "#file1" );' +
+'ga.altfile("filetest","file1","file1_altval");' +
+'$( "#file1" ).change( function(){console.log("change on #file1");$("#file1_altval").html( "<i>Local</i>: " + $("#file1").val().replace(/^C:.fakepath./,""));$("#file1_msg").html("");});' +
+'ga.altfile.button("filetest","file1","Choose a file","rfile",function(v){ga.altfile.button.lrfile(v,"filetest","file1");});' +
+'$("#file1_button").on("click",function(){return ga.altfile.button.call("filetest","file1");});';
+
+// var s = $(v).jstree("get_selected", true),r="";$.each(s,function(){r=r+$.base64.decode(this.id).substr(2)+" "});$("#file1_altval").html( r.length ? "<i>Server</i>: " + r : "");r.length?$("#file1").val(""):""});' +
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="file2" >Choose another file </label></td>' +
+'<td><input type="file" name="file2" id="file2" data-add="file2_altval">' +
+' or <button id="file2_button" name="file2_button" data-type="lrfile"><span class="buttontext">Browse server</span></button>' +
+
+' <span id="file2_altval"></span>' +
+'<span id="file2_msg" class="warning field_msg" > </span></td><input type="hidden" name="_selaltval_file2" value="file2_altval"</input></tr>';
+
+this_eval = 'ga.value.setLastValue( "filetest", "#file2" );' +
+'ga.altfile("filetest","file2","file2_altval");' +
+'$( "#file2" ).change( function(){console.log("change on #file2");$("#file2_altval").html( "<i>Local</i>: " + $("#file2").val().replace(/^C:.fakepath./,""));$("#file2_msg").html("");});' +
+'ga.altfile.button("filetest","file2","Choose another file","rfile",function(v){ga.altfile.button.lrfile(v,"filetest","file2");});' +
+'$("#file2_button").on("click",function(){return ga.altfile.button.call("filetest","file2");});';
+
+// var s = $(v).jstree("get_selected", true),r="";$.each(s,function(){r=r+$.base64.decode(this.id).substr(2)+" "});$("#file2_altval").html( r.length ? "<i>Server</i>: " + r : "");r.length?$("#file2").val(""):""});' +
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="cbfile3cb" class="highlight">How about yet another file </label></td><td><input type="checkbox" name="cbfile3cb" id="cbfile3cb" data-repeater="checkbox"></td></tr>'
++ '<tr><td></td><td colspan="4"><span id="cbfile3cb-repeater"></span></td></tr>'
+;
+this_eval = 
+'ga.value.setLastValue( "filetest", "#cbfile3cb" );'
+
+
+
+ + 'ga.repeat.repeater( "filetest", "cbfile3cb", "checkbox" );$( "#cbfile3cb" ).change( function() { ga.repeat.change( "filetest", "cbfile3cb" ); } );'
+
+
+
+ input_repeats += 'ga.repeat.change( "filetest", "cbfile3cb", 1 );';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="file3cb" >Choose a CB file </label></td>' +
+'<td><input type="file" name="file3cb" id="file3cb" data-add="file3cb_altval">' +
+' or <button id="file3cb_button" name="file3cb_button" data-type="lrfile"><span class="buttontext">Browse server</span></button>' +
+
+' <span id="file3cb_altval"></span>' +
+'<span id="file3cb_msg" class="warning field_msg" > </span></td><input type="hidden" name="_selaltval_file3cb" value="file3cb_altval"</input></tr>';
+
+this_eval = 'ga.value.setLastValue( "filetest", "#file3cb" );' +
+'ga.altfile("filetest","file3cb","file3cb_altval");' +
+'$( "#file3cb" ).change( function(){console.log("change on #file3cb");$("#file3cb_altval").html( "<i>Local</i>: " + $("#file3cb").val().replace(/^C:.fakepath./,""));$("#file3cb_msg").html("");});' +
+'ga.altfile.button("filetest","file3cb","Choose a CB file","rfile",function(v){ga.altfile.button.lrfile(v,"filetest","file3cb");});' +
+'$("#file3cb_button").on("click",function(){return ga.altfile.button.call("filetest","file3cb");});';
+
+// var s = $(v).jstree("get_selected", true),r="";$.each(s,function(){r=r+$.base64.decode(this.id).substr(2)+" "});$("#file3cb_altval").html( r.length ? "<i>Server</i>: " + r : "");r.length?$("#file3cb").val(""):""});' +
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+this_html = ga.repeat.repeat( "filetest", "file3cb", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("filetest", "file3cb", "cbfile3cb" );';
+
+input_html += this_html;
+input_eval += this_eval;
+ga.tmp.html = '';
+ga.tmp.html = '<tr><td></td><td colspan="4"><span id="file4i-repeater"></span></td></tr>';
+
+this_html = '<tr>' +
+'<td><label for="file4i">How about a bunch of files </label></td>' + 
+'<td><input type="number" name="file4i" id="file4i" data-repeater="integer" value="0" min="0" max="5"' +
+'><span id="file4i_msg" class="warning field_msg" > </span></td></tr>'
++ ga.tmp.html
+;
+
+this_eval = 
+'ga.value.setLastValue( "filetest", "#file4i" );'
++ 'ga.repeat.repeater( "filetest", "file4i", "integer" );'
++ '$( "#file4i" ).on("change blur", function() { ga.valid.checkInt( "#file4i" );'
++ 'ga.repeat.change( "filetest", "file4i" );'
+
++ '});'
+
++ '$( "#file4i" ).keypress( function() { $( "#file4i_msg" ).html( "" ); });'
+
+
+
+;
+
+ input_repeats += 'ga.repeat.change( "filetest", "file4i", 1 );';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="file4if" >Choose a numbered file </label></td>' +
+'<td><input type="file" name="file4if" id="file4if" data-add="file4if_altval">' +
+' or <button id="file4if_button" name="file4if_button" data-type="lrfile"><span class="buttontext">Browse server</span></button>' +
+
+' <span id="file4if_altval"></span>' +
+'<span id="file4if_msg" class="warning field_msg" > </span></td><input type="hidden" name="_selaltval_file4if" value="file4if_altval"</input></tr>';
+
+this_eval = 'ga.value.setLastValue( "filetest", "#file4if" );' +
+'ga.altfile("filetest","file4if","file4if_altval");' +
+'$( "#file4if" ).change( function(){console.log("change on #file4if");$("#file4if_altval").html( "<i>Local</i>: " + $("#file4if").val().replace(/^C:.fakepath./,""));$("#file4if_msg").html("");});' +
+'ga.altfile.button("filetest","file4if","Choose a numbered file","rfile",function(v){ga.altfile.button.lrfile(v,"filetest","file4if");});' +
+'$("#file4if_button").on("click",function(){return ga.altfile.button.call("filetest","file4if");});';
+
+// var s = $(v).jstree("get_selected", true),r="";$.each(s,function(){r=r+$.base64.decode(this.id).substr(2)+" "});$("#file4if_altval").html( r.length ? "<i>Server</i>: " + r : "");r.length?$("#file4if").val(""):""});' +
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+this_html = ga.repeat.repeat( "filetest", "file4if", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("filetest", "file4if", "file4i" );';
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr id="path1-tr"><td><label for="path1" >Choose a path </label></td>' +
+'<td><button id="path1"  name="path1" data-type="rpath" data-add="path1_altval" class="help_link"><span class="buttontext">Browse server for a path</span></button>' +
+'<span class="help">Choose path is an optional field</span>' +
+'<span id="path1_altval"></span>' +
+'<span id="path1_msg" class="warning field_msg" > </span></td>';
+
+this_eval = 'ga.value.setLastValue( "filetest", "#path1" );' +
+'ga.altfile("filetest","path1","path1_altval");' +
+'ga.altfile.button("filetest","path1","Choose a path","rpath",function(v){ga.altfile.button.rpath(v,"filetest","path1");});' +
+'$("#path1").on("click",function(){return ga.altfile.button.call("filetest","path1");});';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr id="path2-tr"><td><label for="path2" >Choose another path </label></td>' +
+'<td><button id="path2"  name="path2" data-type="rpath" data-add="path2_altval" class="help_link"><span class="buttontext">Browse server for a path</span></button>' +
+'<span class="help">Choose another path help</span>' +
+'<span id="path2_altval"></span>' +
+'<span id="path2_msg" class="warning field_msg" > </span></td>';
+
+this_eval = 'ga.value.setLastValue( "filetest", "#path2" );' +
+'ga.altfile("filetest","path2","path2_altval");' +
+'ga.altfile.button("filetest","path2","Choose another path","rpath",function(v){ga.altfile.button.rpath(v,"filetest","path2");});' +
+'$("#path2").on("click",function(){return ga.altfile.button.call("filetest","path2");});';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="cbpath3cb" class="highlight">How about yet another path </label></td><td><input type="checkbox" name="cbpath3cb" id="cbpath3cb" data-repeater="checkbox"></td></tr>'
++ '<tr><td></td><td colspan="4"><span id="cbpath3cb-repeater"></span></td></tr>'
+;
+this_eval = 
+'ga.value.setLastValue( "filetest", "#cbpath3cb" );'
+
+
+
+ + 'ga.repeat.repeater( "filetest", "cbpath3cb", "checkbox" );$( "#cbpath3cb" ).change( function() { ga.repeat.change( "filetest", "cbpath3cb" ); } );'
+
+
+
+ input_repeats += 'ga.repeat.change( "filetest", "cbpath3cb", 1 );';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr id="path3cb-tr"><td><label for="path3cb" >Choose a CB path </label></td>' +
+'<td><button id="path3cb"  name="path3cb" data-type="rpath" data-add="path3cb_altval" class="help_link"><span class="buttontext">Browse server for a path</span></button>' +
+'<span class="help">Choose a CB path is for a CB repeat path</span>' +
+'<span id="path3cb_altval"></span>' +
+'<span id="path3cb_msg" class="warning field_msg" > </span></td>';
+
+this_eval = 'ga.value.setLastValue( "filetest", "#path3cb" );' +
+'ga.altfile("filetest","path3cb","path3cb_altval");' +
+'ga.altfile.button("filetest","path3cb","Choose a CB path","rpath",function(v){ga.altfile.button.rpath(v,"filetest","path3cb");});' +
+'$("#path3cb").on("click",function(){return ga.altfile.button.call("filetest","path3cb");});';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+this_html = ga.repeat.repeat( "filetest", "path3cb", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("filetest", "path3cb", "cbpath3cb" );';
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+ga.tmp.html = '';
+ga.tmp.html = '<tr><td></td><td colspan="4"><span id="path4i-repeater"></span></td></tr>';
+
+this_html = '<tr>' +
+'<td><label for="path4i">How about a bunch of paths </label></td>' + 
+'<td><input type="number" name="path4i" id="path4i" data-repeater="integer" value="0" min="0" max="5"' +
+'><span id="path4i_msg" class="warning field_msg" > </span></td></tr>'
++ ga.tmp.html
+;
+
+this_eval = 
+'ga.value.setLastValue( "filetest", "#path4i" );'
++ 'ga.repeat.repeater( "filetest", "path4i", "integer" );'
++ '$( "#path4i" ).on("change blur", function() { ga.valid.checkInt( "#path4i" );'
++ 'ga.repeat.change( "filetest", "path4i" );'
+
++ '});'
+
++ '$( "#path4i" ).keypress( function() { $( "#path4i_msg" ).html( "" ); });'
+
+
+
+;
+
+ input_repeats += 'ga.repeat.change( "filetest", "path4i", 1 );';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr id="path4if-tr"><td><label for="path4if" >Choose a numbered path </label></td>' +
+'<td><button id="path4if"  name="path4if" data-type="rpath" data-add="path4if_altval" class="help_link"><span class="buttontext">Browse server for a path</span></button>' +
+'<span class="help">Choose a numbered path is for a integer repeat path</span>' +
+'<span id="path4if_altval"></span>' +
+'<span id="path4if_msg" class="warning field_msg" > </span></td>';
+
+this_eval = 'ga.value.setLastValue( "filetest", "#path4if" );' +
+'ga.altfile("filetest","path4if","path4if_altval");' +
+'ga.altfile.button("filetest","path4if","Choose a numbered path","rpath",function(v){ga.altfile.button.rpath(v,"filetest","path4if");});' +
+'$("#path4if").on("click",function(){return ga.altfile.button.call("filetest","path4if");});';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+this_html = ga.repeat.repeat( "filetest", "path4if", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("filetest", "path4if", "path4i" );';
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr id="rfile1-tr"><td><label for="rfile1" >Choose a remote file </label></td>' +
+'<td><button id="rfile1" name="rfile1" data-type="rfile" data-add="rfile1_altval" class="help_link"><span class="buttontext">Browse server for a file</span></button>' +
+'<span class="help">Choose remote file is an optional field</span>' +
+'<span id="rfile1_altval"></span>' +
+'<span id="rfile1_msg" class="warning field_msg" > </span></td>';
+
+this_eval = 'ga.value.setLastValue( "filetest", "#rfile1" );' +
+'ga.altfile("filetest","rfile1","rfile1_altval");' +
+'ga.altfile.button("filetest","rfile1","Choose a remote file","rfile",function(v){ga.altfile.button.rfile(v,"filetest","rfile1");});' +
+'$("#rfile1").on("click",function(){return ga.altfile.button.call("filetest","rfile1");});';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr id="rfile2-tr"><td><label for="rfile2" >Choose another remote file </label></td>' +
+'<td><button id="rfile2" name="rfile2" data-type="rfile" data-add="rfile2_altval" class="help_link"><span class="buttontext">Browse server for a file</span></button>' +
+'<span class="help">Choose another remote file</span>' +
+'<span id="rfile2_altval"></span>' +
+'<span id="rfile2_msg" class="warning field_msg" > </span></td>';
+
+this_eval = 'ga.value.setLastValue( "filetest", "#rfile2" );' +
+'ga.altfile("filetest","rfile2","rfile2_altval");' +
+'ga.altfile.button("filetest","rfile2","Choose another remote file","rfile",function(v){ga.altfile.button.rfile(v,"filetest","rfile2");});' +
+'$("#rfile2").on("click",function(){return ga.altfile.button.call("filetest","rfile2");});';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="cbfile3cb" class="highlight">How about yet another remote file </label></td><td><input type="checkbox" name="cbfile3cb" id="cbfile3cb" data-repeater="checkbox"></td></tr>'
++ '<tr><td></td><td colspan="4"><span id="cbfile3cb-repeater"></span></td></tr>'
+;
+this_eval = 
+'ga.value.setLastValue( "filetest", "#cbfile3cb" );'
+
+
+
+ + 'ga.repeat.repeater( "filetest", "cbfile3cb", "checkbox" );$( "#cbfile3cb" ).change( function() { ga.repeat.change( "filetest", "cbfile3cb" ); } );'
+
+
+
+ input_repeats += 'ga.repeat.change( "filetest", "cbfile3cb", 1 );';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr id="rfile3cb-tr"><td><label for="rfile3cb" >Choose a CB remote file </label></td>' +
+'<td><button id="rfile3cb" name="rfile3cb" data-type="rfile" data-add="rfile3cb_altval" class="help_link"><span class="buttontext">Browse server for a file</span></button>' +
+'<span class="help">Choose a CB remote file is for a CB repeat remote file</span>' +
+'<span id="rfile3cb_altval"></span>' +
+'<span id="rfile3cb_msg" class="warning field_msg" > </span></td>';
+
+this_eval = 'ga.value.setLastValue( "filetest", "#rfile3cb" );' +
+'ga.altfile("filetest","rfile3cb","rfile3cb_altval");' +
+'ga.altfile.button("filetest","rfile3cb","Choose a CB remote file","rfile",function(v){ga.altfile.button.rfile(v,"filetest","rfile3cb");});' +
+'$("#rfile3cb").on("click",function(){return ga.altfile.button.call("filetest","rfile3cb");});';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+this_html = ga.repeat.repeat( "filetest", "rfile3cb", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("filetest", "rfile3cb", "cbfile3cb" );';
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+ga.tmp.html = '';
+ga.tmp.html = '<tr><td></td><td colspan="4"><span id="rfile4i-repeater"></span></td></tr>';
+
+this_html = '<tr>' +
+'<td><label for="rfile4i">How about a bunch of remote files </label></td>' + 
+'<td><input type="number" name="rfile4i" id="rfile4i" data-repeater="integer" value="0" min="0" max="5"' +
+'><span id="rfile4i_msg" class="warning field_msg" > </span></td></tr>'
++ ga.tmp.html
+;
+
+this_eval = 
+'ga.value.setLastValue( "filetest", "#rfile4i" );'
++ 'ga.repeat.repeater( "filetest", "rfile4i", "integer" );'
++ '$( "#rfile4i" ).on("change blur", function() { ga.valid.checkInt( "#rfile4i" );'
++ 'ga.repeat.change( "filetest", "rfile4i" );'
+
++ '});'
+
++ '$( "#rfile4i" ).keypress( function() { $( "#rfile4i_msg" ).html( "" ); });'
+
+
+
+;
+
+ input_repeats += 'ga.repeat.change( "filetest", "rfile4i", 1 );';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr id="rfile4if-tr"><td><label for="rfile4if" >Choose a numbered remote file </label></td>' +
+'<td><button id="rfile4if" name="rfile4if" data-type="rfile" data-add="rfile4if_altval" class="help_link"><span class="buttontext">Browse server for a file</span></button>' +
+'<span class="help">Choose a numbered remote file is for a integer repeat remote file</span>' +
+'<span id="rfile4if_altval"></span>' +
+'<span id="rfile4if_msg" class="warning field_msg" > </span></td>';
+
+this_eval = 'ga.value.setLastValue( "filetest", "#rfile4if" );' +
+'ga.altfile("filetest","rfile4if","rfile4if_altval");' +
+'ga.altfile.button("filetest","rfile4if","Choose a numbered remote file","rfile",function(v){ga.altfile.button.rfile(v,"filetest","rfile4if");});' +
+'$("#rfile4if").on("click",function(){return ga.altfile.button.call("filetest","rfile4if");});';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+this_html = ga.repeat.repeat( "filetest", "rfile4if", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("filetest", "rfile4if", "rfile4i" );';
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+if( skipped_row == 1 ){ input_html += "</tr>"; }
+input_html += '</table>';
+$( '#filetest_input_area' ).html( input_html );
+eval( input_eval );
+</script>
+<p><button id="filetest_submit" class="help_link"><span class="buttontext">Submit</span></button>
+<span class="help">this is help for the submit button</span>
+<button id="filetest_reset" class="help_link"><span class="buttontext">Reset to default values</span></button>
+<span class="help">this is help for the reset to default values button</span>
+
+</p>
+<span id="filetest_progress"></span>
+<script>
+
+
+
+
+var filetest_output_msgs = $("#filetest_output_msgs");
+filetest_output_msgs.text( "" );
+
+var filetest_timeout_handler = "unset";
+
+function get_results_filetest( id, last_timeout, getlastmsg, getinput )
+{
+
+//             url:"ajax/get_results.php?_window=" +  window.name + "&_logon=" +$( "#_state" ).data( "_logon" ) + '&_uuid=' + id,
+    var job_status = "";
+    $.getJSON( 
+             "ajax/get_results.php",
+             {
+                tagmode: "any",
+                format: "json",
+                _window : window.name,
+                _logon : $( "#_state" ).data( "_logon" ),
+                _uuid : id,
+                _getlastmsg : getlastmsg,
+                _getinput : getinput ? true : false
+             } )
+    .done( function( data, status, xhr ) {
+
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( id );
+           }
+
+           job_status = ga.data.update( "filetest", data ).job_status;
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+              if ( filetest_timeout_handler != "unset" )
+              {
+                  clearTimeout( filetest_timeout_handler );
+                  filetest_timeout_handler = "unset";
+              }
+              unsubMsging( id, "filetest" );
+              eval( filetest_done_eval );
+           } else {
+               if ( !last_timeout || last_timeout < 2000 )
+               { 
+                  last_timeout = 2000;
+               } else {
+                  if ( last_timeout < 16000 )
+                  {
+                      last_timeout *= 2;
+                  } else {
+                      last_timeout = 16000;
+                  }
+               }
+
+               filetest_timeout_handler =  setTimeout( get_results_filetest, last_timeout, id, last_timeout, 0 );
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+           $( "#filetest_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/center.php </span>" );
+           $('#filetest_progress').html( "" );
+           if ( filetest_timeout_handler != "unset" )
+           {
+               clearTimeout( filetest_timeout_handler );
+               filetest_timeout_handler = "unset";
+           }
+           unsubMsging( id, "filetest" );
+           eval( filetest_done_eval );
+          } );
+    return false;
+};
+
+function msg_filetest ( id, data )
+{
+   ga.data.update( "filetest", data, get_results_filetest, id );
+};
+
+$( "#filetest_submit" ).click( function( e ) {
+   e.preventDefault();
+   e.returnValue = false;
+
+   var $ok = 0;
+   
+   
+
+   ga.event( "", "filetest", "submit clicked" );
+
+   
+
+
+
+
+
+   if ( !ga.valid.checksubmit( "filetest" ) ) {
+       return false;
+   }
+
+   var $form = $(this);
+
+   $.ajax({
+       type: 'get'
+       ,url: "ajax/sys_config/sys_joblocked.php?_window=" +  window.name + "&_logon=" + $( "#_state" ).data( "_logon" )
+
+       ,context: $form
+       ,success: function( data ) { // your success handler
+
+          if ( !$ok )
+          {
+          switch ( data )
+          {
+             case "1" :
+             {
+                 messagebox( { icon:"warning.png", text:"This project directory is currently locked by another project.\nYou can wait until it completes, change the project in user configuration or clear the lock in the job manager." } );
+                 return;
+             } break;
+             case "2" :
+             {
+                 messagebox( { icon:"warning.png", text:"You must be logged in to submit this module." } );
+                 return;
+             } break;
+             default :
+             {
+
+                 $ok = 1;
+             }
+          }
+          }
+       }
+       ,error: function() { // your error handler
+          messagebox( { icon:"toast.png", text:"Checking the project lock failed. This is possibly a server or network issue" } );
+       }
+       ,complete: function() { 
+          this.off('submit');
+          if ( $ok )
+          {
+
+
+              $( "#filetest_results" ).text( "" );
+
+              ga.value.saveLastValues( "filetest" );
+              ga.value.resetDefaultValues( "filetest_output", true );
+
+              var found_errors = 0;
+              $("#filetest").find("input").each(function(i){
+                 if ( $(this).attr( 'required' ) && $(this).val().length == 0 )
+                 {
+                    var tag =  "#filetest " + "#" + $(this).attr('id') + "_msg";
+
+                    $( tag ).html( "missing required field" );
+                    found_errors = 1;
+                 }
+              });
+              if ( found_errors ) {
+                  return;
+              }
+
+    var tree_html = "";
+    $( "._hidden_tree_selects" ).remove( );
+    $.each( input_trees, function( k, v ){
+
+        $( 'input[type=hidden][name="' + v + '[]"]' ).remove();
+        var selectedElms = $('#' + v).jstree("get_selected", true);
+        var i = 0;
+        $.each(selectedElms, function() {
+           tree_html += '<input type="hidden" name="' + v + '[]" value="' + this.id + '" class="_hidden_tree_selects"/>';
+
+        });
+    });
+
+    $( this ).append( tree_html );
+
+
+    var logonadd = $("<input>").attr("type", "hidden").attr("name", "_logon").val( $( "#_state" ).data( "_logon" ) );$( this ).append($(logonadd));
+    var projectadd = $("<input>").attr("type", "hidden").attr("name", "_project").val( $( "#_state" ).data( "_project" ) );$( this ).append($(projectadd));
+    var windowadd = $("<input>").attr("type", "hidden").attr("name", "_window").val( window.name );$( this ).append($(windowadd));
+    var vuuid = uuid.v1();
+
+
+
+
+
+
+    var uuidadd = $("<input>").attr("type", "hidden").attr("name", "_uuid").val( vuuid );$( this ).append($(uuidadd));
+//    ga.altfile.add( "filetest" );
+    ga.valuen.addhtml( "filetest" );
+
+    subMsging( vuuid, msg_filetest, "filetest" );
+
+    var formData = new FormData($('form')[0]);
+
+
+    $('#filetest_progress').html( "Uploading:<progress></progress>" );
+
+    var job_status = "";
+
+    ga.event( "", "filetest", "submit: passed submit checks, submitting" );
+
+    $.ajax( {
+             dataType: "json",
+             cache:false,
+//             timeout:3000,  // for testing
+             type:"POST",
+             url:"ajax/tools/filetest.php",
+             data: formData,
+             xhr: function() {  // Custom XMLHttpRequest
+                 var myXhr = $.ajaxSettings.xhr();
+                 if(myXhr.upload){ // Check if upload property exists
+                     myXhr.upload.addEventListener('progress',
+                         function(e) {
+                         if(e.lengthComputable){
+                           $('#filetest_progress progress').attr({value:e.loaded,max:e.total});
+                         } }
+//                     progressHandlingFunction
+                    , false);
+                 }
+                 return myXhr;
+             },
+             contentType: false,
+             processData: false
+            } )
+    .done( function( data, status, xhr ) {
+
+
+
+
+// refresh cache for this project
+           $('#filetest_progress').html( "" );
+   
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( vuuid );
+           }
+           
+// loop through data pairs
+           filetest_output_msgs.text( "" );
+           job_status = ga.data.update( "filetest", data ).job_status;
+
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+               if ( filetest_timeout_handler != "unset" )
+               {
+                   clearTimeout( filetest_timeout_handler );
+                   filetest_timeout_handler = "unset";
+               }
+               unsubMsging( vuuid, "filetest" );
+               eval( filetest_done_eval );
+           } else {
+               filetest_timeout_handler = setTimeout( get_results_filetest, 2000, vuuid, 2000, 0 );
+
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+
+
+
+           $( "#filetest_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/filetest.php </span>" );
+           $('#filetest_progress').html( "" );
+           if ( filetest_timeout_handler != "unset" )
+           {
+               clearTimeout( filetest_timeout_handler );
+               filetest_timeout_handler = "unset";
+           }
+           unsubMsging( vuuid, "filetest" );
+           eval( filetest_done_eval );
+          } );
+          } else {
+
+          }
+       }
+   });
+}); 
+
+$( "#filetest_reset" ).click( function() {
+    
+    
+    ga.event( "", "filetest", "reset clicked" );
+    //    ga.value.resetDefaultValues( "filetest" );
+    ga.valuen.restore.dflt(  "filetest" );
+    ga.value.resetDefaultValues( "filetest_output", true );
+    
+    eval( input_repeats );
+    return false;
+});
+setHoverHelp();
+
+
+eval( input_repeats );
+ga.pull.doPull();
+</script>
+</form>
+<div id="filetest_results"></div>
+<script>
+ga.tmp.html = "<hr>";
+
+$("#filetest").append( ga.tmp.html );
+</script>
+<form id="filetest_output">
+<div id="filetest_output_msgs" class="warning" type="msgs"></div>
+<script>
+ga.value.setLastValueOutput( "filetest_output" );
+ga.value.extra_resets.clear();
+</script>
+
+<table>
+<tr>
+<td colspan="4" style="vertical-align:top"><label hidden id="filetest_output_textarea_label" for="filetest_output_textarea" class="header3 ">Report:</label>
+<textarea readonly hidden id="filetest_output_textarea" rows="10" cols="60" class="help_link"></textarea>
+<span class="help">general textarea help</span>
+</td>
+</tr>
+</table>
+</form>
+

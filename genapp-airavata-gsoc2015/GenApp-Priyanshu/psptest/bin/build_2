@@ -1,0 +1,27 @@
+#!/usr/bin/perl
+
+use JSON;
+use Data::Dumper;
+
+if ( !@ARGV )
+{
+    print "\{\"error\":\"center called with no arguments\"\}\n";
+    exit;
+}
+
+$json = shift;
+$ref = decode_json( $json );
+$res = {};
+$$res{ "hi" } = "build_2 executable";
+$$res{ "output1" } = 1234;
+$$res{ "output2b" } = '';
+$$res{ "output3" } = '';
+$$res{ "output5" } = 'text area output
+multiline
+';
+
+open OUT, ">/home/ehb/genapptest/log";
+print OUT Dumper($ref);
+close OUT;
+print encode_json( $res ) . "\n";
+

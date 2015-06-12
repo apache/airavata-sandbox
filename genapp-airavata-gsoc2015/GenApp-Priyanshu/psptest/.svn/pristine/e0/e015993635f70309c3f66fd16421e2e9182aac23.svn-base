@@ -1,0 +1,201 @@
+# this is a module file, any module specific info belongs here
+{
+    "moduleid" : "calculate_2",
+    "label"    : "Calculate_2",
+    "help"     : "help for Calculate_2",
+    "fields"   : [
+                  {
+                   "role"       : "input",
+                   "id"       : "input1",
+                   "label"    : "Input value 1",
+                   "type"     : "float",
+                   "default"  : 0.0,
+                   "min"      : 0.0,
+                   "max"      : 1e50,
+                   "required" : "true",
+                   "help"     : "This field can have values from 0 to 1e50 and is of the float type and it will be the value of input1 in the executable received json" 
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "input2",
+                   "label"   : "Input value 2",
+                   "type"    : "integer",
+                   "default" : 1,
+                   "min"     : -10,
+                   "max"     : 10,
+                   "required" : "false",
+                   "help"     : "This field can have values from -10 to 10 and is of the integer type  and it will be the value of input2 in the executable received json"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "input3",
+                   "label"   : "Input value 3",
+                   "type"    : "checkbox",
+                   "checked" : "true",
+                   "help"     : "This field can have values checked or not checked.  If checked, the executable json input will have an input3 with value on"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input4",
+                   "name"    : "input4",
+                   "label"   : "1st listbox",
+                   "type"    : "listbox",
+                   "values"  : "choice 1~c1~choice 2~c2~choice 3~c3~choice 4~c4",
+                   "default" : "c2",
+                   "repeater" : "true",
+                   "help"     : "This field is a listbox and depending on the choice, different fields will display below"
+                   },
+                   {
+                   "role"      : "input",
+                   "id"      : "input3c1",
+                   "label"   : "Input value 4 c1",
+                   "type"    : "checkbox",
+                   "checked" : "true",
+                   "repeat"  : "input4:c1",
+                   "help"     : "This field is a checkbox that only appears when input4 above is set to choice 1 or c1"
+                   },
+                   {
+                   "role"      : "input",
+                   "id"      : "input3c2",
+                   "label"   : "Input value 4 c2",
+                   "type"    : "checkbox",
+                   "checked" : "true",
+                   "repeat"  : "input4:c2",
+                   "help"     : "This field is a checkbox that only appears when input4 above is set to choice 2 or c2"
+                   },
+                   {
+                   "role"      : "input",
+                   "id"      : "input3c2b",
+                   "label"   : "Input value 4 c2b",
+                   "type"    : "integer",
+                   "repeat"  : "input4:c2",
+                   "help"     : "This field is an integer that only appears when input4 above is set to choice 2 or c2"
+                   },
+                   {
+                   "role"      : "input",
+                   "id"      : "input3c3b",
+                   "label"   : "Input value 4 c3b",
+                   "type"    : "listbox",
+                   "values"  : "choice 1~c1~choice 2~c2~choice 3~c3~choice 4~c4",
+                   "repeat"  : "input4:c3",
+                   "help"     : "This field is a listbox that only appears when input4 above is set to choice 3 or c3"
+                   },
+                   {
+                   "role"      : "input",
+                   "id"      : "input3c3",
+                   "label"   : "Input value 4 c3",
+                   "type"    : "checkbox",
+                   "checked" : "true",
+                   "repeat"  : "input4:c3",
+                   "help"     : "This field is a checkbox that only appears when input4 above is set to choice 3 or c3"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input6",
+                   "name"    : "input6",
+                   "label"   : "textarea",
+                   "type"    : "textarea",
+                   "default" : "this is a text areamultiline",
+                   "rows"    : 4,
+                   "cols"    : 40,
+                   "help"    : "enter some text"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input7a",
+                   "name"    : "input7",
+                   "label"   : "Radiobutton a",
+                   "type"    : "radio",
+                   "help"    : "radio button a help"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input7b",
+                   "name"    : "input7",
+                   "label"   : "Radiobutton b",
+                   "type"    : "radio",
+                   "help"    : "radio button b help"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input7c",
+                   "name"    : "input7",
+                   "label"   : "Radiobutton c",
+                   "type"    : "radio",
+                   "checked" : "true",
+                   "help"    : "radio button c help"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "output1",
+                   "label" : "Output value 1",
+                   "type"  : "float",
+                   "help"     : "This field is a float value that is the result of the submission"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "outputref",
+                   "label" : "input json reference",
+                   "type"  : "file",
+                   "help"     : "This field is a file link that holds the input json reference sent to the executable"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "outputres",
+                   "label" : "results json reference",
+                   "type"  : "file",
+                   "help"     : "This field is a file link that holds the output json retrieved from the executable"
+                   },
+                   {
+                   "role"  : "output",
+                   "name"  : "output2",
+                   "id"    : "output2a",
+                   "label" : "Radio output 2a",
+                   "type"  : "radio",
+                   "help"  : "output radio 2a"
+                   },
+                   {
+                   "role"  : "output",
+                   "name"  : "output2",
+                   "id"    : "output2b",
+                   "label" : "Radio output 2b",
+                   "type"  : "radio",
+                   "help"  : "output radio 2b"
+                   },
+                   {
+                   "role"  : "output",
+                   "name"  : "output2",
+                   "id"    : "output2c",
+                   "label" : "Radio output 2c",
+                   "type"  : "radio",
+                   "help"  : "output radio 2c"
+                   },
+                   {
+                   "role"  : "output",
+                   "id"    : "output3",
+                   "label" : "checkbox out 3",
+                   "type"  : "checkbox",
+                   "help"  : "output checkbox 3"
+                   },
+                   {
+                   "role"  : "output",
+                   "id"    : "output4",
+                   "label" : "checkbox out 4",
+                   "type"  : "checkbox",
+                   "help"  : "output checkbox 4"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"      : "output5",
+                   "name"    : "output5",
+                   "label"   : "output textarea",
+                   "type"    : "textarea",
+                   "rows"    : 6,
+                   "cols"    : 60,
+                   "help"  : "output textarea"
+                   }
+
+                  ],
+# the executable will take inputs in order and produce output
+    "executable" : "calculate_2"
+}

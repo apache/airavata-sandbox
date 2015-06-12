@@ -1,0 +1,95 @@
+# this is a module file, any module specific info belongs here
+{
+    "moduleid" : "plottest",
+    "label"    : "plottest",
+#    "session"  : "true",
+#    "newsession"  : "true",
+    "fields"   : [
+                  {
+                   "role"       : "input",
+                   "id"       : "startx",
+                   "label"    : "Start x",
+                   "type"     : "float",
+                   "default"  : 1.0,
+                   "min"      : 1.0,
+#                   "max"      : 1e50,
+                   "required" : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "endx",
+                   "label"   : "End x",
+                   "type"    : "float",
+                   "default" : 10,
+#                   "min"     : -10,
+#                   "max"     : 10,
+                   "required" : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "deltax",
+                   "label"   : "Delta x",
+                   "type"    : "float",
+                   "default" : 0.5,
+#                   "min"     : -10,
+#                   "max"     : 10,
+                   "required" : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "abs",
+                   "label"   : "abs",
+                   "type"    : "checkbox",
+                   "checked" : "false"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "axislabels",
+                   "label"   : "Axis labels",
+                   "type"    : "checkbox",
+                   "checked" : "false"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "logx",
+                   "label"   : "x axis log scale",
+                   "type"    : "checkbox",
+                   "checked" : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "logy",
+                   "label"   : "y axis log scale",
+                   "type"    : "checkbox",
+                   "checked" : "false"
+                   },
+                   {
+                   "role"           : "output",
+                   "id"             : "plotout4",
+                   "label"          : "plot 2d",
+                   "type"           : "plot2d",
+                   "titlefontclass" : "header3",
+                   "height"         : "400px",
+                   "width"          : "800px",
+                   "pan"            : "true",
+                   "zoom"           : "true",
+                   "hover"          : "true",
+                   "help"           : "drag to pan, double click to zoom, to reset zoom and pan: click on title, axis labels or live coordinates box"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "outputref",
+                   "label" : "input json reference",
+                   "type"  : "file"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "outputres",
+                   "label" : "results json reference",
+                   "type"  : "file"
+                   }
+                  ],
+# the executable will take inputs in order and produce output
+    "executable" : "plottest"
+    ,"uniqueid"  : "on"
+}

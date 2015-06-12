@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+
+use JSON;
+use Data::Dumper;
+
+if ( !@ARGV )
+{
+    print "\{\"error\":\"__moduleid__ called with no arguments\"\}\n";
+    exit;
+}
+
+$ref = decode_json( shift );
+
+$res = {};
+$$res{ "note" } = "__moduleid__ executable";
+
+open OUT, ">>/tmp/log";
+print OUT "-"x20 . "\n";
+print OUT `date`;
+print OUT "$0\n";
+print OUT "--- input ---\n";
+print OUT Dumper($ref);
+print OUT "--- output ---\n";
+print OUT Dumper($res);
+print OUT "-"x20 . "\n";
+close OUT;
+
+print encode_json( $res ) . "\n";
+

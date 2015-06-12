@@ -1,0 +1,1266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SOME TITLE 0.1</title>
+<style>
+
+document
+{  
+    margin: 0;  
+    padding: 0;  
+    cursor: none;
+}  
+
+body {
+background: rgb( 0,0,95 );
+color: rgb( 220,210,210 );
+margin-bottom: 50px;
+}
+
+textarea {
+
+
+}
+
+.title {
+  text-decoration: none;
+  outline: 0;
+}
+
+.title:link {
+  color: rgb( 220,210,210 );
+}
+
+.title:visited {
+  color: rgb( 220,210,210 );
+}
+
+.title:active {
+  color: rgb( 220,210,210 );
+}
+
+.title:hover {
+   color: rgb( 200,128,0 );  
+}
+
+.pagetitle {
+   z-index: -1;
+}
+
+.opacity {
+opacity: 0.7;
+filter: alpha(opacity=70);
+-webkit-transition: opacity 1s linear;
+}
+
+.opacity:hover {
+opacity: 1;
+filter: alpha(opacity=100);
+-webkit-transition: opacity 1s linear;
+}
+
+td {
+   padding-left: 0;
+}
+
+.padcell td {
+   padding-left: 5px;
+   padding-right: 5px;
+   text-align : center;
+}
+
+.padcell th {
+   padding-left: 5px;
+   padding-right: 5px;
+   text-align : center;
+}
+
+footer { position: fixed; left: 0; bottom: 0; height: 50px; width: 100%; background: rgb( 0,0,95 ); z-index:50;}
+
+#tab_feedback {
+     position: fixed;
+     right: 0;
+     top: 200px;
+     display: block;
+     width: 25px;
+     height: 102px;
+     text-indent: -10000px;
+     background-image: url(data:image/png;base64,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);
+     opacity: 0.7;
+     filter: alpha(opacity=70);
+     -webkit-transition: opacity 1s linear;
+     overflow: hidden;
+     z-index: 5;
+}
+
+#tab_feedback:hover {
+    opacity: 1;
+    filter: alpha(opacity=100);
+    -webkit-transition: opacity 1s linear;
+}
+
+#tab_feedback2 {
+     position: fixed;
+     right: 0;
+     top: 200px;
+     display: block;
+     width: 25px;
+     height: 102px;
+     text-indent: -10000px;
+     background-image: url(pngs/tabfeedback.png);
+     overflow: hidden;
+     z-index: 5;
+}
+
+#tab_docs {
+     position: fixed;
+     right: 0;
+     top: 295px;
+     z-index: 4;
+}
+
+.warning {
+color: rgb( 255,0,0 );
+}
+
+.ui-state-highlight {
+  color: rgb( 200,128,0 );
+}
+
+.header1 {
+font-size: 2em;
+color: rgb( 228,255,250 );
+}
+.header2 {
+font-size: 1.75em;
+color: rgb( 228,255,250 );
+}
+.header3 {
+font-size: 1.5em;
+color: rgb( 228,255,250 );
+}
+.header4 {
+font-size: 1.25em;
+color: rgb( 228,255,250 );
+}
+
+.sidebar {
+    position: absolute;
+    left: 0;
+    display: block;  
+}
+
+.sidebar ul {
+   list-style-type: none;
+   padding-left: 0;
+}
+
+/* .sidebar ul li + li {
+  border-top: 1px dotted;
+} */
+
+.sidebar ul li {
+   display: block;  
+   width: 140px;  
+   font-size: 18px;  
+   line-height: 44px;  
+   text-align: center;  
+   vertical-align: middle;
+   text-decoration: none;  
+   color: rgb( 220,210,210 );
+}
+
+.sidebar ul li img {
+   vertical-align: middle;
+   float: right;
+}
+
+.sidebar ul li:hover {
+   color: rgb( 200,128,0 );  
+}
+
+.config {
+   vertical-align: middle;
+   float: right;
+}
+
+.hoverhighlight {
+   text-align: right;
+}
+
+.hoverhighlight:hover {
+   color: rgb( 200,128,0 );  
+}
+
+#panelmain {
+position: relative;
+    display: block;  
+
+}
+
+a:link    {color: rgb( 228,255,250 );}
+a:visited {color: rgb( 220,210,210 );}
+a:hover   {color: rgb( 255,255,255 );}
+a:active  {color: rgb( 200,128,0 );}
+
+button {
+  outline: none;
+/*  cursor: none; */
+  border: 0px;
+  text-decoration: none;
+  text-shadow: 0 1px 1px rgba(0,0,0,.3);
+  border-radius: .2em;
+  -webkit-border-radius: .2em; 
+  -moz-border-radius: .2em;
+  background-color: rgb( 228,255,250 );
+  background: -webkit-gradient(linear, left top, left bottom, from( rgb( 228,255,250 ) ), to( rgb( 128,170,150 ) ));
+  background: -moz-linear-gradient(top, rgb( 228,255,250 ),  rgb( 128,170,150 ) );
+  filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr=rgb( 128,170,150 ), endColorstr=rgb( 128,170,150 ));
+  padding: 0;
+  padding-left: 2px; 
+  padding-right: 2px; 
+}
+
+
+button:hover {
+/*   opacity: .5; */
+   background-color: rgb( 255,255,255 );
+   background: -webkit-gradient(linear, left top, left bottom, from( rgb( 255,255,255 ) ), to( rgb( 228,255,250 ) ));
+    background: -moz-linear-gradient(top, rgb( 255,255,255 ),  rgb( 228,255,250 ) );
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr=rgb( 228,255,250 ), endColorstr=rgb( 228,255,250 ));
+/*   color: rgb( 255, 128, 0 );   */
+}
+
+button:active {
+position: relative;
+top: 1px;
+left: 1px;
+}
+
+.box-shadow-menu { 
+vertical-align:middle;
+font-size: 2em;
+}
+
+.box-shadow-menu:hover { 
+  color: rgb(200,128,0);
+  stroke: rgb(200,128,0);
+}
+
+.svgmenu {
+  color: rgb(220,210,210);
+  stroke: rgb(220,210,210);
+  padding: 5px;
+}
+.svgmenu:hover { 
+  color: rgb(200,128,0);
+  stroke: rgb(200,128,0);
+}
+.highlight:hover { 
+  color: rgb(200,128,0);
+}
+
+.help {
+    background-color: rgba(0,0,75, 0.95 );
+    color: rgb(240,240,210);
+    border-radius: .5em;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    opacity: 0; /* Make it transparent */
+    padding: .5em;
+    position: absolute;
+    text-decoration: none;
+    visibility: hidden; /* and hidden */
+/*    width: 25em; */
+    z-index: 10;
+}
+
+.hidden {
+    opacity: 0;  
+    visibility: hidden;
+/*    display: none; */
+}
+
+.helpright {
+    top: 60px;
+}
+
+.helpleft {
+    left: 10px;
+    min-width: 20em;
+}
+
+.help_link_on:hover + span {
+    opacity: 1;
+    visibility: visible;
+}
+
+.plot2ddef {
+   width: 600px;
+   height: 300px;
+}
+
+.coord {
+    background-color: rgba(0,0,75, 0.95 );
+    color: rgb(240,240,210);
+    border-radius: .5em;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    opacity: 0; /* Make it transparent */
+    padding: .5em;
+    position: absolute;
+    text-decoration: none;
+    visibility: hidden;
+/*    width: 25em; */
+    z-index: 10;
+}
+
+.coordvisible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modalDialog {
+   position: fixed;
+/*             font-family: Arial, Helvetica, sans-serif; */
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   background: rgba(0,0,0,0.8);
+   z-index: 99999;
+   opacity:0;
+   -webkit-transition: opacity 400ms ease-in;
+   -moz-transition: opacity 400ms ease-in;
+   transition: opacity 400ms ease-in;
+   pointer-events: none;
+}
+
+.modalDialog_on {
+   opacity:1;
+   pointer-events: auto;
+}
+
+.modalDialog > div {
+   width: 50%;
+   position: relative;
+   margin: 10% auto;
+   padding: 5px 20px 13px 20px;
+   border-radius: 10px;
+   background: rgb( 0,0,95 );
+   background: -moz-linear-gradient(rgb( 0,0,95 ), #222);
+   background: -webkit-linear-gradient(rgb( 0,0,95 ), #222);
+   background: -o-linear-gradient(rgb( 0,0,95 ), #222);
+}
+
+.close {
+   background: #606061;
+   color: #FFFFFF;
+   line-height: 25px;
+   position: absolute;
+   right: -12px;
+   text-align: center;
+   top: -10px;
+   width: 24px;
+   text-decoration: none;
+   font-weight: bold;
+   -webkit-border-radius: 12px;
+   -moz-border-radius: 12px;
+   border-radius: 12px;
+   -moz-box-shadow: 1px 1px 3px #000;
+   -webkit-box-shadow: 1px 1px 3px #000;
+   box-shadow: 1px 1px 3px #000;
+}
+
+.close:hover { background: #00d9ff; }
+
+.modalDialog2 {
+   position: fixed;
+/*             font-family: Arial, Helvetica, sans-serif; */
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   background: rgba(0,0,0,0.8);
+   z-index: 99998;
+   opacity:0;
+   -webkit-transition: opacity 400ms ease-in;
+   -moz-transition: opacity 400ms ease-in;
+   transition: opacity 400ms ease-in;
+   pointer-events: none;
+}
+
+.modalDialog2_on {
+   opacity:1;
+   pointer-events: auto;
+}
+
+.modalDialog2 > div {
+   width: 55%;
+   position: relative;
+   margin: 10% auto;
+   padding: 5px 20px 13px 20px;
+   border-radius: 10px;
+   background: rgb( 0,0,95 );
+   background: -moz-linear-gradient(rgb( 0,0,95 ), #222);
+   background: -webkit-linear-gradient(rgb( 0,0,95 ), #222);
+   background: -o-linear-gradient(rgb( 0,0,95 ), #222);
+}
+
+.close2 {
+   background: #606061;
+   color: #FFFFFF;
+   line-height: 25px;
+   position: absolute;
+   right: -12px;
+   text-align: center;
+   top: -10px;
+   width: 24px;
+   text-decoration: none;
+   font-weight: bold;
+   -webkit-border-radius: 12px;
+   -moz-border-radius: 12px;
+   border-radius: 12px;
+   -moz-box-shadow: 1px 1px 3px #000;
+   -webkit-box-shadow: 1px 1px 3px #000;
+   box-shadow: 1px 1px 3px #000;
+}
+
+.close2:hover { background: #00d9ff; }
+
+.modalDialog3 {
+   position: fixed;
+/*             font-family: Arial, Helvetica, sans-serif; */
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   background: rgba(0,0,0,0.8);
+   z-index: 99999;
+   opacity:0;
+   -webkit-transition: opacity 400ms ease-in;
+   -moz-transition: opacity 400ms ease-in;
+   transition: opacity 400ms ease-in;
+   pointer-events: none;
+}
+
+.modalDialog3_on {
+   opacity:1;
+   pointer-events: auto;
+}
+   
+
+.table-wrapper {
+   overflow: auto;
+   max-height: 400px;
+}
+
+.modalDialog3 > div {
+   max-width: 70%;
+   position: relative;
+   margin: 10% auto;
+   padding: 5px 20px 13px 20px;
+   max-height: 95%;
+   border-radius: 10px;
+   background: rgb( 0,0,95 );
+   background: -moz-linear-gradient(rgb( 0,0,95 ), #222);
+   background: -webkit-linear-gradient(rgb( 0,0,95 ), #222);
+   background: -o-linear-gradient(rgb( 0,0,95 ), #222);
+}
+
+.close3 {
+   background: #606061;
+   color: #FFFFFF;
+   line-height: 25px;
+   position: absolute;
+   right: -12px;
+   text-align: center;
+   top: -10px;
+   width: 24px;
+   text-decoration: none;
+   font-weight: bold;
+   -webkit-border-radius: 12px;
+   -moz-border-radius: 12px;
+   border-radius: 12px;
+   -moz-box-shadow: 1px 1px 3px #000;
+   -webkit-box-shadow: 1px 1px 3px #000;
+   box-shadow: 1px 1px 3px #000;
+}
+
+.close3:hover { background: #00d9ff; }
+
+</style>
+<link rel="stylesheet" href="css/jstree.min.css">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+<script src="js/genapp.js"></script>
+<style>
+.legendLabel {
+   color: rgb( 220,210,210 );
+}
+</style>
+</head>
+<header>
+<span class="pagetitle"><a href="" class="title help_link" target="_blank" ><h2>SOME TITLE 0.1</h2></a><span class="help">this is application help</span></span>
+<table width=100%> <tr>
+<td> <span id="menuspan" onclick="menuOnOff(event);" class="box-shadow-menu help_link"> 
+  <svg class="svgmenu" width="20" height="20" stroke-width="2.7">
+    <path d="M0,1.5 20,1.5" />
+    <path d="M0,9.5 20,9.5" />
+    <path d="M0,17.5 20,17.5" />
+  </svg>
+  <span id="seabug" height=50px></span>
+ </span><span class="help">this is menu help</span></td>
+<td id="_alttitle"><span class="hidden">intentionally left blank</span></td>
+<td align=right >
+  <table>
+    <tr>
+    <td>
+    <table cellspacing="0" cellpadding="0">
+      <tr><td><div id="sel_project" class="help_link"></div><span class="help">this is project help</span></td></tr>
+      <tr><td><div id="login" class="hoverhighlight help_link"></div><span class="help">this is login help</span></td></tr>
+      <tr><td><div id="register" class="hoverhighlight help_link"></div></td></tr>
+      <tr><td><div id="logoff" class="hoverhighlight help_link"></div><span class="help">this is logoff help</span></td></tr>
+      <tr><td><div id="hoverhelp" class="hoverhighlight help_link"></div><span class="help">this is help help</span></td></tr>
+    </table>
+    </td>
+    <td>
+    <table cellspacing="0" cellpadding="0">
+      <tr>
+      <td><div class="help_link"><img src="data:image/png;base64,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" width=40px id="files" class="config opacity"></div><span class="help helpright" style="right:70px">this is file help</span></td>
+      <td><div class="help_link"><img src="data:image/png;base64,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" width=40px id="jobs" class="config opacity"></div><span class="help helpright" style="right:40px">this is jobs help</span></td>
+      <td><div  id="userconfig" class="help_link"><img src="data:image/png;base64,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" width=40px id="config" class="config opacity"></div><span class="help helpright" style="right:10px">this is user config help</span></td>
+      </tr>
+    </table>
+    </td>
+    </tr>
+  </table>
+</td>
+</tr>
+</table>
+<div id="openModal" class="modalDialog">
+   <div>
+      <span id="closeModal" class="close">X</span>
+      <div id="configbody"></div>
+   </div>
+</div>
+<div id="openModal2" class="modalDialog2">
+   <div>
+      <span id="closeModal2" class="close2">X</span>
+      <div id="configbody2"></div>
+   </div>
+</div>
+<div id="openModal3" class="modalDialog3">
+   <div>
+      <span id="closeModal3" class="close3">X</span>
+      <div id="configbody3"></div>
+   </div>
+</div>
+</header>
+<body>
+
+<div id="global_data"> </div>
+<div id="_state"> </div>
+<script> 
+ga.colors({
+  background : "0,0,95"
+  ,text       : "220,210,210" 
+});
+ga.set("textarea:rows",10);
+ga.set("plot2d:precision",6);
+
+_jmol_info = {};
+// add this to id openModal for 2nd link (not working correctly)      <div id="floating_link2" class="modal"></div>
+
+gd = $( "#global_data" );
+gd.data( "_unload", 0 );
+window.onbeforeunload = function (e) { gd.data( "_unload", 1 );  };
+
+function setMsging()
+{
+
+   var ws = $( "#_state" ).data( "_ws" );
+   if ( !ws )
+   {
+      console.log( "setMsging: ws not defined" );
+      return;
+   }
+
+   var conn = $( '#_state' ).data( "_wssession" );
+   if ( conn && conn.isOpen )
+   {
+      console.log( "setMsging: connection is already open" );
+      return;
+   }
+    
+
+   conn = new ab.Session( ws 
+      , function() {            // Once the connection has been established
+
+          ga.event( "global", "ws messaging", "connection established" );
+          $( '#_state' ).data( "_wssession", conn );
+        }
+      , function() {            // When the connection is closed
+
+            if ( gd.data( "_unload" ) == 0 )
+            {
+              ga.event( "global", "ws messaging", "connection failed" );
+            messagebox( { icon: "toast.png",
+                         text: "WebSocket messaging failed to " + ws + "<p>Your firewall may be blocking external access to port " + ws.replace( /^.*:/g, '') + " or the WebSocket server is down.<p>This results in a crippled experience with no messaging.",
+                         buttons : [ { id : "ok", label : "OK" } ] });
+            }
+        }
+      , {                       // Additional parameters, we're ignoring the WAMP sub-protocol for older browsers
+            'skipSubprotocolCheck': true
+        }
+    );
+
+
+}        
+
+subd_msging = [];
+
+function subMsging( vuuid, onevent, moduleid )
+{
+
+   if ( moduleid in subd_msging )
+   {
+
+      unsubMsging( subd_msging[ moduleid ], moduleid );
+   }
+
+   subd_msging[ moduleid ] = vuuid;
+
+   var ws = $( "#_state" ).data( "_ws" );
+   if ( !ws )
+   {
+      console.log( "subMsging: ws not defined" );
+      return;
+   }
+
+   var conn = $( '#_state' ).data( "_wssession" );
+   if ( !conn )
+//   if ( conn && !conn.isOpen )
+   {
+      console.log( "subMsging: connection is not open" );
+      return;
+   }
+
+   conn.subscribe( vuuid, onevent );
+// this doesn't work:
+// .then( function( subscription ) { $( '#_state' ).data( "_wssub:" + vuuid, subscription ) } );
+}
+
+function unsubMsging( vuuid, moduleid )
+{
+
+   if ( moduleid in subd_msging )
+   {
+
+      delete subd_msging[ moduleid ];
+   } else {
+
+      return;
+   }
+   var ws = $( "#_state" ).data( "_ws" );
+   if ( !ws )
+   {
+      console.log( "subMsging: ws not defined" );
+      return;
+   }
+
+   var conn = $( '#_state' ).data( "_wssession" );
+   if ( !conn )
+//   if ( conn && !conn.isOpen )
+   {
+      console.log( "subMsging: connection is not open" );
+      return;
+   }
+
+   conn.unsubscribe( vuuid );
+   $( '#_state' ).data( "_wssub:" + vuuid, null );
+}
+
+function msgGenericEvent( vuuid, data )
+{
+   console.log( 'msgGenericEvent ' + vuuid + ' : ' + data.json);
+}
+
+function getSid()
+{
+$.ajax({
+url: "ajax/sys_uid.php",
+cache: false
+})
+.done( function( data, status, xhr ) {
+  $.each(data, function(k, v) {
+
+//  if ( k == "_sid" )
+//   {
+//     $( "#global_data" ).data( "sid", v );
+//   } 
+   if ( k == "_ws" )
+   {
+    
+     $( "#_state" ).data( "_ws", v );
+     setMsging();
+   }
+ }); 
+});
+}
+
+getSid();
+
+function generateUUID(){
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x7|0x8)).toString(16);
+    });
+    return uuid;
+};
+
+if ( window.name.length == 0 )
+{
+    window.name = generateUUID();
+}
+
+ga.fc.url         = "ajax/sys_config/sys_files.php?_window=" + window.name + "&_spec=fc_cache&_spec_dir=";
+ga.fc.url_delete  = "ajax/sys_config/sys_files.php";
+
+ga.jc.url         = "ajax/sys_config/sys_jobs.php";
+
+ga.license.url    = "ajax/sys_config/sys_license.php";
+
+// var fs_test = function( obj ) {
+//   console.log( "fs_test:" );
+//   console.dir( obj );
+//}
+
+//ga.fc( "#", fs_test );
+
+function resetHoverHelp() {
+    
+   if ( $( "#global_data" ).data( "hoverhelp" ) ||
+        $( "#global_data" ).data( "hoverhelp" ) != 0 )
+   {
+       $( ".help_link" ).removeClass( "help_link_on" );
+       $( ".help_link" ).addClass( "help_link_on" );
+   }
+}
+
+function setHoverHelp() {
+    
+    
+   if ( !$( "#global_data" ).data( "hoverhelp" ) ||
+        $( "#global_data" ).data( "hoverhelp" ) == 0 )
+   {
+       
+       $( ".help_link" ).removeClass( "help_link_on" );
+       $( "#hoverhelp" ).html( "Help off" );
+   } else {
+       
+       $( ".help_link" ).addClass( "help_link_on" );
+       $( "#hoverhelp" ).html( "Help on" );
+   }
+}
+
+function setLogin() {
+   if ( !$( "#global_data" ).data( "login" ) ||
+        $( "#global_data" ).data( "login" ) == 0 )
+   {
+       $( "#login" ).html( "Logged in" );
+   } else {
+       $( "#login" ).html( "Logged off" );
+   }
+}
+</script>
+
+<div id="tab_feedback" class="modal help_link"></div><span class="help" style="right:30px;top:245px">this is feedback help</span>
+<span class="help" style="right:30px;top:338px">this is docs help</span>
+ 
+
+<nav class="sidebar toggle">
+<ul id="navul">
+<script>
+ga.tmp.menu = "";
+ga.admin.ids = [];
+ga.set( "icon:tools", "pngs/tools.png" );
+if ( 10 ) { ga.tmp.menu += '<li id="tools" class="help_link">Tools<img src="' + ga.set.data["icon:tools"] + '" width=40px></li><span class="help helpleft">tools help text</span>';};
+if ( 0 ) { ga.admin.ids.push( "#tools" );}
+ga.set( "icon:build", "pngs/build.png" );
+if ( 10 ) { ga.tmp.menu += '<li id="build" class="help_link">Build<img src="' + ga.set.data["icon:build"] + '" width=40px></li><span class="help helpleft">build help text</span>';};
+if ( 0 ) { ga.admin.ids.push( "#build" );}
+ga.set( "icon:interact", "pngs/interact.png" );
+if ( 10 ) { ga.tmp.menu += '<li id="interact" class="help_link">Interact<img src="' + ga.set.data["icon:interact"] + '" width=40px></li><span class="help helpleft">interact help text</span>';};
+if ( 0 ) { ga.admin.ids.push( "#interact" );}
+ga.set( "icon:simulate", "pngs/simulate.png" );
+if ( 10 ) { ga.tmp.menu += '<li id="simulate" class="help_link">Simulate<img src="' + ga.set.data["icon:simulate"] + '" width=40px></li><span class="help helpleft">simulate help text</span>';};
+if ( 0 ) { ga.admin.ids.push( "#simulate" );}
+ga.set( "icon:calculate", "pngs/calculate.png" );
+if ( 10 ) { ga.tmp.menu += '<li id="calculate" class="help_link">Calculate<img src="' + ga.set.data["icon:calculate"] + '" width=40px></li><span class="help helpleft">calculate help text</span>';};
+if ( 0 ) { ga.admin.ids.push( "#calculate" );}
+ga.set( "icon:analyze", "pngs/analyze.png" );
+if ( 10 ) { ga.tmp.menu += '<li id="analyze" class="help_link">Analyze<img src="' + ga.set.data["icon:analyze"] + '" width=40px></li><span class="help helpleft">analyze help text</span>';};
+if ( 0 ) { ga.admin.ids.push( "#analyze" );}
+$( "#navul" ).append( ga.tmp.menu );
+$( ga.admin.ids.join() ).hide();
+
+</script>
+</ul>
+</nav>
+
+<div id="panelmain" >
+<p></p>
+</div>
+<script>
+    var count = 0;
+    var sidewidth = parseFloat( $( ".sidebar" ).css( "width" ) ) + 
+                    parseFloat( $( ".sidebar" ).css( "padding-left" ) ) +
+                    parseFloat( $( ".sidebar" ).css( "padding-right" ) ) +
+                    parseFloat( $( ".sidebar" ).css( "border-left-width" ) ) +
+                    parseFloat( $( ".sidebar" ).css( "border-right-width" ) ) +
+                    parseFloat( $( ".sidebar" ).css( "margin-left" ) ) +
+                    parseFloat( $( ".sidebar" ).css( "margin-right" ) )
+    ;
+    var speed = 400;
+    $( "#panelmain" ).css( "left", count % 2 ? 0 : sidewidth );
+
+    $( ".sidebar ul li" ).click( function() {
+
+
+
+
+
+
+
+
+        var myTag = $( this ).attr( "id" );
+        $( "#seabug" ).html( "<img height=50px style=\"vertical-align:middle\" id='" + myTag + "' src='" + ga.set.data[ "icon:" + myTag ] + "'>" );
+        ga.event( "global", myTag, "load" );
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+        $( "#panelmain" ).load( "ajax/" + myTag + ".html", function(){ resetHoverHelp();} );
+
+        $( "#menuspan" ).trigger( "click" );
+    } );
+
+    function menuOnOff(event) {
+        count++;
+// 
+        var ofs = count % 2 ? 0 : sidewidth;
+        var wid = count % 2 ? '100%' : $("#panelmain").parent().parent().width() - sidewidth - 20;
+
+
+
+
+        $( ".toggle" ).toggle( speed );
+        $( "#panelmain" ).animate( {left: ofs, width: wid }, speed );
+    }
+
+    $( window ).resize(function() {
+        var ofs = count % 2 ? 0 : sidewidth;
+        var wid = count % 2 ? '100%' : $( "#panelmain" ).parent().parent().width() - sidewidth - 20;
+
+
+
+        $( "#panelmain" ).css( "left", ofs ).css( "width", wid );
+    } );
+
+$( "#hoverhelp" ).click(function() {
+    
+    
+    
+   if ( !$( "#global_data" ).data( "hoverhelp" ) ||
+        $( "#global_data" ).data( "hoverhelp" ) == 0 )
+   {
+    
+       $( "#global_data" ).data( "hoverhelp", 1 );
+   } else {
+    
+       $( "#global_data" ).data( "hoverhelp", 0 );
+   }
+   setHoverHelp();
+});
+$( "#global_data" ).data( "hoverhelp", 1 );
+setHoverHelp();
+
+$( "#config" ).click( function() {
+   var s = $( '#_state' );
+   var l = s.data( '_logon' );
+   ga.repeats.save();
+   if ( l && l.length )
+   {
+       ga.event( "global", "user_config" , "load" );
+       $( "#configbody" ).load( "etc/sys_user_config.html" );
+   } else {
+       ga.event( "global", "user_register" , "load" );
+       $( "#configbody" ).load( "etc/sys_register.html" );
+   }
+   $( ".modalDialog" ).addClass( "modalDialog_on" );
+});
+
+function closeModal()
+{
+   ga.repeats.restore();
+   $( ".modalDialog" ).removeClass( "modalDialog_on" );
+   setTimeout(function(){
+       $( "#configbody" ).html( "" );
+   }, 400);
+}
+
+$( "#closeModal" ).click( function() {
+   closeModal();
+});
+
+function closeModal2()
+{
+   ga.repeats.restore();
+   $( ".modalDialog2" ).removeClass( "modalDialog2_on" );
+   setTimeout(function(){
+       $( "#configbody2" ).html( "" );
+   }, 400);
+}
+
+$( "#closeModal2" ).click( function() {
+   closeModal2();
+});
+
+function closeModal3()
+{
+   ga.repeats.restore();
+   $( ".modalDialog3" ).removeClass( "modalDialog3_on" );
+   $( "#configbody3" ).html( "" );
+   var ws = $( "#_state" ).data( "__msgs" );
+   if ( ws && ws.length )
+   {
+
+       var m = ws.shift();
+       $( "#_state" ).data( "__msgs", ws );
+       messagebox( m, 1 );
+   }
+}
+
+$( "#closeModal3" ).click( function() {
+   closeModal3();
+});
+
+$( "#tab_feedback" ).click( function() {
+   ga.repeats.save();
+   ga.event( "global", "feedback" , "load" );
+   $( "#configbody2" ).load( "etc/sys_feedback.html" );
+   $( ".modalDialog2" ).addClass( "modalDialog2_on" );
+});
+
+$( "#tab_feedback2" ).click( function() {
+   ga.repeats.save();
+   ga.event( "global", "feedback2" , "load" );
+   $( "#configbody2" ).load( "etc/sys_feedback2.html" );
+   $( ".modalDialog2" ).addClass( "modalDialog2_on" );
+});
+
+$( "#login" ).click( function() {
+   ga.repeats.save();
+   ga.event( "global", "login" , "load" );
+   $( "#configbody" ).load( "etc/sys_login.html" );
+   $( ".modalDialog" ).addClass( "modalDialog_on" );
+});
+
+$( "#files" ).click( function() {
+   var s = $( '#_state' );
+   var l = s.data( '_logon' );
+   if ( l && l.length )
+   {
+      ga.repeats.save();
+      ga.event( "global", "file_manager" , "load" );
+      $( "#configbody" ).load( "etc/sys_file_manager.html" );
+      $( ".modalDialog" ).addClass( "modalDialog_on" );
+   }
+});
+
+$( "#jobs" ).click( function() {
+   var s = $( '#_state' );
+   var l = s.data( '_logon' );
+
+   if ( l && l.length )
+   {
+      ga.repeats.save();
+      ga.event( "global", "job_manager" , "load" );
+      $( "#configbody" ).load( "etc/sys_job_manager.html" );
+      $( ".modalDialog" ).addClass( "modalDialog_on" );
+   }
+});
+
+$( "#logoff" ).click( function() {
+   ga.repeats.save();
+   ga.event( "global", "logoff" , "load" );
+   $( "#configbody" ).load( "etc/sys_logoff.html" );
+   $( ".modalDialog" ).addClass( "modalDialog_on" );
+});
+
+$( "#register" ).click( function() {
+   ga.repeats.save();
+   ga.event( "global", "register" , "load" );
+   $( "#configbody" ).load( "etc/sys_register.html" );
+   $( ".modalDialog" ).addClass( "modalDialog_on" );
+});
+
+function messagebox( m, force )
+{
+   if ( !force )
+   {
+      if ( $( ".modalDialog3" ).hasClass( "modalDialog3_on" ) )
+      {
+          var ws = $( "#_state" ).data( "__msgs" );
+          if ( !ws || (ws && ( Object.prototype.toString.call( ws ) != '[object Array]' ) ) )
+          {
+             ws = [];
+          }
+          ws.push( m );
+          $( "#_state" ).data( "__msgs",  ws );
+          return;
+      }
+   }
+   if ( m.icon )
+   {
+      $( "#configbody3" ).html( "<table style='width:95%;vertical-align:middle'><tr><td style='width:10%'><img src='pngs/" + m.icon + "' width=40px></td><td style='text-align:center'>" + m.text + "</td></tr></table>" );
+   } else {
+      $( "#configbody3" ).html( "<center>" + m.text + "</center>" );
+   }
+
+   if ( m.buttons ) {
+      tmp = "<center><table><tr>";
+      for ( i = 0; i < m.buttons.length; i++ ) {
+          tmp = tmp + '<td><button id="_mbb_' + m.buttons[ i ].id + '">' + m.buttons[ i ].label + '</button></td>';
+      }
+      tmp = tmp + "</tr></table><center>";
+
+      $( "#configbody3" ).append( tmp );
+      for ( i = 0; i < m.buttons.length; i++ ) {
+          if ( m.buttons[ i ].cb ) {
+              $( "#_mbb_" + m.buttons[ i ].id ).off().one( "click" , m.buttons[ i ], function( event ) {  event.data.cb( event.data.data ); closeModal3(); } );
+          } else {
+              $( "#_mbb_" + m.buttons[ i ].id ).off().one( "click" , m.buttons[ i ], function( event ) {  closeModal3(); } );
+          }
+      }
+   }      
+   if ( m.ptext ) {
+      $( "#configbody3" ).append( m.ptext );
+   }
+
+   ga.repeats.save();
+   $( ".modalDialog3" ).addClass( "modalDialog3_on" );
+}
+
+function syncState()
+{
+   window.history.replaceState( {}, "SOME TITLE 0.1", "/psptest/" );
+   var s = $( '#_state' );
+   var l = s.data( '_logon' );
+   var ll = s.data( '_logon:last' );
+   var tmp,
+       clearem = 0,
+       hm = 0,
+       hideadmin = 0;;
+       
+   if ( !ll || l != ll ) {
+      if ( l && l.length ) {
+          if ( $( "#files" ).is(":hidden") ) {
+              clearem = 1;
+          }
+
+          $( "#login" ).html( "" );
+          $( "#logoff" ).html( "Logoff " + l );
+          $( "#files" ).show();
+          $( "#jobs" ).show();
+//          $( "#register" ).html( "" );
+//          $( "#userconfig" ).html( "<img src=\"etc/config.png\" width=40px id=\"config\" class=\"config\">" );
+          ga.license.get();
+          hm = 1;
+      } else {
+          if ( !$( "#files" ).is(":hidden") ) {
+              clearem = 1;
+          }
+          $( "#login" ).html( "Login" );
+          $( "#logoff" ).html( "" );
+          $( "#sel_project" ).html( "" );
+          $( "#files" ).hide();
+          $( "#jobs" ).hide();
+          ga.license.data = {};
+//          $( "#register" ).html( "Register" );
+          $( ga.admin.ids.join(",") ).hide();
+          hideadmin = 1;
+      }
+      s.data( '_logon:last', l );
+      if ( clearem ) {
+        $( "#global_data" ).removeData();
+        ga.fc.clear( "#" ); 
+        ga.jc.clear( "#" ); 
+        ga.valuen.reset();
+        $( "#panelmain" ).html( "" );
+        $( "#seabug" ).html( "" );
+        if ( !$( ".sidebar" ).is(':visible') ) {
+            $( "#menuspan" ).trigger( "click" );
+        }
+        $( "#global_data" ).data( "hoverhelp", 1 );
+        resetHoverHelp();
+        if ( hideadmin ) {
+          $( ga.admin.ids.join(",") ).hide();
+        }
+        $( "#userconfig + span" ).html( hm ? "this is user config help" : "this is register help" );
+      }
+   }
+   var fsr = s.data( '_fs_refresh' );
+   if ( fsr && fsr.length )
+   {
+
+      if ( fsr !== "#" )
+      { 
+         fsr = $.base64.encode( "./" + fsr );
+      }
+
+      ga.fc.clear( fsr );
+//      ga.jc.clear( "#" );
+      s.removeData( '_fs_refresh' );
+   }
+
+   var swl = s.data( '_switch' );
+   if ( swl && swl.length )
+   {
+      var sw = swl.split( "/" );
+      if ( sw && sw.length == 4 )
+      {
+
+
+         s.data( '_project', sw[ 2 ] );
+         $( "#seabug" ).html( "<img height=50px style=\"vertical-align:middle\" id='" + sw[0] + "' src='pngs/" + sw[0] + ".png'>" );
+         if ( !( count % 2 ) )
+         {
+            menuOnOff();
+         }
+         var tmp =  sw[1] + "_timeout_handler";
+         var chk = "if( typeof " + tmp + " !== 'undefined' && " + tmp + " != 'unset' ){ console.log( 'clearing timeout' );clearTimeout(" + tmp + ");};";
+
+         eval( chk );
+         ga.event( "reattach", sw[0] , "load" );
+         $( "#panelmain" ).load( "ajax/" + sw[0] + ".html", function(){
+
+
+
+
+           $( "#panel_" + sw[ 0 ] ).load( "ajax/" + sw[0] + "/" + sw[1] + ".html",
+               function(){
+
+                   ga.value.resetDefaultValues( sw[1] + "_output", true );
+                   eval( "subMsging('" + sw[3] + "', msg_" + sw[1] + ",'" + sw[1] + "');get_results_" + sw[1] + "('" + sw[3] + "',0,1,1);" );
+               }); 
+         });
+   
+         s.removeData( '_switch' );
+      }
+   }
+   var p = s.data( '_project' );
+   var pl = s.data( '_project:last' );
+   if ( !pl || p != pl )
+   {
+      if ( p && p.length && p != "no_project_specified" )
+      {
+          $( "#sel_project" ).html( "Project " + p );
+      } else {
+          $( "#sel_project" ).html( "" );
+      }
+      s.data( '_project:last', p );
+   }
+
+   var m = s.data( '_message' );
+   if ( m ) {
+       messagebox( m );
+       s.removeData( '_message' );
+   }
+   var fsc = s.data( '_fs_clear' );
+   if ( fsc && fsc.length )
+   {
+
+       ga.fc.clear( fsc );
+       s.removeData( '_fs_clear' );
+   }
+}
+
+$.getJSON( "ajax/sys_config/sys_status.php", {
+tags: "_logon",
+tagmode: "any",
+format: "json",
+_window : window.name
+})
+.done(function( data ) {
+$( '#_state' ).data( "_logon", data[ "_logon" ] );
+$( '#_state' ).data( "_project", data[ "_project" ] );
+
+syncState();
+});
+
+ga.fc.delete_warn_delete = function( ids ) {
+    messagebox( {
+                   icon  : "warning.png",
+                   text  : ga.fc.delete_node_message( ids ),
+                   ptext : ga.fc.delete_node_message_files( ids ),
+                   buttons : [
+                              { id    : "remove",
+                                label : "Yes, remove them",
+                                cb    : ga.fc.delete_node,
+                                data  : ids
+                              },
+                              { id    : "cancel",
+                                label : "Cancel"
+                              }
+                             ]
+                 } );
+}
+
+ga.fc.delete_error_msg = function( ids, text ) {
+    messagebox( {
+                   icon : "warning.png",
+                   text : text,
+                   buttons : [
+                     { id    : "ok",
+                       label : "OK" } ]
+                } );
+}
+
+ga.fc.ajax_error_msg = function( text ) {
+    messagebox( {
+                   icon : "toast.png",
+                   text : text,
+                   buttons : [
+                     { id    : "ok",
+                       label : "OK" } ]
+                } );
+}
+
+$(function() {
+    $('.pagetitle').css({
+        'position' : 'absolute',
+        'left' : '50%',
+        'top' : '0%'
+    });
+    $('.pagetitle h2').css({
+        'position' : 'relative',
+        'top'      : -$('.pagetitle').outerHeight() / 11,
+        'left'     : -$('.pagetitle').outerWidth() / 2
+    });
+});
+
+$( "#_alttitle" ).on( "click", function() { 
+                       window.open( ".", "_blank" );
+                       return false;
+}).hover( function() {
+                       $( ".title" ).css( { "color" : "rgb(200,128,0)" } );
+                       },
+                       function() {
+                       $( ".title" ).css( { "color" : "rgb(220,210,210)" } );
+                       }
+);
+
+
+</script>
+<footer><hr>Test footer</footer>
+</body>
+</html>

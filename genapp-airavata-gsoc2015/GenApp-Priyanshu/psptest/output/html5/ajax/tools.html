@@ -1,0 +1,71 @@
+<style>
+#panel_tools {
+    position: relative;
+    display: block;  
+}
+</style>
+<p>
+<center>
+
+    <button id="tools_center" class="help_link">Center</button><span class="help">help for Center</span>
+<script>
+    $( "#tools_center" ).click(function() {
+        var d=$( "#tab_docs > a" );
+        if ( d.length ) { d.attr( "href", "__docsbaseurl__/tools/center/center.html" ); };
+    
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+
+        if ( ga.valuen.lastload != "center" || !$( "#" + ga.valuen.lastload ).is( ":visible" ) ) {
+            $( "#panel_tools" ).load( "ajax/tools/center.html", function() { ga.valuen.save( "center", true ); ga.valuen.restore( "center" ); ga.valuen.lastload = "center"; });
+        }
+    });
+</script>
+    <button id="tools_align" class="help_link">Align</button><span class="help">help for Align</span>
+<script>
+    $( "#tools_align" ).click(function() {
+        var d=$( "#tab_docs > a" );
+        if ( d.length ) { d.attr( "href", "__docsbaseurl__/tools/align/align.html" ); };
+    
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+
+        if ( ga.valuen.lastload != "align" || !$( "#" + ga.valuen.lastload ).is( ":visible" ) ) {
+            $( "#panel_tools" ).load( "ajax/tools/align.html", function() { ga.valuen.save( "align", true ); ga.valuen.restore( "align" ); ga.valuen.lastload = "align"; });
+        }
+    });
+</script>
+    <button id="tools_filetest" class="help_link">Filetest</button><span class="help">help for Filetest</span>
+<script>
+    $( "#tools_filetest" ).click(function() {
+        var d=$( "#tab_docs > a" );
+        if ( d.length ) { d.attr( "href", "__docsbaseurl__/tools/filetest/filetest.html" ); };
+    
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+
+        if ( ga.valuen.lastload != "filetest" || !$( "#" + ga.valuen.lastload ).is( ":visible" ) ) {
+            $( "#panel_tools" ).load( "ajax/tools/filetest.html", function() { ga.valuen.save( "filetest", true ); ga.valuen.restore( "filetest" ); ga.valuen.lastload = "filetest"; });
+        }
+    });
+</script>
+    <button id="tools_data_interpolation" class="help_link">Data Interpolation</button>
+<script>
+    $( "#tools_data_interpolation" ).click(function() {
+        var d=$( "#tab_docs > a" );
+        if ( d.length ) { d.attr( "href", "__docsbaseurl__/tools/data_interpolation/data_interpolation.html" ); };
+    
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+
+        if ( ga.valuen.lastload != "data_interpolation" || !$( "#" + ga.valuen.lastload ).is( ":visible" ) ) {
+            $( "#panel_tools" ).load( "ajax/tools/data_interpolation.html", function() { ga.valuen.save( "data_interpolation", true ); ga.valuen.restore( "data_interpolation" ); ga.valuen.lastload = "data_interpolation"; });
+        }
+    });
+</script>
+</center>
+</p>
+
+<div id="panel_tools">
+</div>
+
+
+<script>
+    $( "#panel_tools" ).text("");
+</script>

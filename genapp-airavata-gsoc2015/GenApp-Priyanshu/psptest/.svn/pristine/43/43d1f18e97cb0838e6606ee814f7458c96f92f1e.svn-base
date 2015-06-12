@@ -1,0 +1,81 @@
+#!/usr/bin/perl
+
+use JSON;
+use Data::Dumper;
+use IO::Socket;
+
+if ( !@ARGV )
+{
+    print "\{\"error\":\"center called with no arguments\"\}\n";
+    exit;
+}
+
+$json = shift;
+$ref = decode_json( $json );
+
+my $sock = IO::Socket::INET->new( Proto => 'udp', PeerPort => $$ref{ "_udpport" }, PeerAddr => $$ref{ "_udphost" } );
+
+$res = {};
+
+$msg = {};
+$$msg{ "_uuid" } = $$ref{ "_uuid" };
+# $$msg{ "hi" } = "center messaging";
+$usemessagebox = $$ref{ 'usemessagebox' };
+if ( $usemessage && !$$ref{ "_udphost" } || !$$ref{ "_udpport" } )
+{
+    $$res{ "Notice" } = "UDP messaging is not setup. Messaging in currently only available in language html5.  If you are running html5, it could be that you have not defined udphost or updport in appconfig.json";
+    $$ref{ 'usemessage' } = 0;
+}
+
+if ( $usemessagebox )
+{
+    $$msg{ "_message" } = {};
+    $$msg{ "_message" }{ 'icon' } = 'skull.png';
+    $$msg{ "_message" }{ 'text' } = 'udp message';
+}
+
+$runminutes = $$ref{ 'runminutes' };
+$sleepsecs = $runminutes * 60;
+$runtimes = 1;
+
+if ( $$ref{ 'usemessage' } )
+{
+    $usemessage = 1;
+    $messagesecs = $$ref{ 'messagesecs' };
+    $runtimes = $sleepsecs / $messagesecs;
+    $sleepsecs /= $runtimes;
+    $$msg{ "_progress" } = 0.0;
+    $sock->send( encode_json( $msg ) );
+}    
+
+
+for ( $i = 0; $i < $runtimes; ++$i )
+{
+    sleep( $sleepsecs );
+    if ( $usemessage )
+    {
+        $$msg{ "output2" } = "Completed " . ( $i+1 ) . " of $runtimes of sleep ${sleepsecs}s";
+        $$msg{ "output3" } = $i / $runtimes;
+        $$msg{ "_progress" } = $i / $runtimes;
+        if ( $usemessagebox )
+        {
+            $$msg{ "_message" }{ 'text' } = 'udp message ' . ( $i+1 ) . " of $runtimes of sleep ${sleepsecs}s";
+        }
+        $sock->send( encode_json( $msg ) );
+    }
+}
+
+$$res{ "output3" } = 1.0;
+# $$res{ "hi" } = "center executable";
+$$res{ "output1" } = "Fully completed $runtimes runs of sleep ${sleepsecs}s";
+# $$res{ "udphost" } = $$ref{ "_udphost" };
+# $$res{ "udpport" } = $$ref{ "_udpport" };
+$$res{ "_message" } = {};
+$$res{ "_message" }{ 'icon' } = 'information.png';
+$$res{ "_message" }{ 'text' } = 'test message';
+
+# open OUT, ">/src/sassie2/log";
+# print OUT Dumper($ref);
+# close OUT;
+print encode_json( $res ) . "\n";
+

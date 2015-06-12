@@ -1,0 +1,529 @@
+
+<form id="plottest">
+<span id="plottest_input_area"></span>
+<script>
+
+input_eval = "";
+input_html = "<table>";
+input_repeats = "";
+input_trees = [];
+skipped_row = 0;
+plottest_done_eval = "";
+_jmol_info = {};
+// jmol = "jmol";
+ga.pull.clearPull();
+$('#plottest').on("keyup keypress", function(e) { var code = e.keyCode || e.which;  if (code  == 13) { e.preventDefault(); return false; }});
+this_html = '<tr><td><label for="startx">Start x </label></td><td><input type="number" name="startx" id="startx" value="1" min="1" required><span id="startx_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 
+'ga.value.setLastValue( "plottest", "#startx" );'
+ + '$( "#startx" ).blur( function() { ga.valid.checkFloat( "#startx" ); });'
+ + '$( "#startx" ).keypress( function() { $( "#startx_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="endx">End x </label></td><td><input type="number" name="endx" id="endx" value="10" required><span id="endx_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 
+'ga.value.setLastValue( "plottest", "#endx" );'
+ + '$( "#endx" ).blur( function() { ga.valid.checkFloat( "#endx" ); });'
+ + '$( "#endx" ).keypress( function() { $( "#endx_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="deltax">Delta x </label></td><td><input type="number" name="deltax" id="deltax" value="0.5" required><span id="deltax_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 
+'ga.value.setLastValue( "plottest", "#deltax" );'
+ + '$( "#deltax" ).blur( function() { ga.valid.checkFloat( "#deltax" ); });'
+ + '$( "#deltax" ).keypress( function() { $( "#deltax_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="abs" class="highlight">abs </label></td><td><input type="checkbox" name="abs" id="abs"></td></tr>'
+
+;
+this_eval = 
+'ga.value.setLastValue( "plottest", "#abs" );'
+
+
+
+
+
+
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="axislabels" class="highlight">Axis labels </label></td><td><input type="checkbox" name="axislabels" id="axislabels"></td></tr>'
+
+;
+this_eval = 
+'ga.value.setLastValue( "plottest", "#axislabels" );'
+
+
+
+
+
+
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="logx" class="highlight">x axis log scale </label></td><td><input type="checkbox" name="logx" id="logx" checked></td></tr>'
+
+;
+this_eval = 
+'ga.value.setLastValue( "plottest", "#logx" );'
+
+
+
+
+
+
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="logy" class="highlight">y axis log scale </label></td><td><input type="checkbox" name="logy" id="logy"></td></tr>'
+
+;
+this_eval = 
+'ga.value.setLastValue( "plottest", "#logy" );'
+
+
+
+
+
+
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+if( skipped_row == 1 ){ input_html += "</tr>"; }
+input_html += '</table>';
+$( '#plottest_input_area' ).html( input_html );
+eval( input_eval );
+</script>
+<p><button id="plottest_submit" class="help_link"><span class="buttontext">Submit</span></button>
+<span class="help">this is help for the submit button</span>
+<button id="plottest_reset" class="help_link"><span class="buttontext">Reset to default values</span></button>
+<span class="help">this is help for the reset to default values button</span>
+
+</p>
+<span id="plottest_progress"></span>
+<script>
+
+
+
+
+var plottest_output_msgs = $("#plottest_output_msgs");
+plottest_output_msgs.text( "" );
+
+var plottest_timeout_handler = "unset";
+
+function get_results_plottest( id, last_timeout, getlastmsg, getinput )
+{
+
+//             url:"ajax/get_results.php?_window=" +  window.name + "&_logon=" +$( "#_state" ).data( "_logon" ) + '&_uuid=' + id,
+    var job_status = "";
+    $.getJSON( 
+             "ajax/get_results.php",
+             {
+                tagmode: "any",
+                format: "json",
+                _window : window.name,
+                _logon : $( "#_state" ).data( "_logon" ),
+                _uuid : id,
+                _getlastmsg : getlastmsg,
+                _getinput : getinput ? true : false
+             } )
+    .done( function( data, status, xhr ) {
+
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( id );
+           }
+
+           job_status = ga.data.update( "plottest", data ).job_status;
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+              if ( plottest_timeout_handler != "unset" )
+              {
+                  clearTimeout( plottest_timeout_handler );
+                  plottest_timeout_handler = "unset";
+              }
+              unsubMsging( id, "plottest" );
+              eval( plottest_done_eval );
+           } else {
+               if ( !last_timeout || last_timeout < 2000 )
+               { 
+                  last_timeout = 2000;
+               } else {
+                  if ( last_timeout < 16000 )
+                  {
+                      last_timeout *= 2;
+                  } else {
+                      last_timeout = 16000;
+                  }
+               }
+
+               plottest_timeout_handler =  setTimeout( get_results_plottest, last_timeout, id, last_timeout, 0 );
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+           $( "#plottest_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/center.php </span>" );
+           $('#plottest_progress').html( "" );
+           if ( plottest_timeout_handler != "unset" )
+           {
+               clearTimeout( plottest_timeout_handler );
+               plottest_timeout_handler = "unset";
+           }
+           unsubMsging( id, "plottest" );
+           eval( plottest_done_eval );
+          } );
+    return false;
+};
+
+function msg_plottest ( id, data )
+{
+   ga.data.update( "plottest", data, get_results_plottest, id );
+};
+
+$( "#plottest_submit" ).click( function( e ) {
+   e.preventDefault();
+   e.returnValue = false;
+
+   var $ok = 0;
+   
+   
+
+   ga.event( "", "plottest", "submit clicked" );
+
+   
+
+
+
+
+
+   if ( !ga.valid.checksubmit( "plottest" ) ) {
+       return false;
+   }
+
+   var $form = $(this);
+
+   $.ajax({
+       type: 'get'
+       ,url: "ajax/sys_config/sys_joblocked.php?_window=" +  window.name + "&_logon=" + $( "#_state" ).data( "_logon" )
+
+       ,context: $form
+       ,success: function( data ) { // your success handler
+
+          if ( !$ok )
+          {
+          switch ( data )
+          {
+             case "1" :
+             {
+                 messagebox( { icon:"warning.png", text:"This project directory is currently locked by another project.\nYou can wait until it completes, change the project in user configuration or clear the lock in the job manager." } );
+                 return;
+             } break;
+             case "2" :
+             {
+                 messagebox( { icon:"warning.png", text:"You must be logged in to submit this module." } );
+                 return;
+             } break;
+             default :
+             {
+
+                 $ok = 1;
+             }
+          }
+          }
+       }
+       ,error: function() { // your error handler
+          messagebox( { icon:"toast.png", text:"Checking the project lock failed. This is possibly a server or network issue" } );
+       }
+       ,complete: function() { 
+          this.off('submit');
+          if ( $ok )
+          {
+
+
+              $( "#plottest_results" ).text( "" );
+
+              ga.value.saveLastValues( "plottest" );
+              ga.value.resetDefaultValues( "plottest_output", true );
+
+              var found_errors = 0;
+              $("#plottest").find("input").each(function(i){
+                 if ( $(this).attr( 'required' ) && $(this).val().length == 0 )
+                 {
+                    var tag =  "#plottest " + "#" + $(this).attr('id') + "_msg";
+
+                    $( tag ).html( "missing required field" );
+                    found_errors = 1;
+                 }
+              });
+              if ( found_errors ) {
+                  return;
+              }
+
+    var tree_html = "";
+    $( "._hidden_tree_selects" ).remove( );
+    $.each( input_trees, function( k, v ){
+
+        $( 'input[type=hidden][name="' + v + '[]"]' ).remove();
+        var selectedElms = $('#' + v).jstree("get_selected", true);
+        var i = 0;
+        $.each(selectedElms, function() {
+           tree_html += '<input type="hidden" name="' + v + '[]" value="' + this.id + '" class="_hidden_tree_selects"/>';
+
+        });
+    });
+
+    $( this ).append( tree_html );
+
+
+    var logonadd = $("<input>").attr("type", "hidden").attr("name", "_logon").val( $( "#_state" ).data( "_logon" ) );$( this ).append($(logonadd));
+    var projectadd = $("<input>").attr("type", "hidden").attr("name", "_project").val( $( "#_state" ).data( "_project" ) );$( this ).append($(projectadd));
+    var windowadd = $("<input>").attr("type", "hidden").attr("name", "_window").val( window.name );$( this ).append($(windowadd));
+    var vuuid = uuid.v1();
+
+
+
+
+
+
+    var uuidadd = $("<input>").attr("type", "hidden").attr("name", "_uuid").val( vuuid );$( this ).append($(uuidadd));
+//    ga.altfile.add( "plottest" );
+    ga.valuen.addhtml( "plottest" );
+
+    subMsging( vuuid, msg_plottest, "plottest" );
+
+    var formData = new FormData($('form')[0]);
+
+
+    $('#plottest_progress').html( "Uploading:<progress></progress>" );
+
+    var job_status = "";
+
+    ga.event( "", "plottest", "submit: passed submit checks, submitting" );
+
+    $.ajax( {
+             dataType: "json",
+             cache:false,
+//             timeout:3000,  // for testing
+             type:"POST",
+             url:"ajax/interact/plottest.php",
+             data: formData,
+             xhr: function() {  // Custom XMLHttpRequest
+                 var myXhr = $.ajaxSettings.xhr();
+                 if(myXhr.upload){ // Check if upload property exists
+                     myXhr.upload.addEventListener('progress',
+                         function(e) {
+                         if(e.lengthComputable){
+                           $('#plottest_progress progress').attr({value:e.loaded,max:e.total});
+                         } }
+//                     progressHandlingFunction
+                    , false);
+                 }
+                 return myXhr;
+             },
+             contentType: false,
+             processData: false
+            } )
+    .done( function( data, status, xhr ) {
+
+
+
+
+// refresh cache for this project
+           $('#plottest_progress').html( "" );
+   
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( vuuid );
+           }
+           
+// loop through data pairs
+           plottest_output_msgs.text( "" );
+           job_status = ga.data.update( "plottest", data ).job_status;
+
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+               if ( plottest_timeout_handler != "unset" )
+               {
+                   clearTimeout( plottest_timeout_handler );
+                   plottest_timeout_handler = "unset";
+               }
+               unsubMsging( vuuid, "plottest" );
+               eval( plottest_done_eval );
+           } else {
+               plottest_timeout_handler = setTimeout( get_results_plottest, 2000, vuuid, 2000, 0 );
+
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+
+
+
+           $( "#plottest_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/interact/plottest.php </span>" );
+           $('#plottest_progress').html( "" );
+           if ( plottest_timeout_handler != "unset" )
+           {
+               clearTimeout( plottest_timeout_handler );
+               plottest_timeout_handler = "unset";
+           }
+           unsubMsging( vuuid, "plottest" );
+           eval( plottest_done_eval );
+          } );
+          } else {
+
+          }
+       }
+   });
+}); 
+
+$( "#plottest_reset" ).click( function() {
+    
+    
+    ga.event( "", "plottest", "reset clicked" );
+    //    ga.value.resetDefaultValues( "plottest" );
+    ga.valuen.restore.dflt(  "plottest" );
+    ga.value.resetDefaultValues( "plottest_output", true );
+    
+    eval( input_repeats );
+    return false;
+});
+setHoverHelp();
+
+
+eval( input_repeats );
+ga.pull.doPull();
+</script>
+</form>
+<div id="plottest_results"></div>
+<script>
+ga.tmp.html = "<hr>";
+
+$("#plottest").append( ga.tmp.html );
+</script>
+<form id="plottest_output">
+<div id="plottest_output_msgs" class="warning" type="msgs"></div>
+<script>
+ga.value.setLastValueOutput( "plottest_output" );
+ga.value.extra_resets.clear();
+</script>
+
+<table>
+<tr>
+<td colspan="4" style="vertical-align:top"><label hidden id="plottest_output_textarea_label" for="plottest_output_textarea" class="header3 ">Report:</label>
+<textarea readonly hidden id="plottest_output_textarea" rows="10" cols="60" class="help_link"></textarea>
+<span class="help">general textarea help</span>
+</td>
+</tr>
+</table>
+<p>
+
+<label for="plotout4">plot 2d</label></tr><tr>
+<table class="help_link">
+<tr>
+   <td></td>
+   <td id="plotout4_title" style="text-align:center" class="header3"></td>
+   <td id="plotout4_xy" class="coord"></td>
+</tr>
+<tr>
+   <td id="plotout4_ylabel" style="text-align:center"></td>
+   <td id="plotout4" type="plot2d" class="plot2ddef" style="width:800px;height:400px"></td>
+   <td id="plotout4_legend"></td>
+</tr>
+<tr>
+   <td></td>
+   <td id="plotout4_xlabel" style="text-align:center"></td>
+   <td></td>
+</tr>
+</table>
+<span class="help">drag to pan, double click to zoom, to reset zoom and pan: click on title, axis labels or live coordinates box</span>
+</p>
+
+<script>
+var tmp = $.plot( $( "#plotout4" ), [[]], gd.data( "_plot_options" ) );
+ga.value.set.plot2d.pan( "#plotout4", 10 );
+ga.value.set.plot2d.zoom( "#plotout4", 10 );
+ga.value.set.plot2d.hover( "#plotout4", 10 );
+ga.value.set.plot2d.pkg( "plottest_output", "#plotout4" );
+$("#plotout4").bind("plothover",function(e,p,i){var r=ga.set("plot2d:precision");$("#plotout4_xy").addClass("coordvisible").text("( "+p.x.toPrecision(r)+" , "+p.y.toPrecision(r)+" )");}).on("mouseout", function(){setTimeout(function(){$("#plotout4_xy").removeClass( "coordvisible" );}, 1500 )});
+ga.value.setLastValue( "plottest_output", "#plotout4" );
+ga.value.extra_resets( "plotout4" );
+</script>
+<table>
+<tr><td><label for="outputref">input json reference </label>
+</td>
+<td><div id="outputref" type="filelink" readonly><span id="outputref_filelink"></span></div>
+</td></tr>
+<script>
+ga.value.setLastValue( "plottest_output", "#outputref" );
+ga.value.extra_resets( "outputref" );
+</script>
+<tr><td><label for="outputres">results json reference </label>
+</td>
+<td><div id="outputres" type="filelink" readonly><span id="outputres_filelink"></span></div>
+</td></tr>
+<script>
+ga.value.setLastValue( "plottest_output", "#outputres" );
+ga.value.extra_resets( "outputres" );
+</script>
+</table>
+</form>
+

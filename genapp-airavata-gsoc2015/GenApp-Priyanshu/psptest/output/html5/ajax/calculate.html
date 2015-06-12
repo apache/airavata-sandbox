@@ -1,0 +1,45 @@
+<style>
+#panel_calculate {
+    position: relative;
+    display: block;  
+}
+</style>
+<p>
+<center>
+
+    <button id="calculate_calculate_1" class="help_link">Calculate 1</button><span class="help">help for Calculate_1</span>
+<script>
+    $( "#calculate_calculate_1" ).click(function() {
+        var d=$( "#tab_docs > a" );
+        if ( d.length ) { d.attr( "href", "__docsbaseurl__/calculate/calculate_1/calculate_1.html" ); };
+    
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+
+        if ( ga.valuen.lastload != "calculate_1" || !$( "#" + ga.valuen.lastload ).is( ":visible" ) ) {
+            $( "#panel_calculate" ).load( "ajax/calculate/calculate_1.html", function() { ga.valuen.save( "calculate_1", true ); ga.valuen.restore( "calculate_1" ); ga.valuen.lastload = "calculate_1"; });
+        }
+    });
+</script>
+    <button id="calculate_calculate_2" class="help_link">Calculate 2</button><span class="help">help for Calculate_2</span>
+<script>
+    $( "#calculate_calculate_2" ).click(function() {
+        var d=$( "#tab_docs > a" );
+        if ( d.length ) { d.attr( "href", "__docsbaseurl__/calculate/calculate_2/calculate_2.html" ); };
+    
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+
+        if ( ga.valuen.lastload != "calculate_2" || !$( "#" + ga.valuen.lastload ).is( ":visible" ) ) {
+            $( "#panel_calculate" ).load( "ajax/calculate/calculate_2.html", function() { ga.valuen.save( "calculate_2", true ); ga.valuen.restore( "calculate_2" ); ga.valuen.lastload = "calculate_2"; });
+        }
+    });
+</script>
+</center>
+</p>
+
+<div id="panel_calculate">
+</div>
+
+
+<script>
+    $( "#panel_calculate" ).text("");
+</script>

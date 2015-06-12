@@ -1,0 +1,473 @@
+
+<form id="interact_2">
+<span id="interact_2_input_area"></span>
+<script>
+
+input_eval = "";
+input_html = "<table>";
+input_repeats = "";
+input_trees = [];
+skipped_row = 0;
+interact_2_done_eval = "";
+_jmol_info = {};
+// jmol = "jmol";
+ga.pull.clearPull();
+$('#interact_2').on("keyup keypress", function(e) { var code = e.keyCode || e.which;  if (code  == 13) { e.preventDefault(); return false; }});
+this_html = '<tr><td><label id="input0_label" class="header1 ">Header 1 no hline</label>' + 
+'</td>' +
+'<td><div id="input0"></div>' +
+'</td></tr>';
+this_eval = '';
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input1">Input value 1 </label></td><td><input type="number" name="input1" id="input1" value="0" min="0" max="1e+50" required><span id="input1_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 
+'ga.value.setLastValue( "interact_2", "#input1" );'
+ + '$( "#input1" ).blur( function() { ga.valid.checkFloat( "#input1" ); });'
+ + '$( "#input1" ).keypress( function() { $( "#input1_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><hr></td></tr><tr><td><label id="input1x_label" class="header2 ">Header 2 prehline</label>' + 
+'</td>' +
+'<td><div id="input1x"></div>' +
+'</td></tr>';
+this_eval = '';
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+ga.tmp.html = '';
+
+
+this_html = '<tr>' +
+'<td><label for="input2">Input value 2 </label></td>' + 
+'<td><input type="number" name="input2" id="input2" value="1" min="-10" max="10"' +
+'><span id="input2_msg" class="warning field_msg" > </span></td></tr>'
+
+;
+
+this_eval = 
+'ga.value.setLastValue( "interact_2", "#input2" );'
+
++ '$( "#input2" ).on("change blur", function() { ga.valid.checkInt( "#input2" );'
+
+
++ '});'
+
++ '$( "#input2" ).keypress( function() { $( "#input2_msg" ).html( "" ); });'
+
+
+
+;
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label id="input2x_label" class="header3 ">Header 3 posthline</label>' + 
+'</td>' +
+'<td><div id="input2x"></div>' +
+'</td></tr><tr><td><hr></td></tr>';
+this_eval = '';
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input3" class="highlight">Input value 3 </label></td><td><input type="checkbox" name="input3" id="input3" checked></td></tr>'
+
+;
+this_eval = 
+'ga.value.setLastValue( "interact_2", "#input3" );'
+
+
+
+
+
+
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+if( skipped_row == 1 ){ input_html += "</tr>"; }
+input_html += '</table>';
+$( '#interact_2_input_area' ).html( input_html );
+eval( input_eval );
+</script>
+<p><button id="interact_2_submit" class="help_link"><span class="buttontext">Submit</span></button>
+<span class="help">this is help for the submit button</span>
+<button id="interact_2_reset" class="help_link"><span class="buttontext">Reset to default values</span></button>
+<span class="help">this is help for the reset to default values button</span>
+
+</p>
+<span id="interact_2_progress"></span>
+<script>
+
+
+
+
+var interact_2_output_msgs = $("#interact_2_output_msgs");
+interact_2_output_msgs.text( "" );
+
+var interact_2_timeout_handler = "unset";
+
+function get_results_interact_2( id, last_timeout, getlastmsg, getinput )
+{
+
+//             url:"ajax/get_results.php?_window=" +  window.name + "&_logon=" +$( "#_state" ).data( "_logon" ) + '&_uuid=' + id,
+    var job_status = "";
+    $.getJSON( 
+             "ajax/get_results.php",
+             {
+                tagmode: "any",
+                format: "json",
+                _window : window.name,
+                _logon : $( "#_state" ).data( "_logon" ),
+                _uuid : id,
+                _getlastmsg : getlastmsg,
+                _getinput : getinput ? true : false
+             } )
+    .done( function( data, status, xhr ) {
+
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( id );
+           }
+
+           job_status = ga.data.update( "interact_2", data ).job_status;
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+              if ( interact_2_timeout_handler != "unset" )
+              {
+                  clearTimeout( interact_2_timeout_handler );
+                  interact_2_timeout_handler = "unset";
+              }
+              unsubMsging( id, "interact_2" );
+              eval( interact_2_done_eval );
+           } else {
+               if ( !last_timeout || last_timeout < 2000 )
+               { 
+                  last_timeout = 2000;
+               } else {
+                  if ( last_timeout < 16000 )
+                  {
+                      last_timeout *= 2;
+                  } else {
+                      last_timeout = 16000;
+                  }
+               }
+
+               interact_2_timeout_handler =  setTimeout( get_results_interact_2, last_timeout, id, last_timeout, 0 );
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+           $( "#interact_2_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/center.php </span>" );
+           $('#interact_2_progress').html( "" );
+           if ( interact_2_timeout_handler != "unset" )
+           {
+               clearTimeout( interact_2_timeout_handler );
+               interact_2_timeout_handler = "unset";
+           }
+           unsubMsging( id, "interact_2" );
+           eval( interact_2_done_eval );
+          } );
+    return false;
+};
+
+function msg_interact_2 ( id, data )
+{
+   ga.data.update( "interact_2", data, get_results_interact_2, id );
+};
+
+$( "#interact_2_submit" ).click( function( e ) {
+   e.preventDefault();
+   e.returnValue = false;
+
+   var $ok = 0;
+   
+   
+
+   ga.event( "", "interact_2", "submit clicked" );
+
+   
+
+
+
+
+
+   if ( !ga.valid.checksubmit( "interact_2" ) ) {
+       return false;
+   }
+
+   var $form = $(this);
+
+   $.ajax({
+       type: 'get'
+       ,url: "ajax/sys_config/sys_joblocked.php?_window=" +  window.name + "&_logon=" + $( "#_state" ).data( "_logon" )
+
+       ,context: $form
+       ,success: function( data ) { // your success handler
+
+          if ( !$ok )
+          {
+          switch ( data )
+          {
+             case "1" :
+             {
+                 messagebox( { icon:"warning.png", text:"This project directory is currently locked by another project.\nYou can wait until it completes, change the project in user configuration or clear the lock in the job manager." } );
+                 return;
+             } break;
+             case "2" :
+             {
+                 messagebox( { icon:"warning.png", text:"You must be logged in to submit this module." } );
+                 return;
+             } break;
+             default :
+             {
+
+                 $ok = 1;
+             }
+          }
+          }
+       }
+       ,error: function() { // your error handler
+          messagebox( { icon:"toast.png", text:"Checking the project lock failed. This is possibly a server or network issue" } );
+       }
+       ,complete: function() { 
+          this.off('submit');
+          if ( $ok )
+          {
+
+
+              $( "#interact_2_results" ).text( "" );
+
+              ga.value.saveLastValues( "interact_2" );
+              ga.value.resetDefaultValues( "interact_2_output", true );
+
+              var found_errors = 0;
+              $("#interact_2").find("input").each(function(i){
+                 if ( $(this).attr( 'required' ) && $(this).val().length == 0 )
+                 {
+                    var tag =  "#interact_2 " + "#" + $(this).attr('id') + "_msg";
+
+                    $( tag ).html( "missing required field" );
+                    found_errors = 1;
+                 }
+              });
+              if ( found_errors ) {
+                  return;
+              }
+
+    var tree_html = "";
+    $( "._hidden_tree_selects" ).remove( );
+    $.each( input_trees, function( k, v ){
+
+        $( 'input[type=hidden][name="' + v + '[]"]' ).remove();
+        var selectedElms = $('#' + v).jstree("get_selected", true);
+        var i = 0;
+        $.each(selectedElms, function() {
+           tree_html += '<input type="hidden" name="' + v + '[]" value="' + this.id + '" class="_hidden_tree_selects"/>';
+
+        });
+    });
+
+    $( this ).append( tree_html );
+
+
+    var logonadd = $("<input>").attr("type", "hidden").attr("name", "_logon").val( $( "#_state" ).data( "_logon" ) );$( this ).append($(logonadd));
+    var projectadd = $("<input>").attr("type", "hidden").attr("name", "_project").val( $( "#_state" ).data( "_project" ) );$( this ).append($(projectadd));
+    var windowadd = $("<input>").attr("type", "hidden").attr("name", "_window").val( window.name );$( this ).append($(windowadd));
+    var vuuid = uuid.v1();
+
+
+
+
+
+
+    var uuidadd = $("<input>").attr("type", "hidden").attr("name", "_uuid").val( vuuid );$( this ).append($(uuidadd));
+//    ga.altfile.add( "interact_2" );
+    ga.valuen.addhtml( "interact_2" );
+
+    subMsging( vuuid, msg_interact_2, "interact_2" );
+
+    var formData = new FormData($('form')[0]);
+
+
+    $('#interact_2_progress').html( "Uploading:<progress></progress>" );
+
+    var job_status = "";
+
+    ga.event( "", "interact_2", "submit: passed submit checks, submitting" );
+
+    $.ajax( {
+             dataType: "json",
+             cache:false,
+//             timeout:3000,  // for testing
+             type:"POST",
+             url:"ajax/interact/interact_2.php",
+             data: formData,
+             xhr: function() {  // Custom XMLHttpRequest
+                 var myXhr = $.ajaxSettings.xhr();
+                 if(myXhr.upload){ // Check if upload property exists
+                     myXhr.upload.addEventListener('progress',
+                         function(e) {
+                         if(e.lengthComputable){
+                           $('#interact_2_progress progress').attr({value:e.loaded,max:e.total});
+                         } }
+//                     progressHandlingFunction
+                    , false);
+                 }
+                 return myXhr;
+             },
+             contentType: false,
+             processData: false
+            } )
+    .done( function( data, status, xhr ) {
+
+
+
+
+// refresh cache for this project
+           $('#interact_2_progress').html( "" );
+   
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( vuuid );
+           }
+           
+// loop through data pairs
+           interact_2_output_msgs.text( "" );
+           job_status = ga.data.update( "interact_2", data ).job_status;
+
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+               if ( interact_2_timeout_handler != "unset" )
+               {
+                   clearTimeout( interact_2_timeout_handler );
+                   interact_2_timeout_handler = "unset";
+               }
+               unsubMsging( vuuid, "interact_2" );
+               eval( interact_2_done_eval );
+           } else {
+               interact_2_timeout_handler = setTimeout( get_results_interact_2, 2000, vuuid, 2000, 0 );
+
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+
+
+
+           $( "#interact_2_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/interact/interact_2.php </span>" );
+           $('#interact_2_progress').html( "" );
+           if ( interact_2_timeout_handler != "unset" )
+           {
+               clearTimeout( interact_2_timeout_handler );
+               interact_2_timeout_handler = "unset";
+           }
+           unsubMsging( vuuid, "interact_2" );
+           eval( interact_2_done_eval );
+          } );
+          } else {
+
+          }
+       }
+   });
+}); 
+
+$( "#interact_2_reset" ).click( function() {
+    
+    
+    ga.event( "", "interact_2", "reset clicked" );
+    //    ga.value.resetDefaultValues( "interact_2" );
+    ga.valuen.restore.dflt(  "interact_2" );
+    ga.value.resetDefaultValues( "interact_2_output", true );
+    
+    eval( input_repeats );
+    return false;
+});
+setHoverHelp();
+
+
+eval( input_repeats );
+ga.pull.doPull();
+</script>
+</form>
+<div id="interact_2_results"></div>
+<script>
+ga.tmp.html = "<hr>";
+
+$("#interact_2").append( ga.tmp.html );
+</script>
+<form id="interact_2_output">
+<div id="interact_2_output_msgs" class="warning" type="msgs"></div>
+<script>
+ga.value.setLastValueOutput( "interact_2_output" );
+ga.value.extra_resets.clear();
+</script>
+
+<table>
+<tr>
+<td colspan="4" style="vertical-align:top"><label hidden id="interact_2_output_textarea_label" for="interact_2_output_textarea" class="header3 ">Report:</label>
+<textarea readonly hidden id="interact_2_output_textarea" cols="60" class="help_link"></textarea>
+<span class="help">general textarea help</span>
+</td>
+</tr>
+<tr><td><hr></td></tr><tr><td><label class="header4">Header 4 pre & post hline</label></td></tr><tr><td><hr></td></tr>
+
+
+
+<tr><td><label class="header4"></label></td></tr><tr><td><hr></td></tr>
+
+
+
+<tr><td><hr></td></tr><tr><td><label>Header no default pre and post hline</label></td></tr><tr><td><hr></td></tr>
+
+
+
+<tr><td><label for="output1">Output value 1 </label></td><td><input type="number" name="output1" id="output1" readonly></td></tr>
+<script>
+ga.value.setLastValue( "interact_2_output", "#output1" );
+</script>
+</table>
+</form>
+

@@ -1,0 +1,91 @@
+# this is a module file, any module specific info belongs here
+{
+    "moduleid" : "interact_2",
+    "label"    : "Interact_2",
+    "help"     : "help for Interact_2",
+    "fields"   : [
+                  {
+                   "role"       : "input",
+                   "id"       : "input0",
+                   "label"    : "Header 1 no hline",
+                   "type"     : "label",
+                   "default"  : "header1"
+                   },
+                  {
+                   "role"       : "input",
+                   "id"       : "input1",
+                   "label"    : "Input value 1",
+                   "type"     : "float",
+                   "default"  : 0.0,
+                   "min"      : 0.0,
+                   "max"      : 1e50,
+                   "required" : "true"
+                   },
+                  {
+                   "role"       : "input",
+                   "id"       : "input1x",
+                   "label"    : "Header 2 prehline",
+                   "type"     : "label",
+                   "default"  : "header2",
+                   "prehline"   : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "input2",
+                   "label"   : "Input value 2",
+                   "type"    : "integer",
+                   "default" : 1,
+                   "min"     : -10,
+                   "max"     : 10,
+                   "required" : "false"
+                   },
+                  {
+                   "role"       : "input",
+                   "id"       : "input2x",
+                   "label"    : "Header 3 posthline",
+                   "type"     : "label",
+                   "default"  : "header3",
+                   "posthline"   : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "input3",
+                   "label"   : "Input value 3",
+                   "type"    : "checkbox",
+                   "checked" : "true"
+                   },
+                  {
+                   "role"       : "output",
+                   "id"       : "output1x",
+                   "label"    : "Header 4 pre & post hline",
+                   "type"     : "label",
+                   "default"  : "header4",
+                   "prehline"   : "true",
+                   "posthline"   : "true"
+                   },
+                  {
+                   "role"       : "output",
+                   "id"       : "output1y",
+                   "label"    : "",
+                   "type"     : "label",
+                   "default"  : "header4",
+                   "posthline"   : "true"
+                   },
+                  {
+                   "role"       : "output",
+                   "id"       : "output2x",
+                   "label"    : "Header no default pre and post hline",
+                   "type"     : "label",
+                   "prehline"   : "true",
+                   "posthline"   : "true"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "output1",
+                   "label" : "Output value 1",
+                   "type"  : "float"
+                   }
+                  ],
+# the executable will take inputs in order and produce output
+    "executable" : "interact_2"
+}
