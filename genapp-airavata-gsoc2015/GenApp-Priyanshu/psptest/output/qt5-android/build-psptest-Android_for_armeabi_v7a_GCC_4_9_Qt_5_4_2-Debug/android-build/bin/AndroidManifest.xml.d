@@ -1,0 +1,2 @@
+/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/output/qt5-android/build-psptest-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_2-Debug/android-build/bin/AndroidManifest.xml : \
+/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/output/qt5-android/build-psptest-Android_for_armeabi_v7a_GCC_4_9_Qt_5_4_2-Debug/android-build/AndroidManifest.xml \

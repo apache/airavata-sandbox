@@ -267,7 +267,7 @@ void psptest::module_submit_tools_center()
    // qDebug() << input_to_json( "center" );
    // we should check if process already running
 
-   QString program = "/home/priyanshu-sekhar/gsoc/new_airavata/new_genapp/psptest/bin/center";
+   QString program = "/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/bin/center";
 
    QFileInfo qfi( program );
    if ( !qfi.exists() || !qfi.isExecutable() || qfi.isDir() )

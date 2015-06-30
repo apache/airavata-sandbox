@@ -4,7 +4,9 @@
                 ,"feedback" : "emre@biochem.uthscsa.edu"
                 ,"from"     : "genapp.ehb1.net"
                }
-  ,"hostip"   : "192.168.3.44"
+  ,"hostip"   : "'192.168.1.106'"
+  ,"hostport" : 8930
+  ,"hosttimeout" : 30000
   ,"hostname" : "192.168.3.44"
   ,"messaging" : {
                   "wsport"     : 37777

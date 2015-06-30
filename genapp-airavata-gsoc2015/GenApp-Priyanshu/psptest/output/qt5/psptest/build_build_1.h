@@ -216,7 +216,7 @@ void psptest::module_submit_build_build_1()
    // qDebug() << input_to_json( "build_1" );
    // we should check if process already running
 
-   QString program = "/home/priyanshu-sekhar/gsoc/new_airavata/new_genapp/psptest/bin/build_1";
+   QString program = "/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/bin/build_1";
 
    QFileInfo qfi( program );
    if ( !qfi.exists() || !qfi.isExecutable() || qfi.isDir() )

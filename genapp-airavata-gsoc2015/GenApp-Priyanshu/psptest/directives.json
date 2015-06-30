@@ -1,5 +1,5 @@
 {
-  "title"                     : "SOME TITLE",
+  "title"                     : "GenApp",
 
   "application"               : "psptest",
 
@@ -7,22 +7,23 @@
   "footersize"                : "50px",
 
   "version"                   : "0.1",
-  "languages"                 : [ "qt4", "qt5" ],
+  "languages"                 : [ "qt4", "qt5", "qt5-android" ],
 
   "executable_path"           :
                                 {
-                                 "html5" : "/home/priyanshu-sekhar/gsoc/new_airavata/new_genapp/psptest/bin",
-                                 "qt3"   : "/home/priyanshu-sekhar/gsoc/new_airavata/new_genapp/psptest/bin",
-                                 "qt4"   : "/home/priyanshu-sekhar/gsoc/new_airavata/new_genapp/psptest/bin",
-                                 "qt5"   : "/home/priyanshu-sekhar/gsoc/new_airavata/new_genapp/psptest/bin"
+                                 "html5" : "/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/bin",
+                                 "qt3"   : "/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/bin",
+                                 "qt4"   : "/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/bin",
+                                 "qt5"   : "/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/bin",
+                                 "qt5-android"   : "/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/bin"
                                 },
 
   "docroot"                   :
                                 {
                                  "html5" : "/opt/lampp/htdocs",
-                                 "qt3"   : "/home/priyanshu-sekhar/gsoc/new_airavata/new_genapp/tmp",
-                                 "qt4"   : "/home/priyanshu-sekhar/gsoc/new_airavata/new_genapp/tmp",
-                                 "qt5"   : "/home/priyanshu-sekhar/gsoc/new_airavata/new_genapp/tmp"
+                                 "qt3"   : "/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/tmp",
+                                 "qt4"   : "/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/tmp",
+                                 "qt5"   : "/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/tmp"
                                 },
   "helper"                    : {
                                  "txt" :"vi",

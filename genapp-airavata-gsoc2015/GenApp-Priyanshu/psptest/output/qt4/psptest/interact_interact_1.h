@@ -454,7 +454,7 @@ void psptest::module_submit_interact_interact_1()
    
    // we should check if process already running
 
-   QString program = "/home/priyanshu-sekhar/gsoc/new_airavata/new_genapp/psptest/bin/interact_1";
+   QString program = "/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/bin/interact_1";
 
    QFileInfo qfi( program );
    if ( !qfi.exists() || !qfi.isExecutable() || qfi.isDir() )

@@ -99,8 +99,8 @@ psptest::psptest() : QFrame()
       setStyleSheet( sf.readAll() );
    }
 
-   setWindowTitle( "SOME TITLE 0.1" );
-   QLabel *title = new QLabel( "<h2>SOME TITLE 0.1</h2>", this );
+   setWindowTitle( "GenApp 0.1" );
+   QLabel *title = new QLabel( "<h2>GenApp 0.1</h2>", this );
    title->setAlignment( Qt::AlignTop | Qt::AlignHCenter);
    QGridLayout* gl_top = new QGridLayout( 0 );
 

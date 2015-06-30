@@ -48,6 +48,7 @@ void Register::init()
     {
         this->directivesFile = directivesHome + "/directives.json";
         this->modulesFile = directivesHome + "/menu.json";
+        this->appConfig = directivesHome + "/appconfig.json";
     }
     cout << "Directives directory: "+this->directivesFile<< endl;
     //directives
@@ -74,12 +75,43 @@ void Register::init()
     
 }
 
+/*typedef struct {
+        gchar *airavata_server;
+        gint airavata_port, airavata_timeout;
+} Settings;
+*/
+typedef struct {
+        gchar *airavata_server, *app_catalog_server;
+        gint airavata_port, app_catalog_port, airavata_timeout;
+} Settings;
 
 void Register::readConfigFile(char* cfgfile, string& airavata_server, int& airavata_port, int& airavata_timeout) {
 
-        airavata_server="'localhost'";
+       /* airavata_server="'192.168.1.24'";
         airavata_port= 8930;
-        airavata_timeout=50000;
+        airavata_timeout=100000;*/
+        json config_json = json::parse_file(this->appConfig);
+        airavata_server = config_json["hostip"].as<std::string>();
+        airavata_port = config_json["hostport"].as<int>();
+        airavata_timeout = config_json["hosttimeout"].as<int>();
+
+       /* Settings *conf;
+        GKeyFile *keyfile;
+        GKeyFileFlags flags;
+        GError *error = NULL;        
+        keyfile = g_key_file_new ();                        
+        if (!g_key_file_load_from_file (keyfile, cfgfile, flags, &error)) {
+                g_error (error->message);
+        } else {                
+                conf = g_slice_new (Settings);
+                conf->airavata_server    = g_key_file_get_string(keyfile, "airavata", "AIRAVATA_SERVER", NULL);
+                airavata_server = conf->airavata_server;
+                conf->airavata_port      = g_key_file_get_integer(keyfile, "airavata", "AIRAVATA_PORT", NULL);
+                airavata_port = conf->airavata_port;
+                conf->airavata_timeout  = g_key_file_get_integer(keyfile, "airavata", "AIRAVATA_TIMEOUT", NULL);
+                airavata_timeout = conf->airavata_timeout;                
+        }              */ 
+
 }
 
 void Register::registerAll()
@@ -87,10 +119,11 @@ void Register::registerAll()
     
         int airavata_port, airavata_timeout;
         string airavata_server="";
-        char* cfgfile = "./airavata-client-properties.ini";;
-        readConfigFile(cfgfile, airavata_server, airavata_port, airavata_timeout);              
+        char* cfgfile = "./airavata-client-properties.ini";
+        readConfigFile(cfgfile, airavata_server, airavata_port, airavata_timeout);  
         airavata_server.erase(0,1);
         airavata_server.erase(airavata_server.length()-1,1);    
+        cout << "server-" << airavata_server << endl;            
         boost::shared_ptr<TSocket> socket(new TSocket(airavata_server, airavata_port));
         socket->setSendTimeout(airavata_timeout);
         boost::shared_ptr<TTransport> transport(new TBufferedTransport(socket));    
@@ -111,6 +144,7 @@ void Register::registerGateway()
 {
     try
     {
+        cout << "registerGateway" << endl;
         Gateway gateway;
         gateway.__set_gatewayName("PHP Reference Gateway");
         gateway.__set_gatewayId("php_reference_gateway");
@@ -189,7 +223,7 @@ void Register::registerGatewayProfile()
     try
     {
         DataMovementProtocol::type dataMovementProtocol;
-        string scratchlocation = this->moduleDir + "/../tmp/qt4"; 
+        string scratchlocation = this->moduleDir + "/../tmp/qt5"; 
         
         char* cLocation = new char[scratchlocation.length()+ 1];
         strcpy(cLocation,scratchlocation.c_str());
@@ -197,10 +231,10 @@ void Register::registerGatewayProfile()
         struct stat info;
         int err = stat(cLocation, &info);
         if(err!=-1 && S_ISDIR(info.st_mode))
-            scratchlocation = this->moduleDir + "/../tmp/qt4";
+            scratchlocation = this->moduleDir + "/../tmp/qt5";
         else
             scratchlocation = this->moduleDir + "/..";
-        
+    
         JobSubmissionProtocol::type jobSubmissionProtocol;
         string preferredBatchQueue;
         bool overridebyAiravata = false;
@@ -410,10 +444,7 @@ Register* Register::getInstance()
     }
 }
 
-typedef struct {
-        gchar *airavata_server, *app_catalog_server;
-        gint airavata_port, app_catalog_port, airavata_timeout;
-} Settings;
+
 
 string gatewayId;
 
@@ -561,7 +592,7 @@ void launchExperiment(char* expId)
             transport->open();              
             // AiravataClient airavataClient = createAiravataClient();
             string tokenId = "-0bbb-403b-a88a-42b6dbe198e9";
-            airavataClient.launchExperiment(expId, tokenId);
+            airavataClient.launchExperiment(expId, "airavataToken");
             qDebug() << "launched client experiment";
             transport->close();             
         } catch (ExperimentNotFoundException e) {

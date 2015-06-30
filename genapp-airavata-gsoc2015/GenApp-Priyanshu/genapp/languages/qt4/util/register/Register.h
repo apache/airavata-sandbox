@@ -82,6 +82,7 @@ private:
     string moduleDir; 
     string directivesFile;
     string modulesFile;
+    string appConfig;
     string gatewayId;
     static bool instanceFlag;
     static Register* register_;

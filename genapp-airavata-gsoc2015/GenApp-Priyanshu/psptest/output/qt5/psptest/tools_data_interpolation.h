@@ -341,7 +341,7 @@ void psptest::module_submit_tools_data_interpolation()
    // qDebug() << input_to_json( "data_interpolation" );
    // we should check if process already running
 
-   QString program = "/home/priyanshu-sekhar/gsoc/new_airavata/new_genapp/psptest/bin/data_interpolation";
+   QString program = "/home/priyanshu-sekhar/airavata-sandbox/genapp-airavata-gsoc2015/GenApp-Priyanshu/psptest/bin/data_interpolation";
 
    QFileInfo qfi( program );
    if ( !qfi.exists() || !qfi.isExecutable() || qfi.isDir() )
