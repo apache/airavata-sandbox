@@ -62,12 +62,9 @@ class THttpTransport : public TVirtualTransport<THttpTransport> {
 
   virtual void flush() = 0;
 
-  virtual const std::string getOrigin();
-
  protected:
 
   boost::shared_ptr<TTransport> transport_;
-  std::string origin_;
 
   TMemoryBuffer writeBuffer_;
   TMemoryBuffer readBuffer_;

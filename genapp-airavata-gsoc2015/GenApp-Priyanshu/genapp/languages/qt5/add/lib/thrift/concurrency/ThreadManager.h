@@ -57,6 +57,7 @@ class ThreadManager {
   ThreadManager() {}
 
  public:
+  class Task;
   typedef apache::thrift::stdcxx::function<void(boost::shared_ptr<Runnable>)> ExpireCallback;
 
   virtual ~ThreadManager() {}

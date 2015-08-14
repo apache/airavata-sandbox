@@ -21,7 +21,6 @@
 #define _THRIFT_TRANSPORT_TBUFFERTRANSPORTS_H_ 1
 
 #include <cstring>
-#include <limits>
 #include <boost/scoped_array.hpp>
 
 #include <thrift/transport/TTransport.h>
@@ -126,6 +125,7 @@ class TBufferBase : public TVirtualTransport<TBufferBase> {
                                 "consume did not follow a borrow.");
     }
   }
+
 
  protected:
 
@@ -253,12 +253,6 @@ class TBufferedTransport
 
   void flush();
 
-  /**
-   * Returns the origin of the underlying transport
-   */
-  virtual const std::string getOrigin() {
-    return transport_->getOrigin();
-  }
 
   /**
    * The following behavior is currently implemented by TBufferedTransport,
@@ -341,19 +335,16 @@ class TFramedTransport
     , wBufSize_(DEFAULT_BUFFER_SIZE)
     , rBuf_()
     , wBuf_(new uint8_t[wBufSize_])
-    , bufReclaimThresh_((std::numeric_limits<uint32_t>::max)())
   {
     initPointers();
   }
 
-  TFramedTransport(boost::shared_ptr<TTransport> transport, uint32_t sz,
-          uint32_t bufReclaimThresh = (std::numeric_limits<uint32_t>::max)())
+  TFramedTransport(boost::shared_ptr<TTransport> transport, uint32_t sz)
     : transport_(transport)
     , rBufSize_(0)
     , wBufSize_(sz)
     , rBuf_()
     , wBuf_(new uint8_t[wBufSize_])
-    , bufReclaimThresh_(bufReclaimThresh)
   {
     initPointers();
   }
@@ -399,13 +390,6 @@ class TFramedTransport
     return TBufferBase::readAll(buf,len);
   }
 
-  /**
-   * Returns the origin of the underlying transport
-   */
-  virtual const std::string getOrigin() {
-    return transport_->getOrigin();
-  }
-
  protected:
   /**
    * Reads a frame of input from the underlying stream.
@@ -430,7 +414,6 @@ class TFramedTransport
   uint32_t wBufSize_;
   boost::scoped_array<uint8_t> rBuf_;
   boost::scoped_array<uint8_t> wBuf_;
-  uint32_t bufReclaimThresh_;
 };
 
 /**

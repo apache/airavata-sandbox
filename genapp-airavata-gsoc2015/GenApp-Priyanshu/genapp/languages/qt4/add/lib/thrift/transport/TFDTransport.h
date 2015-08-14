@@ -48,12 +48,7 @@ class TFDTransport : public TVirtualTransport<TFDTransport> {
 
   ~TFDTransport() {
     if (close_policy_ == CLOSE_ON_DESTROY) {
-      try {
-        close();
-      } catch(TTransportException& ex) {
-        GlobalOutput.printf("~TFDTransport TTransportException: '%s'",
-                            ex.what());
-      }
+      close();
     }
   }
 
