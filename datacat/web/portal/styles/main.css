@@ -1,0 +1,144 @@
+body {
+    max-width: 992px;
+    margin: 0 auto !important;
+    padding: 0 !important;
+}
+
+.header-wrapper {
+    height: 92px;
+    background-color: #c1c64c;
+}
+
+.header {
+    text-align: center;
+    padding: 20px 0 !important;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.header #login-popover-btn {
+    text-align: right;
+}
+
+.header .arrow {
+    top: -11px !important;
+}
+
+#login-form-wrapper, #logout-form-wrapper {
+    padding: 0 10px;
+}
+
+#login-btn-wrapper, #logout-btn-wrapper{
+    margin-bottom: 0 !important;
+}
+
+.content-wrapper {
+}
+
+.content {
+
+}
+
+.query-form-wrapper {
+    margin-top: 15px;
+    padding: 10px 0 !important;
+}
+
+.query-form-wrapper .form-inline div {
+    padding: 0 6px !important;
+}
+
+
+#query-search {
+    width: 100%;
+}
+
+#query-search-btn {
+}
+
+.fielded-form-wrapper {
+    margin-top: 15px;
+    padding: 0 !important;
+}
+
+.fielded-form-inner-wrapper {
+    padding: 15px;
+}
+
+.fielded-field .fielded-form-input-wrapper{
+    padding: 0 6px !important;
+}
+
+.fielded-field div {
+    padding: 0 3px !important;
+}
+
+.range-form-wrapper {
+    margin-top: 15px;
+    padding: 0 !important;
+}
+
+.range-form-inner-wrapper {
+    padding: 15px;
+}
+
+#form-outer-wrapper {
+    margin-top: 15px;
+    padding: 0 15px 15px 15px !important;
+}
+
+.results-table-wrapper {
+    margin-top: 15px;
+    padding: 10px 0 !important;
+    overflow-x: auto;
+}
+
+.bordered {
+    border: 1px solid #222222;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -khtml-border-radius: 10px;
+}
+
+#results-table th a {
+    color: #428bca;
+}
+
+/*#search-btn {
+    margin-top: 15px;
+}*/
+
+@media (min-width: 992px) {                                 /* responsive css for large screens */
+
+    .fielded-form-inner-wrapper {
+        margin-right: 7px;
+    }
+
+    .range-form-inner-wrapper {
+        margin-left: 7px;
+    }
+}
+
+@media (max-width: 767px) {                                 /* responsive css for small / mobile screens */
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .bootstrap-select{
+        margin-bottom: 10px !important;
+    }
+
+}
+
+@media (max-width: 992px) {                                 /* responsive css for medium size / tablet screens */
+
+    .content-wrapper {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+
+}

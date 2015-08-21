@@ -1,0 +1,40 @@
+{
+    "username": "sudhakar",
+
+    "userGroups": ["sudhakar"],
+
+    "queryStringSet": false,
+
+    /*A Solr query*/
+    "queryString": "*:*",
+
+    "startRow": 0,
+
+    "numberOfRows": 25,
+
+    "primaryQueryParameterList": [
+        {
+            "primaryQueryType": "EQUALS",
+            "firstParameter": "InChI=1S/C5H9O4.C2H8N3/c1-4(6)8-9-5(2,3)7;1-5-2(3)4/h1-3H3;5H,3-4H2,1H3",
+            "secondParameter": null,
+            "field": "InChi_s"
+        },
+        {
+            "primaryQueryType": "SUBSTRING",
+            "firstParameter": "C5H9O4",
+            "secondParameter": null,
+            "field": "InChi_s"
+        },
+        {
+            "primaryQueryType": "RANGE",
+            "firstParameter": "*",
+            "secondParameter": "2015-09-08T00:43:54Z",
+            "field": "createdDate"
+        },
+        {
+            "primaryQueryType": "PHRASE",
+            "firstParameter": "InChI=1S/C5H9O4.C2H8N3/c1-4(6)8-9-5(2,3)7;1-5-2(3)4/h1-3H3;5H,3-4H2,1H3",
+            "secondParameter": null,
+            "field": "InChi_s"
+        }
+    ]}
