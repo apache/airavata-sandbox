@@ -33,8 +33,8 @@ class AppCatalog:
 
         transport.open()
         
-        client_id = r'XXXXXXXXXXXX'
-        client_secret = r'XXXXXXXX'
+        client_id = r'XXXXXXXXXX'
+        client_secret = r'XXXXXXXXXXX'
 
         client = BackendApplicationClient(client_id=client_id)
         oauth = OAuth2Session(client=client)
