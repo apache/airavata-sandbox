@@ -44,7 +44,7 @@ fi
 # Generation of thrift files will require installing Apache Thrift. Please add thrift to your path.
 #  Verify is thrift is installed, is in the path is at a specified version.
 
-REQUIRED_THRIFT_VERSION='0.9.2'
+REQUIRED_THRIFT_VERSION='0.9.3'
 
 VERSION=$(thrift -version 2>/dev/null | grep -F "${REQUIRED_THRIFT_VERSION}" |  wc -l)
 if [ "$VERSION" -ne 1 ] ; then
@@ -84,8 +84,8 @@ add_license_header() {
 
     # For all generated thrift code, add the suppress all warnings annotation
     #  NOTE: In order to save the original file as a backup, use sed -i.orig in place of sed -i ''
-    find ${GENERATED_CODE_DIR} -name '*.java' -print0 | xargs -0 sed -i '' -e 's/public class /@SuppressWarnings("all") public class /'
-    find ${GENERATED_CODE_DIR} -name '*.java' -print0 | xargs -0 sed -i '' -e 's/public enum /@SuppressWarnings("all") public enum /'
+#    find ${GENERATED_CODE_DIR} -name '*.java' -print0 | xargs -0 sed -i '' -e 's/public class /@SuppressWarnings("all") public class /'
+#    find ${GENERATED_CODE_DIR} -name '*.java' -print0 | xargs -0 sed -i '' -e 's/public enum /@SuppressWarnings("all") public enum /'
 
     # For each source file within the generated directory, add the ASF V2 LICENSE header
     FILE_SUFFIXES=(.php .java .h .cpp)
