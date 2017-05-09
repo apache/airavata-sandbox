@@ -12,7 +12,7 @@ import sys
 import random
 
 from thrift.protocol import TBinaryProtocol
-from thrift.transport import TSocket, TTransport   ##, TSSLSocket
+from thrift.transport import TSocket, TTransport, TSSLSocket
 
 from apache.airavata.api import Airavata
 from apache.airavata.model.security.ttypes import AuthzToken
@@ -21,7 +21,7 @@ from apache.airavata.model.application.io.ttypes import InputDataObjectType, Out
 class AppCatalog:
     def __init__(self, hostName, port):
         # Create a socket to the Airavata Server
-        transport = TSocket.TSocket(hostName,port)
+        transport = TSSLSocket.TSSLSocket(hostName,port, validate=False)
         # Use Buffered Protocol to speedup over raw sockets
         transport = TTransport.TBufferedTransport(transport)
 
@@ -33,18 +33,19 @@ class AppCatalog:
 
         transport.open()
         
-        client_id = r'XXXXXXXXXX'
-        client_secret = r'XXXXXXXXXXX'
+        #client_id = r'XXXXXXXXXX'
+        #client_secret = r'XXXXXXXXXXX'
 
-        client = BackendApplicationClient(client_id=client_id)
-        oauth = OAuth2Session(client=client)
-        token = oauth.fetch_token(token_url='https://idp.scigap.org:9443/oauth2/token', client_id=client_id, client_secret=client_secret)
-        self.authzToken = AuthzToken(token["access_token"])
+        #client = BackendApplicationClient(client_id=client_id)
+        #oauth = OAuth2Session(client=client)
+        #token = oauth.fetch_token(token_url='https://idp.scigap.org:9443/oauth2/token', client_id=client_id, client_secret=client_secret)
+        #self.authzToken = AuthzToken(token["access_token"])
+        self.authzToken = AuthzToken("")
         
-        claimsMap = {"userName":"admin","gatewayID": "Ultrascan_Production"}
+        claimsMap = {"userName":"admin","gatewayID": "seagrid"}
         self.authzToken.claimsMap = claimsMap
 
-        self.gateWayId = "Ultrascan_Production"
+        self.gateWayId = "seagrid"
 
         print self.airavataClient.getAPIVersion(self.authzToken)
 

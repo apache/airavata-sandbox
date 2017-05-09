@@ -17,7 +17,7 @@ import sys
 import random
 
 from thrift.protocol import TBinaryProtocol
-from thrift.transport import TSocket, TTransport   ##, TSSLSocket
+from thrift.transport import TSocket, TTransport, TSSLSocket
 
 from apache.airavata.api import Airavata
 from apache.airavata.model.security.ttypes import AuthzToken
@@ -26,7 +26,7 @@ from apache.airavata.model.application.io.ttypes import InputDataObjectType, Out
 class ExpCatalog:
     def __init__(self, hostName, port):
         # Create a socket to the Airavata Server
-        transport = TSocket.TSocket(hostName,port)
+        transport = TSSLSocket.TSSLSocket(hostName,port, validate=False)
         # Use Buffered Protocol to speedup over raw sockets
         transport = TTransport.TBufferedTransport(transport)
 
@@ -38,19 +38,20 @@ class ExpCatalog:
 
         transport.open()
         
-        client_id = r'XXXXXXXXX'
-        client_secret = r'XXXXXXXXX'
+        #client_id = r'XXXXXXXXX'
+        #client_secret = r'XXXXXXXXX'
 
-        client = BackendApplicationClient(client_id=client_id)
-        oauth = OAuth2Session(client=client)
-        token = oauth.fetch_token(token_url='https://idp.scigap.org:9443/oauth2/token', client_id=client_id, client_secret=client_secret)
-        self.authzToken = AuthzToken(token["access_token"])
+        #client = BackendApplicationClient(client_id=client_id)
+        #oauth = OAuth2Session(client=client)
+        #token = oauth.fetch_token(token_url='https://idp.scigap.org:9443/oauth2/token', client_id=client_id, client_secret=client_secret)
+        #self.authzToken = AuthzToken(token["access_token"])
+        self.authzToken = AuthzToken("empty-token")
         
-        claimsMap = {"userName":"admin","gatewayID": "Ultrascan_Production"}
+        claimsMap = {"userName":"admin","gatewayID": "seagrid"}
         self.authzToken.claimsMap = claimsMap
 
-        self.gateWayId = "default"
-
+        self.gateWayId = "seagrid"
+        print(self.authzToken)
         print (self.airavataClient.getAPIVersion(self.authzToken))
 
     def getExperiment(self, expId):
