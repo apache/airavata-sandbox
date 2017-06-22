@@ -25,7 +25,7 @@ Some core concepts used in Helix which are important to know:
 * State Model & State Transitions – Helix allows developers to define what state a participant node needs to be, in order to declare it healthy. Example, in an ONLINE-OFFLINE state model, a node is healthy if it is in ONLINE state; whereas if it goes OFFLINE (for any reason), we can define TRANSITION actions to bring it back ONLINE.
 * Cluster – Contains participants and controller nodes. One can define the State model for a cluster.
 
-More details about Apache Helix can be found on their website [https://helix.apache.org](https://helix.apache.org).
+More details about Apache Helix can be found on their website [http://helix.apache.org](http://helix.apache.org){:target="_blank"}.
 
 ## How can Helix be used in Airavata??
 Assuming we use Helix just to perform distributed task execution, I have the following in mind:
