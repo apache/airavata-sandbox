@@ -14,7 +14,7 @@ Apart from these, Helix also provides out-of-the-box APIs to perform Distributed
 * Workflow – A combination of jobs arranged in a DAG. In a ONE-TIME workflow, once all jobs are completed, the workflow ends. In a RECURRING workflow, you can schedule workflows to run periodically.
 * Job Queues – Another type of workflow, but never ends – keeps accepting new incoming jobs. Ends only when user terminates it.
 
-[helix-tas-framework](images/helix-task-framework.png)
+![helix-task-framework](images/helix-task-framework.png "Helix Task Framework Workflow")
 
 * Helix also allows users to share data (key-value pairs) across Tasks/Jobs/Workflows. The content stored at workflow layer can shared by different jobs belong to this workflow. Similarly content persisted at job layer can shared by different tasks nested in this job.
 * Helix provides APIs to POLL either a JOB or WORKFLOW to reach a particular state.
