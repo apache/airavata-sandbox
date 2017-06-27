@@ -47,11 +47,15 @@ public class SSHRunnerTest {
 
             String routingKey = UUID.randomUUID().toString();
             SSHRunner sshExecutor = new SSHRunner();
+
             sshExecutor.executeCommand(routingKey, "mkdir -p airavata", br2, br2SshAuthentication);
+
             sshExecutor.scpTo(routingKey, SSHRunnerTest.class.getClassLoader().getResource("job_tf.pbs").getPath(),
                     "~/airavata/", br2, br2SshAuthentication);
+
             sshExecutor.scpTo(routingKey, SSHRunnerTest.class.getClassLoader().getResource("code_tf.py").getPath(),
                     "~/airavata/", br2, br2SshAuthentication);
+
             sshExecutor.executeCommand(routingKey, new String[]{"cd ~/airavata", "qsub ~/airavata/job_tf.pbs"}, br2, br2SshAuthentication);
 
         }catch (Exception ex){
