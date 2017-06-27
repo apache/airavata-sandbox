@@ -37,6 +37,15 @@ public class SSHTask implements Task {
 
     @Override
     public TaskResult run() {
+// Todo Should be stored before the DAG execution start
+//        byte[] input = SerializationUtils.serialize(yourList);
+//        curator.create()
+//                .creatingParentContainersIfNeeded()
+//                .forPath(path, input);
+
+// Todo Deserialize the TaskContext from data store.
+//        byte[] output = curator.getData().forPath(path);
+//        List<String> newList = (List<String>)SerializationUtils.deserialize(output);
         return null;
     }
 
