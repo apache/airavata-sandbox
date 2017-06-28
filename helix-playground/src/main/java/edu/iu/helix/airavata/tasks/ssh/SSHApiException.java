@@ -20,13 +20,16 @@
 */
 package edu.iu.helix.airavata.tasks.ssh;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+/**
+ * An exception class to wrap SSH command execution related errors.
+ */
+public class SSHApiException extends Exception {
 
-import java.io.Serializable;
+    public SSHApiException(String message) {
+        super(message);
+    }
 
-public class Authentication implements Serializable {
-    private final static Logger logger = LoggerFactory.getLogger(Authentication.class);
-
-    protected String userName;
+    public SSHApiException(String message, Exception e) {
+        super(message, e);
+    }
 }

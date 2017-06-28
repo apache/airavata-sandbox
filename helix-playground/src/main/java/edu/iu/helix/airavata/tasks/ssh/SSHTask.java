@@ -20,19 +20,26 @@
 */
 package edu.iu.helix.airavata.tasks.ssh;
 
+import edu.iu.helix.airavata.HelixUtil;
+import edu.iu.helix.airavata.ZkUtils;
 import org.apache.helix.task.Task;
 import org.apache.helix.task.TaskCallbackContext;
 import org.apache.helix.task.TaskResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.UUID;
+
 public class SSHTask implements Task {
     private final static Logger logger = LoggerFactory.getLogger(SSHTask.class);
 
+    public static final String TASK_COMMAND = "SSH_TASK";
     private TaskCallbackContext callbackContext;
+    private String taskId;
 
     public SSHTask(TaskCallbackContext callbackContext){
         this.callbackContext = callbackContext;
+        this.taskId = callbackContext.getTaskConfig().getId();
     }
 
     @Override
@@ -46,7 +53,36 @@ public class SSHTask implements Task {
 // Todo Deserialize the TaskContext from data store.
 //        byte[] output = curator.getData().forPath(path);
 //        List<String> newList = (List<String>)SerializationUtils.deserialize(output);
-        return null;
+
+        System.out.println("Running SSH Task for ID: " + taskId);
+        try {
+            SSHTaskContext taskContext = (SSHTaskContext) ZkUtils.getZkData(ZkUtils.getCuratorClient(), HelixUtil.SSH_WORKFLOW, taskId);
+            String routingKey = UUID.randomUUID().toString();
+            SSHRunner sshExecutor = new SSHRunner();
+
+            System.out.println("Task: " + taskId + ", is of Type: " + taskContext.getTask_type());
+            switch (taskContext.getTask_type()) {
+
+                case EXECUTE_COMMAND:
+                    SSHCommandOutputReader sshOut = sshExecutor.executeCommand(routingKey, taskContext.getCommand(),
+                            (SSHServerInfo) taskContext.getServerInfo(), taskContext.getSshKeyAuthentication());
+                    System.out.println("SSH Command Output: " + sshOut.getStdOutputString());
+                    break;
+
+                case FILE_COPY:
+                    String scpOut = sshExecutor.scpTo(routingKey, taskContext.getSourceFilePath(), taskContext.getDestFilePath(),
+                            (SSHServerInfo) taskContext.getServerInfo(), taskContext.getSshKeyAuthentication());
+                    System.out.println("SCP Command Output: " + scpOut);
+                    break;
+
+                default:
+                    throw new Exception("Unknown SSH Task Type: " + taskContext.getTask_type());
+            }
+        } catch (Exception ex) {
+            System.err.println("Something went wrong for task: " + taskId + ", reason: " + ex);
+            return new TaskResult(TaskResult.Status.FAILED, "SSH command completed!");
+        }
+        return new TaskResult(TaskResult.Status.COMPLETED, "SSH command completed!");
     }
 
     @Override

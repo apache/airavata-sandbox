@@ -23,7 +23,9 @@ package edu.iu.helix.airavata.tasks.ssh;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SSHTaskContext {
+import java.io.Serializable;
+
+public class SSHTaskContext implements Serializable {
     private final static Logger logger = LoggerFactory.getLogger(SSHTaskContext.class);
 
     public static enum TASK_TYPE {FILE_COPY, EXECUTE_COMMAND;}
@@ -126,5 +128,18 @@ public class SSHTaskContext {
 
     public void setCommand(String command) {
         this.command = command;
+    }
+
+    @Override
+    public String toString() {
+        return "SSHTaskContext{" +
+                "task_type=" + task_type +
+                ", sshKeyAuthentication=" + sshKeyAuthentication +
+                ", sshUserInfo=" + sshUserInfo +
+                ", serverInfo=" + serverInfo +
+                ", sourceFilePath='" + sourceFilePath + '\'' +
+                ", destFilePath='" + destFilePath + '\'' +
+                ", command='" + command + '\'' +
+                '}';
     }
 }

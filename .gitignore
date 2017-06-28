@@ -1,4 +1,5 @@
 *.class
+*id_rsa*
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
