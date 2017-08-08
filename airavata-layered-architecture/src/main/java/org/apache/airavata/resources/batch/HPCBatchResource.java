@@ -21,16 +21,18 @@
 package org.apache.airavata.resources.batch;
 
 import com.jcraft.jsch.JSchException;
-import groovy.lang.Writable;
+import groovy.lang.*;
 import groovy.text.GStringTemplateEngine;
 import groovy.text.TemplateEngine;
-import org.apache.airavata.resources.Authentication;
-import org.apache.airavata.resources.OutputParser;
-import org.apache.airavata.resources.ServerInfo;
+import org.apache.airavata.models.resources.Authentication;
+import org.apache.airavata.models.resources.JobSubmissionOutput;
+import org.apache.airavata.models.resources.ServerInfo;
+import org.apache.airavata.models.resources.hpc.*;
+import org.apache.airavata.models.resources.hpc.Script;
+import org.apache.airavata.models.runners.ssh.SSHKeyAuthentication;
+import org.apache.airavata.models.runners.ssh.SSHServerInfo;
 import org.apache.airavata.runners.ssh.SSHCommandOutputReader;
-import org.apache.airavata.runners.ssh.SSHKeyAuthentication;
 import org.apache.airavata.runners.ssh.SSHRunner;
-import org.apache.airavata.runners.ssh.SSHServerInfo;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,10 +46,10 @@ public class HPCBatchResource {
 
     private static final int MAX_RETRY_COUNT = 3;
 
-    private ServerInfo serverInfo;
-    private Authentication authentication;
-    private JobManagerConfiguration jobManagerConfiguration;
-    private OutputParser outputParser;
+    protected ServerInfo serverInfo;
+    protected Authentication authentication;
+    protected JobManagerConfiguration jobManagerConfiguration;
+    protected OutputParser outputParser;
 
     public HPCBatchResource(ServerInfo serverInfo, JobManagerConfiguration jobManagerConfiguration, Authentication
             authentication) throws Exception {
@@ -64,9 +66,12 @@ public class HPCBatchResource {
         this.outputParser = jobManagerConfiguration.getParser();
     }
 
-    public JobSubmissionOutput submitBatchJob(String routingKey, GroovyMap groovyMap, String workingDirectory) throws Exception {
+    public HPCBatchResource() {}
+
+    public JobSubmissionOutput submitBatchJob(String routingKey, GroovyMap groovyMap) throws Exception {
         File tempJobFile = File.createTempFile("temp_job", jobManagerConfiguration.getScriptExtension());
         FileUtils.writeStringToFile(tempJobFile, generateScript(groovyMap));
+        String workingDirectory = groovyMap.get(Script.WORKING_DIR).toString();
 
         String jobScriptFilePath = tempJobFile.getPath();
         JobSubmissionOutput jsoutput = new JobSubmissionOutput();

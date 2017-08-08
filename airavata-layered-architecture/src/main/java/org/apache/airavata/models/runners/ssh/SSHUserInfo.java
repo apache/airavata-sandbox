@@ -18,32 +18,49 @@
  * under the License.
  *
 */
-package org.apache.airavata.resources;
+package org.apache.airavata.models.runners.ssh;
 
-public class ServerInfo {
+import com.jcraft.jsch.UserInfo;
 
-    public static enum ComProtocol {SSH, LOCAL}
+public class SSHUserInfo implements UserInfo {
 
-    protected String host;
-    protected String userName;
-    protected int port;
-    protected ComProtocol comProtocol;
+    private String userName;
+    private String password;
+    private String passphrase;
 
-    public ServerInfo(){}
-
-    public ServerInfo(String userName, String host, ComProtocol comProtocol, int port) {
+    public SSHUserInfo(String userName, String password, String passphrase) {
         this.userName = userName;
-        this.host = host;
-        this.comProtocol = comProtocol;
-        this.port = port;
+        this.password = password;
+        this.passphrase = passphrase;
     }
 
-    public String getHost() {
-        return host;
+    @Override
+    public String getPassphrase() {
+        return null;
     }
 
-    public String getUserName() {
-        return userName;
+    @Override
+    public String getPassword() {
+        return null;
     }
 
+    @Override
+    public boolean promptPassword(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean promptPassphrase(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean promptYesNo(String s) {
+        return false;
+    }
+
+    @Override
+    public void showMessage(String s) {
+
+    }
 }

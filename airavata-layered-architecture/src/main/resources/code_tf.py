@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import numpy.polynomial.polynomial as poly
+import time
 
 from random import randint
 
@@ -27,4 +28,6 @@ mul_product = tf.sparse_tensor_dense_matmul(connections, tf.reshape(neuron_value
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())
 
+temp = time.time()
 output = sess.run(mul_product)
+print(time.time()-temp)

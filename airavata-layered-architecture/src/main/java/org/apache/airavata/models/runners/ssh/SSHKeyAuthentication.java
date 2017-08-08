@@ -18,11 +18,11 @@
  * under the License.
  *
 */
-package org.apache.airavata.runners.ssh;
+package org.apache.airavata.models.runners.ssh;
 
-import org.apache.airavata.resources.Authentication;
+import org.apache.airavata.models.resources.Authentication;
 
-public class SSHKeyAuthentication extends Authentication{
+public class SSHKeyAuthentication extends Authentication {
     private byte[] privateKey;
     private byte[] publicKey;
     private String passphrase;

@@ -20,7 +20,8 @@
 */
 package org.apache.airavata.resources.batch;
 
-import org.apache.airavata.resources.OutputParser;
+import org.apache.airavata.models.resources.JobStatus;
+import org.apache.airavata.models.resources.hpc.OutputParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

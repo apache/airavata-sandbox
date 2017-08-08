@@ -18,40 +18,24 @@
  * under the License.
  *
 */
-package org.apache.airavata.runners;
+package org.apache.airavata.models.resources.hpc;
 
+public class RawCommandInfo {
+    private String rawCommand;
 
-import com.jcraft.jsch.Channel;
+    public RawCommandInfo(String cmd) {
+        this.rawCommand = cmd;
+    }
 
-import java.io.OutputStream;
+    public String getCommand() {
+        return this.rawCommand;
+    }
 
-/**
- * Output of a certain command.
- */
-public interface CommandOutput {
+    public String getRawCommand() {
+        return rawCommand;
+    }
 
-    /**
-     * Gets the output of the command as a stream.
-     * @param  channel Command output as a stream.
-     */
-    void onOutput(Channel channel);
-
-    /**
-     * Gets standard error as a output stream.
-     * @return Command error as a stream.
-     */
-    OutputStream getStandardError();
-
-    /**
-     * The command exit code.
-     * @param code The program exit code
-     */
-    void exitCode(int code);
-
-    /**
-     * Return the exit code of the command execution.
-     * @return exit code
-     */
-    int getExitCode();
-
+    public void setRawCommand(String rawCommand) {
+        this.rawCommand = rawCommand;
+    }
 }

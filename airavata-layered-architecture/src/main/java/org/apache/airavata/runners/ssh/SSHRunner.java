@@ -21,6 +21,10 @@
 package org.apache.airavata.runners.ssh;
 
 import com.jcraft.jsch.*;
+import org.apache.airavata.models.runners.ssh.SSHApiException;
+import org.apache.airavata.models.runners.ssh.SSHKeyAuthentication;
+import org.apache.airavata.models.runners.ssh.SSHServerInfo;
+import org.apache.airavata.models.runners.ssh.SSHUserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

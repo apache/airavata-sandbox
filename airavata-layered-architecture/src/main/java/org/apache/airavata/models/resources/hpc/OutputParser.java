@@ -18,9 +18,9 @@
  * under the License.
  *
 */
-package org.apache.airavata.resources;
+package org.apache.airavata.models.resources.hpc;
 
-import org.apache.airavata.resources.batch.JobStatus;
+import org.apache.airavata.models.resources.JobStatus;
 
 import java.util.Map;
 

@@ -18,24 +18,32 @@
  * under the License.
  *
 */
-package org.apache.airavata.resources.batch;
+package org.apache.airavata.models.resources;
 
-public class RawCommandInfo {
-    private String rawCommand;
+public class ServerInfo {
 
-    public RawCommandInfo(String cmd) {
-        this.rawCommand = cmd;
+    public static enum ComProtocol {SSH, LOCAL}
+
+    protected String host;
+    protected String userName;
+    protected int port;
+    protected ComProtocol comProtocol;
+
+    public ServerInfo(){}
+
+    public ServerInfo(String userName, String host, ComProtocol comProtocol, int port) {
+        this.userName = userName;
+        this.host = host;
+        this.comProtocol = comProtocol;
+        this.port = port;
     }
 
-    public String getCommand() {
-        return this.rawCommand;
+    public String getHost() {
+        return host;
     }
 
-    public String getRawCommand() {
-        return rawCommand;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setRawCommand(String rawCommand) {
-        this.rawCommand = rawCommand;
-    }
 }

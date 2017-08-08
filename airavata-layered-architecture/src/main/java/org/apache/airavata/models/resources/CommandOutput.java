@@ -18,18 +18,40 @@
  * under the License.
  *
 */
-package org.apache.airavata.runners.ssh;
+package org.apache.airavata.models.resources;
+
+
+import com.jcraft.jsch.Channel;
+
+import java.io.OutputStream;
 
 /**
- * An exception class to wrap SSH command execution related errors.
+ * Output of a certain command.
  */
-public class SSHApiException extends Exception {
+public interface CommandOutput {
 
-    public SSHApiException(String message) {
-        super(message);
-    }
+    /**
+     * Gets the output of the command as a stream.
+     * @param  channel Command output as a stream.
+     */
+    void onOutput(Channel channel);
 
-    public SSHApiException(String message, Exception e) {
-        super(message, e);
-    }
+    /**
+     * Gets standard error as a output stream.
+     * @return Command error as a stream.
+     */
+    OutputStream getStandardError();
+
+    /**
+     * The command exit code.
+     * @param code The program exit code
+     */
+    void exitCode(int code);
+
+    /**
+     * Return the exit code of the command execution.
+     * @return exit code
+     */
+    int getExitCode();
+
 }

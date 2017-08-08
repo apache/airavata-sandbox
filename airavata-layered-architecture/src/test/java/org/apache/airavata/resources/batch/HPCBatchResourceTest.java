@@ -20,10 +20,14 @@
 */
 package org.apache.airavata.resources.batch;
 
-import org.apache.airavata.Constants;
-import org.apache.airavata.runners.ssh.SSHKeyAuthentication;
+import org.apache.airavata.models.*;
+import org.apache.airavata.models.resources.hpc.GroovyMap;
+import org.apache.airavata.models.resources.hpc.JobManagerConfiguration;
+import org.apache.airavata.models.resources.hpc.PBSJobConfiguration;
+import org.apache.airavata.models.resources.hpc.Script;
+import org.apache.airavata.models.runners.ssh.SSHKeyAuthentication;
+import org.apache.airavata.models.runners.ssh.SSHServerInfo;
 import org.apache.airavata.runners.ssh.SSHRunnerTest;
-import org.apache.airavata.runners.ssh.SSHServerInfo;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -35,7 +39,7 @@ public class HPCBatchResourceTest {
     private final static Logger logger = LoggerFactory.getLogger(HPCBatchResourceTest.class);
 
     @Test
-    public void test() throws Exception {
+    public void testGenericResource() throws Exception {
         SSHKeyAuthentication br2SshAuthentication = new SSHKeyAuthentication(
                 Constants.loginUserName,
                 IOUtils.toByteArray(SSHRunnerTest.class.getClassLoader().getResourceAsStream("ssh/id_rsa")),
@@ -55,6 +59,23 @@ public class HPCBatchResourceTest {
                 "/opt/torque/torque-5.0.1/bin", jobManagerCommands, new BatchJobOutputParser());
         HPCBatchResource hpcBatchResource = new HPCBatchResource(br2, pbsJobConfiguration, br2SshAuthentication);
 
+
+        String routingKey = UUID.randomUUID().toString();
+
+        //Defining all the configurations
+        hpcBatchResource.submitBatchJob(routingKey, getJobSpecification());
+    }
+
+    @Test
+    public void testBR2() throws Exception {
+        String routingKey = UUID.randomUUID().toString();
+
+        //Defining only which resource to use and the implementation handles the details
+        BigRed2 bigRed2 = new BigRed2();
+        bigRed2.submitBatchJob(routingKey, getJobSpecification());
+    }
+
+    private GroovyMap getJobSpecification(){
         GroovyMap jobSpecification = new GroovyMap();
 
         jobSpecification.add(Script.NODES, 1);
@@ -80,7 +101,6 @@ public class HPCBatchResourceTest {
         jobSpecification.add(Script.STANDARD_OUT_FILE, "STDOUT.txt");
         jobSpecification.add(Script.STANDARD_ERROR_FILE, "STDERR.txt");
 
-        String routingKey = UUID.randomUUID().toString();
-        hpcBatchResource.submitBatchJob(routingKey, jobSpecification, "~/airavata");
+        return jobSpecification;
     }
 }

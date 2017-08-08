@@ -18,7 +18,7 @@
  * under the License.
  *
 */
-package org.apache.airavata.resources.batch;
+package org.apache.airavata.models.resources.hpc;
 
 public enum Script {
 

@@ -20,7 +20,9 @@
 */
 package org.apache.airavata.runners.ssh;
 
-import org.apache.airavata.Constants;
+import org.apache.airavata.models.Constants;
+import org.apache.airavata.models.runners.ssh.SSHKeyAuthentication;
+import org.apache.airavata.models.runners.ssh.SSHServerInfo;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;

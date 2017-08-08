@@ -18,13 +18,18 @@
  * under the License.
  *
 */
-package org.apache.airavata.resources;
+package org.apache.airavata.models.runners.ssh;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+/**
+ * An exception class to wrap SSH command execution related errors.
+ */
+public class SSHApiException extends Exception {
 
-public class Authentication {
-    private final static Logger logger = LoggerFactory.getLogger(Authentication.class);
+    public SSHApiException(String message) {
+        super(message);
+    }
 
-    protected String userName;
+    public SSHApiException(String message, Exception e) {
+        super(message, e);
+    }
 }

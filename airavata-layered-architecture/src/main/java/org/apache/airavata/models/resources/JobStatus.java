@@ -18,13 +18,11 @@
  * under the License.
  *
 */
-package org.apache.airavata;
+package org.apache.airavata.models.resources;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Constants {
-    private final static Logger logger = LoggerFactory.getLogger(Constants.class);
-
-    public static final String loginUserName = "snakanda";
+public class JobStatus {
+    private final static Logger logger = LoggerFactory.getLogger(JobStatus.class);
 }

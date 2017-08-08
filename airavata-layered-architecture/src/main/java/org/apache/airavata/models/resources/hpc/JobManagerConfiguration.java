@@ -18,9 +18,7 @@
  * under the License.
  *
 */
-package org.apache.airavata.resources.batch;
-
-import org.apache.airavata.resources.OutputParser;
+package org.apache.airavata.models.resources.hpc;
 
 public interface JobManagerConfiguration {
     public static enum JobManagerCommand{JOB_MONITORING, SUBMISSION, DELETION};

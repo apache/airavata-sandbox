@@ -18,9 +18,8 @@
  * under the License.
  *
 */
-package org.apache.airavata.resources.batch;
+package org.apache.airavata.models.resources.hpc;
 
-import org.apache.airavata.resources.OutputParser;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;

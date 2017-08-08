@@ -18,9 +18,9 @@
  * under the License.
  *
 */
-package org.apache.airavata.runners.ssh;
+package org.apache.airavata.models.runners.ssh;
 
-import org.apache.airavata.resources.ServerInfo;
+import org.apache.airavata.models.resources.ServerInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

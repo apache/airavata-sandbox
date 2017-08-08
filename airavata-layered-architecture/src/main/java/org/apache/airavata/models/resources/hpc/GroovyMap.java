@@ -18,7 +18,7 @@
  * under the License.
  *
 */
-package org.apache.airavata.resources.batch;
+package org.apache.airavata.models.resources.hpc;
 
 import java.util.HashMap;
 import java.util.Optional;
