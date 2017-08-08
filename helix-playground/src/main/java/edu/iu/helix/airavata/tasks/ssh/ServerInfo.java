@@ -20,7 +20,9 @@
 */
 package edu.iu.helix.airavata.tasks.ssh;
 
-public class ServerInfo {
+import java.io.Serializable;
+
+public class ServerInfo implements Serializable {
 
     public static enum ComProtocol {SSH, LOCAL}
 

@@ -21,7 +21,7 @@
 package edu.iu.helix.airavata.tasks.ssh;
 
 
-public class SSHKeyAuthentication extends Authentication{
+public class SSHKeyAuthentication extends Authentication {
     private byte[] privateKey;
     private byte[] publicKey;
     private String passphrase;

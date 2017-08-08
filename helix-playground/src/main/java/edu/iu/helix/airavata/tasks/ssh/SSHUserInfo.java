@@ -22,7 +22,9 @@ package edu.iu.helix.airavata.tasks.ssh;
 
 import com.jcraft.jsch.UserInfo;
 
-public class SSHUserInfo implements UserInfo {
+import java.io.Serializable;
+
+public class SSHUserInfo implements UserInfo, Serializable {
 
     private String userName;
     private String password;

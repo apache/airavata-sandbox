@@ -102,10 +102,10 @@ public class HelixClusterManager {
     }
 
     public boolean submitDag(HelixUtil.DAGType dagType) {
-        Workflow workflow = HelixUtil.getWorkflow(dagType);
-        taskDriver.start(workflow);
-        System.out.println("Started workflow for DagType: " + dagType + ", in cluster: " + clusterName);
         try {
+            Workflow workflow = HelixUtil.getWorkflow(dagType);
+            taskDriver.start(workflow);
+            System.out.println("Started workflow for DagType: " + dagType + ", in cluster: " + clusterName);
             taskDriver.pollForWorkflowState(workflow.getName(), TaskState.COMPLETED, TaskState.FAILED);
 //            while (true) {
 //                Thread.sleep(100);
@@ -129,8 +129,8 @@ public class HelixClusterManager {
     }
 
     public static void main(String[] args) {
-        String clusterName = "HelixDemoCluster";
-        String zkAddress = "localhost:2199";
+        String clusterName = HelixUtil.CLUSTER_NAME;
+        String zkAddress = HelixUtil.ZK_ADDRESS;
         int numWorkers = 3;
         int numPartitions = 1;
 
@@ -142,11 +142,11 @@ public class HelixClusterManager {
             HelixClusterManager manager = new HelixClusterManager(clusterName, zkAddress, numWorkers, numPartitions);
             manager.startHelixCluster();
 
-            System.out.println("Submitting Workflow for DagType: " + HelixUtil.DAGType.TYPE_A);
-            if (manager.submitDag(HelixUtil.DAGType.TYPE_A)) {
-                System.out.println("Successfully completed workflow for Dag: " + HelixUtil.DAGType.TYPE_A);
+            System.out.println("Submitting Workflow for DagType: " + HelixUtil.DAGType.SSH);
+            if (manager.submitDag(HelixUtil.DAGType.SSH)) {
+                System.out.println("Successfully completed workflow for Dag: " + HelixUtil.DAGType.SSH);
             } else {
-                throw new Exception("Failed to run workflow for Dag: " + HelixUtil.DAGType.TYPE_A);
+                throw new Exception("Failed to run workflow for Dag: " + HelixUtil.DAGType.SSH);
             }
         } catch (Exception ex) {
             logger.error("Something went wrong while running helix cluster manager. Reason: " + ex, ex);

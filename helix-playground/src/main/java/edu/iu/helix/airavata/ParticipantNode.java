@@ -4,6 +4,7 @@ import edu.iu.helix.airavata.tasks.HelixTaskA;
 import edu.iu.helix.airavata.tasks.HelixTaskB;
 import edu.iu.helix.airavata.tasks.HelixTaskC;
 import edu.iu.helix.airavata.tasks.HelixTaskD;
+import edu.iu.helix.airavata.tasks.ssh.SSHTask;
 import org.apache.helix.InstanceType;
 import org.apache.helix.examples.OnlineOfflineStateModelFactory;
 import org.apache.helix.manager.zk.ZKHelixAdmin;
@@ -93,6 +94,12 @@ public class ParticipantNode implements Runnable {
 
             // register task model
             Map<String, TaskFactory> taskRegistry = new HashMap<String, TaskFactory>();
+            taskRegistry.put(SSHTask.TASK_COMMAND, new TaskFactory() {
+                @Override
+                public Task createNewTask(TaskCallbackContext context) {
+                    return new SSHTask(context);
+                }
+            });
             taskRegistry.put(HelixTaskA.TASK_COMMAND, new TaskFactory() {
                 @Override
                 public Task createNewTask(TaskCallbackContext context) {
