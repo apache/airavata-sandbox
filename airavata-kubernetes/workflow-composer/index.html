@@ -302,7 +302,7 @@
 
                     try
                     {
-                        v1 = graph.insertVertex(parent, null, prototype, x, y, 80, 60);
+                        v1 = graph.insertVertex(parent, null, prototype.cloneNode(true), x, y, 80, 60);
                         v1.setConnectable(false);
 
                         var inputs = [];

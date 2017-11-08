@@ -24,9 +24,10 @@ import org.apache.airavata.k8s.api.server.ServerRuntimeException;
 import org.apache.airavata.k8s.api.server.model.process.ProcessModel;
 import org.apache.airavata.k8s.api.server.model.process.ProcessStatus;
 import org.apache.airavata.k8s.api.server.model.task.TaskModel;
-import org.apache.airavata.k8s.api.server.repository.ProcessRepository;
+import org.apache.airavata.k8s.api.server.repository.process.ProcessRepository;
 import org.apache.airavata.k8s.api.resources.process.ProcessResource;
-import org.apache.airavata.k8s.api.server.repository.ProcessStatusRepository;
+import org.apache.airavata.k8s.api.server.repository.process.ProcessStatusRepository;
+import org.apache.airavata.k8s.api.server.service.task.TaskService;
 import org.apache.airavata.k8s.api.server.service.util.ToResourceUtil;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,8 @@ public class ProcessService {
     private ExperimentService experimentService;
     private TaskService taskService;
 
+    private WorkflowService workflowService;
+
     public ProcessService(ProcessRepository processRepository,
                           ProcessStatusRepository processStatusRepository,
                           ExperimentService experimentService,
@@ -64,9 +67,21 @@ public class ProcessService {
         processModel.setId(resource.getId());
         processModel.setCreationTime(resource.getCreationTime());
         processModel.setLastUpdateTime(resource.getLastUpdateTime());
-        processModel.setExperiment(experimentService.findEntityById(resource.getExperimentId())
-                .orElseThrow(() -> new ServerRuntimeException("Can not find experiment with id " +
-                        resource.getExperimentId())));
+        processModel.setName(resource.getName());
+        processModel.setProcessType(ProcessModel.ProcessType.valueOf(resource.getProcessType()));
+
+        if (resource.getExperimentId() != 0) {
+            processModel.setExperiment(experimentService.findEntityById(resource.getExperimentId())
+                    .orElseThrow(() -> new ServerRuntimeException("Can not find experiment with id " +
+                            resource.getExperimentId())));
+        }
+
+        if (resource.getWorkflowId() != 0) {
+            processModel.setWorkflow(workflowService.findEntityById(resource.getWorkflowId())
+                    .orElseThrow(() -> new ServerRuntimeException("Can not find workflow with id " +
+                            resource.getWorkflowId())));
+        }
+
         processModel.setExperimentDataDir(resource.getExperimentDataDir());
 
         ProcessModel saved = processRepository.save(processModel);

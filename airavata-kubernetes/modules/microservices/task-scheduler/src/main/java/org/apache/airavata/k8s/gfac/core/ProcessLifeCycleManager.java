@@ -84,33 +84,6 @@ public class ProcessLifeCycleManager {
 
     public void submitTaskToQueue(TaskResource taskResource) {
 
-        switch (taskResource.getTaskType()) {
-            case TaskResource.TaskTypes.EGRESS_DATA_STAGING :
-                System.out.println("Submitting task " + taskResource.getId() + " to egress data staging queue");
-                updateProcessStatus(ProcessStatusResource.State.OUTPUT_DATA_STAGING);
-                this.kafkaSender.send("airavata-task-egress-staging", taskResource.getId() + "");
-                break;
-            case TaskResource.TaskTypes.INGRESS_DATA_STAGING :
-                System.out.println("Submitting task " + taskResource.getId() + " to ingress data staging queue");
-                updateProcessStatus(ProcessStatusResource.State.INPUT_DATA_STAGING);
-                this.kafkaSender.send("airavata-task-ingress-staging", taskResource.getId() + "");
-                break;
-            case TaskResource.TaskTypes.ENV_SETUP :
-                System.out.println("Submitting task " + taskResource.getId() + " to env setup queue");
-                updateProcessStatus(ProcessStatusResource.State.PRE_PROCESSING);
-                this.kafkaSender.send("airavata-task-env-setup", taskResource.getId() + "");
-                break;
-            case TaskResource.TaskTypes.ENV_CLEANUP :
-                System.out.println("Submitting task " + taskResource.getId() + " to env cleanup queue");
-                updateProcessStatus(ProcessStatusResource.State.POST_PROCESSING);
-                this.kafkaSender.send("airavata-task-env-cleanup", taskResource.getId() + "");
-                break;
-            case TaskResource.TaskTypes.JOB_SUBMISSION :
-                System.out.println("Submitting task " + taskResource.getId() + " to job submission queue");
-                updateProcessStatus(ProcessStatusResource.State.EXECUTING);
-                this.kafkaSender.send("airavata-task-job-submission", taskResource.getId() + "");
-                break;
-        }
     }
 
     private void updateProcessStatus(int state) {

@@ -1,0 +1,23 @@
+<h4>Workflows</h4>
+
+<button class="btn btn-default-outline" (click)="routeToCreatePage()">Add Workflow</button>
+
+<table class="table">
+  <thead class="thead-light">
+
+  <tr>
+    <th scope="col">Id</th>
+    <th scope="col">Name</th>
+    <th scope="col"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr *ngFor="let workflow of this.workFlows">
+    <th scope="row">{{ workflow.id }}</th>
+    <td>{{ workflow.name }}</td>
+    <td><button (click)="routeToDetailPage(workflow.id)">Detail</button></td>
+  </tr>
+  </tbody>
+
+</table>

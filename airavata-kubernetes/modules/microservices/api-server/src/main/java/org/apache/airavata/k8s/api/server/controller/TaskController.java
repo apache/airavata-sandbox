@@ -22,7 +22,7 @@ package org.apache.airavata.k8s.api.server.controller;
 import org.apache.airavata.k8s.api.resources.task.TaskResource;
 import org.apache.airavata.k8s.api.resources.task.TaskStatusResource;
 import org.apache.airavata.k8s.api.server.ServerRuntimeException;
-import org.apache.airavata.k8s.api.server.service.TaskService;
+import org.apache.airavata.k8s.api.server.service.task.TaskService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 

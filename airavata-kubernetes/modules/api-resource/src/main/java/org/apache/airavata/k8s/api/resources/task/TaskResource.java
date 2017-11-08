@@ -31,7 +31,8 @@ import java.util.List;
 public class TaskResource {
 
     private long id;
-    private int taskType;
+    private String name;
+    private long taskTypeId;
     private String taskTypeStr;
     private long parentProcessId;
     private long creationTime;
@@ -39,9 +40,13 @@ public class TaskResource {
     private List<TaskStatusResource> taskStatus = new ArrayList<>();
     private String taskDetail;
     private List<Long> taskErrorIds = new ArrayList<>();
-    private List<TaskParamResource> taskParams = new ArrayList<>();
+    private List<TaskInputResource> inputs = new ArrayList<>();
+    private List<TaskOutputResource> outputs = new ArrayList<>();
+    private List<TaskOutPortResource> outPorts = new ArrayList<>();
     private List<Long> jobIds;
     private int order;
+    private boolean startingTask;
+    private boolean stoppingTask;
 
     public long getId() {
         return id;
@@ -52,12 +57,12 @@ public class TaskResource {
         return this;
     }
 
-    public int getTaskType() {
-        return taskType;
+    public long getTaskTypeId() {
+        return taskTypeId;
     }
 
-    public TaskResource setTaskType(int taskType) {
-        this.taskType = taskType;
+    public TaskResource setTaskTypeId(long taskTypeId) {
+        this.taskTypeId = taskTypeId;
         return this;
     }
 
@@ -124,12 +129,21 @@ public class TaskResource {
         return this;
     }
 
-    public List<TaskParamResource> getTaskParams() {
-        return taskParams;
+    public List<TaskInputResource> getInputs() {
+        return inputs;
     }
 
-    public TaskResource setTaskParams(List<TaskParamResource> taskParams) {
-        this.taskParams = taskParams;
+    public TaskResource setInputs(List<TaskInputResource> inputs) {
+        this.inputs = inputs;
+        return this;
+    }
+
+    public List<TaskOutputResource> getOutputs() {
+        return outputs;
+    }
+
+    public TaskResource setOutputs(List<TaskOutputResource> outputs) {
+        this.outputs = outputs;
         return this;
     }
 
@@ -148,6 +162,40 @@ public class TaskResource {
 
     public TaskResource setOrder(int order) {
         this.order = order;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<TaskOutPortResource> getOutPorts() {
+        return outPorts;
+    }
+
+    public void setOutPorts(List<TaskOutPortResource> outPorts) {
+        this.outPorts = outPorts;
+    }
+
+    public boolean isStartingTask() {
+        return startingTask;
+    }
+
+    public TaskResource setStartingTask(boolean startingTask) {
+        this.startingTask = startingTask;
+        return this;
+    }
+
+    public boolean isStoppingTask() {
+        return stoppingTask;
+    }
+
+    public TaskResource setStoppingTask(boolean stoppingTask) {
+        this.stoppingTask = stoppingTask;
         return this;
     }
 
