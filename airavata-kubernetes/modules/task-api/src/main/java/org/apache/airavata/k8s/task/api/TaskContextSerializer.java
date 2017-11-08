@@ -2,6 +2,10 @@ package org.apache.airavata.k8s.task.api;
 
 import org.apache.kafka.common.serialization.Serializer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.Map;
 
 /**
@@ -18,7 +22,23 @@ public class TaskContextSerializer implements Serializer<TaskContext> {
 
     @Override
     public byte[] serialize(String topic, TaskContext data) {
-        return new byte[0];
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutput out = null;
+        try {
+            out = new ObjectOutputStream(bos);
+            out.writeObject(data);
+            out.flush();
+            return bos.toByteArray();
+        } catch (IOException e) {
+            // ignore catch
+        } finally {
+            try {
+                bos.close();
+            } catch (IOException ex) {
+                // ignore close exception
+            }
+        }
+        return null;
     }
 
     @Override

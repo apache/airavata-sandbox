@@ -2,6 +2,7 @@ package org.apache.airavata.k8s.task.api;
 
 import org.apache.airavata.k8s.api.resources.compute.ComputeResource;
 import org.apache.airavata.k8s.api.resources.task.TaskInputResource;
+import org.apache.airavata.k8s.api.resources.task.TaskOutPortResource;
 import org.apache.airavata.k8s.api.resources.task.TaskResource;
 import org.apache.airavata.k8s.api.resources.task.TaskStatusResource;
 import org.apache.airavata.k8s.api.resources.task.type.TaskTypeResource;
@@ -54,7 +55,7 @@ public abstract class AbstractTaskExecutionService {
         System.out.println("Executing task " + taskContext.getTaskId());
         TaskResource taskResource = this.restTemplate.getForObject("http://" + apiServerUrl + "/task/" + taskContext.getTaskId(), TaskResource.class);
 
-        publishTaskStatus(taskResource.getParentProcessId(), taskResource.getId(), TaskStatusResource.State.SCHEDULED);
+        publishTaskStatus(taskContext, TaskStatusResource.State.SCHEDULED);
 
         this.executorService.execute(() -> {
             try {
@@ -80,7 +81,7 @@ public abstract class AbstractTaskExecutionService {
         return operations;
     }
 
-    public String findInput(TaskResource taskResource, String name, boolean optional) throws Exception {
+    public String findInput(TaskContext taskContext, TaskResource taskResource, String name, boolean optional) throws Exception {
 
         Optional<TaskInputResource> inputResource = taskResource.getInputs()
                 .stream()
@@ -92,7 +93,7 @@ public abstract class AbstractTaskExecutionService {
 
         } else {
             if (!optional) {
-                publishTaskStatus(taskResource.getParentProcessId(), taskResource.getId(), TaskStatusResource.State.FAILED,
+                publishTaskStatus(taskContext, TaskStatusResource.State.FAILED,
                         name + " is not available in inputs");
                 throw new Exception(name + " is not available in inputs");
             } else {
@@ -104,13 +105,26 @@ public abstract class AbstractTaskExecutionService {
     public abstract void initializeParameters(TaskResource taskResource, TaskContext taskContext) throws Exception;
     public abstract void executeTask(TaskResource taskResource, TaskContext taskContext);
 
-    public void publishTaskStatus(long processId, long taskId, int status) {
-        publishTaskStatus(processId, taskId, status, "");
+    public void publishTaskStatus(TaskContext taskContext, int status) {
+        publishTaskStatus(taskContext, status, "");
     }
 
-    public void publishTaskStatus(long processId, long taskId, int status, String reason) {
-        this.kafkaSender.send(this.taskEventPublishTopic, processId + "-" + taskId,
-                processId + "," + taskId + "," + status + "," + reason);
+    public void publishTaskStatus(TaskContext taskContext, int status, String reason) {
+        taskContext.setStatus(status);
+        taskContext.setReason(reason);
+
+        this.kafkaSender.send(this.taskEventPublishTopic, taskContext);
+    }
+
+    public void finishTaskExecution(TaskContext taskContext, TaskResource task, String outPortName, int status, String reason) throws Exception {
+        Optional<TaskOutPortResource> selectedOutPort = task.getOutPorts().stream().filter(outPort -> outPort.getName().equals(outPortName)).findFirst();
+        if (!selectedOutPort.isPresent()) {
+            throw new Exception("Selected out port " + outPortName + " does not exist in the task " + task.getName());
+        }
+
+        taskContext.setStatus(status);
+        taskContext.setReason(reason);
+        taskContext.setOutPortId(selectedOutPort.get().getId());
     }
 
     public RestTemplate getRestTemplate() {

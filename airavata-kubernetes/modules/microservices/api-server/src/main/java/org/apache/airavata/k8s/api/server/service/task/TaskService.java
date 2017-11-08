@@ -19,6 +19,7 @@
  */
 package org.apache.airavata.k8s.api.server.service.task;
 
+import org.apache.airavata.k8s.api.resources.task.TaskDagResource;
 import org.apache.airavata.k8s.api.resources.task.TaskResource;
 import org.apache.airavata.k8s.api.resources.task.TaskStatusResource;
 import org.apache.airavata.k8s.api.server.ServerRuntimeException;
@@ -29,8 +30,7 @@ import org.apache.airavata.k8s.api.server.repository.task.type.TaskTypeRepositor
 import org.apache.airavata.k8s.api.server.service.util.ToResourceUtil;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * TODO: Class level comments please
@@ -79,12 +79,13 @@ public class TaskService {
         taskModel.setStartingTask(resource.isStartingTask());
         taskModel.setStoppingTask(resource.isStoppingTask());
         taskModel.setTaskDetail(resource.getTaskDetail());
+        taskModel.setReferenceId(resource.getReferenceId());
         taskModel.setParentProcess(processRepository.findById(resource.getParentProcessId())
                 .orElseThrow(() -> new ServerRuntimeException("Can not find process with id " +
                         resource.getParentProcessId())));
-        taskModel.setTaskType(taskTypeRepository.findById(resource.getTaskTypeId())
+        taskModel.setTaskType(taskTypeRepository.findById(resource.getTaskType().getId())
                 .orElseThrow(() -> new ServerRuntimeException("Can not find task type with id " +
-                resource.getTaskTypeId())));
+                resource.getTaskType().getId())));
 
         TaskModel savedTask = taskRepository.save(taskModel);
 
@@ -141,4 +142,12 @@ public class TaskService {
         return ToResourceUtil.toResource(taskRepository.findById(id).get());
     }
 
+    public Set<TaskDagResource> getDagForProcess(long processId) {
+        Set<TaskDagResource> taskDagResources = new HashSet<>();
+        Iterable<TaskDAG> taskDags = this.taskDAGRepository.findBysourceOutPort_taskModel_parentProcess_id(processId);
+        Optional.ofNullable(taskDags).ifPresent(dags -> dags.forEach(taskDAG -> {
+           taskDagResources.add(ToResourceUtil.toResource(taskDAG).get());
+        }));
+        return taskDagResources;
+    }
 }

@@ -10,6 +10,7 @@ public class TaskOutPortResource {
     private long id;
     private String name;
     private int referenceId = 0;
+    private TaskResource taskResource;
 
     public long getId() {
         return id;
@@ -35,6 +36,15 @@ public class TaskOutPortResource {
 
     public TaskOutPortResource setReferenceId(int referenceId) {
         this.referenceId = referenceId;
+        return this;
+    }
+
+    public TaskResource getTaskResource() {
+        return taskResource;
+    }
+
+    public TaskOutPortResource setTaskResource(TaskResource taskResource) {
+        this.taskResource = taskResource;
         return this;
     }
 }

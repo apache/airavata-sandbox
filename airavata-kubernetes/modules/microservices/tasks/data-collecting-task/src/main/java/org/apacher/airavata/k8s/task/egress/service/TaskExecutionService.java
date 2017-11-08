@@ -56,10 +56,10 @@ public class TaskExecutionService extends AbstractTaskExecutionService {
     @Override
     public void initializeParameters(TaskResource taskResource, TaskContext taskContext) throws Exception {
 
-        taskContext.getLocalContext().put(DataCollectingTaskInfo.REMOTE_SOURCE_PATH, findInput(taskResource, DataCollectingTaskInfo.REMOTE_SOURCE_PATH, false));
-        taskContext.getLocalContext().put(DataCollectingTaskInfo.IDENTIFIER, findInput(taskResource, DataCollectingTaskInfo.IDENTIFIER, false));
+        taskContext.getLocalContext().put(DataCollectingTaskInfo.REMOTE_SOURCE_PATH, findInput(taskContext, taskResource, DataCollectingTaskInfo.REMOTE_SOURCE_PATH, false));
+        taskContext.getLocalContext().put(DataCollectingTaskInfo.IDENTIFIER, findInput(taskContext, taskResource, DataCollectingTaskInfo.IDENTIFIER, false));
 
-        String computeId = findInput(taskResource, DataCollectingTaskInfo.COMPUTE_RESOURCE, false);
+        String computeId = findInput(taskContext, taskResource, DataCollectingTaskInfo.COMPUTE_RESOURCE, false);
         taskContext.getLocalContext().put(DataCollectingTaskInfo.COMPUTE_RESOURCE, this.getRestTemplate().getForObject("http://" + this.getApiServerUrl()
                 + "/compute/" + Long.parseLong(computeId), ComputeResource.class));
 
@@ -73,7 +73,7 @@ public class TaskExecutionService extends AbstractTaskExecutionService {
             String identifier = (String) taskContext.getLocalContext().get(DataCollectingTaskInfo.IDENTIFIER);
             String remoteSourcePath = (String) taskContext.getLocalContext().get(DataCollectingTaskInfo.REMOTE_SOURCE_PATH);
 
-            publishTaskStatus(taskResource.getParentProcessId(), taskResource.getId(), TaskStatusResource.State.EXECUTING);
+            publishTaskStatus(taskContext, TaskStatusResource.State.EXECUTING);
 
             String temporaryFile = "/tmp/" + UUID.randomUUID().toString();
             System.out.println("Downloading " + remoteSourcePath + " to " + temporaryFile + " from compute resource "
@@ -94,12 +94,11 @@ public class TaskExecutionService extends AbstractTaskExecutionService {
             getRestTemplate().exchange("http://" + getApiServerUrl() + "/data/" + taskResource.getId()+ "/"
                             + identifier + "/upload", HttpMethod.POST, requestEntity, Long.class);
 
-            publishTaskStatus(taskResource.getParentProcessId(), taskResource.getId(),
-                    TaskStatusResource.State.COMPLETED);
+            finishTaskExecution(taskContext, taskResource, "Out", TaskStatusResource.State.COMPLETED, "Task completed");
 
         } catch (Exception e) {
             e.printStackTrace();
-            publishTaskStatus(taskResource.getParentProcessId(), taskResource.getId(), TaskStatusResource.State.FAILED, e.getMessage());
+            publishTaskStatus(taskContext, TaskStatusResource.State.FAILED, e.getMessage());
 
         }
     }

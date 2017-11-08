@@ -19,6 +19,8 @@
  */
 package org.apache.airavata.k8s.gfac.messaging;
 
+import org.apache.airavata.k8s.task.api.TaskContext;
+import org.apache.airavata.k8s.task.api.TaskContextSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 
@@ -31,9 +33,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 public class KafkaSender {
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, TaskContext> kafkaTemplate;
 
-    public void send(String topic, String payload) {
-        kafkaTemplate.send(topic, payload);
+    public void send(String topic, TaskContext taskContext) {
+        kafkaTemplate.send(topic, taskContext);
     }
 }

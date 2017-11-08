@@ -3,7 +3,6 @@ package org.apache.airavata.k8s.api.server.service;
 import org.apache.airavata.k8s.api.resources.process.ProcessResource;
 import org.apache.airavata.k8s.api.resources.workflow.WorkflowResource;
 import org.apache.airavata.k8s.api.server.ServerRuntimeException;
-import org.apache.airavata.k8s.api.server.model.process.ProcessModel;
 import org.apache.airavata.k8s.api.server.model.task.TaskDAG;
 import org.apache.airavata.k8s.api.server.model.task.TaskModel;
 import org.apache.airavata.k8s.api.server.model.task.TaskOutPort;
@@ -12,9 +11,11 @@ import org.apache.airavata.k8s.api.server.repository.task.TaskDAGRepository;
 import org.apache.airavata.k8s.api.server.repository.task.TaskOutPortRepository;
 import org.apache.airavata.k8s.api.server.repository.task.TaskRepository;
 import org.apache.airavata.k8s.api.server.repository.workflow.WorkflowRepository;
+import org.apache.airavata.k8s.api.server.service.messaging.MessagingService;
 import org.apache.airavata.k8s.api.server.service.task.TaskService;
 import org.apache.airavata.k8s.api.server.service.util.GraphParser;
 import org.apache.airavata.k8s.api.server.service.util.ToResourceUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,14 +34,19 @@ public class WorkflowService {
 
     private ProcessService processService;
     private TaskService taskService;
+    private MessagingService messagingService;
 
     private WorkflowRepository workflowRepository;
     private TaskOutPortRepository taskOutPortRepository;
     private TaskRepository taskRepository;
     private TaskDAGRepository taskDAGRepository;
 
+    @Value("${scheduler.topic.name}")
+    private String schedulerTopic;
+
     public WorkflowService(ProcessService processService,
                            TaskService taskService,
+                           MessagingService messagingService,
                            WorkflowRepository workflowRepository,
                            TaskOutPortRepository taskOutPortRepository,
                            TaskRepository taskRepository,
@@ -48,6 +54,7 @@ public class WorkflowService {
 
         this.processService = processService;
         this.taskService = taskService;
+        this.messagingService = messagingService;
         this.workflowRepository = workflowRepository;
         this.taskOutPortRepository = taskOutPortRepository;
         this.taskRepository = taskRepository;
@@ -112,6 +119,8 @@ public class WorkflowService {
         } catch (Exception e) {
             throw new ServerRuntimeException("Failed to create workflow", e);
         }
+
+        this.messagingService.send(schedulerTopic, processId + "");
         return 0;
     }
 
@@ -123,6 +132,7 @@ public class WorkflowService {
         return workflowResources;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Optional<Workflow> findEntityById(long id) {
         return this.workflowRepository.findById(id);
     }

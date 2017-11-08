@@ -54,10 +54,10 @@ public class TaskExecutionService extends AbstractTaskExecutionService {
     @Override
     public void initializeParameters(TaskResource taskResource, TaskContext taskContext) throws Exception {
 
-        taskContext.getLocalContext().put(DATA_LOCATION_ID, findInput(taskResource, DATA_LOCATION_ID, false));
-        taskContext.getLocalContext().put(REMOTE_TARGET_PATH, findInput(taskResource, REMOTE_TARGET_PATH, false));
+        taskContext.getLocalContext().put(DATA_LOCATION_ID, findInput(taskContext, taskResource, DATA_LOCATION_ID, false));
+        taskContext.getLocalContext().put(REMOTE_TARGET_PATH, findInput(taskContext, taskResource, REMOTE_TARGET_PATH, false));
 
-        String computeId = findInput(taskResource, COMPUTE_RESOURCE, false);
+        String computeId = findInput(taskContext, taskResource, COMPUTE_RESOURCE, false);
         taskContext.getLocalContext().put(COMPUTE_RESOURCE, this.getRestTemplate().getForObject("http://" + this.getApiServerUrl()
                 + "/compute/" + Long.parseLong(computeId), ComputeResource.class));
     }
@@ -70,14 +70,15 @@ public class TaskExecutionService extends AbstractTaskExecutionService {
         ComputeResource computeResource = (ComputeResource) taskContext.getLocalContext().get(COMPUTE_RESOURCE);
 
         try {
-            publishTaskStatus(taskResource.getParentProcessId(), taskResource.getId(), TaskStatusResource.State.EXECUTING);
+            publishTaskStatus(taskContext, TaskStatusResource.State.EXECUTING);
             fetchComputeResourceOperation(computeResource).transferDataIn(dataLocationId, remoteTargetPath, "SCP");
-            publishTaskStatus(taskResource.getParentProcessId(), taskResource.getId(), TaskStatusResource.State.COMPLETED);
+            finishTaskExecution(taskContext, taskResource, "Out", TaskStatusResource.State.COMPLETED, "Task completed");
+
 
         } catch (Exception e) {
 
             e.printStackTrace();
-            publishTaskStatus(taskResource.getParentProcessId(), taskResource.getId(), TaskStatusResource.State.FAILED);
+            publishTaskStatus(taskContext, TaskStatusResource.State.FAILED);
         }
     }
 }
