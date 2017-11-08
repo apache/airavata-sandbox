@@ -21,9 +21,9 @@ package org.apache.airavata.k8s.api.server.service;
 
 import org.apache.airavata.k8s.api.server.ServerRuntimeException;
 import org.apache.airavata.k8s.api.server.model.application.ApplicationDeployment;
-import org.apache.airavata.k8s.api.server.repository.ApplicationDeploymentRepository;
-import org.apache.airavata.k8s.api.server.repository.ApplicationModuleRepository;
-import org.apache.airavata.k8s.api.server.repository.ComputeRepository;
+import org.apache.airavata.k8s.api.server.repository.application.ApplicationDeploymentRepository;
+import org.apache.airavata.k8s.api.server.repository.application.ApplicationModuleRepository;
+import org.apache.airavata.k8s.api.server.repository.compute.ComputeRepository;
 import org.apache.airavata.k8s.api.resources.application.ApplicationDeploymentResource;
 import org.apache.airavata.k8s.api.server.service.util.ToResourceUtil;
 import org.springframework.beans.factory.annotation.Autowired;

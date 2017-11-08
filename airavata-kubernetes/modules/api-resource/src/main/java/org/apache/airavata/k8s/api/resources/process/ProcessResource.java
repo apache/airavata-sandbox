@@ -33,7 +33,9 @@ import java.util.List;
 public class ProcessResource {
 
     private long id;
+    private String name;
     private long experimentId;
+    private long workflowId;
     private long creationTime;
     private long lastUpdateTime;
     private List<ProcessStatusResource> processStatuses = new ArrayList<>();
@@ -41,6 +43,7 @@ public class ProcessResource {
     private List<Long> processErrorIds = new ArrayList<>();
     private String taskDag;
     private String experimentDataDir;
+    private String processType;
 
     public long getId() {
         return id;
@@ -120,6 +123,33 @@ public class ProcessResource {
 
     public ProcessResource setExperimentDataDir(String experimentDataDir) {
         this.experimentDataDir = experimentDataDir;
+        return this;
+    }
+
+    public String getProcessType() {
+        return processType;
+    }
+
+    public ProcessResource setProcessType(String processType) {
+        this.processType = processType;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ProcessResource setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public long getWorkflowId() {
+        return workflowId;
+    }
+
+    public ProcessResource setWorkflowId(long workflowId) {
+        this.workflowId = workflowId;
         return this;
     }
 }

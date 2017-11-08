@@ -22,4 +22,8 @@ export class TaskService {
   addTask(task: Task) {
     return this.apiService.post("task", task);
   }
+
+  getAllTaskTypes() {
+    return this.apiService.get("taskType").map(res => res.json());
+  }
 }

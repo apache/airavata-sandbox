@@ -21,9 +21,9 @@ package org.apache.airavata.k8s.api.server.service.data;
 
 import org.apache.airavata.k8s.api.resources.data.DataEntryResource;
 import org.apache.airavata.k8s.api.server.model.data.DataStoreModel;
-import org.apache.airavata.k8s.api.server.repository.DataStoreRepository;
-import org.apache.airavata.k8s.api.server.repository.ExperimentOutputDataRepository;
-import org.apache.airavata.k8s.api.server.repository.TaskRepository;
+import org.apache.airavata.k8s.api.server.repository.data.DataStoreRepository;
+import org.apache.airavata.k8s.api.server.repository.experiment.ExperimentOutputDataRepository;
+import org.apache.airavata.k8s.api.server.repository.task.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

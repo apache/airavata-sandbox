@@ -22,6 +22,7 @@ package org.apache.airavata.k8s.api.server.model.process;
 import org.apache.airavata.k8s.api.server.model.commons.ErrorModel;
 import org.apache.airavata.k8s.api.server.model.experiment.Experiment;
 import org.apache.airavata.k8s.api.server.model.task.TaskModel;
+import org.apache.airavata.k8s.api.server.model.workflow.Workflow;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -45,6 +46,11 @@ public class ProcessModel {
     @ManyToOne
     private Experiment experiment;
 
+    @ManyToOne
+    private Workflow workflow;
+
+    private String name;
+
     private long creationTime;
     private long lastUpdateTime;
 
@@ -61,75 +67,117 @@ public class ProcessModel {
 
     private String experimentDataDir;
 
+    private ProcessType processType = ProcessType.EXPERIMENT;
+
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public ProcessModel setId(long id) {
         this.id = id;
+        return this;
     }
 
     public Experiment getExperiment() {
         return experiment;
     }
 
-    public void setExperiment(Experiment experiment) {
+    public ProcessModel setExperiment(Experiment experiment) {
         this.experiment = experiment;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ProcessModel setName(String name) {
+        this.name = name;
+        return this;
     }
 
     public long getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(long creationTime) {
+    public ProcessModel setCreationTime(long creationTime) {
         this.creationTime = creationTime;
+        return this;
     }
 
     public long getLastUpdateTime() {
         return lastUpdateTime;
     }
 
-    public void setLastUpdateTime(long lastUpdateTime) {
+    public ProcessModel setLastUpdateTime(long lastUpdateTime) {
         this.lastUpdateTime = lastUpdateTime;
+        return this;
     }
 
     public List<ProcessStatus> getProcessStatuses() {
         return processStatuses;
     }
 
-    public void setProcessStatuses(List<ProcessStatus> processStatuses) {
+    public ProcessModel setProcessStatuses(List<ProcessStatus> processStatuses) {
         this.processStatuses = processStatuses;
+        return this;
     }
 
     public List<TaskModel> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<TaskModel> tasks) {
+    public ProcessModel setTasks(List<TaskModel> tasks) {
         this.tasks = tasks;
+        return this;
     }
 
     public String getTaskDag() {
         return taskDag;
     }
 
-    public void setTaskDag(String taskDag) {
+    public ProcessModel setTaskDag(String taskDag) {
         this.taskDag = taskDag;
+        return this;
     }
 
     public List<ErrorModel> getProcessErrors() {
         return processErrors;
     }
 
-    public void setProcessErrors(List<ErrorModel> processErrors) {
+    public ProcessModel setProcessErrors(List<ErrorModel> processErrors) {
         this.processErrors = processErrors;
+        return this;
     }
 
     public String getExperimentDataDir() {
         return experimentDataDir;
     }
 
-    public void setExperimentDataDir(String experimentDataDir) {
+    public ProcessModel setExperimentDataDir(String experimentDataDir) {
         this.experimentDataDir = experimentDataDir;
+        return this;
+    }
+
+    public ProcessType getProcessType() {
+        return processType;
+    }
+
+    public ProcessModel setProcessType(ProcessType processType) {
+        this.processType = processType;
+        return this;
+    }
+
+    public Workflow getWorkflow() {
+        return workflow;
+    }
+
+    public ProcessModel setWorkflow(Workflow workflow) {
+        this.workflow = workflow;
+        return this;
+    }
+
+    public enum ProcessType {
+        WORKFLOW, EXPERIMENT;
     }
 }

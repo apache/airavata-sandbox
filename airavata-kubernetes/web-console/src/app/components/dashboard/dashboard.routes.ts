@@ -8,6 +8,8 @@ import {Routes} from "@angular/router";
 import {ExperimentDetailComponent} from "../experiment/detail/experiment.detail";
 import {ProcessDetailComponent} from "../process/detail/process.detail.component";
 import {SetupComponent} from "../setup/setup.component";
+import {WorkflowCreateComponent} from "../workflow/create/create.component";
+import {WorkflowListComponent} from "../workflow/list/workflow.list.component";
 
 /**
  * Created by dimuthu on 10/29/17.
@@ -46,5 +48,13 @@ export const DASHBOARD_ROUTES: Routes = [
   {
     path: 'module',
     component: AppModuleListComponent,
+  },
+  {
+    path: 'workflow',
+    component: WorkflowListComponent,
+  },
+  {
+    path: 'workflow/create',
+    component: WorkflowCreateComponent,
   }
 ];

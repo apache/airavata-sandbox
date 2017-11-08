@@ -15,6 +15,8 @@ import {FormsModule} from "@angular/forms";
 import {ExperimentDetailComponent} from "./components/experiment/detail/experiment.detail";
 import {ProcessDetailComponent} from "./components/process/detail/process.detail.component";
 import {SetupComponent} from "./components/setup/setup.component";
+import {WorkflowCreateComponent} from "./components/workflow/create/create.component";
+import {WorkflowListComponent} from "./components/workflow/list/workflow.list.component";
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import {SetupComponent} from "./components/setup/setup.component";
     ExperimentListComponent,
     ExperimentDetailComponent,
     ProcessDetailComponent,
-    SetupComponent
+    SetupComponent,
+    WorkflowCreateComponent,
+    WorkflowListComponent
   ],
   imports: [
     NgbModule.forRoot(),

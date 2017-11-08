@@ -36,11 +36,10 @@
         <module>modules/microservices/workflow-generator</module>
         <module>modules/microservices/task-scheduler</module>
         <module>modules/microservices/event-sink</module>
-        <module>modules/microservices/tasks/ingress-staging-task</module>
-        <module>modules/microservices/tasks/env-setup-task</module>
-        <module>modules/microservices/tasks/job-submission-task</module>
-        <module>modules/microservices/tasks/env-cleanup-task</module>
-        <module>modules/microservices/tasks/egress-staging-task</module>
+        <module>modules/microservices/tasks/command-executing-task</module>
+        <module>modules/microservices/tasks/data-pushing-task</module>
+        <module>modules/microservices/tasks/data-collecting-task</module>
+        <module>modules/task-api</module>
     </modules>
 
     <dependencyManagement>

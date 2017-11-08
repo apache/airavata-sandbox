@@ -1,0 +1,27 @@
+<label for="worklow-name">Workflow Name</label>
+<input [(ngModel)]="workFlowName" name="worklow-name" id="worklow-name"/>
+
+<table style="position:relative;">
+  <tr>
+    <td>
+      <div id="toolContainer" style="border: solid 1px black; width: 80px; cursor: default">
+
+      </div>
+    </td>
+    <td>
+      <div id="graphContainer"
+           style="border: solid 1px black;overflow:hidden;width:321px; cursor:default;">
+      </div>
+    </td>
+    <td valign="top">
+      <div id="properties"
+           style="border: solid 1px black; padding: 10px;">
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td><button (click)="onShowWorkflowXMLClicked()">Show XML</button></td>
+    <td><button (click)="onCreateWorkflowClicked()">Create Workflow</button></td>
+  </tr>
+</table>
