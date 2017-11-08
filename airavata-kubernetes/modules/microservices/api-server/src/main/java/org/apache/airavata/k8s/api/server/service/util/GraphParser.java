@@ -4,6 +4,7 @@ import org.apache.airavata.k8s.api.resources.task.TaskInputResource;
 import org.apache.airavata.k8s.api.resources.task.TaskOutPortResource;
 import org.apache.airavata.k8s.api.resources.task.TaskOutputResource;
 import org.apache.airavata.k8s.api.resources.task.TaskResource;
+import org.apache.airavata.k8s.api.resources.task.type.TaskTypeResource;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 
@@ -55,12 +56,13 @@ public class GraphParser {
                             taskResource.setName(attr.getNodeValue());
 
                         } else if ("Type".equals(attr.getNodeName())) {
-                            taskResource.setTaskTypeId(Long.parseLong(attr.getNodeValue()));
+                            taskResource.setTaskType(new TaskTypeResource().setId(Long.parseLong(attr.getNodeValue())));
 
                         } else if (attr.getNodeName().startsWith("in-") || attr.getNodeName().startsWith("out-")) {
 
                         } else if ("id".equals(attr.getNodeName())) {
                             id = Integer.parseInt(attr.getNodeValue());
+                            taskResource.setReferenceId(id);
 
                         } else if (attr.getNodeName().startsWith("output-")) {
                             TaskOutputResource outputResource = new TaskOutputResource();

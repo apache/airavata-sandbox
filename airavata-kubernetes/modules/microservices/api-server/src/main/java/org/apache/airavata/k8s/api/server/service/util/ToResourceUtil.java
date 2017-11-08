@@ -37,16 +37,13 @@ import org.apache.airavata.k8s.api.server.model.experiment.ExperimentOutputData;
 import org.apache.airavata.k8s.api.server.model.experiment.ExperimentStatus;
 import org.apache.airavata.k8s.api.server.model.process.ProcessModel;
 import org.apache.airavata.k8s.api.server.model.process.ProcessStatus;
-import org.apache.airavata.k8s.api.server.model.task.TaskInput;
-import org.apache.airavata.k8s.api.server.model.task.TaskModel;
+import org.apache.airavata.k8s.api.server.model.task.*;
 import org.apache.airavata.k8s.api.resources.application.*;
 import org.apache.airavata.k8s.api.resources.compute.ComputeResource;
 import org.apache.airavata.k8s.api.resources.experiment.ExperimentInputResource;
 import org.apache.airavata.k8s.api.resources.experiment.ExperimentOutputResource;
 import org.apache.airavata.k8s.api.resources.experiment.ExperimentResource;
 import org.apache.airavata.k8s.api.resources.process.ProcessResource;
-import org.apache.airavata.k8s.api.server.model.task.TaskOutput;
-import org.apache.airavata.k8s.api.server.model.task.TaskStatus;
 import org.apache.airavata.k8s.api.server.model.task.type.TaskInputType;
 import org.apache.airavata.k8s.api.server.model.task.type.TaskModelType;
 import org.apache.airavata.k8s.api.server.model.task.type.TaskOutPortType;
@@ -231,10 +228,11 @@ public class ToResourceUtil {
             resource.setLastUpdateTime(taskModel.getLastUpdateTime());
             resource.setCreationTime(taskModel.getCreationTime());
             resource.setParentProcessId(taskModel.getParentProcess().getId());
-            resource.setTaskTypeId(taskModel.getTaskType().getId());
+            resource.setTaskType(toResource(taskModel.getTaskType()).get());
             resource.setTaskDetail(taskModel.getTaskDetail());
             resource.setStartingTask(taskModel.isStartingTask());
             resource.setStoppingTask(taskModel.isStoppingTask());
+            resource.setReferenceId(taskModel.getReferenceId());
             Optional.ofNullable(taskModel.getTaskInputs())
                     .ifPresent(inputs ->
                             inputs.forEach(input -> resource.getInputs()
@@ -306,7 +304,14 @@ public class ToResourceUtil {
             ProcessResource processResource = new ProcessResource();
             processResource.setId(processModel.getId());
             processResource.setLastUpdateTime(processModel.getLastUpdateTime());
-            processResource.setExperimentId(processModel.getExperiment().getId());
+
+            Optional.ofNullable(processModel.getExperiment()).ifPresent(experiment -> {
+                processResource.setExperimentId(experiment.getId());
+            });
+            Optional.ofNullable(processModel.getWorkflow()).ifPresent(workflow -> {
+                processResource.setWorkflowId(workflow.getId());
+            });
+
             processResource.setTaskDag(processModel.getTaskDag());
             processResource.setCreationTime(processModel.getCreationTime());
             Optional.ofNullable(processModel.getProcessStatuses())
@@ -413,6 +418,31 @@ public class ToResourceUtil {
                     resource.getProcessIds().add(processModel.getId());
                 });
             });
+            return Optional.of(resource);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<TaskDagResource> toResource(TaskDAG taskDAG) {
+        if (taskDAG != null) {
+            TaskDagResource resource = new TaskDagResource();
+            resource.setId(taskDAG.getId());
+            resource.setSourceOutPort(toResource(taskDAG.getSourceOutPort()).get());
+            resource.setTargetTask(toResource(taskDAG.getTargetTask()).get());
+            return Optional.of(resource);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<TaskOutPortResource> toResource(TaskOutPort outPort) {
+        if (outPort != null) {
+            TaskOutPortResource resource = new TaskOutPortResource();
+            resource.setId(outPort.getId());
+            resource.setReferenceId(outPort.getReferenceId());
+            resource.setName(outPort.getName());
+            resource.setTaskResource(toResource(outPort.getTaskModel()).get());
             return Optional.of(resource);
         } else {
             return Optional.empty();

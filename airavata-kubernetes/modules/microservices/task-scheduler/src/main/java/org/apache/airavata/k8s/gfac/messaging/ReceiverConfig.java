@@ -19,6 +19,8 @@
  */
 package org.apache.airavata.k8s.gfac.messaging;
 
+import org.apache.airavata.k8s.task.api.TaskContext;
+import org.apache.airavata.k8s.task.api.TaskContextDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,7 +71,7 @@ public class ReceiverConfig {
         // list of host:port pairs used for establishing the initial connections to the Kakfa cluster
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, TaskContextDeserializer.class);
         // create a random group for each consumer in order to read all events form all consumers
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "event-group-" + UUID.randomUUID().toString());
         return props;
@@ -81,8 +83,8 @@ public class ReceiverConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, String> consumerFactoryForEvents() {
-        return new DefaultKafkaConsumerFactory<String, String>(consumerConfigsForEvents());
+    public ConsumerFactory<String, TaskContext> consumerFactoryForEvents() {
+        return new DefaultKafkaConsumerFactory<String, TaskContext>(consumerConfigsForEvents());
     }
 
     @Bean
@@ -95,8 +97,8 @@ public class ReceiverConfig {
     }
 
     @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaEventListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, String> factory =
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, TaskContext>> kafkaEventListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, TaskContext> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactoryForEvents());
         return factory;

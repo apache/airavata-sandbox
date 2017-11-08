@@ -20,6 +20,7 @@
 package org.apache.airavata.k8s.gfac.messaging;
 
 import org.apache.airavata.k8s.gfac.service.WorkerService;
+import org.apache.airavata.k8s.task.api.TaskContext;
 import org.springframework.kafka.annotation.KafkaListener;
 
 import javax.annotation.Resource;
@@ -42,12 +43,8 @@ public class KafkaReceiver {
     }
 
     @KafkaListener(topics = "${task.event.topic.name}", containerFactory = "kafkaEventListenerContainerFactory")
-    public void receiveTaskEvent(String payload) {
-        System.out.println("received event=" + payload);
-        String[] eventParts = payload.split(",");
-        long processId = Long.parseLong(eventParts[0]);
-        long taskId = Long.parseLong(eventParts[1]);
-        int state = Integer.parseInt(eventParts[2]);
-        workerService.onTaskStateEvent(processId, taskId, state);
+    public void receiveTaskEvent(TaskContext taskContext) {
+        System.out.println("received event for task id =" + taskContext.getTaskId());
+        workerService.onTaskStateEvent(taskContext);
     }
 }

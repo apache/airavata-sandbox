@@ -53,12 +53,12 @@ public class TaskExecutionService extends AbstractTaskExecutionService {
     @Override
     public void initializeParameters(TaskResource taskResource, TaskContext taskContext) throws Exception {
 
-        taskContext.getLocalContext().put(CommandTaskInfo.COMMAND, findInput(taskResource, CommandTaskInfo.COMMAND, false));
-        taskContext.getLocalContext().put(CommandTaskInfo.ARGUMENTS, findInput(taskResource, CommandTaskInfo.ARGUMENTS, true));
-        taskContext.getLocalContext().put(CommandTaskInfo.STD_OUT_PATH, findInput(taskResource, CommandTaskInfo.STD_OUT_PATH, false));
-        taskContext.getLocalContext().put(CommandTaskInfo.STD_ERR_PATH, findInput(taskResource, CommandTaskInfo.STD_ERR_PATH, false));
+        taskContext.getLocalContext().put(CommandTaskInfo.COMMAND, findInput(taskContext, taskResource, CommandTaskInfo.COMMAND, false));
+        taskContext.getLocalContext().put(CommandTaskInfo.ARGUMENTS, findInput(taskContext, taskResource, CommandTaskInfo.ARGUMENTS, true));
+        taskContext.getLocalContext().put(CommandTaskInfo.STD_OUT_PATH, findInput(taskContext, taskResource, CommandTaskInfo.STD_OUT_PATH, false));
+        taskContext.getLocalContext().put(CommandTaskInfo.STD_ERR_PATH, findInput(taskContext, taskResource, CommandTaskInfo.STD_ERR_PATH, false));
 
-        String computeId = findInput(taskResource, CommandTaskInfo.COMPUTE_RESOURCE, false);
+        String computeId = findInput(taskContext, taskResource, CommandTaskInfo.COMPUTE_RESOURCE, false);
         taskContext.getLocalContext().put(CommandTaskInfo.COMPUTE_RESOURCE, this.getRestTemplate().getForObject("http://" + this.getApiServerUrl()
                 + "/compute/" + Long.parseLong(computeId), ComputeResource.class));
 
@@ -75,7 +75,7 @@ public class TaskExecutionService extends AbstractTaskExecutionService {
             String stdErrPath = (String) taskContext.getLocalContext().get(CommandTaskInfo.STD_ERR_PATH);
             String stdOutSuffix = " > " + stdOutPath + " 2> " + stdErrPath;
 
-            publishTaskStatus(taskResource.getParentProcessId(), taskResource.getId(), TaskStatusResource.State.EXECUTING);
+            publishTaskStatus(taskContext, TaskStatusResource.State.EXECUTING);
 
             String finalCommand = command + (arguments != null ? arguments : "") + stdOutSuffix;
 
@@ -84,17 +84,17 @@ public class TaskExecutionService extends AbstractTaskExecutionService {
             ExecutionResult executionResult = fetchComputeResourceOperation(computeResource).executeCommand(finalCommand);
 
             if (executionResult.getExitStatus() == 0) {
-                publishTaskStatus(taskResource.getParentProcessId(), taskResource.getId(), TaskStatusResource.State.COMPLETED);
+                finishTaskExecution(taskContext, taskResource, "Out", TaskStatusResource.State.COMPLETED, "Task completed");
             } else if (executionResult.getExitStatus() == -1) {
-                publishTaskStatus(taskResource.getParentProcessId(), taskResource.getId(), TaskStatusResource.State.FAILED, "Process didn't exit successfully");
+                publishTaskStatus(taskContext, TaskStatusResource.State.FAILED, "Process didn't exit successfully");
             } else {
-                publishTaskStatus(taskResource.getParentProcessId(), taskResource.getId(), TaskStatusResource.State.FAILED, "Process exited with error status " + executionResult.getExitStatus());
+                publishTaskStatus(taskContext, TaskStatusResource.State.FAILED, "Process exited with error status " + executionResult.getExitStatus());
             }
 
         } catch (Exception e) {
 
             e.printStackTrace();
-            publishTaskStatus(taskResource.getParentProcessId(), taskResource.getId(), TaskStatusResource.State.FAILED, e.getMessage());
+            publishTaskStatus(taskContext, TaskStatusResource.State.FAILED, e.getMessage());
         }
     }
 }

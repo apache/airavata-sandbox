@@ -19,6 +19,9 @@
  */
 package org.apache.airavata.k8s.api.resources.process;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * TODO: Class level comments please
  *
@@ -88,20 +91,46 @@ public class ProcessStatusResource {
         return this;
     }
 
-    public static final class State {
-        public static final int CREATED = 0;
-        public static final int VALIDATED = 1;
-        public static final int STARTED = 2;
-        public static final int PRE_PROCESSING = 3;
-        public static final int CONFIGURING_WORKSPACE = 4;
-        public static final int INPUT_DATA_STAGING = 5;
-        public static final int EXECUTING = 6;
-        public static final int MONITORING = 7;
-        public static final int OUTPUT_DATA_STAGING = 8;
-        public static final int POST_PROCESSING = 9;
-        public static final int COMPLETED = 10;
-        public static final int FAILED = 11;
-        public static final int CANCELLING = 12;
-        public static final int CANCELED = 13;
+    public static enum State {
+
+        CREATED(0),
+        VALIDATED(1),
+        STARTED(2),
+        PRE_PROCESSING(3),
+        CONFIGURING_WORKSPACE(4),
+        INPUT_DATA_STAGING(5),
+        EXECUTING(6),
+        MONITORING(7),
+        OUTPUT_DATA_STAGING(8),
+        POST_PROCESSING(9),
+        COMPLETED(10),
+        FAILED(11),
+        CANCELLING(12),
+        CANCELED(13);
+
+        private final int value;
+
+        private State(int value) {
+            this.value = value;
+        }
+
+        private static Map<Integer, State> map = new HashMap<>();
+
+        static {
+            for (State state : State.values()) {
+                map.put(state.value, state);
+            }
+        }
+
+        public static State valueOf(int taskState) {
+            return map.get(taskState);
+        }
+
+        /**
+         * Get the integer value of this enum value, as defined in the Thrift IDL.
+         */
+        public int getValue() {
+            return value;
+        }
     }
 }

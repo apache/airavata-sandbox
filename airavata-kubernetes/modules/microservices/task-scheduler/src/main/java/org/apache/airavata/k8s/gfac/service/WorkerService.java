@@ -20,18 +20,17 @@
 package org.apache.airavata.k8s.gfac.service;
 
 import org.apache.airavata.k8s.api.resources.process.ProcessResource;
+import org.apache.airavata.k8s.api.resources.task.TaskDagResource;
 import org.apache.airavata.k8s.api.resources.task.TaskResource;
 import org.apache.airavata.k8s.api.resources.task.TaskStatusResource;
 import org.apache.airavata.k8s.gfac.core.ProcessLifeCycleManager;
 import org.apache.airavata.k8s.gfac.messaging.KafkaSender;
+import org.apache.airavata.k8s.task.api.TaskContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * TODO: Class level comments please
@@ -59,30 +58,26 @@ public class WorkerService {
         ProcessResource processResource = this.restTemplate.getForObject("http://" + apiServerUrl + "/process/" + processId,
                 ProcessResource.class);
         List<TaskResource> taskResources = processResource.getTasks();
-        boolean freshProcess = true;
-        for (TaskResource taskResource : taskResources) {
-            if (taskResource.getTaskStatus() != null && taskResource.getTaskStatus().size() > 0) {
-                // Already partially completed process. This happens when the task scheduler is killed while processing a process
-                TaskStatusResource lastStatusResource = taskResource.getTaskStatus().get(taskResource.getTaskStatus().size() - 1);
-                // TODO continue from last state
-                freshProcess = false;
-            } else {
-                // Fresh task
 
-            }
-        }
+        Set<TaskDagResource> takDagSet = this.restTemplate.getForObject("http://" + apiServerUrl + "/task/dag/"
+                + processId, Set.class);
 
-        if (freshProcess) {
-            System.out.println("Starting to execute process " + processId);
-            ProcessLifeCycleManager manager = new ProcessLifeCycleManager(processId, taskResources, kafkaSender, restTemplate, apiServerUrl);
-            manager.init();
-            manager.submitTaskToQueue(taskResources.get(0));
-            processLifecycleStore.put(processId, manager);
-        }
+        final Map<Long, Long> edgeMap = new HashMap<>();
+        Optional.ofNullable(takDagSet)
+                .ifPresent(dags -> dags.forEach(dag ->
+                        edgeMap.put(dag.getSourceOutPort().getId(), dag.getTargetTask().getId())));
+
+        System.out.println("Starting to execute process " + processId);
+        ProcessLifeCycleManager manager =
+                new ProcessLifeCycleManager(processId, taskResources, edgeMap, kafkaSender, restTemplate, apiServerUrl);
+
+        manager.init();
+        manager.start();
+        processLifecycleStore.put(processId, manager);
     }
 
-    public void onTaskStateEvent(long processId, long taskId, int state) {
-        Optional.ofNullable(processLifecycleStore.get(processId))
-                .ifPresent(manager -> manager.onTaskStateChanged(taskId, state));
+    public void onTaskStateEvent(TaskContext taskContext) {
+        Optional.ofNullable(processLifecycleStore.get(taskContext.getProcessId()))
+                .ifPresent(manager -> manager.onTaskStateChanged(taskContext));
     }
 }

@@ -42,6 +42,8 @@ public class TaskModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    private int referenceId; // to track workflows
+
     private String name;
 
     @ManyToOne
@@ -210,5 +212,14 @@ public class TaskModel {
 
     public void setTaskOutPorts(List<TaskOutPort> taskOutPorts) {
         this.taskOutPorts = taskOutPorts;
+    }
+
+    public int getReferenceId() {
+        return referenceId;
+    }
+
+    public TaskModel setReferenceId(int referenceId) {
+        this.referenceId = referenceId;
+        return this;
     }
 }
