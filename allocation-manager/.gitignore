@@ -24,4 +24,4 @@ hs_err_pid*
 
 # Ignore files starting with dot
 .*
-.gitignore
+!.gitignore
