@@ -1,10 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>allocation-manager</groupId>
-    <artifactId>allocation-manager</artifactId>
+    <groupId>org.apache.airavata</groupId>
+    <artifactId>airavata-allocation-manager</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>allocation-manager-server</groupId>
-  <artifactId>allocation-manager-server</artifactId>
+  <artifactId>airavata-allocation-manager-stubs</artifactId>
 </project>
