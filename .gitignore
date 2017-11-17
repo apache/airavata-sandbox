@@ -1,5 +1,11 @@
+# Compiled class file
 *.class
-*id_rsa*
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -8,18 +14,18 @@
 *.jar
 *.war
 *.ear
-
-
-target/
-.idea/
-tmp/
-logs/
-gaussian_sample/
-*.ser
-*.iml
-*.gen
+*.zip
+*.tar.gz
+*.rar
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-solr-server/logs/solr.log
+
+# Ignore files ending with target
+*target/
+
+# Ignore files starting with dot
+.*
+!.gitignore
+
 
