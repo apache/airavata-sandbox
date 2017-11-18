@@ -249,6 +249,10 @@ public class ToResourceUtil {
                             taskStatuses.forEach(taskStatus -> resource.getTaskStatus()
                                     .add(toResource(taskStatus).get())));
 
+            Optional.ofNullable(taskModel.getTaskOutPorts())
+                    .ifPresent(outPorts -> outPorts.forEach(outPort -> resource.getOutPorts()
+                            .add(toResource(outPort).get())));
+
             resource.setOrder(taskModel.getOrderIndex());
             return Optional.of(resource);
         } else {
@@ -442,7 +446,7 @@ public class ToResourceUtil {
             resource.setId(outPort.getId());
             resource.setReferenceId(outPort.getReferenceId());
             resource.setName(outPort.getName());
-            resource.setTaskResource(toResource(outPort.getTaskModel()).get());
+            //resource.setTaskResource(toResource(outPort.getTaskModel()).get());
             return Optional.of(resource);
         } else {
             return Optional.empty();

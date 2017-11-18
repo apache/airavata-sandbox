@@ -44,8 +44,7 @@ public class DataStoreModel {
     @Basic(fetch = FetchType.LAZY)
     private byte[] content;
 
-    @ManyToOne
-    private ExperimentOutputData experimentOutputData;
+    private String identifier;
 
     @ManyToOne
     private TaskModel taskModel;
@@ -68,12 +67,12 @@ public class DataStoreModel {
         return this;
     }
 
-    public ExperimentOutputData getExperimentOutputData() {
-        return experimentOutputData;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public DataStoreModel setExperimentOutputData(ExperimentOutputData experimentOutputData) {
-        this.experimentOutputData = experimentOutputData;
+    public DataStoreModel setIdentifier(String identifier) {
+        this.identifier = identifier;
         return this;
     }
 
