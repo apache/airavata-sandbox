@@ -51,10 +51,10 @@ public class DataStoreService {
         this.experimentOutputDataRepository = experimentOutputDataRepository;
     }
 
-    public long createEntry(long taskId, long expOutId, byte[] content) {
+    public long createEntry(long taskId, String identifier, byte[] content) {
         DataStoreModel model = new DataStoreModel();
         model.setTaskModel(taskRepository.findById(taskId).get())
-                .setExperimentOutputData(experimentOutputDataRepository.findById(expOutId).get())
+                .setIdentifier(identifier)
                 .setContent(content);
         return dataStoreRepository.save(model).getId();
     }
@@ -64,8 +64,7 @@ public class DataStoreService {
         List<DataStoreModel> dataStoreModels = this.dataStoreRepository.findByTaskModel_ParentProcess_Id(processId);
         Optional.ofNullable(dataStoreModels).ifPresent(models -> models.forEach(model -> entries.add(new DataEntryResource()
                 .setId(model.getId())
-                .setName(model.getExperimentOutputData().getName())
-                .setDataType(model.getExperimentOutputData().getType().name()))));
+                .setName(model.getIdentifier()))));
         return entries;
     }
 }

@@ -23,14 +23,19 @@ import org.apache.airavata.k8s.api.resources.process.ProcessResource;
 import org.apache.airavata.k8s.api.resources.task.TaskDagResource;
 import org.apache.airavata.k8s.api.resources.task.TaskResource;
 import org.apache.airavata.k8s.api.resources.task.TaskStatusResource;
+import org.apache.airavata.k8s.gfac.core.HelixWorkflowManager;
 import org.apache.airavata.k8s.gfac.core.ProcessLifeCycleManager;
 import org.apache.airavata.k8s.gfac.messaging.KafkaSender;
 import org.apache.airavata.k8s.task.api.TaskContext;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * TODO: Class level comments please
@@ -44,6 +49,7 @@ public class WorkerService {
     private final RestTemplate restTemplate;
     private final KafkaSender kafkaSender;
     private Map<Long, ProcessLifeCycleManager> processLifecycleStore = new HashMap<>();
+    ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     @Value("${api.server.url}")
     private String apiServerUrl;
@@ -59,8 +65,9 @@ public class WorkerService {
                 ProcessResource.class);
         List<TaskResource> taskResources = processResource.getTasks();
 
-        Set<TaskDagResource> takDagSet = this.restTemplate.getForObject("http://" + apiServerUrl + "/task/dag/"
-                + processId, Set.class);
+        Set<TaskDagResource> takDagSet = this.restTemplate.exchange("http://" + apiServerUrl + "/task/dag/"
+                + processId, HttpMethod.GET, null, new ParameterizedTypeReference<Set<TaskDagResource>>() {})
+                .getBody();
 
         final Map<Long, Long> edgeMap = new HashMap<>();
         Optional.ofNullable(takDagSet)
@@ -68,12 +75,22 @@ public class WorkerService {
                         edgeMap.put(dag.getSourceOutPort().getId(), dag.getTargetTask().getId())));
 
         System.out.println("Starting to execute process " + processId);
-        ProcessLifeCycleManager manager =
-                new ProcessLifeCycleManager(processId, taskResources, edgeMap, kafkaSender, restTemplate, apiServerUrl);
+        //ProcessLifeCycleManager manager =
+        //        new ProcessLifeCycleManager(processId, taskResources, edgeMap, kafkaSender, restTemplate, apiServerUrl);
 
-        manager.init();
-        manager.start();
-        processLifecycleStore.put(processId, manager);
+        //manager.init();
+        //manager.start();
+
+        //processLifecycleStore.put(processId, manager);
+
+        final HelixWorkflowManager helixWorkflowManager = new HelixWorkflowManager(processId, taskResources, edgeMap, kafkaSender, restTemplate, apiServerUrl);
+
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                helixWorkflowManager.launchWorkflow();
+            }
+        });
     }
 
     public void onTaskStateEvent(TaskContext taskContext) {

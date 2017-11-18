@@ -105,10 +105,10 @@ public class WorkflowService {
             });
 
             parseResult.getEdgeCache().forEach(((outPort, inPort) -> {
-                if (outPort.getParentOperation() != null && outPort.getNextPort().getParentOperation() != null) {
+                if (outPort.getParentTask() != null && outPort.getNextPort().getParentTask() != null) {
                     Optional<TaskOutPort> sourceOutPort = taskOutPortRepository
-                            .findByReferenceIdAndTaskModel_Id(outPort.getId(), outPort.getParentTask().getId());
-                    Optional<TaskModel> targetTask = taskRepository.findById(inPort.getParentTask().getId());
+                            .findByReferenceIdAndTaskModel_Id(outPort.getId(), outPort.getParentTask().getTaskResource().getId());
+                    Optional<TaskModel> targetTask = taskRepository.findById(inPort.getParentTask().getTaskResource().getId());
 
                     taskDAGRepository.save(new TaskDAG()
                             .setSourceOutPort(sourceOutPort.get())

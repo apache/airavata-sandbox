@@ -41,10 +41,10 @@ public class KafkaReceiver {
         System.out.println("received process=" + payload);
         workerService.launchProcess(Long.parseLong(payload));
     }
-
-    @KafkaListener(topics = "${task.event.topic.name}", containerFactory = "kafkaEventListenerContainerFactory")
-    public void receiveTaskEvent(TaskContext taskContext) {
-        System.out.println("received event for task id =" + taskContext.getTaskId());
-        workerService.onTaskStateEvent(taskContext);
-    }
+//
+//    @KafkaListener(topics = "${task.event.topic.name}", containerFactory = "kafkaEventListenerContainerFactory")
+//    public void receiveTaskEvent(TaskContext taskContext) {
+//        System.out.println("received event for task id =" + taskContext.getTaskId());
+//        workerService.onTaskStateEvent(taskContext);
+//    }
 }
