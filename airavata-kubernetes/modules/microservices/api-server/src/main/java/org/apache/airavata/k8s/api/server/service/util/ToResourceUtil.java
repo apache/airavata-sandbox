@@ -229,6 +229,7 @@ public class ToResourceUtil {
             resource.setCreationTime(taskModel.getCreationTime());
             resource.setParentProcessId(taskModel.getParentProcess().getId());
             resource.setTaskType(toResource(taskModel.getTaskType()).get());
+            resource.setTaskTypeStr(taskModel.getTaskType().getName());
             resource.setTaskDetail(taskModel.getTaskDetail());
             resource.setStartingTask(taskModel.isStartingTask());
             resource.setStoppingTask(taskModel.isStoppingTask());

@@ -54,7 +54,7 @@ public class HelixWorkflowManager {
                 InstanceType.SPECTATOR, "localhost:2199");
 
         try {
-
+            updateProcessStatus(ProcessStatusResource.State.CREATED);
             Workflow.Builder workflowBuilder = createWorkflow();
             WorkflowConfig.Builder config = new WorkflowConfig.Builder().setFailureThreshold(0);
             workflowBuilder.setWorkflowConfig(config.build());
@@ -63,6 +63,8 @@ public class HelixWorkflowManager {
             }
 
             Workflow workflow = workflowBuilder.build();
+
+            updateProcessStatus(ProcessStatusResource.State.VALIDATED);
 
             helixManager.connect();
             TaskDriver taskDriver = new TaskDriver(helixManager);
@@ -77,8 +79,12 @@ public class HelixWorkflowManager {
             );
 
             taskDriver.start(workflow);
+
+            updateProcessStatus(ProcessStatusResource.State.STARTED);
+
             logger.info("Started workflow");
             TaskState taskState = taskDriver.pollForWorkflowState(workflow.getName(), TaskState.COMPLETED, TaskState.FAILED, TaskState.STOPPED, TaskState.ABORTED);
+            updateProcessStatus(taskState);
             System.out.println("Workflow state " + taskState.name());
 
         } catch (Exception ex) {
@@ -144,6 +150,29 @@ public class HelixWorkflowManager {
                 });
             });
         }));
+    }
+
+    private void updateProcessStatus(TaskState taskState) {
+        switch (taskState) {
+            case ABORTED:
+                updateProcessStatus(ProcessStatusResource.State.ABORTED);
+                break;
+            case COMPLETED:
+                updateProcessStatus(ProcessStatusResource.State.COMPLETED);
+                break;
+            case STOPPED:
+                updateProcessStatus(ProcessStatusResource.State.STOPPED);
+                break;
+            case NOT_STARTED:
+                updateProcessStatus(ProcessStatusResource.State.NOT_STARTED);
+                break;
+            case FAILED:
+                updateProcessStatus(ProcessStatusResource.State.FAILED);
+                break;
+            case IN_PROGRESS:
+                updateProcessStatus(ProcessStatusResource.State.EXECUTING);
+                break;
+        }
     }
 
     private void updateProcessStatus(ProcessStatusResource.State state) {

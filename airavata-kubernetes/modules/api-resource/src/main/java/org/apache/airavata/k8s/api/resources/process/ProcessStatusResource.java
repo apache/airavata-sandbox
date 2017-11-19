@@ -106,7 +106,10 @@ public class ProcessStatusResource {
         COMPLETED(10),
         FAILED(11),
         CANCELLING(12),
-        CANCELED(13);
+        CANCELED(13),
+        ABORTED(14),
+        STOPPED(15),
+        NOT_STARTED(16);
 
         private final int value;
 

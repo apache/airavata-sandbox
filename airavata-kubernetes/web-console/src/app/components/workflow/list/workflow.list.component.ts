@@ -33,7 +33,7 @@ export class WorkflowListComponent {
   }
 
   routeToDetailPage(id: number) {
-    this.router.navigateByUrl("/experiment/detail/"+id);
+    this.router.navigateByUrl("/workflow/detail/"+id);
   }
 
   routeToCreatePage() {

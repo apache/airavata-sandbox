@@ -77,7 +77,9 @@ public class WorkflowService {
 
         long processId = processService.create(new ProcessResource()
                 .setName("Workflow Process : " + workflow.getName() + "-" + UUID.randomUUID().toString())
-                .setCreationTime(System.currentTimeMillis()).setProcessType("WORKFLOW"));
+                .setCreationTime(System.currentTimeMillis())
+                .setProcessType("WORKFLOW")
+                .setWorkflowId(id));
 
         try {
             GraphParser.ParseResult parseResult = GraphParser.parse(new String(workflow.getWorkFlowGraph()));
@@ -130,6 +132,10 @@ public class WorkflowService {
         Optional.ofNullable(workFlows)
                 .ifPresent(wfs -> wfs.forEach(wf -> workflowResources.add(ToResourceUtil.toResource(wf).get())));
         return workflowResources;
+    }
+
+    public Optional<WorkflowResource> findById(long id) {
+        return ToResourceUtil.toResource(findEntityById(id).get());
     }
 
     @SuppressWarnings("WeakerAccess")

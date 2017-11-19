@@ -14,4 +14,12 @@ export class WorkflowService {
   getAllWorkflows() {
     return this.apiService.get("workflow").map(res => res.json());
   }
+
+  getWorkflowById(id: number) {
+    return this.apiService.get("workflow/" + id).map(res => res.json());
+  }
+
+  launchWorkflow(id: number) {
+    return this.apiService.get("workflow/" + id + "/launch");
+  }
 }

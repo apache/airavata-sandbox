@@ -107,10 +107,12 @@ public class DataOutputTask extends AbstractTask {
                                 .setDefaultValue(""),
                         new TaskInputTypeResource()
                                 .setName(PARAMS.IDENTIFIER)
-                                .setType("String"),
+                                .setType("String")
+                                .setDefaultValue(""),
                         new TaskInputTypeResource()
                                 .setName(PARAMS.COMPUTE_RESOURCE)
-                                .setType("Long")));
+                                .setType("Long")
+                                .setDefaultValue("")));
 
         taskTypeResource.getOutPorts().addAll(
                 Arrays.asList(

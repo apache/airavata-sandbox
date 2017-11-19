@@ -17,6 +17,8 @@ import {ProcessDetailComponent} from "./components/process/detail/process.detail
 import {SetupComponent} from "./components/setup/setup.component";
 import {WorkflowCreateComponent} from "./components/workflow/create/create.component";
 import {WorkflowListComponent} from "./components/workflow/list/workflow.list.component";
+import {WorkflowDetailComponent} from "./components/workflow/detail/workflow.detail";
+import {UtilService} from "./services/util.service";
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import {WorkflowListComponent} from "./components/workflow/list/workflow.list.co
     ProcessDetailComponent,
     SetupComponent,
     WorkflowCreateComponent,
-    WorkflowListComponent
+    WorkflowListComponent,
+    WorkflowDetailComponent
   ],
   imports: [
     NgbModule.forRoot(),
@@ -40,7 +43,7 @@ import {WorkflowListComponent} from "./components/workflow/list/workflow.list.co
     HttpModule,
     FormsModule
   ],
-  providers: [],
+  providers: [UtilService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
