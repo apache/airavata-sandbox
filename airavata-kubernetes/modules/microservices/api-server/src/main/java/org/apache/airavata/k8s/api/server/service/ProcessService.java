@@ -27,6 +27,7 @@ import org.apache.airavata.k8s.api.server.model.task.TaskModel;
 import org.apache.airavata.k8s.api.server.repository.process.ProcessRepository;
 import org.apache.airavata.k8s.api.resources.process.ProcessResource;
 import org.apache.airavata.k8s.api.server.repository.process.ProcessStatusRepository;
+import org.apache.airavata.k8s.api.server.repository.workflow.WorkflowRepository;
 import org.apache.airavata.k8s.api.server.service.task.TaskService;
 import org.apache.airavata.k8s.api.server.service.util.ToResourceUtil;
 import org.springframework.stereotype.Service;
@@ -48,17 +49,19 @@ public class ProcessService {
     private ExperimentService experimentService;
     private TaskService taskService;
 
-    private WorkflowService workflowService;
+    private WorkflowRepository workflowRepository;
 
     public ProcessService(ProcessRepository processRepository,
                           ProcessStatusRepository processStatusRepository,
                           ExperimentService experimentService,
-                          TaskService taskService) {
+                          TaskService taskService,
+                          WorkflowRepository workflowRepository) {
 
         this.processRepository = processRepository;
         this.processStatusRepository = processStatusRepository;
         this.experimentService = experimentService;
         this.taskService = taskService;
+        this.workflowRepository = workflowRepository;
     }
 
     public long create(ProcessResource resource) {
@@ -77,7 +80,7 @@ public class ProcessService {
         }
 
         if (resource.getWorkflowId() != 0) {
-            processModel.setWorkflow(workflowService.findEntityById(resource.getWorkflowId())
+            processModel.setWorkflow(workflowRepository.findById(resource.getWorkflowId())
                     .orElseThrow(() -> new ServerRuntimeException("Can not find workflow with id " +
                             resource.getWorkflowId())));
         }

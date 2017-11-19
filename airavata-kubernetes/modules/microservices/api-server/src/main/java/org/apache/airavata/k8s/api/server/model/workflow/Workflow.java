@@ -27,7 +27,7 @@ public class Workflow {
     private byte[] workFlowGraph;
 
 
-    @OneToMany(mappedBy = "experiment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "workflow", cascade = CascadeType.ALL)
     private List<ProcessModel> processes = new ArrayList<>();
 
     public long getId() {

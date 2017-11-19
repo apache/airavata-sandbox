@@ -169,7 +169,7 @@ public class SSHComputeOperations implements ComputeOperations {
         File _lfile = new File(source);
 
         if (ptimestamp) {
-            command = "T " + (_lfile.lastModified() / 1000) + " 0";
+            command = "T" + (_lfile.lastModified() / 1000) + " 0";
             // The access time should be sent here,
             // but it is not accessible with JavaAPI ;-<
             command += (" " + (_lfile.lastModified() / 1000) + " 0\n");
@@ -341,6 +341,6 @@ public class SSHComputeOperations implements ComputeOperations {
         //ExecutionResult result = operations.executeCommand("sh /opt/sample.sh > /tmp/stdout.txt 2> /tmp/stderr.txt");
         //System.out.println(result.getStdOut());
         //System.out.println(result.getStdErr());
-        operations.transferDataOut("/tmp/stdout.txt", "/tmp/b.txt", "SCP");
+        operations.transferDataIn("/tmp/a.txt", "/tmp/b.txt", "SCP");
     }
 }
