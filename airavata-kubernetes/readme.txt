@@ -19,3 +19,7 @@ When running in a local machine, add following host entries to /etc/hosts file
 When running as docker containers, pass following environment variables to api-server container
 spring_datasource_username=<db user>
 spring_datasource_password=<db password>
+
+Create Helix cluster
+
+./helix-admin.sh --zkSvr localhost:2199 --addCluster AiravataDemoCluster
