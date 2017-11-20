@@ -22,14 +22,14 @@ export class WorkflowDetailComponent {
   processes: Array<Process> = [];
   processLastState: ProcessStatus = new ProcessStatus();
   processListModel: NgbModalRef;
+  workflowId: number;
 
   constructor(private modalService: NgbModal,private activatedRoute: ActivatedRoute,
               private workflowService: WorkflowService, private processService: ProcessService,
               private router: Router) {
 
-    let workflowId = this.activatedRoute.snapshot.params["id"];
-    this.workflowService.getWorkflowById(workflowId)
-      .subscribe(data => {this.selectedWorkflow = data}, err => {console.log(err)});
+    this.workflowId = this.activatedRoute.snapshot.params["id"];
+    this.fetchWorkflow(this.workflowId);
   }
 
   launchWorkflow() {
@@ -54,15 +54,32 @@ export class WorkflowDetailComponent {
 
   openProcessesAsModel(content) {
     this.processes = [];
-    this.selectedWorkflow.processIds.forEach(id => {
-      this.processService.getProcessById(id).subscribe(data => {
-        this.processes.push(data);
-        this.processes.sort((p1, p2) => {return p1.id - p2.id;})
-      }, err => {
-        console.log(err);
-      });
-    });
-    this.processListModel = this.modalService.open(content, {size: "lg"});
-    this.processListModel.result.then((result) => {}, (reason) => {});
+
+    this.workflowService.getWorkflowById(this.workflowId)
+      .subscribe(data => {
+
+        this.selectedWorkflow = data;
+        this.selectedWorkflow.processIds.forEach(id => {
+
+          this.processService.getProcessById(id).subscribe(data => {
+            this.processes.push(data);
+            this.processes.sort((p1, p2) => {return p1.id - p2.id;})
+
+          }, err => {
+            console.log(err);
+          });
+
+        });
+
+        this.processListModel = this.modalService.open(content, {size: "lg"});
+        this.processListModel.result.then((result) => {}, (reason) => {});
+
+      }, err => {console.log(err)});
+
+  }
+
+  fetchWorkflow(id: number) {
+    this.workflowService.getWorkflowById(id)
+      .subscribe(data => {this.selectedWorkflow = data}, err => {console.log(err)});
   }
 }

@@ -1,27 +1,33 @@
-<label for="worklow-name">Workflow Name</label>
-<input [(ngModel)]="workFlowName" name="worklow-name" id="worklow-name"/>
+<div class="container">
 
-<table style="position:relative;">
-  <tr>
-    <td>
-      <div id="toolContainer" style="border: solid 1px black; width: 80px; cursor: default">
+  <div class="row" style="margin-bottom: 20px; margin-top: 20px">
 
-      </div>
-    </td>
-    <td>
+    <div class="col-8">
+      <label for="worklow-name">Workflow Name</label>
+      <input [(ngModel)]="workFlowName" name="worklow-name" id="worklow-name"/>
+    </div>
+
+    <div class="col-4">
+      <button (click)="onShowWorkflowXMLClicked()" class="btn btn-info">Show XML</button>
+      <button (click)="onCreateWorkflowClicked()" class="btn btn-success">Create Workflow</button>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-1" id="toolContainer" style="border: solid 1px black; cursor: default"></div>
+
+    <div class="col-7">
       <div id="graphContainer"
            style="border: solid 1px black;overflow:hidden;width:321px; cursor:default;">
       </div>
-    </td>
-    <td valign="top">
-      <div id="properties"
-           style="border: solid 1px black; padding: 10px;">
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td><button (click)="onShowWorkflowXMLClicked()">Show XML</button></td>
-    <td><button (click)="onCreateWorkflowClicked()">Create Workflow</button></td>
-  </tr>
-</table>
+    </div>
+
+    <div class="col-4">
+      <div id="properties" style="border: solid 1px black; padding: 10px;"></div>
+    </div>
+
+  </div>
+
+</div>
