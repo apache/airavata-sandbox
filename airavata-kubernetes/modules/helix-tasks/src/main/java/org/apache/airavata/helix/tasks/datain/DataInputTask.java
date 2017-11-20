@@ -86,7 +86,7 @@ public class DataInputTask extends AbstractTask {
         TaskTypeResource taskTypeResource = new TaskTypeResource();
         taskTypeResource.setName(NAME);
         taskTypeResource.setTopicName("airavata-data-collect");
-        taskTypeResource.setIcon("assets/icons/copy.png");
+        taskTypeResource.setIcon("assets/icons/datain.png");
         taskTypeResource.getInputTypes().addAll(
                 Arrays.asList(
                         new TaskInputTypeResource()
