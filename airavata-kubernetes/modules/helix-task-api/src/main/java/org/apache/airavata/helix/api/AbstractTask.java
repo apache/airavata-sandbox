@@ -1,7 +1,6 @@
 package org.apache.airavata.helix.api;
 
 import org.apache.airavata.k8s.api.resources.compute.ComputeResource;
-import org.apache.airavata.k8s.api.resources.task.type.TaskTypeResource;
 import org.apache.airavata.k8s.compute.api.ComputeOperations;
 import org.apache.airavata.k8s.compute.impl.MockComputeOperation;
 import org.apache.airavata.k8s.compute.impl.SSHComputeOperations;
