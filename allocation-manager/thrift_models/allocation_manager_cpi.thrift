@@ -24,4 +24,24 @@ service AllocationRegistryService{
     */
     allocation_manager_models.UserAllocationDetail getAllocationRequest(1: required string projectId)
 
+/**
+    <p>API method to get an allocation Request status</p>
+    */
+    string getAllocationRequestStatus(1: required string projectId)
+
+    /**
+    <p>API method to get an allocation Request PI email</p>
+    */
+    string getAllocationRequestUserEmail(1: required string userName)
+
+    /**
+    <p>API method to get an allocation Request Admin email</p>
+    */
+    string getAllocationManagerAdminEmail(1: required string userType)
+
+ /**
+    <p>API method to get an allocation Request PI</p>
+    */
+    string getAllocationRequestUserName(1: required string projectId)
+
 }

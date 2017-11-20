@@ -19,15 +19,37 @@
  */
 package org.apache.airavata.allocation.manager.server;
 
+import org.apache.airavata.allocation.manager.db.repositories.RequestStatusRepository;
+import org.apache.airavata.allocation.manager.db.repositories.UserAllocationDetailPKRepository;
+import org.apache.airavata.allocation.manager.db.repositories.UserDetailRepository;
 import org.apache.airavata.allocation.manager.models.*;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 
-//public class AllocationManagerServerHandler implements AllocationRegistryService.Iface {
-public class AllocationManagerServerHandler {
-//	public UserAllocationDetailPK getAllocationRequestPI(java.lang.String projectId) throws org.apache.thrift.TException{
-//		
-//		
-//	}
-
+public class AllocationManagerServerHandler implements AllocationRegistryService.Iface {
 	
+	public String getAllocationRequestStatus(String projectId) throws org.apache.thrift.TException{	
+		try{
+            return (new RequestStatusRepository()).get(projectId).status;
+        }catch (Throwable ex) {
+            throw new Exception("Could not get project status");
+        }
+	}
+	
+	public String getAllocationRequestPIEmail(String projectId) throws org.apache.thrift.TException{	
+		try{
+			String userName = getAllocationRequestUserName(projectId);
+            return (new UserDetailRepository()).get(userName).email;
+        }catch (Throwable ex) {
+            throw new Exception("Could not get email");
+        }
+	}
+	
+	public String getAllocationRequestUserName(String projectId) throws org.apache.thrift.TException{	
+		try{
+            return (new UserAllocationDetailPKRepository()).get(projectId).username;
+        }catch (Throwable ex) {
+            throw new Exception("Could not get project status");
+        }
+	}
 }
