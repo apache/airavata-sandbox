@@ -6,6 +6,7 @@ import org.apache.helix.task.Task;
 import org.apache.helix.task.TaskCallbackContext;
 import org.apache.helix.task.TaskFactory;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +18,9 @@ import java.util.Map;
  */
 public class Participant extends HelixParticipant {
 
-    public Participant(String zkAddress, String clusterName, String participantName, String taskTypeName, String apiServerUrl) {
-        super(zkAddress, clusterName, participantName, taskTypeName, apiServerUrl);
+
+    public Participant(String propertyFile) throws IOException {
+        super(propertyFile);
     }
 
     @Override
@@ -43,11 +45,11 @@ public class Participant extends HelixParticipant {
     }
 
     public static void main(String args[]) {
-        HelixParticipant participant = new Participant(
-                "localhost:2199",
-                "AiravataDemoCluster",
-                "command-p1", CommandTask.NAME,
-                "localhost:8080");
-        new Thread(participant).start();
+        try {
+            HelixParticipant participant = new Participant("application.properties");
+            new Thread(participant).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

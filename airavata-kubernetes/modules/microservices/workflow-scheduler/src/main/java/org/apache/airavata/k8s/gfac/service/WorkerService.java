@@ -54,6 +54,15 @@ public class WorkerService {
     @Value("${api.server.url}")
     private String apiServerUrl;
 
+    @Value("${zookeeper.connection.url}")
+    private String zkConnectionString;
+
+    @Value("${helix.cluster.name}")
+    private String helixClusterName;
+
+    @Value("${instance.name}")
+    private String instanceName;
+
     public WorkerService(RestTemplate restTemplate, KafkaSender kafkaSender) {
         this.restTemplate = restTemplate;
         this.kafkaSender = kafkaSender;
@@ -83,7 +92,9 @@ public class WorkerService {
 
         //processLifecycleStore.put(processId, manager);
 
-        final HelixWorkflowManager helixWorkflowManager = new HelixWorkflowManager(processId, taskResources, edgeMap, kafkaSender, restTemplate, apiServerUrl);
+        final HelixWorkflowManager helixWorkflowManager = new HelixWorkflowManager(processId, taskResources, edgeMap,
+                kafkaSender, restTemplate, apiServerUrl,
+                zkConnectionString, helixClusterName, instanceName);
 
         executorService.execute(new Runnable() {
             @Override

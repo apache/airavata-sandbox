@@ -55,7 +55,7 @@ public class CommandTask extends AbstractTask {
             String finalCommand = command + (arguments != null ? arguments : "") + stdOutSuffix;
 
             System.out.println("Executing command " + finalCommand);
-
+            Thread.sleep(200000);
             ExecutionResult executionResult = fetchComputeResourceOperation(computeResource).executeCommand(finalCommand);
 
             if (executionResult.getExitStatus() == 0) {

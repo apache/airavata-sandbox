@@ -38,20 +38,28 @@ public class HelixWorkflowManager {
     private final RestTemplate restTemplate;
     private String apiServerUrl;
 
+    private String zkConnectionString;
+    private String helixClusterName;
+    private String instanceName;
+
     public HelixWorkflowManager(long processId, List<TaskResource> tasks, Map<Long, Long> edgeMap,
                                 KafkaSender kafkaSender,
-                                RestTemplate restTemplate, String apiServerUrl) {
+                                RestTemplate restTemplate, String apiServerUrl, String zkConnectionString,
+                                String helixClusterName, String instanceName) {
         this.processId = processId;
         this.tasks = tasks;
         this.edgeMap = edgeMap;
         this.kafkaSender = kafkaSender;
         this.restTemplate = restTemplate;
         this.apiServerUrl = apiServerUrl;
+        this.zkConnectionString = zkConnectionString;
+        this.helixClusterName = helixClusterName;
+        this.instanceName = instanceName;
     }
 
     public void launchWorkflow() {
-        org.apache.helix.HelixManager helixManager = HelixManagerFactory.getZKHelixManager("AiravataDemoCluster", "Admin",
-                InstanceType.SPECTATOR, "localhost:2199");
+        org.apache.helix.HelixManager helixManager = HelixManagerFactory.getZKHelixManager(helixClusterName, instanceName,
+                InstanceType.SPECTATOR, zkConnectionString);
 
         try {
             updateProcessStatus(ProcessStatusResource.State.CREATED);

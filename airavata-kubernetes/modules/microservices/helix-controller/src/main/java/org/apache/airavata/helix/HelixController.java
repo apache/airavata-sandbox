@@ -1,9 +1,12 @@
 package org.apache.airavata.helix;
 
+import org.apache.airavata.helix.api.PropertyResolver;
 import org.apache.helix.controller.HelixControllerMain;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -24,10 +27,14 @@ public class HelixController implements Runnable {
     private CountDownLatch startLatch = new CountDownLatch(1);
     private CountDownLatch stopLatch = new CountDownLatch(1);
 
-    public HelixController(String zkAddress, String clusterName, String controllerName) {
-        this.clusterName = clusterName;
-        this.controllerName = controllerName;
-        this.zkAddress = zkAddress;
+    public HelixController(String propertyFile) throws IOException {
+
+        PropertyResolver propertyResolver = new PropertyResolver();
+        propertyResolver.loadInputStream(this.getClass().getClassLoader().getResourceAsStream(propertyFile));
+
+        this.clusterName = propertyResolver.get("helix.cluster.name");
+        this.controllerName = propertyResolver.get("helix.controller.name");
+        this.zkAddress = propertyResolver.get("zookeeper.connection.url");
     }
 
     public void run() {
@@ -77,7 +84,11 @@ public class HelixController implements Runnable {
     }
 
     public static void main(String args[]) {
-        HelixController helixController = new HelixController("localhost:2199", "AiravataDemoCluster", "AiravataController");
-        helixController.start();
+        try {
+            HelixController helixController = new HelixController("application.properties");
+            helixController.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

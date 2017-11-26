@@ -16,6 +16,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -37,18 +39,19 @@ public abstract class HelixParticipant implements Runnable {
     private String apiServerUrl;
     private RestTemplate restTemplate;
 
-    public HelixParticipant(String zkAddress,
-                            String clusterName,
-                            String participantName,
-                            String taskTypeName,
-                            String apiServerUrl) {
+    public HelixParticipant(String propertyFile) throws IOException {
 
         logger.debug("Initializing Participant Node");
-        this.zkAddress = zkAddress;
-        this.clusterName = clusterName;
-        this.participantName = participantName;
-        this.taskTypeName = taskTypeName;
-        this.apiServerUrl = apiServerUrl;
+
+        PropertyResolver propertyResolver = new PropertyResolver();
+        propertyResolver.loadInputStream(this.getClass().getClassLoader().getResourceAsStream(propertyFile));
+
+        this.zkAddress = propertyResolver.get("zookeeper.connection.url");
+        this.clusterName = propertyResolver.get("helix.cluster.name");
+        this.participantName = propertyResolver.get("participant.name");
+        this.taskTypeName = propertyResolver.get("task.type.name");
+        this.apiServerUrl = propertyResolver.get("api.server.url");
+
         this.restTemplate = new RestTemplate();
     }
 
