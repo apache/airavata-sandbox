@@ -22,11 +22,7 @@ package org.apache.airavata.k8s.gfac.service;
 import org.apache.airavata.k8s.api.resources.process.ProcessResource;
 import org.apache.airavata.k8s.api.resources.task.TaskDagResource;
 import org.apache.airavata.k8s.api.resources.task.TaskResource;
-import org.apache.airavata.k8s.api.resources.task.TaskStatusResource;
 import org.apache.airavata.k8s.gfac.core.HelixWorkflowManager;
-import org.apache.airavata.k8s.gfac.core.ProcessLifeCycleManager;
-import org.apache.airavata.k8s.gfac.messaging.KafkaSender;
-import org.apache.airavata.k8s.task.api.TaskContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -47,8 +43,6 @@ import java.util.concurrent.Executors;
 public class WorkerService {
 
     private final RestTemplate restTemplate;
-    private final KafkaSender kafkaSender;
-    private Map<Long, ProcessLifeCycleManager> processLifecycleStore = new HashMap<>();
     ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     @Value("${api.server.url}")
@@ -63,9 +57,8 @@ public class WorkerService {
     @Value("${instance.name}")
     private String instanceName;
 
-    public WorkerService(RestTemplate restTemplate, KafkaSender kafkaSender) {
+    public WorkerService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.kafkaSender = kafkaSender;
     }
 
     public void launchProcess(long processId) {
@@ -93,7 +86,7 @@ public class WorkerService {
         //processLifecycleStore.put(processId, manager);
 
         final HelixWorkflowManager helixWorkflowManager = new HelixWorkflowManager(processId, taskResources, edgeMap,
-                kafkaSender, restTemplate, apiServerUrl,
+                restTemplate, apiServerUrl,
                 zkConnectionString, helixClusterName, instanceName);
 
         executorService.execute(new Runnable() {
@@ -102,10 +95,5 @@ public class WorkerService {
                 helixWorkflowManager.launchWorkflow();
             }
         });
-    }
-
-    public void onTaskStateEvent(TaskContext taskContext) {
-        Optional.ofNullable(processLifecycleStore.get(taskContext.getProcessId()))
-                .ifPresent(manager -> manager.onTaskStateChanged(taskContext));
     }
 }

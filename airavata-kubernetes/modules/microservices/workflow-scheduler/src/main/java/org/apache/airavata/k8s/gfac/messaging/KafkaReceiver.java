@@ -20,7 +20,6 @@
 package org.apache.airavata.k8s.gfac.messaging;
 
 import org.apache.airavata.k8s.gfac.service.WorkerService;
-import org.apache.airavata.k8s.task.api.TaskContext;
 import org.springframework.kafka.annotation.KafkaListener;
 
 import javax.annotation.Resource;
