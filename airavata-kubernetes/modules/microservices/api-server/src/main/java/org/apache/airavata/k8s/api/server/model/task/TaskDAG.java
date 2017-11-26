@@ -1,7 +1,5 @@
 package org.apache.airavata.k8s.api.server.model.task;
 
-import com.sun.javafx.tk.Toolkit;
-
 import javax.persistence.*;
 
 /**
