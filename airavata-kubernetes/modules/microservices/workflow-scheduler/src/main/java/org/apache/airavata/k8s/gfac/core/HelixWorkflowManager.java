@@ -2,13 +2,11 @@ package org.apache.airavata.k8s.gfac.core;
 
 import org.apache.airavata.k8s.api.resources.process.ProcessStatusResource;
 import org.apache.airavata.k8s.api.resources.task.TaskResource;
-import org.apache.airavata.k8s.gfac.messaging.KafkaSender;
 import org.apache.helix.HelixManagerFactory;
 import org.apache.helix.InstanceType;
 import org.apache.helix.task.*;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.zookeeper.Op;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -32,8 +30,6 @@ public class HelixWorkflowManager {
     // out port id, next task id
     private Map<Long, Long> edgeMap;
 
-    private KafkaSender kafkaSender;
-
     // Todo abstract out these parameters to reusable class
     private final RestTemplate restTemplate;
     private String apiServerUrl;
@@ -43,13 +39,11 @@ public class HelixWorkflowManager {
     private String instanceName;
 
     public HelixWorkflowManager(long processId, List<TaskResource> tasks, Map<Long, Long> edgeMap,
-                                KafkaSender kafkaSender,
                                 RestTemplate restTemplate, String apiServerUrl, String zkConnectionString,
                                 String helixClusterName, String instanceName) {
         this.processId = processId;
         this.tasks = tasks;
         this.edgeMap = edgeMap;
-        this.kafkaSender = kafkaSender;
         this.restTemplate = restTemplate;
         this.apiServerUrl = apiServerUrl;
         this.zkConnectionString = zkConnectionString;
