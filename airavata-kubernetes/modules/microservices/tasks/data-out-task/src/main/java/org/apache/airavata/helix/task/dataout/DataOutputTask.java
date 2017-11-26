@@ -1,4 +1,4 @@
-package org.apache.airavata.helix.task.datain.dataout;
+package org.apache.airavata.helix.task.dataout;
 
 import org.apache.airavata.helix.api.AbstractTask;
 import org.apache.airavata.k8s.api.resources.compute.ComputeResource;

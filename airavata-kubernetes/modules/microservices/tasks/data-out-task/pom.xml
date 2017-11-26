@@ -29,7 +29,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.apache.airavata.helix.task.command.Participant</mainClass>
+                            <mainClass>org.apache.airavata.helix.task.dataout.Participant</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
