@@ -31,6 +31,7 @@ node {
     env.BUILDIMG_DATA_OUT_TASK=data_out_task_imageName
 
     stage "Build"
+        sh "/opt/maven/bin/mvn -N -f airavata-kubernetes clean install"
         sh "/opt/maven/bin/mvn -f airavata-kubernetes/modules/api-resource/ clean install"
         sh "/opt/maven/bin/mvn -f airavata-kubernetes/modules/compute-resource-api/ clean install"
         sh "/opt/maven/bin/mvn -f airavata-kubernetes/modules/helix-task-api/ clean install"
