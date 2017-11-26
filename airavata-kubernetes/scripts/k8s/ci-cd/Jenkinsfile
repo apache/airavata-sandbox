@@ -67,13 +67,13 @@ node {
         sh "sed 's#dimuthuupe/task-scheduler:v1.0#'$BUILDIMG_TASK_SCHEDULER'#' airavata-kubernetes/scripts/k8s/task-scheduler/task-scheduler-dep.yml | kubectl apply -f -"
         sh "kubectl rollout status deployment/task-scheduler"
 
-        sh "sed 's#dimuthuupe/command-task:v1.0#'$BUILDIMG_COMMAND_TASK'#' airavata-kubernetes/scripts/k8s/command-task/command-task-dep.yml | kubectl apply -f -"
+        sh "sed 's#dimuthuupe/command-task:v1.0#'$BUILDIMG_COMMAND_TASK'#' airavata-kubernetes/scripts/k8s/tasks/command-task/command-task-dep.yml | kubectl apply -f -"
         sh "kubectl rollout status deployment/command-task"
 
-        sh "sed 's#dimuthuupe/data-in-task:v1.0#'$BUILDIMG_DATA_IN_TASK'#' airavata-kubernetes/scripts/k8s/data-in-task/data-in-task-dep.yml | kubectl apply -f -"
+        sh "sed 's#dimuthuupe/data-in-task:v1.0#'$BUILDIMG_DATA_IN_TASK'#' airavata-kubernetes/scripts/k8s/tasks/data-in-task/data-in-task-dep.yml | kubectl apply -f -"
         sh "kubectl rollout status deployment/data-in-task"
 
-        sh "sed 's#dimuthuupe/data-out-task:v1.0#'$BUILDIMG_DATA_OUT_TASK'#' airavata-kubernetes/scripts/k8s/data-out-task/data-out-task-dep.yml | kubectl apply -f -"
+        sh "sed 's#dimuthuupe/data-out-task:v1.0#'$BUILDIMG_DATA_OUT_TASK'#' airavata-kubernetes/scripts/k8s/tasks/data-out-task/data-out-task-dep.yml | kubectl apply -f -"
         sh "kubectl rollout status deployment/data-out-task"
 
 }
