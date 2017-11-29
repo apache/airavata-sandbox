@@ -1,6 +1,7 @@
 package org.apache.airavata.allocation.manager.notification.receiver;
 
 import org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails;
+import org.apache.airavata.allocation.manager.notification.models.NotificationInformation;
 import org.apache.airavata.allocation.manager.notification.sender.MailNotification;
 import org.apache.thrift.transport.TServerSocket;
 import com.rabbitmq.client.*;
@@ -33,8 +34,10 @@ public class NotificationReceiver {
 				public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,
 						byte[] body) throws IOException {
 					String requestID = new String(body, "UTF-8");
-					(new MailNotification()).sendMail(requestID, (new NotificationDetails()).getRequestDetails(requestID)[0],
-							(new NotificationDetails()).getRequestDetails(requestID)[1]);
+
+					NotificationInformation information = (new NotificationDetails()).getRequestDetails(requestID);
+					(new MailNotification()).sendMail(requestID, information.getStatus(), information.getSenderList());
+
 				}
 			};
 			channel.basicConsume("notify", true, consumer);
