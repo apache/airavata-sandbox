@@ -21,7 +21,7 @@ public class NotificationDetails {
 				senderList.add(obj.getAllocationRequestAdminEmail());
 				
 			result.setStatus(status);
-			
+
 		} catch (TException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

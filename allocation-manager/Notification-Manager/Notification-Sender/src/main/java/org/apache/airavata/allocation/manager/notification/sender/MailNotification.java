@@ -10,6 +10,7 @@ import org.apache.commons.mail.SimpleEmail;
 
 public class MailNotification {
 
+
 	public void sendMail(String requestId, String status, List<String> senderList) {
 
 		EmailNotificationMessage message = new EmailNotificationMessage();
@@ -36,10 +37,11 @@ public class MailNotification {
 			email.setFrom(username);
 			email.setSubject(subject);
 			email.setMsg(body);
+
 			for(String s : senderList) {
 				email.addTo(s);
 			}
-			
+
 			email.send();
 		} catch (EmailException e) {
 			// TODO Auto-generated catch block

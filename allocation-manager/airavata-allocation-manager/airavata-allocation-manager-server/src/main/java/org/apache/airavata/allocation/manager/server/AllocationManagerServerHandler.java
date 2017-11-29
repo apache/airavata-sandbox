@@ -56,6 +56,7 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
 	public String getAllocationRequestAdminEmail() throws org.apache.thrift.TException{	
 		try{
             return (new UserDetailRepository()).getAdminDetails().getEmail();
+
         }catch (Throwable ex) {
             throw new Exception("Could not get project status");
         }

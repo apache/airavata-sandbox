@@ -34,8 +34,8 @@ public class NotificationReceiver {
 				public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,
 						byte[] body) throws IOException {
 					String requestID = new String(body, "UTF-8");
-					NotificationInformation information = (new NotificationDetails()).getRequestDetails(requestID);
 
+					NotificationInformation information = (new NotificationDetails()).getRequestDetails(requestID);
 					(new MailNotification()).sendMail(requestID, information.getStatus(), information.getSenderList());
 
 				}
