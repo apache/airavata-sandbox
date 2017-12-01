@@ -23,13 +23,18 @@ class DetailView(generic.DetailView):
 
 class RequestCreate(CreateView):
     model = Request
-    fields = ['request_title', 'request_status', 'cpu_hours_requested', 'cpu_hours_allocated']
+    fields = ['request_title', 'request_status', 'request_description', 'allocation_type',
+              'applications_to_be_used', 'disk_usage_range_per_job', 'document', 'field_of_science',
+              'keywords', 'max_memory_per_cpu', 'num_cpus_per_job', 'request_reviewed_and_funded_by',
+              'request_date', 'service_units', 'specific_resource_selection', 'typical_su_per_job']
 
 
 class RequestUpdate(UpdateView):
     model = Request
-    fields = ['request_title', 'request_status', 'cpu_hours_requested', 'cpu_hours_allocated']
-
+    fields = ['request_title', 'request_status', 'request_description', 'allocation_type',
+              'applications_to_be_used', 'disk_usage_range_per_job', 'document', 'field_of_science',
+              'keywords', 'max_memory_per_cpu', 'num_cpus_per_job', 'request_reviewed_and_funded_by',
+              'request_date', 'service_units', 'specific_resource_selection', 'typical_su_per_job']
 
 class RequestDelete(DeleteView):
     model = Request
