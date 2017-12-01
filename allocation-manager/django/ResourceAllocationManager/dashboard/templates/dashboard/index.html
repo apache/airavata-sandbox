@@ -1,0 +1,25 @@
+{% extends 'dashboard/base.html' %}
+{% block title %} Allcation Manager - Home{% endblock %}
+{% block body %}
+    {% if all_requests %}
+        <h3>Here are all my requests</h3>
+    <!-- Details-->
+    <ul>
+        {% for request in all_requests %}
+         <li>
+             <a href="{% url 'dashboard:detail' request.id %}">{{ request.request_title }}</a>
+             <!-- Delete -->
+            <form action="{% url 'dashboard:request-delete' request.id %}" method="post" style="display: inline">
+                {% csrf_token %}
+                <input type="hidden" name="request_id" value="{{ request.id }}">
+                <button type="submit" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+            </form>
+         </li>
+        {% endfor %}
+    </ul>
+    {%  else %}
+        <h3>You don't have any requests</h3>
+    {% endif %}
+{%  endblock %}
