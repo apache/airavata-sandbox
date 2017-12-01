@@ -47,6 +47,12 @@
 			<version>0.10.0</version>
 			<type>pom</type>
 		</dependency>
+	 <dependency>
+	  <groupId>org.apache.airavata</groupId>
+	  <artifactId>airavata-commons</artifactId>
+	  <version>0.17-SNAPSHOT</version>
+	  <type>jar</type>
+	 </dependency>
 	</dependencies>
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>

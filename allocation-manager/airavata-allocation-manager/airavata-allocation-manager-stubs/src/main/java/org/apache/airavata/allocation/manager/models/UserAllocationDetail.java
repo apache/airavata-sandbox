@@ -68,6 +68,7 @@ public class UserAllocationDetail implements org.apache.thrift.TBase<UserAllocat
   public java.lang.String typeOfAllocation; // optional
   public long typicalSuPerJob; // optional
 
+
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     ID((short)1, "id"),
