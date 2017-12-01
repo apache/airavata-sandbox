@@ -6,7 +6,7 @@
  * regarding copyright ownership.  The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
+ * with the License. You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,9 +20,7 @@
 package org.apache.airavata.allocation.manager.server;
 
 import org.apache.airavata.common.exception.ApplicationSettingsException;
-import org.apache.airavata.allocation.manager.db.entities.*;
 import org.apache.airavata.allocation.manager.db.repositories.*;
-import org.apache.airavata.allocation.manager.db.utils.DBConstants;
 import org.apache.airavata.allocation.manager.db.utils.JPAUtils;
 import org.apache.airavata.allocation.manager.models.*;
 import org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService;
@@ -30,10 +28,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.*;
 
 public class AllocationManagerServerHandler implements AllocationRegistryService.Iface {
     
@@ -52,9 +46,9 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
         try{
             if((new UserAllocationDetailPKRepository()).isExists(reqDetails.id.projectId))  
             throw new TException("There exist project with the id");
-            (new UserAllocationDetailRepository()).create(reqDetails);
+            UserAllocationDetail create = (new UserAllocationDetailRepository()).create(reqDetails);
             return reqDetails.id.projectId;
-        }catch (Throwable ex) {
+        }catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }
@@ -67,7 +61,7 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             UserAllocationDetailPK alloc = new UserAllocationDetailPK();
             alloc.setProjectId(projectId);
             return ((new UserAllocationDetailRepository()).isExists(alloc.projectId));
-        }catch (Throwable ex) {
+        }catch (Exception ex) {
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }
     }
@@ -80,7 +74,7 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             alloc.setProjectId(projectId);
             (new UserAllocationDetailPKRepository()).delete(alloc.projectId);
             return true;
-        }catch (Throwable ex) {
+        }catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }
@@ -93,7 +87,35 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             UserAllocationDetailPK alloc = new UserAllocationDetailPK();
             alloc.setProjectId(projectId);
             return (new UserAllocationDetailRepository()).get(alloc.projectId);
-        }catch (Throwable ex) {
+        }catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+        }
+    }
+
+    @Override
+    public boolean updateAllocationRequest(UserAllocationDetail reqDetails) throws TException {
+         try{
+            UserAllocationDetail userAlloc = new UserAllocationDetail();
+            
+            //Update UserAllocationDetail field.
+            userAlloc.id.setProjectId(reqDetails.id.projectId);
+            userAlloc.setApplicationsToBeUsed(reqDetails.applicationsToBeUsed);
+            userAlloc.setDiskUsageRangePerJob(reqDetails.diskUsageRangePerJob);           
+            userAlloc.setDocuments(reqDetails.documents);
+            userAlloc.setFieldOfScience(reqDetails.fieldOfScience);
+            userAlloc.setKeywords(reqDetails.keywords);
+            userAlloc.setMaxMemoryPerCpu(reqDetails.maxMemoryPerCpu);
+            userAlloc.setNumberOfCpuPerJob(reqDetails.numberOfCpuPerJob);
+            userAlloc.setProjectDescription(reqDetails.projectDescription);
+            userAlloc.setServiceUnits(reqDetails.serviceUnits);
+            userAlloc.setSpecificResourceSelection(reqDetails.specificResourceSelection);
+            userAlloc.setTypeOfAllocation(reqDetails.typeOfAllocation);
+            userAlloc.setTypicalSuPerJob(reqDetails.typicalSuPerJob);
+
+            (new UserAllocationDetailRepository()).update(userAlloc);
+            return true;
+        }catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }

@@ -53,6 +53,12 @@
 	  <version>0.17-SNAPSHOT</version>
 	  <type>jar</type>
 	 </dependency>
+	 <dependency>
+	  <groupId>org.apache.airavata</groupId>
+	  <artifactId>airavata-messaging-core</artifactId>
+	  <version>0.17-SNAPSHOT</version>
+	  <type>jar</type>
+	 </dependency>
 	</dependencies>
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
