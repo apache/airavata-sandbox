@@ -41,6 +41,10 @@
         <module>modules/microservices/tasks/command-task</module>
         <module>modules/microservices/tasks/data-in-task</module>
         <module>modules/microservices/tasks/data-out-task</module>
+        <module>modules/agents/agent-core</module>
+        <module>modules/agents/thrift-agent</module>
+        <module>modules/microservices/tasks/async-command-task</module>
+        <module>modules/microservices/async-event-listener</module>
     </modules>
 
     <dependencyManagement>

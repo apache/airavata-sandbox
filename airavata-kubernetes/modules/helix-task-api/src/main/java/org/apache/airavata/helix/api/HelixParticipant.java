@@ -38,12 +38,13 @@ public abstract class HelixParticipant implements Runnable {
     private String taskTypeName;
     private String apiServerUrl;
     private RestTemplate restTemplate;
+    private PropertyResolver propertyResolver;
 
     public HelixParticipant(String propertyFile) throws IOException {
 
         logger.debug("Initializing Participant Node");
 
-        PropertyResolver propertyResolver = new PropertyResolver();
+        this.propertyResolver = new PropertyResolver();
         propertyResolver.loadInputStream(this.getClass().getClassLoader().getResourceAsStream(propertyFile));
 
         this.zkAddress = propertyResolver.get("zookeeper.connection.url");
@@ -136,5 +137,9 @@ public abstract class HelixParticipant implements Runnable {
             logger.info("Participant: " + participantName + ", has disconnected from cluster: " + clusterName);
             zkHelixManager.disconnect();
         }
+    }
+
+    public PropertyResolver getPropertyResolver() {
+        return propertyResolver;
     }
 }

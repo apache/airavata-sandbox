@@ -60,6 +60,9 @@ public class ProcessModel {
     @OneToMany(mappedBy = "parentProcess", cascade = CascadeType.ALL)
     private List<TaskModel> tasks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "processModel", cascade = CascadeType.ALL)
+    private List<ProcessBootstrapData> processBootstrapData = new ArrayList<>();
+
     private String taskDag;
 
     @OneToMany
@@ -174,6 +177,15 @@ public class ProcessModel {
 
     public ProcessModel setWorkflow(Workflow workflow) {
         this.workflow = workflow;
+        return this;
+    }
+
+    public List<ProcessBootstrapData> getProcessBootstrapData() {
+        return processBootstrapData;
+    }
+
+    public ProcessModel setProcessBootstrapData(List<ProcessBootstrapData> processBootstrapData) {
+        this.processBootstrapData = processBootstrapData;
         return this;
     }
 

@@ -29,7 +29,7 @@ public class Participant extends HelixParticipant {
         TaskFactory dataInTask = new TaskFactory() {
             @Override
             public Task createNewTask(TaskCallbackContext context) {
-                return new DataOutputTask(context);
+                return new DataOutputTask(context, getPropertyResolver());
             }
         };
 

@@ -1,6 +1,7 @@
 package org.apache.airavata.helix.task.command;
 
 import org.apache.airavata.helix.api.AbstractTask;
+import org.apache.airavata.helix.api.PropertyResolver;
 import org.apache.airavata.k8s.api.resources.compute.ComputeResource;
 import org.apache.airavata.k8s.api.resources.task.TaskStatusResource;
 import org.apache.airavata.k8s.api.resources.task.type.TaskInputTypeResource;
@@ -29,8 +30,8 @@ public class CommandTask extends AbstractTask {
     private String computeResourceId;
     private ComputeResource computeResource;
 
-    public CommandTask(TaskCallbackContext callbackContext) {
-        super(callbackContext);
+    public CommandTask(TaskCallbackContext callbackContext, PropertyResolver propertyResolver) {
+        super(callbackContext, propertyResolver);
     }
 
     @Override

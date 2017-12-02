@@ -41,6 +41,7 @@ public class ProcessResource {
     private List<ProcessStatusResource> processStatuses = new ArrayList<>();
     private List<TaskResource> tasks = new ArrayList<>();
     private List<Long> processErrorIds = new ArrayList<>();
+    private List<ProcessBootstrapDataResource> processBootstrapData = new ArrayList<>();
     private String taskDag;
     private String experimentDataDir;
     private String processType;
@@ -150,6 +151,15 @@ public class ProcessResource {
 
     public ProcessResource setWorkflowId(long workflowId) {
         this.workflowId = workflowId;
+        return this;
+    }
+
+    public List<ProcessBootstrapDataResource> getProcessBootstrapData() {
+        return processBootstrapData;
+    }
+
+    public ProcessResource setProcessBootstrapData(List<ProcessBootstrapDataResource> processBootstrapData) {
+        this.processBootstrapData = processBootstrapData;
         return this;
     }
 }
