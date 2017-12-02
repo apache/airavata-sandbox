@@ -13,8 +13,13 @@
 <ul>
 <li><a href="#Fn_AllocationRegistryService_createAllocationRequest">createAllocationRequest</a></li>
 <li><a href="#Fn_AllocationRegistryService_deleteAllocationRequest">deleteAllocationRequest</a></li>
+<li><a href="#Fn_AllocationRegistryService_getAllocationManagerAdminEmail">getAllocationManagerAdminEmail</a></li>
 <li><a href="#Fn_AllocationRegistryService_getAllocationRequest">getAllocationRequest</a></li>
+<li><a href="#Fn_AllocationRegistryService_getAllocationRequestStatus">getAllocationRequestStatus</a></li>
+<li><a href="#Fn_AllocationRegistryService_getAllocationRequestUserEmail">getAllocationRequestUserEmail</a></li>
+<li><a href="#Fn_AllocationRegistryService_getAllocationRequestUserName">getAllocationRequestUserName</a></li>
 <li><a href="#Fn_AllocationRegistryService_isAllocationRequestExists">isAllocationRequestExists</a></li>
+<li><a href="#Fn_AllocationRegistryService_updateAllocationRequest">updateAllocationRequest</a></li>
 </ul>
 </td>
 <td></td>
@@ -34,4 +39,19 @@
 <br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequest">Function: AllocationRegistryService.getAllocationRequest</h4>
 <pre><code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> getAllocationRequest(<code>string</code> projectId)
 </pre><p>API method to get an allocation Request</p>
+<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_updateAllocationRequest">Function: AllocationRegistryService.updateAllocationRequest</h4>
+<pre><code>bool</code> updateAllocationRequest(<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> allocDetail)
+</pre><p>API method to update an allocation Request</p>
+<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequestStatus">Function: AllocationRegistryService.getAllocationRequestStatus</h4>
+<pre><code>string</code> getAllocationRequestStatus(<code>string</code> projectId)
+</pre><p>API method to get an allocation Request status</p>
+<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequestUserEmail">Function: AllocationRegistryService.getAllocationRequestUserEmail</h4>
+<pre><code>string</code> getAllocationRequestUserEmail(<code>string</code> userName)
+</pre><p>API method to get an allocation Request PI email</p>
+<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationManagerAdminEmail">Function: AllocationRegistryService.getAllocationManagerAdminEmail</h4>
+<pre><code>string</code> getAllocationManagerAdminEmail(<code>string</code> userType)
+</pre><p>API method to get an allocation Request Admin email</p>
+<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequestUserName">Function: AllocationRegistryService.getAllocationRequestUserName</h4>
+<pre><code>string</code> getAllocationRequestUserName(<code>string</code> projectId)
+</pre><p>API method to get an allocation Request PI</p>
 <br/></div></div></body></html>
