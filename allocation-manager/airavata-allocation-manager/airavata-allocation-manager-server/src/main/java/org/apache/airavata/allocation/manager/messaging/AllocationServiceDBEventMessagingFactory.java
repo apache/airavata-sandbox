@@ -60,7 +60,7 @@ public class AllocationServiceDBEventMessagingFactory {
             synchronized (AllocationServiceDBEventMessagingFactory.class){
                 if(null == allocationServiceDBEventSubscriber){
                     log.info("Creating DB Event publisher.....");
-                    allocationServiceDBEventSubscriber = MessagingFactory.getDBEventSubscriber(new AllocationServiceDBEventHandler(), DBEventService.ALLOCATION.toString());
+                    allocationServiceDBEventSubscriber = MessagingFactory.getDBEventSubscriber(new AllocationServiceDBEventHandler(), "allocation");
                     log.info("DB Event publisher created");
                 }
             }
@@ -78,9 +78,9 @@ public class AllocationServiceDBEventMessagingFactory {
 
         for(String publisher : publishers){
 
-            log.info("Sending service discovery message. Publisher : " + publisher + ", Subscriber : " + DBEventService.ALLOCATION.toString());
+            log.info("Sending service discovery message. Publisher : " + publisher + ", Subscriber : " + "allocation");
 
-            DBEventSubscriber dbEventSubscriber = new DBEventSubscriber(DBEventService.ALLOCATION.toString());
+            DBEventSubscriber dbEventSubscriber = new DBEventSubscriber("allocation");
             DBEventMessageContext dbEventMessageContext = new DBEventMessageContext();
             dbEventMessageContext.setSubscriber(dbEventSubscriber);
 

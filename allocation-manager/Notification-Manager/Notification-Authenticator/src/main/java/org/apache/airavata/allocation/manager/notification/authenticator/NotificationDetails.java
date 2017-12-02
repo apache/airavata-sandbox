@@ -11,18 +11,19 @@ public class NotificationDetails {
 
 	public NotificationInformation getRequestDetails(String projectID) {
 		NotificationInformation result = new NotificationInformation() ;
-		AllocationManagerServerHandler obj  = new AllocationManagerServerHandler();
+		
 		 try {
+                     AllocationManagerServerHandler obj  = new AllocationManagerServerHandler();
 			 String status =  obj.getAllocationRequestStatus(projectID);
 			 
 			 List<String>senderList = new ArrayList<String>() ;
 				
 				senderList.add(obj.getAllocationRequestUserName(projectID));
-				senderList.add(obj.getAllocationRequestAdminEmail());
+				senderList.add(obj.getAllocationManagerAdminEmail("ADMIN"));
 				
 			result.setStatus(status);
 
-		} catch (TException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
