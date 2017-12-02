@@ -1,7 +1,7 @@
 package org.apache.airavata.allocation.manager.notification.sender;
 
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
@@ -10,7 +10,8 @@ import org.apache.commons.mail.SimpleEmail;
 
 public class MailNotification {
 
-	public void sendMail(String requestId, String status, ArrayList<String> senderList) {
+
+	public void sendMail(String requestId, String status, List<String> senderList) {
 
 		EmailNotificationMessage message = new EmailNotificationMessage();
 		EmailNotificationConfiguration emailConfiguration = new EmailNotificationConfiguration();
@@ -25,7 +26,7 @@ public class MailNotification {
 
 	}
 	
-	public void mail(String username, String password, String subject, String body, ArrayList<String> senderList) {
+	public void mail(String username, String password, String subject, String body, List<String> senderList) {
 		Email email = new SimpleEmail();
 		email.setHostName("smtp.googlemail.com");
 		email.setSmtpPort(465);
@@ -36,9 +37,11 @@ public class MailNotification {
 			email.setFrom(username);
 			email.setSubject(subject);
 			email.setMsg(body);
+
 			for(String s : senderList) {
 				email.addTo(s);
 			}
+
 			email.send();
 		} catch (EmailException e) {
 			// TODO Auto-generated catch block

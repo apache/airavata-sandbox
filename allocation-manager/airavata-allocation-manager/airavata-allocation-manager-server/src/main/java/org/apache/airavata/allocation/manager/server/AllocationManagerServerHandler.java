@@ -120,4 +120,46 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }
     }
+    
+    @Override
+    public String getAllocationRequestStatus(String projectId) throws org.apache.thrift.TException{ 
+        try{
+            return (new RequestStatusRepository()).get(projectId).status;
+        }catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+        }
+    }
+
+    @Override
+    public String getAllocationRequestUserEmail(String projectId) throws TException {    
+        try{
+            String userName = getAllocationRequestUserName(projectId);
+            return (new UserDetailRepository()).get(userName).email;
+        }catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+        }
+    }
+     
+    @Override
+    public String getAllocationRequestUserName(String projectId) throws org.apache.thrift.TException{   
+        try{
+            return (new UserAllocationDetailPKRepository()).get(projectId).username;
+        }catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+        }
+    }
+    
+    @Override
+    public String getAllocationManagerAdminEmail(String userType) throws TException {
+      try{
+            return (new UserDetailRepository()).getAdminDetails().getEmail();
+
+        }catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+        }    
+    }
 }
