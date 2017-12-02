@@ -23,8 +23,13 @@ service AllocationRegistryService{
      <p>API method to get an allocation Request</p>
     */
     allocation_manager_models.UserAllocationDetail getAllocationRequest(1: required string projectId)
+    
+    /**
+     <p>API method to update an allocation Request</p>
+    */
+    bool updateAllocationRequest(1: required allocation_manager_models.UserAllocationDetail allocDetail)
 
-/**
+   /**
     <p>API method to get an allocation Request status</p>
     */
     string getAllocationRequestStatus(1: required string projectId)
@@ -43,5 +48,4 @@ service AllocationRegistryService{
     <p>API method to get an allocation Request PI</p>
     */
     string getAllocationRequestUserName(1: required string projectId)
-
 }
