@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Class level comments please
@@ -40,7 +41,12 @@ public class WorkflowController {
     }
 
     @GetMapping(path = "{id}/launch", produces = MediaType.APPLICATION_JSON_VALUE)
-    public long launchExperiment(@PathVariable("id") long id) {
-        return this.workflowService.launchWorkflow(id);
+    public long launchWorkflow(@PathVariable("id") long id) {
+        return this.workflowService.launchWorkflow(id, null);
+    }
+
+    @PostMapping(path = "{id}/launch", produces = MediaType.APPLICATION_JSON_VALUE)
+    public long launchWorkflow(@PathVariable("id") long id, @RequestBody Map<String, String> boostrapData) {
+        return this.workflowService.launchWorkflow(id, boostrapData);
     }
 }

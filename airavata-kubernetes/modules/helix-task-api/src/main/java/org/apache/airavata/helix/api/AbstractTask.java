@@ -29,9 +29,9 @@ public abstract class AbstractTask extends UserContentStore implements Task {
     public static final String PROCESS_ID = "process_id";
 
     //Configurable values
-    private String apiServerUrl = "localhost:8080";
-    private String kafkaBootstrapUrl = "localhost:9092";
-    private String eventTopic = "airavata-task-event";
+    private String apiServerUrl;
+    private String kafkaBootstrapUrl;
+    private String eventTopic;
 
     private TaskCallbackContext callbackContext;
     private RestTemplate restTemplate;
@@ -39,11 +39,19 @@ public abstract class AbstractTask extends UserContentStore implements Task {
     private long processId;
     private long taskId;
 
-    public AbstractTask(TaskCallbackContext callbackContext) {
+    private PropertyResolver propertyResolver;
+
+    public AbstractTask(TaskCallbackContext callbackContext, PropertyResolver propertyResolver) {
         this.callbackContext = callbackContext;
         this.taskId = Long.parseLong(this.callbackContext.getTaskConfig().getConfigMap().get(TASK_ID));
         this.processId = Long.parseLong(this.callbackContext.getTaskConfig().getConfigMap().get(PROCESS_ID));
         this.restTemplate = new RestTemplate();
+        this.propertyResolver = propertyResolver;
+
+        this.apiServerUrl = getPropertyResolver().get("api.server.url");
+        this.kafkaBootstrapUrl = getPropertyResolver().get("kafka.bootstrap.url");
+        this.eventTopic = getPropertyResolver().get("event.topic");
+
         initializeKafkaEventProducer();
         init();
     }
@@ -134,5 +142,13 @@ public abstract class AbstractTask extends UserContentStore implements Task {
 
     public long getTaskId() {
         return taskId;
+    }
+
+    public Producer<String, String> getEventProducer() {
+        return eventProducer;
+    }
+
+    public PropertyResolver getPropertyResolver() {
+        return propertyResolver;
     }
 }

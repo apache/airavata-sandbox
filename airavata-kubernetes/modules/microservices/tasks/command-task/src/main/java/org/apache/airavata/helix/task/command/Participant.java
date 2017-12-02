@@ -30,7 +30,7 @@ public class Participant extends HelixParticipant {
         TaskFactory commandTaskFac = new TaskFactory() {
             @Override
             public Task createNewTask(TaskCallbackContext context) {
-                return new CommandTask(context);
+                return new CommandTask(context, getPropertyResolver());
             }
         };
 

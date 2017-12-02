@@ -20,6 +20,7 @@
 package org.apache.airavata.k8s.api.server.service.util;
 
 import org.apache.airavata.k8s.api.resources.experiment.ExperimentStatusResource;
+import org.apache.airavata.k8s.api.resources.process.ProcessBootstrapDataResource;
 import org.apache.airavata.k8s.api.resources.process.ProcessStatusResource;
 import org.apache.airavata.k8s.api.resources.task.*;
 import org.apache.airavata.k8s.api.resources.task.type.TaskInputTypeResource;
@@ -35,6 +36,7 @@ import org.apache.airavata.k8s.api.server.model.experiment.Experiment;
 import org.apache.airavata.k8s.api.server.model.experiment.ExperimentInputData;
 import org.apache.airavata.k8s.api.server.model.experiment.ExperimentOutputData;
 import org.apache.airavata.k8s.api.server.model.experiment.ExperimentStatus;
+import org.apache.airavata.k8s.api.server.model.process.ProcessBootstrapData;
 import org.apache.airavata.k8s.api.server.model.process.ProcessModel;
 import org.apache.airavata.k8s.api.server.model.process.ProcessStatus;
 import org.apache.airavata.k8s.api.server.model.task.*;
@@ -325,7 +327,22 @@ public class ToResourceUtil {
                     .ifPresent(tasks -> tasks.forEach(task -> processResource.getTasks().add(toResource(task).get())));
             Optional.ofNullable(processModel.getProcessErrors())
                     .ifPresent(errs -> errs.forEach(err -> processResource.getProcessErrorIds().add(err.getId())));
+            Optional.ofNullable(processModel.getProcessBootstrapData())
+                    .ifPresent(datas -> datas.forEach(data -> processResource.getProcessBootstrapData().add(toResource(data).get())));
+
             return Optional.of(processResource);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public static Optional<ProcessBootstrapDataResource> toResource(ProcessBootstrapData bootstrapData) {
+        if (bootstrapData != null) {
+            ProcessBootstrapDataResource resource = new ProcessBootstrapDataResource();
+            resource.setId(bootstrapData.getId());
+            resource.setKey(bootstrapData.getKey());
+            resource.setValue(bootstrapData.getValue());
+            return Optional.of(resource);
         } else {
             return Optional.empty();
         }

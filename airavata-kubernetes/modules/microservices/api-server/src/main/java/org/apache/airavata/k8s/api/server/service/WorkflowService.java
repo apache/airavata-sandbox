@@ -1,5 +1,6 @@
 package org.apache.airavata.k8s.api.server.service;
 
+import org.apache.airavata.k8s.api.resources.process.ProcessBootstrapDataResource;
 import org.apache.airavata.k8s.api.resources.process.ProcessResource;
 import org.apache.airavata.k8s.api.resources.workflow.WorkflowResource;
 import org.apache.airavata.k8s.api.server.ServerRuntimeException;
@@ -18,10 +19,7 @@ import org.apache.airavata.k8s.api.server.service.util.ToResourceUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * TODO: Class level comments please
@@ -70,15 +68,22 @@ public class WorkflowService {
         return saved.getId();
     }
 
-    public long launchWorkflow(long id) {
+    public long launchWorkflow(long id, Map<String, String> boostrapData) {
         Workflow workflow = this.workflowRepository.findById(id)
                 .orElseThrow(() -> new ServerRuntimeException("Workflow with id " + id + "can not be found"));
 
+        List<ProcessBootstrapDataResource> bootstrapDataResources = new ArrayList<>();
+
+        if (boostrapData != null) {
+            boostrapData.forEach((key, value) ->
+                    bootstrapDataResources.add(new ProcessBootstrapDataResource().setKey(key).setValue(value)));
+        }
 
         long processId = processService.create(new ProcessResource()
                 .setName("Workflow Process : " + workflow.getName() + "-" + UUID.randomUUID().toString())
                 .setCreationTime(System.currentTimeMillis())
                 .setProcessType("WORKFLOW")
+                .setProcessBootstrapData(bootstrapDataResources)
                 .setWorkflowId(id));
 
         try {

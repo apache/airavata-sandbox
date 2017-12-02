@@ -1,6 +1,7 @@
 package org.apache.airavata.helix.task.datain;
 
 import org.apache.airavata.helix.api.AbstractTask;
+import org.apache.airavata.helix.api.PropertyResolver;
 import org.apache.airavata.k8s.api.resources.compute.ComputeResource;
 import org.apache.airavata.k8s.api.resources.task.TaskStatusResource;
 import org.apache.airavata.k8s.api.resources.task.type.TaskInputTypeResource;
@@ -30,8 +31,8 @@ public class DataInputTask extends AbstractTask {
     private String computeResourceId;
     private ComputeResource computeResource;
 
-    public DataInputTask(TaskCallbackContext callbackContext) {
-        super(callbackContext);
+    public DataInputTask(TaskCallbackContext callbackContext, PropertyResolver propertyResolver) {
+        super(callbackContext, propertyResolver);
     }
 
     @Override

@@ -85,7 +85,8 @@ public class WorkerService {
 
         //processLifecycleStore.put(processId, manager);
 
-        final HelixWorkflowManager helixWorkflowManager = new HelixWorkflowManager(processId, taskResources, edgeMap,
+        final HelixWorkflowManager helixWorkflowManager = new HelixWorkflowManager(processId, taskResources,
+                processResource.getProcessBootstrapData(), edgeMap,
                 restTemplate, apiServerUrl,
                 zkConnectionString, helixClusterName, instanceName);
 

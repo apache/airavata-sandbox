@@ -30,7 +30,7 @@ public class Participant extends HelixParticipant {
         TaskFactory dataInTask = new TaskFactory() {
             @Override
             public Task createNewTask(TaskCallbackContext context) {
-                return new DataInputTask(context);
+                return new DataInputTask(context, getPropertyResolver());
             }
         };
 
