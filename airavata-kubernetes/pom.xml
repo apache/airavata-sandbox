@@ -45,6 +45,7 @@
         <module>modules/agents/thrift-agent</module>
         <module>modules/microservices/tasks/async-command-task</module>
         <module>modules/microservices/async-event-listener</module>
+        <module>modules/microservices/tasks/async-command-monitor</module>
     </modules>
 
     <dependencyManagement>

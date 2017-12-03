@@ -24,9 +24,9 @@ public class StatusPublisher {
         this.initializeKafkaEventProducer();
     }
 
-    public void publishStatus(long callbackWorkflowId, String status, String message) {
+    public void publishStatus(long callbackWorkflowId, AsyncCommandStatus status, String message) {
         this.eventProducer.send(new ProducerRecord<String, String>(
-                this.topicName, String.join(",", callbackWorkflowId + "", status, message)));
+                this.topicName, String.join(",", callbackWorkflowId + "", status.name(), message)));
     }
 
     public void initializeKafkaEventProducer() {

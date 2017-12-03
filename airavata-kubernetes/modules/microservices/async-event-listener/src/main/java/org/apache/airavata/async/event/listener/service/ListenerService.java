@@ -30,6 +30,6 @@ public class ListenerService {
         Map<String, String> boostrapData = new HashMap<>();
         boostrapData.put("event", event);
         boostrapData.put("message", message);
-        this.restTemplate.postForObject(apiServerUrl + "/workflow/" + workflowId + "/launch", boostrapData, Long.class);
+        this.restTemplate.postForObject("http://" + apiServerUrl + "/workflow/" + workflowId + "/launch", boostrapData, Long.class);
     }
 }

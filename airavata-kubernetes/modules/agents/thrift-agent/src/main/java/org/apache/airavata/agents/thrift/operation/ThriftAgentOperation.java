@@ -22,22 +22,23 @@ public class ThriftAgentOperation extends AsyncOperation {
 
     public ThriftAgentOperation(ComputeResource computeResource) {
         super(computeResource);
-
-        try {
-            TTransport transport = new TSocket(computeResource.getHost(), 9090);
-            transport.open();
-            TProtocol protocol = new TBinaryProtocol(transport);
-            this.client = new OperationService.Client(protocol);
-
-        } catch (TTransportException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public void executeCommandAsync(String command, long callbackWorkflowId) {
         try {
-            client.executeCommand(command, callbackWorkflowId);
+            System.out.println("Submitting command");
+            try {
+                TTransport transport = new TSocket(getComputeResource().getHost(), 9090);
+                transport.open();
+                TProtocol protocol = new TBinaryProtocol(transport);
+                this.client = new OperationService.Client(protocol);
+                client.executeCommand(command, callbackWorkflowId);
+                System.out.println("Finished submitting");
+                transport.close();
+            } catch (TTransportException e) {
+                e.printStackTrace();
+            }
         } catch (TException e) {
             e.printStackTrace();
         }

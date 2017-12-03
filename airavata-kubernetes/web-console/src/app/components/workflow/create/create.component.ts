@@ -376,8 +376,6 @@ export class WorkflowCreateComponent implements AfterViewInit {
         model.beginUpdate();
 
         try {
-          v1 = graph.insertVertex(parent, null, prototype.cloneNode(true), x, y, 80, 60);
-          v1.setConnectable(false);
 
           let inputs = [];
           let inputKeys = [];
@@ -394,6 +392,9 @@ export class WorkflowCreateComponent implements AfterViewInit {
               outputKeys.push(attr.nodeName);
             }
           }
+
+          v1 = graph.insertVertex(parent, null, prototype.cloneNode(true), x, y, 80, outputs.length*20 + 20);
+          v1.setConnectable(false);
 
           let inputDivision = 1 / (inputs.length + 1);
           let outputDivision = 1 / (outputs.length + 1);
