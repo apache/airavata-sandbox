@@ -56,6 +56,7 @@ public class AsyncCommandTask extends AbstractTask {
             AsyncOperation operation = (AsyncOperation) Class.forName("org.apache.airavata.agents.thrift.operation.ThriftAgentOperation")
                     .getConstructor(ComputeResource.class).newInstance(this.computeResource);
             operation.executeCommandAsync(this.command, this.callBackWorkflowId);
+            publishTaskStatus(TaskStatusResource.State.COMPLETED, "Task completed");
             return new TaskResult(TaskResult.Status.COMPLETED, "Task completed");
         } catch (InstantiationException | IllegalAccessException |
                 InvocationTargetException | ClassNotFoundException | NoSuchMethodException | ClassCastException e) {
