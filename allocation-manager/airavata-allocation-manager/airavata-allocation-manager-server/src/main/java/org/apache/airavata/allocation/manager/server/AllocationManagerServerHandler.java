@@ -20,6 +20,7 @@
 package org.apache.airavata.allocation.manager.server;
 
 import org.apache.airavata.common.exception.ApplicationSettingsException;
+import org.apache.airavata.allocation.manager.client.NotificationManager;
 import org.apache.airavata.allocation.manager.db.repositories.*;
 import org.apache.airavata.allocation.manager.db.utils.JPAUtils;
 import org.apache.airavata.allocation.manager.models.*;
@@ -161,5 +162,23 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }    
     }
+
+
+	@Override
+	public void updateAllocationRequestStatus(String projectId, String status) throws TException {
+		// TODO Auto-generated method stub
+		
+		RequestStatusRepository request = new RequestStatusRepository();
+		try {
+			
+			request.get(projectId).setStatus(status);
+			 //once status updated notify user
+			(new NotificationManager()).notificationSender(projectId);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+		}
+		
+	}
 
 }
