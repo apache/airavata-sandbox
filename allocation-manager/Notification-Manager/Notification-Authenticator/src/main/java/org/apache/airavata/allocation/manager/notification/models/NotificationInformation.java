@@ -1,11 +1,12 @@
 package org.apache.airavata.allocation.manager.notification.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationInformation {
 
 	private String status;
-	List<String> SenderList;
+	List<String> SenderList = new ArrayList<String>();
 	public String getStatus() {
 		return status;
 	}
