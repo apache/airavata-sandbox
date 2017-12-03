@@ -10,6 +10,8 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NotificationReceiver {
 	public static void StartsimpleServer() {
@@ -26,15 +28,15 @@ public class NotificationReceiver {
 
 			channel.queueDeclare("notify", false, false, false, null);
 			// Comfort logging
-			System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-			System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+			System.out.println("Waiting for notification");
+		
 
 			Consumer consumer = new DefaultConsumer(channel) {
 				@Override
 				public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,
 						byte[] body) throws IOException {
 					String requestID = new String(body, "UTF-8");
-
+					
 					NotificationInformation information = (new NotificationDetails()).getRequestDetails(requestID);
 					(new MailNotification()).sendMail(requestID, information.getStatus(), information.getSenderList());
 

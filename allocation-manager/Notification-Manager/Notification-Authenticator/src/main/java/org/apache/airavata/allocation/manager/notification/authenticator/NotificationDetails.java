@@ -13,15 +13,16 @@ public class NotificationDetails {
 		NotificationInformation result = new NotificationInformation() ;
 		
 		 try {
-                     AllocationManagerServerHandler obj  = new AllocationManagerServerHandler();
+			 AllocationManagerServerHandler obj  = new AllocationManagerServerHandler();
 			 String status =  obj.getAllocationRequestStatus(projectID);
 			 
-			 List<String>senderList = new ArrayList<String>() ;
-				
+			 	List<String>senderList = new ArrayList<String>() ;
+		
 				senderList.add(obj.getAllocationRequestUserName(projectID));
 				senderList.add(obj.getAllocationManagerAdminEmail("ADMIN"));
 				
 			result.setStatus(status);
+			result.setSenderList(senderList);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

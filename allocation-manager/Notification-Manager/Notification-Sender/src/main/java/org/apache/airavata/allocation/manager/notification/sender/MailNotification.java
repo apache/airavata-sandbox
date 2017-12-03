@@ -27,6 +27,7 @@ public class MailNotification {
 	}
 	
 	public void mail(String username, String password, String subject, String body, List<String> senderList) {
+		
 		Email email = new SimpleEmail();
 		email.setHostName("smtp.googlemail.com");
 		email.setSmtpPort(465);

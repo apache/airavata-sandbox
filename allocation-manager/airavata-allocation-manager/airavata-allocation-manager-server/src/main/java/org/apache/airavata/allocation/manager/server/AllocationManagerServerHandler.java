@@ -156,7 +156,6 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
     public String getAllocationManagerAdminEmail(String userType) throws TException {
       try{
             return (new UserDetailRepository()).getAdminDetails().getEmail();
-
         }catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
