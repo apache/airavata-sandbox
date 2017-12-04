@@ -1,13 +1,14 @@
-package org.apache.airavata.allocation.manager.notification.receiver;
+package org.apache.airavata.allocation.manager.client;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
-public class NotificationSender {
+public class NotificationManager {
+
 	private final static String QUEUE_NAME = "notify";
 
-	public static void main(String[] args) {
+	public void notificationSender(String projectID) {
 
 		try {
 
@@ -22,7 +23,7 @@ public class NotificationSender {
 			// Create the Queue if it does not exist
 			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 			// assuming this is the request id send
-			String project_ID = "1001";
+			String project_ID = projectID;
 
 			channel.basicPublish("", QUEUE_NAME, null, project_ID.getBytes());
 
