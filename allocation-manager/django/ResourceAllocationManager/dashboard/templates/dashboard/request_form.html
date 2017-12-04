@@ -11,16 +11,16 @@
 
                       <!-- Tabular Category of questions in the form-->
                       <ul class="nav nav-pills">
-                        <li class="active"><a data-toggle="pill" href="#category1">Category 1</a></li>
-                        <li><a data-toggle="pill" href="#category2">Category 2</a></li>
-                        <li><a data-toggle="pill" href="#category3">Category 3</a></li>
-                        <li><a data-toggle="pill" href="#category4">Category 4</a></li>
+                        <li class="active"><a data-toggle="pill" href="#category1">General Description</a></li>
+                        <li><a data-toggle="pill" href="#category2">Typical Job Description</a></li>
+                        <li><a data-toggle="pill" href="#category3">Resource Description</a></li>
+                        <li><a data-toggle="pill" href="#category4">Additional Details</a></li>
                       </ul>
 
                       <div class="tab-content">
                         <div id="category1" class="tab-pane fade in active">
-                          <h3>Category One Title</h3>
-                          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                          <h3></h3>
+{#                          <p>Please provi</p>#}
                           <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
 {#                            {% include 'dashboard/form-template.html' %}#}
@@ -53,77 +53,105 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="apps">Applications to be used</label>
                                 <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="apps" placeholder="Enter Applications">
+{#                                  <PLACEHOLDER options #}
+                                    <select class="selectpicker" data-style="btn-primary" data-live-search="true" multiple>
+                                         <optgroup label="Web">
+                                            <option>PHP</option>
+                                            <option>CSS</option>
+                                            <option>HTML</option>
+                                            <option>CSS 3</option>
+                                            <option>Bootstrap</option>
+                                            <option>JavaScript</option>
+                                        </optgroup>
+                                        <optgroup label="Programming">
+                                          <option>Java</option>
+                                          <option>C#</option>
+                                          <option>Python</option>
+                                        </optgroup>
+                                    </select>
+{#                                    <input type="text" class="form-control "placeholder="Other">#}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="keywords">Keywords</label>
+                                <div class="col-sm-10">
+                                  <input type="text" id="keywords" placeholder="Keywords">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <ul class="pager">
-                                  <li><a href="#">Next</a></li>
+                                  <li class="next"><a href="#category2">Next</a></li>
                                 </ul>
                             </div>
                           </form>
                         </div>
                         <div id="category2" class="tab-pane fade">
-                          <h3>Category Two</h3>
-                          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                          <h3></h3>
+{#                          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>#}
                           <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
 {#                            {% include 'dashboard/form-template.html' %}#}
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="disk-usage">Disk usage range per job</label>
                                 <div class="col-sm-10">
-                                  <input type="range" min="0" max="100" class="form-control" id="disk-usage" placeholder="Enter Disk Usage per Job">
+                                  <input type="range" min="0" max="100" class="slider" id="disk-usage" placeholder="Enter Disk Usage per Job">
                                 </div>
                             </div>
-                            <!-- Search for how to upload documents using bootstrap -->
-                            <div class="form-group">
-                                <label class="control-label col-sm-2" for="documents">Upload</label>
-                                <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="documents" placeholder="Upload Relevant Documents">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-2" for="science-field">Field of Science</label>
-                                <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="science-field" placeholder="Enter Field of Science">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-2" for="keywords">Keywords</label>
-                                <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="keywords" placeholder="Enter Keywords">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <ul class="pager">
-                                  <li><a href="#">Previous</a></li>
-                                  <li><a href="#">Next</a></li>
-                                </ul>
-                            </div>
-                          </form>
-                        </div>
-                        <div id="category3" class="tab-pane fade">
-                          <h3>Category Three</h3>
-                          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-                          <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-{#                            {% include 'dashboard/form-template.html' %}#}
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="memory-cpu">Max Memory per CPU</label>
                                 <div class="col-sm-10">
-                                  <input type="number" class="form-control" id="memory-cpu" placeholder="Enter Max Memory per CPU">
+                                  <input type="number" min="0" class="form-control" id="memory-cpu" placeholder="Enter Max Memory per CPU">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-sm-2" for="cpu-per-job">Number of CPUs per job</label>
                                 <div class="col-sm-10">
-                                  <input type="number" class="form-control" id="cpu-per-job" placeholder="Enter Number of CPUs per job">
+                                  <input type="number" min="0" class="form-control" id="cpu-per-job" placeholder="Enter Number of CPUs per job">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-2" for="request-date">Request Date</label>
+                                <label class="control-label col-sm-2" for="typical-su">Typical SU per Job</label>
                                 <div class="col-sm-10">
-                                  <input type="date" class="form-control" id="request-date" placeholder="Select a Date">
+                                  <input type="number" min="0" class="form-control" id="typical-su" placeholder="Enter Typical SU per Job">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <ul class="pager">
+                                  <li class="previous"><a href="#">Previous</a></li>
+                                  <li class="next"><a href="#">Next</a></li>
+                                </ul>
+                            </div>
+                          </form>
+                        </div>
+                        <div id="category3" class="tab-pane fade">
+                          <h3></h3>
+{#                          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>#}
+                          <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+{#                            {% include 'dashboard/form-template.html' %}#}
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="allocation">Total Allocation Requested</label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control" id="allocation" placeholder="Enter Requested Allocation">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="specific-resources">Specific Resources</label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control" id="specific-resources" placeholder="Enter Specific Resources">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="apps">Resource Type</label>
+                                <div class="col-sm-10">
+{#                                  <PLACEHOLDER options #}
+                                    <select class="selectpicker" data-style="btn-primary" data-live-search="true">
+                                      <option>On-Demand</option>
+                                      <option>Large Memory</option>
+                                      <option>GPUs</option>
+                                     </select>
+{#                                    <input type="text" class="form-control "placeholder="Other">#}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -135,33 +163,28 @@
                           </form>
                         </div>
                         <div id="category4" class="tab-pane fade">
-                          <h3>Category Four</h3>
-                          <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                          <h3></h3>
+{#                          <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>#}
                           <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
 {#                            {% include 'dashboard/form-template.html' %}#}
                             <div class="form-group">
-                                <label class="control-label col-sm-2" for="service-units">Service Units</label>
+                                <label class="control-label col-sm-2" for="comments">Additional Comments</label>
                                 <div class="col-sm-10">
-                                  <input type="number" class="form-control" id="service-units" placeholder="Enter Service Units">
+                                  <input type="text" class="form-control" id="comments" placeholder="Enter Additional Comments">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-2" for="resource-selection">Specific Resource Selection</label>
-                                <div class="col-sm-10">
-                                  <input type="text" class="form-control" id="resource-selection" placeholder="Specific Resource Selection">
-                                </div>
+                                 <label class="control-label col-sm-2" for="upload-file">Relevant Documents</label>
+                                 <div class="col-sm-10">
+                                    <input id="upload-file" type="file" class="file" data-preview-file-type="text">
+                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-2" for="typical-su">Typical SU per Job</label>
-                                <div class="col-sm-10">
-                                  <input type="number" class="form-control" id="typical-su" placeholder="Enter Typical SU per Job">
-                                </div>
-                            </div>
+
                             <div class="form-group">
                                 <ul class="pager">
-                                  <li><a href="#">Previous</a></li>
-                                  <li><a href="#">Next</a></li>
+                                  <li class="previous"><a href="#">Previous</a></li>
+
                                 </ul>
                             </div>
                             <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
