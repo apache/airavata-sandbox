@@ -10,11 +10,11 @@
                     <div class="panel-body">
 
                       <!-- Tabular Category of questions in the form-->
-                      <ul class="nav nav-pills">
-                        <li class="active"><a data-toggle="pill" href="#category1">General Description</a></li>
-                        <li><a data-toggle="pill" href="#category2">Typical Job Description</a></li>
-                        <li><a data-toggle="pill" href="#category3">Resource Description</a></li>
-                        <li><a data-toggle="pill" href="#category4">Additional Details</a></li>
+                      <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#category1">General Description</a></li>
+                        <li><a data-toggle="tab" href="#category2">Typical Job Description</a></li>
+                        <li><a data-toggle="tab" href="#category3">Resource Description</a></li>
+                        <li><a data-toggle="tab" href="#category4">Additional Details</a></li>
                       </ul>
 
                       <div class="tab-content">
@@ -78,11 +78,9 @@
                                   <input type="text" id="keywords" placeholder="Keywords">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <ul class="pager">
-                                  <li class="next"><a href="#category2">Next</a></li>
-                                </ul>
-                            </div>
+                            <div>
+                                <a class="btn btn-info btnNext" style="text-align:left; margin: 10% 10% 0 0">Next</a>
+                            </div>
                           </form>
                         </div>
                         <div id="category2" class="tab-pane fade">
@@ -115,11 +113,9 @@
                                   <input type="number" min="0" class="form-control" id="typical-su" placeholder="Enter Typical SU per Job">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <ul class="pager">
-                                  <li class="previous"><a href="#">Previous</a></li>
-                                  <li class="next"><a href="#">Next</a></li>
-                                </ul>
+                            <div>
+                                <a class="btn btn-info btnPrevious" style="text-align:left; margin: 10% 10% 0 0">Previous</a>
+                                <a class="btn btn-info btnNext" style="text-align:left; margin: 10% 0 0 0">Next</a>
                             </div>
                           </form>
                         </div>
@@ -154,11 +150,9 @@
 {#                                    <input type="text" class="form-control "placeholder="Other">#}
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <ul class="pager">
-                                  <li><a href="#">Previous</a></li>
-                                  <li><a href="#">Next</a></li>
-                                </ul>
+                            <div>
+                                <a class="btn btn-info btnPrevious" style="text-align:left; margin: 10% 10% 0 0">Previous</a>
+                                <a class="btn btn-info btnNext" style="text-align:left; margin: 10% 0 0 0">Next</a>
                             </div>
                           </form>
                         </div>
@@ -181,21 +175,16 @@
                                  </div>
                             </div>
 
-                            <div class="form-group">
-                                <ul class="pager">
-                                  <li class="previous"><a href="#">Previous</a></li>
-
-                                </ul>
-                            </div>
                             <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
 {#                            {% include 'dashboard/form-template.html' %}#}
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
+                                    <a class="btn btn-info btnPrevious">Previous</a>
                                     <button type="submit" class="btn btn-success">Submit</button>
                                 </div>
                             </div>
-                        </form>
+                            </form>
                           </form>
                         </div>
                       </div>
@@ -204,4 +193,17 @@
             </div>
         </div>
     </div>
+
+    <!-- Script for previous and next buttons-->
+    <script>
+        $(document).ready(function(){
+            $('.btnNext').click(function(){
+              $('.nav-tabs > .active').next('li').find('a').trigger('click');
+            });
+
+            $('.btnPrevious').click(function(){
+              $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+            });  
+        });
+    </script>
 {% endblock %}
