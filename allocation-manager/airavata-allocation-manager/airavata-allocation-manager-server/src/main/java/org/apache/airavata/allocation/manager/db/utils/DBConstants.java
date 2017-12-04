@@ -103,4 +103,12 @@ public class DBConstants {
         public static final String CREATED_TIME = "createdTime";
         public static final String UPDATED_TIME = "updatedTime";
     }
+    // Added the UserDetail table fields 
+    public static class UserDetailTable {
+        public static final String USERNAME = "username";
+        public static final String EMAIL = "email";
+        public static final String FULLNAME = "fullName";
+        public static final String PASSWORD = "password";
+        public static final String USERTYPE = "userType";
+    }
 }
