@@ -220,4 +220,19 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }
     }
+
+    @Override
+    public List<UserAllocationDetail> getAllRequestsForAdmin(String userName) throws TException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean assignReviewers(UserAllocationDetailPK projectId, String userName) throws TException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean updateRequestByReviewer(UserAllocationDetailPK projectId, UserAllocationDetail userAllocationDetail) throws TException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

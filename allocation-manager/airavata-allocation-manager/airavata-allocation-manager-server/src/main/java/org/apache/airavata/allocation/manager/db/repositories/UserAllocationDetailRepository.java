@@ -1,13 +1,11 @@
 package org.apache.airavata.allocation.manager.db.repositories;
 
 import org.apache.airavata.allocation.manager.db.entities.UserAllocationDetailEntity;
-import org.apache.airavata.allocation.manager.models.*;
+import org.apache.airavata.allocation.manager.models.UserAllocationDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UserAllocationDetailRepository 
-        //extends AbstractRepository<UserAllocationDetail, UserAllocationDetailEntity, UserAllocationDetailPK>{
-        extends AbstractRepository<UserAllocationDetail, UserAllocationDetailEntity, String> {
+public class UserAllocationDetailRepository extends AbstractRepository<UserAllocationDetail, UserAllocationDetailEntity, String> {
     private final static Logger logger = LoggerFactory.getLogger(DomainRepository.class);
 
     public UserAllocationDetailRepository(){

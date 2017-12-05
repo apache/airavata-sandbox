@@ -53,6 +53,22 @@ service AllocationRegistryService{
     <p>API method to update the status of a request</p>
     */
     void updateAllocationRequestStatus(1: required string projectId, 2: required string status)
+
+/**
+    <p>API method to get all requests for admin</p>
+    */
+    list<allocation_manager_models.UserAllocationDetail> getAllRequestsForAdmin(1: required string userName)
+
+/**
+    <p>API method to assign reviewers</p>
+    */
+    bool assignReviewers(1:required allocation_manager_models.UserAllocationDetailPK projectId , 2: required string userName)
+
+/**
+    <p>API method to update request submitted by reviewer</p>
+    */
+    bool updateRequestByReviewer(1:required allocation_manager_models.UserAllocationDetailPK projectId, 2:required allocation_manager_models.UserAllocationDetail userAllocationDetail)
+
     
     /**
         <p>API method to check if the logged in user is an Admin</p>
