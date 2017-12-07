@@ -19,6 +19,7 @@
  */
 package org.apache.airavata.allocation.manager.server;
 
+import java.util.List;
 import org.apache.airavata.common.exception.ApplicationSettingsException;
 import org.apache.airavata.allocation.manager.client.NotificationManager;
 import org.apache.airavata.allocation.manager.db.repositories.*;
@@ -98,7 +99,6 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
     public boolean updateAllocationRequest(UserAllocationDetail reqDetails) throws TException {
          try{
             UserAllocationDetail userAlloc = new UserAllocationDetail();
-            
             //Update UserAllocationDetail field.
             userAlloc.id.setProjectId(reqDetails.id.projectId);
             userAlloc.setApplicationsToBeUsed(reqDetails.applicationsToBeUsed);
@@ -163,22 +163,76 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
         }    
     }
 
+    @Override
+    public void updateAllocationRequestStatus(String projectId, String status) throws TException {
+        // TODO Auto-generated method stub
+        RequestStatusRepository request = new RequestStatusRepository();
+        try {
 
-	@Override
-	public void updateAllocationRequestStatus(String projectId, String status) throws TException {
-		// TODO Auto-generated method stub
-		
-		RequestStatusRepository request = new RequestStatusRepository();
-		try {
-			
-			request.get(projectId).setStatus(status);
-			 //once status updated notify user
-			(new NotificationManager()).notificationSender(projectId);
-		} catch (Exception ex) {
-			logger.error(ex.getMessage(), ex);
+                request.get(projectId).setStatus(status);
+                 //once status updated notify user
+                (new NotificationManager()).notificationSender(projectId);
+        } catch (Exception ex) {
+                logger.error(ex.getMessage(), ex);
+    throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+        }
+
+    }
+
+    @Override
+    public boolean isAdmin(String userName) throws AllocationManagerException, TException {
+        try{
+            UserDetail objUser = getUserDetails(userName);
+            if(objUser == null) throw new IllegalArgumentException();
+            return objUser.userType.equals("admin");
+        }catch (Exception ex) {
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
-		}
-		
-	}
+        }
+    }
 
+    @Override
+    public boolean isReviewer(String userName) throws AllocationManagerException, TException {
+        try{
+            UserDetail objUser = getUserDetails(userName);
+            if(objUser == null) throw new IllegalArgumentException();
+            return objUser.userType.equals("reviewer");
+        }catch (Exception ex) {
+            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+        }
+    }
+
+    @Override
+    public List<UserAllocationDetail> getAllRequestsForReviewers(String userName)  throws AllocationManagerException, TException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<UserAllocationDetail> getReviewsForRequest(UserAllocationDetailPK projectId) throws AllocationManagerException, TException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public UserDetail getUserDetails(String userName) throws AllocationManagerException, TException {
+        try{
+            return (new UserDetailRepository()).get(userName);
+        }catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+        }
+    }
+
+    @Override
+    public List<UserAllocationDetail> getAllRequestsForAdmin(String userName) throws TException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean assignReviewers(UserAllocationDetailPK projectId, String userName) throws TException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean updateRequestByReviewer(UserAllocationDetailPK projectId, UserAllocationDetail userAllocationDetail) throws TException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

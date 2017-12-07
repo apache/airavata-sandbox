@@ -33,3 +33,23 @@ bin/*
 
 
 /bin/
+
+*.dat
+
+*.lck
+
+*.ctrl
+
+allocation-manager/airavata-allocation-manager/airavata-allocation-manager-server/sharing_catalog/log/README_DO_NOT_TOUCH_FILES.txt
+
+allocation-manager/airavata-allocation-manager/airavata-allocation-manager-server/sharing_catalog/README_DO_NOT_TOUCH_FILES.txt
+
+allocation-manager/airavata-allocation-manager/airavata-allocation-manager-server/sharing_catalog/seg0/README_DO_NOT_TOUCH_FILES.txt
+
+allocation-manager/airavata-allocation-manager/airavata-allocation-manager-server/sharing_catalog/service.properties
+
+*.xml
+
+*.xml
+
+allocation-manager/airavata-allocation-manager/airavata-allocation-manager-server/src/main/resources/META-INF/persistence.xml
