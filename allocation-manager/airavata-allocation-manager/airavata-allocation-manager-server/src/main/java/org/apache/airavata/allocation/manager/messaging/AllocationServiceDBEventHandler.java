@@ -80,7 +80,7 @@ public class AllocationServiceDBEventHandler implements MessageHandler {
                             case READ:
                                 log.info("Updating user. User name : " + user.id.getUsername());
 
-                                allocationManagerClient.getAllocationRequest(user.id.projectId);
+                                allocationManagerClient.getAllocationRequest(user.id.projectId, user.id.getUsername());
                                 log.debug("User updated. User Id : " + user.id.getUsername());
 
                                 break;
@@ -95,7 +95,7 @@ public class AllocationServiceDBEventHandler implements MessageHandler {
                             case DELETE:
                                 log.info("Deleting user. User name : " + user.id.getUsername());
 
-                                allocationManagerClient.deleteAllocationRequest(user.id.projectId);
+                                allocationManagerClient.deleteAllocationRequest(user.id.projectId, user.id.getUsername());
                                 log.debug("User deleted. User name : " + user.id.getUsername());
 
                                 break;

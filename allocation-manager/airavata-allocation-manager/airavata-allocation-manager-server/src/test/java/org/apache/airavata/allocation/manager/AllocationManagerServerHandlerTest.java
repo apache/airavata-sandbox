@@ -70,7 +70,7 @@ public class AllocationManagerServerHandlerTest {
 
 
         Assert.assertNotNull(allocationManagerServerHandler.createAllocationRequest(userAllocationDetails));
-        Assert.assertEquals(allocationManagerServerHandler.getAllocationRequest("123"),userAllocationDetails);
+        Assert.assertEquals(allocationManagerServerHandler.getAllocationRequest("123",""),userAllocationDetails);
 
         UserAllocationDetail userAllocationDetails1 = new UserAllocationDetail();
         UserAllocationDetailPK userAllocationDetailPK1 = new UserAllocationDetailPK(); 
@@ -78,9 +78,9 @@ public class AllocationManagerServerHandlerTest {
         userAllocationDetailPK1.setUsername("harsha");
         userAllocationDetails1.setId(userAllocationDetailPK1);
 
-        Assert.assertTrue(allocationManagerServerHandler.isAllocationRequestExists(userAllocationDetailPK1.getProjectId()));
+        Assert.assertTrue(allocationManagerServerHandler.isAllocationRequestExists(userAllocationDetailPK1.getProjectId(),""));
         Assert.assertEquals(allocationManagerServerHandler.createAllocationRequest(userAllocationDetails1),"There exist project with the id");
 
-        Assert.assertTrue(allocationManagerServerHandler.deleteAllocationRequest("123"));
+        Assert.assertTrue(allocationManagerServerHandler.deleteAllocationRequest("123",""));
     }
 }
