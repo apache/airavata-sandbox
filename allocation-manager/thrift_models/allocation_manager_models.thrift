@@ -9,7 +9,10 @@ struct UserAllocationDetailPK{
 	1:optional string projectId,
 	4:optional string username
 }
-
+struct ProjectReviewerPK{
+	1:optional string projectId,
+	4:optional string reviewer
+}
 
 /**
 * <p>Required allocation request details</p>
@@ -46,7 +49,11 @@ struct UserAllocationDetail{
 13:optional string specificResourceSelection,
 14:optional string title,
 15:optional string typeOfAllocation,
-16:optional i64 typicalSuPerJob
+16:optional i64 typicalSuPerJob,
+17:optional i64 awardAllocation,
+18:optional i64 startDate,
+19:optional i64 endDate,
+20:optional string status
 }
 
 /**
@@ -58,13 +65,8 @@ struct UserAllocationDetail{
 * <li>startDate: Start date of the allocation</li>
 * <li>status: Status of the allocation request</li>
 **/
-struct RequestStatus{
-1:optional string projectId,
-2:optional i64 awardAllocation,
-3:optional i64 endDate,
-4:optional string reviewers,
-5:optional i64 startDate,
-6:optional string status
+struct ProjectReviewer{
+1:optional ProjectReviewerPK id
 }
 
 /**

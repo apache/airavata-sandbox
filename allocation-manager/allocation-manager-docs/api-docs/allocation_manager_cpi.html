@@ -38,59 +38,59 @@
 <h3 id="Svc_AllocationRegistryService">Service: AllocationRegistryService</h3>
 <div class="definition"><h4 id="Fn_AllocationRegistryService_createAllocationRequest">Function: AllocationRegistryService.createAllocationRequest</h4>
 <pre><code>string</code> createAllocationRequest(<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> allocDetail)
-</pre><p>API method to create new allocation requests</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_isAllocationRequestExists">Function: AllocationRegistryService.isAllocationRequestExists</h4>
+</pre><pre><p>API method to create new allocation requests</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_isAllocationRequestExists">Function: AllocationRegistryService.isAllocationRequestExists</h4>
 <pre><code>bool</code> isAllocationRequestExists(<code>string</code> projectId)
-</pre><p>API method to check if the allocation request exists</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_deleteAllocationRequest">Function: AllocationRegistryService.deleteAllocationRequest</h4>
+</pre><pre><p>API method to check if the allocation request exists</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_deleteAllocationRequest">Function: AllocationRegistryService.deleteAllocationRequest</h4>
 <pre><code>bool</code> deleteAllocationRequest(<code>string</code> projectId)
-</pre><p>API method to delete allocation request</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequest">Function: AllocationRegistryService.getAllocationRequest</h4>
+</pre><pre><p>API method to delete allocation request</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequest">Function: AllocationRegistryService.getAllocationRequest</h4>
 <pre><code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> getAllocationRequest(<code>string</code> projectId)
-</pre><p>API method to get an allocation Request</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_updateAllocationRequest">Function: AllocationRegistryService.updateAllocationRequest</h4>
+</pre><pre><p>API method to get an allocation Request</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_updateAllocationRequest">Function: AllocationRegistryService.updateAllocationRequest</h4>
 <pre><code>bool</code> updateAllocationRequest(<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> allocDetail)
-</pre><p>API method to update an allocation Request</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequestStatus">Function: AllocationRegistryService.getAllocationRequestStatus</h4>
+</pre><pre><p>API method to update an allocation Request</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequestStatus">Function: AllocationRegistryService.getAllocationRequestStatus</h4>
 <pre><code>string</code> getAllocationRequestStatus(<code>string</code> projectId)
-</pre><p>API method to get an allocation Request status</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequestUserEmail">Function: AllocationRegistryService.getAllocationRequestUserEmail</h4>
+</pre><pre><p>API method to get an allocation Request status</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequestUserEmail">Function: AllocationRegistryService.getAllocationRequestUserEmail</h4>
 <pre><code>string</code> getAllocationRequestUserEmail(<code>string</code> userName)
-</pre><p>API method to get an allocation Request PI email</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationManagerAdminEmail">Function: AllocationRegistryService.getAllocationManagerAdminEmail</h4>
+</pre><pre><p>API method to get an allocation Request PI email</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationManagerAdminEmail">Function: AllocationRegistryService.getAllocationManagerAdminEmail</h4>
 <pre><code>string</code> getAllocationManagerAdminEmail(<code>string</code> userType)
-</pre><p>API method to get an allocation Request Admin email</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequestUserName">Function: AllocationRegistryService.getAllocationRequestUserName</h4>
+</pre><pre><p>API method to get an allocation Request Admin email</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequestUserName">Function: AllocationRegistryService.getAllocationRequestUserName</h4>
 <pre><code>string</code> getAllocationRequestUserName(<code>string</code> projectId)
-</pre><p>API method to get an allocation Request PI</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_updateAllocationRequestStatus">Function: AllocationRegistryService.updateAllocationRequestStatus</h4>
+</pre><pre><p>API method to get an allocation Request PI</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_updateAllocationRequestStatus">Function: AllocationRegistryService.updateAllocationRequestStatus</h4>
 <pre><code>void</code> updateAllocationRequestStatus(<code>string</code> projectId,
                                    <code>string</code> status)
-</pre><p>API method to update the status of a request</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllRequestsForAdmin">Function: AllocationRegistryService.getAllRequestsForAdmin</h4>
+</pre><pre><p>API method to update the status of a request</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllRequestsForAdmin">Function: AllocationRegistryService.getAllRequestsForAdmin</h4>
 <pre><code>list&lt;<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code>&gt;</code> getAllRequestsForAdmin(<code>string</code> userName)
-</pre><p>API method to get all requests for admin</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_assignReviewers">Function: AllocationRegistryService.assignReviewers</h4>
+</pre><pre><p>API method to get all requests for admin</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_assignReviewers">Function: AllocationRegistryService.assignReviewers</h4>
 <pre><code>bool</code> assignReviewers(<code><a href="allocation_manager_models.html#Struct_UserAllocationDetailPK">allocation_manager_models.UserAllocationDetailPK</a></code> projectId,
                      <code>string</code> userName)
-</pre><p>API method to assign reviewers</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_updateRequestByReviewer">Function: AllocationRegistryService.updateRequestByReviewer</h4>
+</pre><pre><p>API method to assign reviewers</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_updateRequestByReviewer">Function: AllocationRegistryService.updateRequestByReviewer</h4>
 <pre><code>bool</code> updateRequestByReviewer(<code><a href="allocation_manager_models.html#Struct_UserAllocationDetailPK">allocation_manager_models.UserAllocationDetailPK</a></code> projectId,
                              <code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> userAllocationDetail)
-</pre><p>API method to update request submitted by reviewer</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_isAdmin">Function: AllocationRegistryService.isAdmin</h4>
+</pre><pre><p>API method to update request submitted by reviewer</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_isAdmin">Function: AllocationRegistryService.isAdmin</h4>
 <pre><code>bool</code> isAdmin(<code>string</code> userName)
-</pre><p>API method to check if the logged in user is an Admin</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_isReviewer">Function: AllocationRegistryService.isReviewer</h4>
+</pre><pre><p>API method to check if the logged in user is an Admin</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_isReviewer">Function: AllocationRegistryService.isReviewer</h4>
 <pre><code>bool</code> isReviewer(<code>string</code> userName)
-</pre><p>API method to check if the logged in user is a Reviewer</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllRequestsForReviewers">Function: AllocationRegistryService.getAllRequestsForReviewers</h4>
+</pre><pre><p>API method to check if the logged in user is a Reviewer</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllRequestsForReviewers">Function: AllocationRegistryService.getAllRequestsForReviewers</h4>
 <pre><code>list&lt;<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code>&gt;</code> getAllRequestsForReviewers(<code>string</code> userName)
-</pre><p>API method to get all requests assigned to the reviewers</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getUserDetails">Function: AllocationRegistryService.getUserDetails</h4>
+</pre><pre><p>API method to get all requests assigned to the reviewers</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getUserDetails">Function: AllocationRegistryService.getUserDetails</h4>
 <pre><code><a href="allocation_manager_models.html#Struct_UserDetail">allocation_manager_models.UserDetail</a></code> getUserDetails(<code>string</code> userName)
-</pre><p>API method to get a user details</p>
-<br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getReviewsForRequest">Function: AllocationRegistryService.getReviewsForRequest</h4>
+</pre><pre><p>API method to get a user details</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getReviewsForRequest">Function: AllocationRegistryService.getReviewsForRequest</h4>
 <pre><code>list&lt;<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code>&gt;</code> getReviewsForRequest(<code><a href="allocation_manager_models.html#Struct_UserAllocationDetailPK">allocation_manager_models.UserAllocationDetailPK</a></code> projectId)
-</pre><p>API method to get all the reviews for a request</p>
-<br/></div></div></body></html>
+</pre><pre><p>API method to get all the reviews for a request</p>
+</pre><br/></div></div></body></html>
