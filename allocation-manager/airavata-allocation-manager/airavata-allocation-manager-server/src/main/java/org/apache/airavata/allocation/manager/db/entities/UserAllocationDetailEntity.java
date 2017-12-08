@@ -4,10 +4,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigInteger;
 
-/**
- *
- * @author harsha
- */
+
 /**
  * The persistent class for the USER_ALLOCATION_DETAILS database table.
  * 
@@ -41,6 +38,9 @@ public class UserAllocationDetailEntity implements Serializable {
 	@Lob
 	@Column(name="FIELD_OF_SCIENCE")
 	private String fieldOfScience;
+
+	@Column(name="IS_PRIMARY_OWNER")
+	private byte isPrimaryOwner;
 
 	@Lob
 	@Column(name="KEYWORDS")
@@ -143,6 +143,14 @@ public class UserAllocationDetailEntity implements Serializable {
 
 	public void setFieldOfScience(String fieldOfScience) {
 		this.fieldOfScience = fieldOfScience;
+	}
+
+	public byte getIsPrimaryOwner() {
+		return this.isPrimaryOwner;
+	}
+
+	public void setIsPrimaryOwner(byte isPrimaryOwner) {
+		this.isPrimaryOwner = isPrimaryOwner;
 	}
 
 	public String getKeywords() {
