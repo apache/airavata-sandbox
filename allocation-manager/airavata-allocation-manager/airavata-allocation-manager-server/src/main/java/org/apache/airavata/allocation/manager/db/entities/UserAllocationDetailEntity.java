@@ -42,6 +42,9 @@ public class UserAllocationDetailEntity implements Serializable {
 	@Column(name="FIELD_OF_SCIENCE")
 	private String fieldOfScience;
 
+	@Column(name="IS_PRIMARY_OWNER")
+	private byte isPrimaryOwner;
+
 	@Lob
 	@Column(name="KEYWORDS")
 	private String keywords;
@@ -143,6 +146,14 @@ public class UserAllocationDetailEntity implements Serializable {
 
 	public void setFieldOfScience(String fieldOfScience) {
 		this.fieldOfScience = fieldOfScience;
+	}
+
+	public byte getIsPrimaryOwner() {
+		return this.isPrimaryOwner;
+	}
+
+	public void setIsPrimaryOwner(byte isPrimaryOwner) {
+		this.isPrimaryOwner = isPrimaryOwner;
 	}
 
 	public String getKeywords() {

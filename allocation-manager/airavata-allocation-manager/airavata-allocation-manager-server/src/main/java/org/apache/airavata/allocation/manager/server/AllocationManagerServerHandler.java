@@ -19,9 +19,13 @@
  */
 package org.apache.airavata.allocation.manager.server;
 
+import static java.lang.System.in;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.airavata.common.exception.ApplicationSettingsException;
 import org.apache.airavata.allocation.manager.client.NotificationManager;
+import org.apache.airavata.allocation.manager.db.entities.ProjectReviewerEntityPK;
+import org.apache.airavata.allocation.manager.db.entities.UserAllocationDetailEntityPK;
 import org.apache.airavata.allocation.manager.db.repositories.*;
 import org.apache.airavata.allocation.manager.db.utils.JPAUtils;
 import org.apache.airavata.allocation.manager.models.*;
@@ -46,7 +50,11 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
     @Override
     public String createAllocationRequest(UserAllocationDetail reqDetails) throws AllocationManagerException, TException {
         try{
-            if((new UserAllocationDetailPKRepository()).isExists(reqDetails.id.projectId))  
+            UserAllocationDetailEntityPK objAllocationDetailEntityPK = new UserAllocationDetailEntityPK();
+            objAllocationDetailEntityPK.setProjectId(reqDetails.id.projectId);
+            objAllocationDetailEntityPK.setUsername(reqDetails.id.username);
+            
+            if((new UserAllocationDetailRepository()).isExists(objAllocationDetailEntityPK))  
             throw new TException("There exist project with the id");
             UserAllocationDetail create = (new UserAllocationDetailRepository()).create(reqDetails);
             return reqDetails.id.projectId;
@@ -58,11 +66,13 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
 
     //Implementing isAllocationRequestExists method to check if the allocation request exists
     @Override
-    public boolean isAllocationRequestExists(String projectId) throws AllocationManagerException, TException {
+    public boolean isAllocationRequestExists(String projectId, String userName) throws AllocationManagerException, TException {
         try{
-            UserAllocationDetailPK alloc = new UserAllocationDetailPK();
-            alloc.setProjectId(projectId);
-            return ((new UserAllocationDetailRepository()).isExists(alloc.projectId));
+            UserAllocationDetailEntityPK objAllocationDetailEntityPK = new UserAllocationDetailEntityPK();
+            objAllocationDetailEntityPK.setProjectId(projectId);
+            objAllocationDetailEntityPK.setUsername(userName);
+            
+            return ((new UserAllocationDetailRepository()).isExists(objAllocationDetailEntityPK));
         }catch (Exception ex) {
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }
@@ -70,11 +80,13 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
 
     //Implementing deleteAllocationRequest method to delete an allocation request
     @Override
-    public boolean deleteAllocationRequest(String projectId) throws AllocationManagerException, TException {
+    public boolean deleteAllocationRequest(String projectId, String userName) throws AllocationManagerException, TException {
         try{
-            UserAllocationDetailPK alloc = new UserAllocationDetailPK();
-            alloc.setProjectId(projectId);
-            (new UserAllocationDetailPKRepository()).delete(alloc.projectId);
+            UserAllocationDetailEntityPK objAllocationDetailEntityPK = new UserAllocationDetailEntityPK();
+            objAllocationDetailEntityPK.setProjectId(projectId);
+            objAllocationDetailEntityPK.setUsername(userName);
+            
+            (new UserAllocationDetailRepository()).delete(objAllocationDetailEntityPK);
             return true;
         }catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
@@ -84,11 +96,13 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
 
     //Implementing getAllocationRequest method to get an allocation request
     @Override
-    public UserAllocationDetail getAllocationRequest(String projectId) throws AllocationManagerException, TException {
+    public UserAllocationDetail getAllocationRequest(String projectId, String userName) throws AllocationManagerException, TException {
         try{
-            UserAllocationDetailPK alloc = new UserAllocationDetailPK();
-            alloc.setProjectId(projectId);
-            return (new UserAllocationDetailRepository()).get(alloc.projectId);
+            UserAllocationDetailEntityPK objAllocationDetailEntityPK = new UserAllocationDetailEntityPK();
+            objAllocationDetailEntityPK.setProjectId(projectId);
+            objAllocationDetailEntityPK.setUsername(userName);
+            
+            return (new UserAllocationDetailRepository().get(objAllocationDetailEntityPK));
         }catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
@@ -123,9 +137,12 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
     }
     
     @Override
-    public String getAllocationRequestStatus(String projectId) throws org.apache.thrift.TException{ 
-        try{
-            return (new RequestStatusRepository()).get(projectId).status;
+    public String getAllocationRequestStatus(String projectId, String userName) throws org.apache.thrift.TException{ 
+       try{
+            UserAllocationDetailEntityPK objAllocDetails = new UserAllocationDetailEntityPK();
+            objAllocDetails.setProjectId(projectId);
+            objAllocDetails.setUsername(userName);
+            return (new UserAllocationDetailRepository()).get(objAllocDetails).status;
         }catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
@@ -166,12 +183,15 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
     @Override
     public void updateAllocationRequestStatus(String projectId, String status) throws TException {
         // TODO Auto-generated method stub
-        RequestStatusRepository request = new RequestStatusRepository();
+        UserAllocationDetailRepository userAllocationDetail = new UserAllocationDetailRepository();
         try {
-
-                request.get(projectId).setStatus(status);
-                 //once status updated notify user
-                (new NotificationManager()).notificationSender(projectId);
+            UserAllocationDetailEntityPK userAllocationDetailPK  = new UserAllocationDetailEntityPK();
+            userAllocationDetailPK.setProjectId(projectId);
+            userAllocationDetailPK.setUsername(new UserAllocationDetailRepository().getPrimaryOwner(projectId));
+            userAllocationDetail.get(userAllocationDetailPK).setStatus(status);
+            
+            //once status updated notify user
+            (new NotificationManager()).notificationSender(projectId);
         } catch (Exception ex) {
                 logger.error(ex.getMessage(), ex);
     throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
@@ -203,7 +223,22 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
 
     @Override
     public List<UserAllocationDetail> getAllRequestsForReviewers(String userName)  throws AllocationManagerException, TException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<UserAllocationDetail> userAllocationDetailList = new ArrayList<UserAllocationDetail>(); 
+        try{
+            if(!isReviewer(userName)){
+                throw new AllocationManagerException().setMessage("Invalid reviewer id!");
+            }
+            List<ProjectReviewer> projReviewerList = (new ProjectReviewerRepository()).getProjectForReviewer(userName);
+            for(ProjectReviewer objProj : projReviewerList){
+                UserAllocationDetailEntityPK userAllocationDetailPK  = new UserAllocationDetailEntityPK();
+                userAllocationDetailPK.setProjectId(objProj.id.getProjectId());
+                userAllocationDetailPK.setUsername(new UserAllocationDetailRepository().getPrimaryOwner(objProj.id.getProjectId()));
+                userAllocationDetailList.add(new UserAllocationDetailRepository().get(userAllocationDetailPK));
+            }
+        }catch (Exception ex) {
+            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+        }
+        return userAllocationDetailList;
     }
 
     @Override

@@ -40,19 +40,23 @@
 <pre><code>string</code> createAllocationRequest(<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> allocDetail)
 </pre><pre><p>API method to create new allocation requests</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_isAllocationRequestExists">Function: AllocationRegistryService.isAllocationRequestExists</h4>
-<pre><code>bool</code> isAllocationRequestExists(<code>string</code> projectId)
+<pre><code>bool</code> isAllocationRequestExists(<code>string</code> projectId,
+                               <code>string</code> userName)
 </pre><pre><p>API method to check if the allocation request exists</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_deleteAllocationRequest">Function: AllocationRegistryService.deleteAllocationRequest</h4>
-<pre><code>bool</code> deleteAllocationRequest(<code>string</code> projectId)
+<pre><code>bool</code> deleteAllocationRequest(<code>string</code> projectId,
+                             <code>string</code> userName)
 </pre><pre><p>API method to delete allocation request</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequest">Function: AllocationRegistryService.getAllocationRequest</h4>
-<pre><code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> getAllocationRequest(<code>string</code> projectId)
+<pre><code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> getAllocationRequest(<code>string</code> projectId,
+                                                                    <code>string</code> userName)
 </pre><pre><p>API method to get an allocation Request</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_updateAllocationRequest">Function: AllocationRegistryService.updateAllocationRequest</h4>
 <pre><code>bool</code> updateAllocationRequest(<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> allocDetail)
 </pre><pre><p>API method to update an allocation Request</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequestStatus">Function: AllocationRegistryService.getAllocationRequestStatus</h4>
-<pre><code>string</code> getAllocationRequestStatus(<code>string</code> projectId)
+<pre><code>string</code> getAllocationRequestStatus(<code>string</code> projectId,
+                                  <code>string</code> userName)
 </pre><pre><p>API method to get an allocation Request status</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequestUserEmail">Function: AllocationRegistryService.getAllocationRequestUserEmail</h4>
 <pre><code>string</code> getAllocationRequestUserEmail(<code>string</code> userName)

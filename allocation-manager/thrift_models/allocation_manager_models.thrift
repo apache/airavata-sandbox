@@ -53,7 +53,8 @@ struct UserAllocationDetail{
 17:optional i64 awardAllocation,
 18:optional i64 startDate,
 19:optional i64 endDate,
-20:optional string status
+20:optional string status,
+21:optional bool isPrimaryOwner
 }
 
 /**
