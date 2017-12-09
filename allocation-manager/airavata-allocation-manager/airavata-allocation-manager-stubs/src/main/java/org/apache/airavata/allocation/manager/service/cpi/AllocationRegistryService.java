@@ -98,17 +98,18 @@ public class AllocationRegistryService {
      * <p>API method to assign reviewers</p>
      * 
      * @param projectId
-     * @param userName
+     * @param reviewerId
+     * @param adminId
      */
-    public boolean assignReviewers(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, java.lang.String userName) throws org.apache.thrift.TException;
+    public boolean assignReviewers(java.lang.String projectId, java.lang.String reviewerId, java.lang.String adminId) throws org.apache.thrift.TException;
 
     /**
      * <p>API method to update request submitted by reviewer</p>
      * 
-     * @param projectId
+     * @param reviewerId
      * @param userAllocationDetail
      */
-    public boolean updateRequestByReviewer(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail) throws org.apache.thrift.TException;
+    public boolean updateRequestByReviewer(java.lang.String reviewerId, org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail) throws org.apache.thrift.TException;
 
     /**
      * <p>API method to check if the logged in user is an Admin</p>
@@ -143,7 +144,19 @@ public class AllocationRegistryService {
      * 
      * @param projectId
      */
-    public java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail> getReviewsForRequest(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId) throws org.apache.thrift.TException;
+    public java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail> getAllReviewsForARequest(java.lang.String projectId) throws org.apache.thrift.TException;
+
+    /**
+     * <p>API method to get all reviewers</p>
+     */
+    public java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> getAllReviewers() throws org.apache.thrift.TException;
+
+    /**
+     * <p>API method to get all unassigned reviewers for a request</p>
+     * 
+     * @param projectId
+     */
+    public java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> getAllUnassignedReviewersForRequest(java.lang.String projectId) throws org.apache.thrift.TException;
 
   }
 
@@ -171,9 +184,9 @@ public class AllocationRegistryService {
 
     public void getAllRequestsForAdmin(java.lang.String userName, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> resultHandler) throws org.apache.thrift.TException;
 
-    public void assignReviewers(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, java.lang.String userName, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
+    public void assignReviewers(java.lang.String projectId, java.lang.String reviewerId, java.lang.String adminId, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
 
-    public void updateRequestByReviewer(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
+    public void updateRequestByReviewer(java.lang.String reviewerId, org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
 
     public void isAdmin(java.lang.String userName, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException;
 
@@ -183,7 +196,11 @@ public class AllocationRegistryService {
 
     public void getUserDetails(java.lang.String userName, org.apache.thrift.async.AsyncMethodCallback<org.apache.airavata.allocation.manager.models.UserDetail> resultHandler) throws org.apache.thrift.TException;
 
-    public void getReviewsForRequest(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> resultHandler) throws org.apache.thrift.TException;
+    public void getAllReviewsForARequest(java.lang.String projectId, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> resultHandler) throws org.apache.thrift.TException;
+
+    public void getAllReviewers(org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> resultHandler) throws org.apache.thrift.TException;
+
+    public void getAllUnassignedReviewersForRequest(java.lang.String projectId, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -462,17 +479,18 @@ public class AllocationRegistryService {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getAllRequestsForAdmin failed: unknown result");
     }
 
-    public boolean assignReviewers(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, java.lang.String userName) throws org.apache.thrift.TException
+    public boolean assignReviewers(java.lang.String projectId, java.lang.String reviewerId, java.lang.String adminId) throws org.apache.thrift.TException
     {
-      send_assignReviewers(projectId, userName);
+      send_assignReviewers(projectId, reviewerId, adminId);
       return recv_assignReviewers();
     }
 
-    public void send_assignReviewers(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, java.lang.String userName) throws org.apache.thrift.TException
+    public void send_assignReviewers(java.lang.String projectId, java.lang.String reviewerId, java.lang.String adminId) throws org.apache.thrift.TException
     {
       assignReviewers_args args = new assignReviewers_args();
       args.setProjectId(projectId);
-      args.setUserName(userName);
+      args.setReviewerId(reviewerId);
+      args.setAdminId(adminId);
       sendBase("assignReviewers", args);
     }
 
@@ -486,16 +504,16 @@ public class AllocationRegistryService {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "assignReviewers failed: unknown result");
     }
 
-    public boolean updateRequestByReviewer(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail) throws org.apache.thrift.TException
+    public boolean updateRequestByReviewer(java.lang.String reviewerId, org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail) throws org.apache.thrift.TException
     {
-      send_updateRequestByReviewer(projectId, userAllocationDetail);
+      send_updateRequestByReviewer(reviewerId, userAllocationDetail);
       return recv_updateRequestByReviewer();
     }
 
-    public void send_updateRequestByReviewer(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail) throws org.apache.thrift.TException
+    public void send_updateRequestByReviewer(java.lang.String reviewerId, org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail) throws org.apache.thrift.TException
     {
       updateRequestByReviewer_args args = new updateRequestByReviewer_args();
-      args.setProjectId(projectId);
+      args.setReviewerId(reviewerId);
       args.setUserAllocationDetail(userAllocationDetail);
       sendBase("updateRequestByReviewer", args);
     }
@@ -602,27 +620,72 @@ public class AllocationRegistryService {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getUserDetails failed: unknown result");
     }
 
-    public java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail> getReviewsForRequest(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId) throws org.apache.thrift.TException
+    public java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail> getAllReviewsForARequest(java.lang.String projectId) throws org.apache.thrift.TException
     {
-      send_getReviewsForRequest(projectId);
-      return recv_getReviewsForRequest();
+      send_getAllReviewsForARequest(projectId);
+      return recv_getAllReviewsForARequest();
     }
 
-    public void send_getReviewsForRequest(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId) throws org.apache.thrift.TException
+    public void send_getAllReviewsForARequest(java.lang.String projectId) throws org.apache.thrift.TException
     {
-      getReviewsForRequest_args args = new getReviewsForRequest_args();
+      getAllReviewsForARequest_args args = new getAllReviewsForARequest_args();
       args.setProjectId(projectId);
-      sendBase("getReviewsForRequest", args);
+      sendBase("getAllReviewsForARequest", args);
     }
 
-    public java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail> recv_getReviewsForRequest() throws org.apache.thrift.TException
+    public java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail> recv_getAllReviewsForARequest() throws org.apache.thrift.TException
     {
-      getReviewsForRequest_result result = new getReviewsForRequest_result();
-      receiveBase(result, "getReviewsForRequest");
+      getAllReviewsForARequest_result result = new getAllReviewsForARequest_result();
+      receiveBase(result, "getAllReviewsForARequest");
       if (result.isSetSuccess()) {
         return result.success;
       }
-      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getReviewsForRequest failed: unknown result");
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getAllReviewsForARequest failed: unknown result");
+    }
+
+    public java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> getAllReviewers() throws org.apache.thrift.TException
+    {
+      send_getAllReviewers();
+      return recv_getAllReviewers();
+    }
+
+    public void send_getAllReviewers() throws org.apache.thrift.TException
+    {
+      getAllReviewers_args args = new getAllReviewers_args();
+      sendBase("getAllReviewers", args);
+    }
+
+    public java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> recv_getAllReviewers() throws org.apache.thrift.TException
+    {
+      getAllReviewers_result result = new getAllReviewers_result();
+      receiveBase(result, "getAllReviewers");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getAllReviewers failed: unknown result");
+    }
+
+    public java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> getAllUnassignedReviewersForRequest(java.lang.String projectId) throws org.apache.thrift.TException
+    {
+      send_getAllUnassignedReviewersForRequest(projectId);
+      return recv_getAllUnassignedReviewersForRequest();
+    }
+
+    public void send_getAllUnassignedReviewersForRequest(java.lang.String projectId) throws org.apache.thrift.TException
+    {
+      getAllUnassignedReviewersForRequest_args args = new getAllUnassignedReviewersForRequest_args();
+      args.setProjectId(projectId);
+      sendBase("getAllUnassignedReviewersForRequest", args);
+    }
+
+    public java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> recv_getAllUnassignedReviewersForRequest() throws org.apache.thrift.TException
+    {
+      getAllUnassignedReviewersForRequest_result result = new getAllUnassignedReviewersForRequest_result();
+      receiveBase(result, "getAllUnassignedReviewersForRequest");
+      if (result.isSetSuccess()) {
+        return result.success;
+      }
+      throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "getAllUnassignedReviewersForRequest failed: unknown result");
     }
 
   }
@@ -1010,27 +1073,30 @@ public class AllocationRegistryService {
       }
     }
 
-    public void assignReviewers(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, java.lang.String userName, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
+    public void assignReviewers(java.lang.String projectId, java.lang.String reviewerId, java.lang.String adminId, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      assignReviewers_call method_call = new assignReviewers_call(projectId, userName, resultHandler, this, ___protocolFactory, ___transport);
+      assignReviewers_call method_call = new assignReviewers_call(projectId, reviewerId, adminId, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class assignReviewers_call extends org.apache.thrift.async.TAsyncMethodCall<java.lang.Boolean> {
-      private org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId;
-      private java.lang.String userName;
-      public assignReviewers_call(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, java.lang.String userName, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      private java.lang.String projectId;
+      private java.lang.String reviewerId;
+      private java.lang.String adminId;
+      public assignReviewers_call(java.lang.String projectId, java.lang.String reviewerId, java.lang.String adminId, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.projectId = projectId;
-        this.userName = userName;
+        this.reviewerId = reviewerId;
+        this.adminId = adminId;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("assignReviewers", org.apache.thrift.protocol.TMessageType.CALL, 0));
         assignReviewers_args args = new assignReviewers_args();
         args.setProjectId(projectId);
-        args.setUserName(userName);
+        args.setReviewerId(reviewerId);
+        args.setAdminId(adminId);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -1045,26 +1111,26 @@ public class AllocationRegistryService {
       }
     }
 
-    public void updateRequestByReviewer(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
+    public void updateRequestByReviewer(java.lang.String reviewerId, org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      updateRequestByReviewer_call method_call = new updateRequestByReviewer_call(projectId, userAllocationDetail, resultHandler, this, ___protocolFactory, ___transport);
+      updateRequestByReviewer_call method_call = new updateRequestByReviewer_call(reviewerId, userAllocationDetail, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class updateRequestByReviewer_call extends org.apache.thrift.async.TAsyncMethodCall<java.lang.Boolean> {
-      private org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId;
+      private java.lang.String reviewerId;
       private org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail;
-      public updateRequestByReviewer_call(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public updateRequestByReviewer_call(java.lang.String reviewerId, org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
-        this.projectId = projectId;
+        this.reviewerId = reviewerId;
         this.userAllocationDetail = userAllocationDetail;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("updateRequestByReviewer", org.apache.thrift.protocol.TMessageType.CALL, 0));
         updateRequestByReviewer_args args = new updateRequestByReviewer_args();
-        args.setProjectId(projectId);
+        args.setReviewerId(reviewerId);
         args.setUserAllocationDetail(userAllocationDetail);
         args.write(prot);
         prot.writeMessageEnd();
@@ -1208,23 +1274,23 @@ public class AllocationRegistryService {
       }
     }
 
-    public void getReviewsForRequest(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> resultHandler) throws org.apache.thrift.TException {
+    public void getAllReviewsForARequest(java.lang.String projectId, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      getReviewsForRequest_call method_call = new getReviewsForRequest_call(projectId, resultHandler, this, ___protocolFactory, ___transport);
+      getAllReviewsForARequest_call method_call = new getAllReviewsForARequest_call(projectId, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
-    public static class getReviewsForRequest_call extends org.apache.thrift.async.TAsyncMethodCall<java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> {
-      private org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId;
-      public getReviewsForRequest_call(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+    public static class getAllReviewsForARequest_call extends org.apache.thrift.async.TAsyncMethodCall<java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> {
+      private java.lang.String projectId;
+      public getAllReviewsForARequest_call(java.lang.String projectId, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.projectId = projectId;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getReviewsForRequest", org.apache.thrift.protocol.TMessageType.CALL, 0));
-        getReviewsForRequest_args args = new getReviewsForRequest_args();
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getAllReviewsForARequest", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        getAllReviewsForARequest_args args = new getAllReviewsForARequest_args();
         args.setProjectId(projectId);
         args.write(prot);
         prot.writeMessageEnd();
@@ -1236,7 +1302,68 @@ public class AllocationRegistryService {
         }
         org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
         org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
-        return (new Client(prot)).recv_getReviewsForRequest();
+        return (new Client(prot)).recv_getAllReviewsForARequest();
+      }
+    }
+
+    public void getAllReviewers(org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      getAllReviewers_call method_call = new getAllReviewers_call(resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class getAllReviewers_call extends org.apache.thrift.async.TAsyncMethodCall<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> {
+      public getAllReviewers_call(org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getAllReviewers", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        getAllReviewers_args args = new getAllReviewers_args();
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new java.lang.IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_getAllReviewers();
+      }
+    }
+
+    public void getAllUnassignedReviewersForRequest(java.lang.String projectId, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> resultHandler) throws org.apache.thrift.TException {
+      checkReady();
+      getAllUnassignedReviewersForRequest_call method_call = new getAllUnassignedReviewersForRequest_call(projectId, resultHandler, this, ___protocolFactory, ___transport);
+      this.___currentMethod = method_call;
+      ___manager.call(method_call);
+    }
+
+    public static class getAllUnassignedReviewersForRequest_call extends org.apache.thrift.async.TAsyncMethodCall<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> {
+      private java.lang.String projectId;
+      public getAllUnassignedReviewersForRequest_call(java.lang.String projectId, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+        super(client, protocolFactory, transport, resultHandler, false);
+        this.projectId = projectId;
+      }
+
+      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
+        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getAllUnassignedReviewersForRequest", org.apache.thrift.protocol.TMessageType.CALL, 0));
+        getAllUnassignedReviewersForRequest_args args = new getAllUnassignedReviewersForRequest_args();
+        args.setProjectId(projectId);
+        args.write(prot);
+        prot.writeMessageEnd();
+      }
+
+      public java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> getResult() throws org.apache.thrift.TException {
+        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new java.lang.IllegalStateException("Method call not finished!");
+        }
+        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
+        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        return (new Client(prot)).recv_getAllUnassignedReviewersForRequest();
       }
     }
 
@@ -1270,7 +1397,9 @@ public class AllocationRegistryService {
       processMap.put("isReviewer", new isReviewer());
       processMap.put("getAllRequestsForReviewers", new getAllRequestsForReviewers());
       processMap.put("getUserDetails", new getUserDetails());
-      processMap.put("getReviewsForRequest", new getReviewsForRequest());
+      processMap.put("getAllReviewsForARequest", new getAllReviewsForARequest());
+      processMap.put("getAllReviewers", new getAllReviewers());
+      processMap.put("getAllUnassignedReviewersForRequest", new getAllUnassignedReviewersForRequest());
       return processMap;
     }
 
@@ -1287,7 +1416,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1312,7 +1441,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1338,7 +1467,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1364,7 +1493,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1389,7 +1518,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1415,7 +1544,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1440,7 +1569,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1465,7 +1594,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1490,7 +1619,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1515,7 +1644,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1540,7 +1669,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+     // @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1565,14 +1694,14 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
 
       public assignReviewers_result getResult(I iface, assignReviewers_args args) throws org.apache.thrift.TException {
         assignReviewers_result result = new assignReviewers_result();
-        result.success = iface.assignReviewers(args.projectId, args.userName);
+        result.success = iface.assignReviewers(args.projectId, args.reviewerId, args.adminId);
         result.setSuccessIsSet(true);
         return result;
       }
@@ -1591,14 +1720,14 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
 
       public updateRequestByReviewer_result getResult(I iface, updateRequestByReviewer_args args) throws org.apache.thrift.TException {
         updateRequestByReviewer_result result = new updateRequestByReviewer_result();
-        result.success = iface.updateRequestByReviewer(args.projectId, args.userAllocationDetail);
+        result.success = iface.updateRequestByReviewer(args.reviewerId, args.userAllocationDetail);
         result.setSuccessIsSet(true);
         return result;
       }
@@ -1617,7 +1746,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1643,7 +1772,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1669,7 +1798,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1694,7 +1823,7 @@ public class AllocationRegistryService {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
@@ -1706,27 +1835,77 @@ public class AllocationRegistryService {
       }
     }
 
-    public static class getReviewsForRequest<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getReviewsForRequest_args> {
-      public getReviewsForRequest() {
-        super("getReviewsForRequest");
+    public static class getAllReviewsForARequest<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getAllReviewsForARequest_args> {
+      public getAllReviewsForARequest() {
+        super("getAllReviewsForARequest");
       }
 
-      public getReviewsForRequest_args getEmptyArgsInstance() {
-        return new getReviewsForRequest_args();
+      public getAllReviewsForARequest_args getEmptyArgsInstance() {
+        return new getAllReviewsForARequest_args();
       }
 
       protected boolean isOneway() {
         return false;
       }
 
-      @Override
+//      @Override
       protected boolean handleRuntimeExceptions() {
         return false;
       }
 
-      public getReviewsForRequest_result getResult(I iface, getReviewsForRequest_args args) throws org.apache.thrift.TException {
-        getReviewsForRequest_result result = new getReviewsForRequest_result();
-        result.success = iface.getReviewsForRequest(args.projectId);
+      public getAllReviewsForARequest_result getResult(I iface, getAllReviewsForARequest_args args) throws org.apache.thrift.TException {
+        getAllReviewsForARequest_result result = new getAllReviewsForARequest_result();
+        result.success = iface.getAllReviewsForARequest(args.projectId);
+        return result;
+      }
+    }
+
+    public static class getAllReviewers<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getAllReviewers_args> {
+      public getAllReviewers() {
+        super("getAllReviewers");
+      }
+
+      public getAllReviewers_args getEmptyArgsInstance() {
+        return new getAllReviewers_args();
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+//      @Override
+      protected boolean handleRuntimeExceptions() {
+        return false;
+      }
+
+      public getAllReviewers_result getResult(I iface, getAllReviewers_args args) throws org.apache.thrift.TException {
+        getAllReviewers_result result = new getAllReviewers_result();
+        result.success = iface.getAllReviewers();
+        return result;
+      }
+    }
+
+    public static class getAllUnassignedReviewersForRequest<I extends Iface> extends org.apache.thrift.ProcessFunction<I, getAllUnassignedReviewersForRequest_args> {
+      public getAllUnassignedReviewersForRequest() {
+        super("getAllUnassignedReviewersForRequest");
+      }
+
+      public getAllUnassignedReviewersForRequest_args getEmptyArgsInstance() {
+        return new getAllUnassignedReviewersForRequest_args();
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+//      @Override
+      protected boolean handleRuntimeExceptions() {
+        return false;
+      }
+
+      public getAllUnassignedReviewersForRequest_result getResult(I iface, getAllUnassignedReviewersForRequest_args args) throws org.apache.thrift.TException {
+        getAllUnassignedReviewersForRequest_result result = new getAllUnassignedReviewersForRequest_result();
+        result.success = iface.getAllUnassignedReviewersForRequest(args.projectId);
         return result;
       }
     }
@@ -1761,7 +1940,9 @@ public class AllocationRegistryService {
       processMap.put("isReviewer", new isReviewer());
       processMap.put("getAllRequestsForReviewers", new getAllRequestsForReviewers());
       processMap.put("getUserDetails", new getUserDetails());
-      processMap.put("getReviewsForRequest", new getReviewsForRequest());
+      processMap.put("getAllReviewsForARequest", new getAllReviewsForARequest());
+      processMap.put("getAllReviewers", new getAllReviewers());
+      processMap.put("getAllUnassignedReviewersForRequest", new getAllUnassignedReviewersForRequest());
       return processMap;
     }
 
@@ -2496,7 +2677,7 @@ public class AllocationRegistryService {
       }
 
       public void start(I iface, assignReviewers_args args, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
-        iface.assignReviewers(args.projectId, args.userName,resultHandler);
+        iface.assignReviewers(args.projectId, args.reviewerId, args.adminId,resultHandler);
       }
     }
 
@@ -2558,7 +2739,7 @@ public class AllocationRegistryService {
       }
 
       public void start(I iface, updateRequestByReviewer_args args, org.apache.thrift.async.AsyncMethodCallback<java.lang.Boolean> resultHandler) throws org.apache.thrift.TException {
-        iface.updateRequestByReviewer(args.projectId, args.userAllocationDetail,resultHandler);
+        iface.updateRequestByReviewer(args.reviewerId, args.userAllocationDetail,resultHandler);
       }
     }
 
@@ -2808,20 +2989,20 @@ public class AllocationRegistryService {
       }
     }
 
-    public static class getReviewsForRequest<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, getReviewsForRequest_args, java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> {
-      public getReviewsForRequest() {
-        super("getReviewsForRequest");
+    public static class getAllReviewsForARequest<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, getAllReviewsForARequest_args, java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> {
+      public getAllReviewsForARequest() {
+        super("getAllReviewsForARequest");
       }
 
-      public getReviewsForRequest_args getEmptyArgsInstance() {
-        return new getReviewsForRequest_args();
+      public getAllReviewsForARequest_args getEmptyArgsInstance() {
+        return new getAllReviewsForARequest_args();
       }
 
       public org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
         final org.apache.thrift.AsyncProcessFunction fcall = this;
         return new org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>>() { 
           public void onComplete(java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail> o) {
-            getReviewsForRequest_result result = new getReviewsForRequest_result();
+            getAllReviewsForARequest_result result = new getAllReviewsForARequest_result();
             result.success = o;
             try {
               fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
@@ -2836,7 +3017,7 @@ public class AllocationRegistryService {
           public void onError(java.lang.Exception e) {
             byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
             org.apache.thrift.TSerializable msg;
-            getReviewsForRequest_result result = new getReviewsForRequest_result();
+            getAllReviewsForARequest_result result = new getAllReviewsForARequest_result();
             if (e instanceof org.apache.thrift.transport.TTransportException) {
               _LOGGER.error("TTransportException inside handler", e);
               fb.close();
@@ -2864,8 +3045,130 @@ public class AllocationRegistryService {
         return false;
       }
 
-      public void start(I iface, getReviewsForRequest_args args, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> resultHandler) throws org.apache.thrift.TException {
-        iface.getReviewsForRequest(args.projectId,resultHandler);
+      public void start(I iface, getAllReviewsForARequest_args args, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail>> resultHandler) throws org.apache.thrift.TException {
+        iface.getAllReviewsForARequest(args.projectId,resultHandler);
+      }
+    }
+
+    public static class getAllReviewers<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, getAllReviewers_args, java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> {
+      public getAllReviewers() {
+        super("getAllReviewers");
+      }
+
+      public getAllReviewers_args getEmptyArgsInstance() {
+        return new getAllReviewers_args();
+      }
+
+      public org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
+        final org.apache.thrift.AsyncProcessFunction fcall = this;
+        return new org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>>() { 
+          public void onComplete(java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> o) {
+            getAllReviewers_result result = new getAllReviewers_result();
+            result.success = o;
+            try {
+              fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
+            } catch (org.apache.thrift.transport.TTransportException e) {
+              _LOGGER.error("TTransportException writing to internal frame buffer", e);
+              fb.close();
+            } catch (java.lang.Exception e) {
+              _LOGGER.error("Exception writing to internal frame buffer", e);
+              onError(e);
+            }
+          }
+          public void onError(java.lang.Exception e) {
+            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
+            org.apache.thrift.TSerializable msg;
+            getAllReviewers_result result = new getAllReviewers_result();
+            if (e instanceof org.apache.thrift.transport.TTransportException) {
+              _LOGGER.error("TTransportException inside handler", e);
+              fb.close();
+              return;
+            } else if (e instanceof org.apache.thrift.TApplicationException) {
+              _LOGGER.error("TApplicationException inside handler", e);
+              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+              msg = (org.apache.thrift.TApplicationException)e;
+            } else {
+              _LOGGER.error("Exception inside handler", e);
+              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+              msg = new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
+            }
+            try {
+              fcall.sendResponse(fb,msg,msgType,seqid);
+            } catch (java.lang.Exception ex) {
+              _LOGGER.error("Exception writing to internal frame buffer", ex);
+              fb.close();
+            }
+          }
+        };
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public void start(I iface, getAllReviewers_args args, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> resultHandler) throws org.apache.thrift.TException {
+        iface.getAllReviewers(resultHandler);
+      }
+    }
+
+    public static class getAllUnassignedReviewersForRequest<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, getAllUnassignedReviewersForRequest_args, java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> {
+      public getAllUnassignedReviewersForRequest() {
+        super("getAllUnassignedReviewersForRequest");
+      }
+
+      public getAllUnassignedReviewersForRequest_args getEmptyArgsInstance() {
+        return new getAllUnassignedReviewersForRequest_args();
+      }
+
+      public org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
+        final org.apache.thrift.AsyncProcessFunction fcall = this;
+        return new org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>>() { 
+          public void onComplete(java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> o) {
+            getAllUnassignedReviewersForRequest_result result = new getAllUnassignedReviewersForRequest_result();
+            result.success = o;
+            try {
+              fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
+            } catch (org.apache.thrift.transport.TTransportException e) {
+              _LOGGER.error("TTransportException writing to internal frame buffer", e);
+              fb.close();
+            } catch (java.lang.Exception e) {
+              _LOGGER.error("Exception writing to internal frame buffer", e);
+              onError(e);
+            }
+          }
+          public void onError(java.lang.Exception e) {
+            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
+            org.apache.thrift.TSerializable msg;
+            getAllUnassignedReviewersForRequest_result result = new getAllUnassignedReviewersForRequest_result();
+            if (e instanceof org.apache.thrift.transport.TTransportException) {
+              _LOGGER.error("TTransportException inside handler", e);
+              fb.close();
+              return;
+            } else if (e instanceof org.apache.thrift.TApplicationException) {
+              _LOGGER.error("TApplicationException inside handler", e);
+              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+              msg = (org.apache.thrift.TApplicationException)e;
+            } else {
+              _LOGGER.error("Exception inside handler", e);
+              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
+              msg = new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
+            }
+            try {
+              fcall.sendResponse(fb,msg,msgType,seqid);
+            } catch (java.lang.Exception ex) {
+              _LOGGER.error("Exception writing to internal frame buffer", ex);
+              fb.close();
+            }
+          }
+        };
+      }
+
+      protected boolean isOneway() {
+        return false;
+      }
+
+      public void start(I iface, getAllUnassignedReviewersForRequest_args args, org.apache.thrift.async.AsyncMethodCallback<java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>> resultHandler) throws org.apache.thrift.TException {
+        iface.getAllUnassignedReviewersForRequest(args.projectId,resultHandler);
       }
     }
 
@@ -11212,19 +11515,22 @@ public class AllocationRegistryService {
   public static class assignReviewers_args implements org.apache.thrift.TBase<assignReviewers_args, assignReviewers_args._Fields>, java.io.Serializable, Cloneable, Comparable<assignReviewers_args>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("assignReviewers_args");
 
-    private static final org.apache.thrift.protocol.TField PROJECT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("projectId", org.apache.thrift.protocol.TType.STRUCT, (short)1);
-    private static final org.apache.thrift.protocol.TField USER_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("userName", org.apache.thrift.protocol.TType.STRING, (short)2);
+    private static final org.apache.thrift.protocol.TField PROJECT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("projectId", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final org.apache.thrift.protocol.TField REVIEWER_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("reviewerId", org.apache.thrift.protocol.TType.STRING, (short)2);
+    private static final org.apache.thrift.protocol.TField ADMIN_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("adminId", org.apache.thrift.protocol.TType.STRING, (short)3);
 
     private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new assignReviewers_argsStandardSchemeFactory();
     private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new assignReviewers_argsTupleSchemeFactory();
 
-    public org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId; // required
-    public java.lang.String userName; // required
+    public java.lang.String projectId; // required
+    public java.lang.String reviewerId; // required
+    public java.lang.String adminId; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
       PROJECT_ID((short)1, "projectId"),
-      USER_NAME((short)2, "userName");
+      REVIEWER_ID((short)2, "reviewerId"),
+      ADMIN_ID((short)3, "adminId");
 
       private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -11241,8 +11547,10 @@ public class AllocationRegistryService {
         switch(fieldId) {
           case 1: // PROJECT_ID
             return PROJECT_ID;
-          case 2: // USER_NAME
-            return USER_NAME;
+          case 2: // REVIEWER_ID
+            return REVIEWER_ID;
+          case 3: // ADMIN_ID
+            return ADMIN_ID;
           default:
             return null;
         }
@@ -11287,8 +11595,10 @@ public class AllocationRegistryService {
     static {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.PROJECT_ID, new org.apache.thrift.meta_data.FieldMetaData("projectId", org.apache.thrift.TFieldRequirementType.REQUIRED, 
-          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, org.apache.airavata.allocation.manager.models.UserAllocationDetailPK.class)));
-      tmpMap.put(_Fields.USER_NAME, new org.apache.thrift.meta_data.FieldMetaData("userName", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.REVIEWER_ID, new org.apache.thrift.meta_data.FieldMetaData("reviewerId", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      tmpMap.put(_Fields.ADMIN_ID, new org.apache.thrift.meta_data.FieldMetaData("adminId", org.apache.thrift.TFieldRequirementType.REQUIRED, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(assignReviewers_args.class, metaDataMap);
@@ -11298,12 +11608,14 @@ public class AllocationRegistryService {
     }
 
     public assignReviewers_args(
-      org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId,
-      java.lang.String userName)
+      java.lang.String projectId,
+      java.lang.String reviewerId,
+      java.lang.String adminId)
     {
       this();
       this.projectId = projectId;
-      this.userName = userName;
+      this.reviewerId = reviewerId;
+      this.adminId = adminId;
     }
 
     /**
@@ -11311,10 +11623,13 @@ public class AllocationRegistryService {
      */
     public assignReviewers_args(assignReviewers_args other) {
       if (other.isSetProjectId()) {
-        this.projectId = new org.apache.airavata.allocation.manager.models.UserAllocationDetailPK(other.projectId);
+        this.projectId = other.projectId;
       }
-      if (other.isSetUserName()) {
-        this.userName = other.userName;
+      if (other.isSetReviewerId()) {
+        this.reviewerId = other.reviewerId;
+      }
+      if (other.isSetAdminId()) {
+        this.adminId = other.adminId;
       }
     }
 
@@ -11325,14 +11640,15 @@ public class AllocationRegistryService {
     @Override
     public void clear() {
       this.projectId = null;
-      this.userName = null;
+      this.reviewerId = null;
+      this.adminId = null;
     }
 
-    public org.apache.airavata.allocation.manager.models.UserAllocationDetailPK getProjectId() {
+    public java.lang.String getProjectId() {
       return this.projectId;
     }
 
-    public assignReviewers_args setProjectId(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId) {
+    public assignReviewers_args setProjectId(java.lang.String projectId) {
       this.projectId = projectId;
       return this;
     }
@@ -11352,27 +11668,51 @@ public class AllocationRegistryService {
       }
     }
 
-    public java.lang.String getUserName() {
-      return this.userName;
+    public java.lang.String getReviewerId() {
+      return this.reviewerId;
     }
 
-    public assignReviewers_args setUserName(java.lang.String userName) {
-      this.userName = userName;
+    public assignReviewers_args setReviewerId(java.lang.String reviewerId) {
+      this.reviewerId = reviewerId;
       return this;
     }
 
-    public void unsetUserName() {
-      this.userName = null;
+    public void unsetReviewerId() {
+      this.reviewerId = null;
     }
 
-    /** Returns true if field userName is set (has been assigned a value) and false otherwise */
-    public boolean isSetUserName() {
-      return this.userName != null;
+    /** Returns true if field reviewerId is set (has been assigned a value) and false otherwise */
+    public boolean isSetReviewerId() {
+      return this.reviewerId != null;
     }
 
-    public void setUserNameIsSet(boolean value) {
+    public void setReviewerIdIsSet(boolean value) {
       if (!value) {
-        this.userName = null;
+        this.reviewerId = null;
+      }
+    }
+
+    public java.lang.String getAdminId() {
+      return this.adminId;
+    }
+
+    public assignReviewers_args setAdminId(java.lang.String adminId) {
+      this.adminId = adminId;
+      return this;
+    }
+
+    public void unsetAdminId() {
+      this.adminId = null;
+    }
+
+    /** Returns true if field adminId is set (has been assigned a value) and false otherwise */
+    public boolean isSetAdminId() {
+      return this.adminId != null;
+    }
+
+    public void setAdminIdIsSet(boolean value) {
+      if (!value) {
+        this.adminId = null;
       }
     }
 
@@ -11382,15 +11722,23 @@ public class AllocationRegistryService {
         if (value == null) {
           unsetProjectId();
         } else {
-          setProjectId((org.apache.airavata.allocation.manager.models.UserAllocationDetailPK)value);
+          setProjectId((java.lang.String)value);
         }
         break;
 
-      case USER_NAME:
+      case REVIEWER_ID:
         if (value == null) {
-          unsetUserName();
+          unsetReviewerId();
         } else {
-          setUserName((java.lang.String)value);
+          setReviewerId((java.lang.String)value);
+        }
+        break;
+
+      case ADMIN_ID:
+        if (value == null) {
+          unsetAdminId();
+        } else {
+          setAdminId((java.lang.String)value);
         }
         break;
 
@@ -11402,8 +11750,11 @@ public class AllocationRegistryService {
       case PROJECT_ID:
         return getProjectId();
 
-      case USER_NAME:
-        return getUserName();
+      case REVIEWER_ID:
+        return getReviewerId();
+
+      case ADMIN_ID:
+        return getAdminId();
 
       }
       throw new java.lang.IllegalStateException();
@@ -11418,8 +11769,10 @@ public class AllocationRegistryService {
       switch (field) {
       case PROJECT_ID:
         return isSetProjectId();
-      case USER_NAME:
-        return isSetUserName();
+      case REVIEWER_ID:
+        return isSetReviewerId();
+      case ADMIN_ID:
+        return isSetAdminId();
       }
       throw new java.lang.IllegalStateException();
     }
@@ -11448,12 +11801,21 @@ public class AllocationRegistryService {
           return false;
       }
 
-      boolean this_present_userName = true && this.isSetUserName();
-      boolean that_present_userName = true && that.isSetUserName();
-      if (this_present_userName || that_present_userName) {
-        if (!(this_present_userName && that_present_userName))
+      boolean this_present_reviewerId = true && this.isSetReviewerId();
+      boolean that_present_reviewerId = true && that.isSetReviewerId();
+      if (this_present_reviewerId || that_present_reviewerId) {
+        if (!(this_present_reviewerId && that_present_reviewerId))
           return false;
-        if (!this.userName.equals(that.userName))
+        if (!this.reviewerId.equals(that.reviewerId))
+          return false;
+      }
+
+      boolean this_present_adminId = true && this.isSetAdminId();
+      boolean that_present_adminId = true && that.isSetAdminId();
+      if (this_present_adminId || that_present_adminId) {
+        if (!(this_present_adminId && that_present_adminId))
+          return false;
+        if (!this.adminId.equals(that.adminId))
           return false;
       }
 
@@ -11468,9 +11830,13 @@ public class AllocationRegistryService {
       if (isSetProjectId())
         hashCode = hashCode * 8191 + projectId.hashCode();
 
-      hashCode = hashCode * 8191 + ((isSetUserName()) ? 131071 : 524287);
-      if (isSetUserName())
-        hashCode = hashCode * 8191 + userName.hashCode();
+      hashCode = hashCode * 8191 + ((isSetReviewerId()) ? 131071 : 524287);
+      if (isSetReviewerId())
+        hashCode = hashCode * 8191 + reviewerId.hashCode();
+
+      hashCode = hashCode * 8191 + ((isSetAdminId()) ? 131071 : 524287);
+      if (isSetAdminId())
+        hashCode = hashCode * 8191 + adminId.hashCode();
 
       return hashCode;
     }
@@ -11493,12 +11859,22 @@ public class AllocationRegistryService {
           return lastComparison;
         }
       }
-      lastComparison = java.lang.Boolean.valueOf(isSetUserName()).compareTo(other.isSetUserName());
+      lastComparison = java.lang.Boolean.valueOf(isSetReviewerId()).compareTo(other.isSetReviewerId());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetUserName()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.userName, other.userName);
+      if (isSetReviewerId()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.reviewerId, other.reviewerId);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      lastComparison = java.lang.Boolean.valueOf(isSetAdminId()).compareTo(other.isSetAdminId());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetAdminId()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.adminId, other.adminId);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -11531,11 +11907,19 @@ public class AllocationRegistryService {
       }
       first = false;
       if (!first) sb.append(", ");
-      sb.append("userName:");
-      if (this.userName == null) {
+      sb.append("reviewerId:");
+      if (this.reviewerId == null) {
         sb.append("null");
       } else {
-        sb.append(this.userName);
+        sb.append(this.reviewerId);
+      }
+      first = false;
+      if (!first) sb.append(", ");
+      sb.append("adminId:");
+      if (this.adminId == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.adminId);
       }
       first = false;
       sb.append(")");
@@ -11547,13 +11931,13 @@ public class AllocationRegistryService {
       if (projectId == null) {
         throw new org.apache.thrift.protocol.TProtocolException("Required field 'projectId' was not present! Struct: " + toString());
       }
-      if (userName == null) {
-        throw new org.apache.thrift.protocol.TProtocolException("Required field 'userName' was not present! Struct: " + toString());
+      if (reviewerId == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'reviewerId' was not present! Struct: " + toString());
+      }
+      if (adminId == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'adminId' was not present! Struct: " + toString());
       }
       // check for sub-struct validity
-      if (projectId != null) {
-        projectId.validate();
-      }
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -11591,18 +11975,25 @@ public class AllocationRegistryService {
           }
           switch (schemeField.id) {
             case 1: // PROJECT_ID
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-                struct.projectId = new org.apache.airavata.allocation.manager.models.UserAllocationDetailPK();
-                struct.projectId.read(iprot);
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.projectId = iprot.readString();
                 struct.setProjectIdIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
-            case 2: // USER_NAME
+            case 2: // REVIEWER_ID
               if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
-                struct.userName = iprot.readString();
-                struct.setUserNameIsSet(true);
+                struct.reviewerId = iprot.readString();
+                struct.setReviewerIdIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            case 3: // ADMIN_ID
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.adminId = iprot.readString();
+                struct.setAdminIdIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
@@ -11624,12 +12015,17 @@ public class AllocationRegistryService {
         oprot.writeStructBegin(STRUCT_DESC);
         if (struct.projectId != null) {
           oprot.writeFieldBegin(PROJECT_ID_FIELD_DESC);
-          struct.projectId.write(oprot);
+          oprot.writeString(struct.projectId);
           oprot.writeFieldEnd();
         }
-        if (struct.userName != null) {
-          oprot.writeFieldBegin(USER_NAME_FIELD_DESC);
-          oprot.writeString(struct.userName);
+        if (struct.reviewerId != null) {
+          oprot.writeFieldBegin(REVIEWER_ID_FIELD_DESC);
+          oprot.writeString(struct.reviewerId);
+          oprot.writeFieldEnd();
+        }
+        if (struct.adminId != null) {
+          oprot.writeFieldBegin(ADMIN_ID_FIELD_DESC);
+          oprot.writeString(struct.adminId);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -11649,18 +12045,20 @@ public class AllocationRegistryService {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, assignReviewers_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        struct.projectId.write(oprot);
-        oprot.writeString(struct.userName);
+        oprot.writeString(struct.projectId);
+        oprot.writeString(struct.reviewerId);
+        oprot.writeString(struct.adminId);
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, assignReviewers_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        struct.projectId = new org.apache.airavata.allocation.manager.models.UserAllocationDetailPK();
-        struct.projectId.read(iprot);
+        struct.projectId = iprot.readString();
         struct.setProjectIdIsSet(true);
-        struct.userName = iprot.readString();
-        struct.setUserNameIsSet(true);
+        struct.reviewerId = iprot.readString();
+        struct.setReviewerIdIsSet(true);
+        struct.adminId = iprot.readString();
+        struct.setAdminIdIsSet(true);
       }
     }
 
@@ -12032,18 +12430,18 @@ public class AllocationRegistryService {
   public static class updateRequestByReviewer_args implements org.apache.thrift.TBase<updateRequestByReviewer_args, updateRequestByReviewer_args._Fields>, java.io.Serializable, Cloneable, Comparable<updateRequestByReviewer_args>   {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("updateRequestByReviewer_args");
 
-    private static final org.apache.thrift.protocol.TField PROJECT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("projectId", org.apache.thrift.protocol.TType.STRUCT, (short)1);
+    private static final org.apache.thrift.protocol.TField REVIEWER_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("reviewerId", org.apache.thrift.protocol.TType.STRING, (short)1);
     private static final org.apache.thrift.protocol.TField USER_ALLOCATION_DETAIL_FIELD_DESC = new org.apache.thrift.protocol.TField("userAllocationDetail", org.apache.thrift.protocol.TType.STRUCT, (short)2);
 
     private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new updateRequestByReviewer_argsStandardSchemeFactory();
     private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new updateRequestByReviewer_argsTupleSchemeFactory();
 
-    public org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId; // required
+    public java.lang.String reviewerId; // required
     public org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      PROJECT_ID((short)1, "projectId"),
+      REVIEWER_ID((short)1, "reviewerId"),
       USER_ALLOCATION_DETAIL((short)2, "userAllocationDetail");
 
       private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
@@ -12059,8 +12457,8 @@ public class AllocationRegistryService {
        */
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
-          case 1: // PROJECT_ID
-            return PROJECT_ID;
+          case 1: // REVIEWER_ID
+            return REVIEWER_ID;
           case 2: // USER_ALLOCATION_DETAIL
             return USER_ALLOCATION_DETAIL;
           default:
@@ -12106,8 +12504,8 @@ public class AllocationRegistryService {
     public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.PROJECT_ID, new org.apache.thrift.meta_data.FieldMetaData("projectId", org.apache.thrift.TFieldRequirementType.REQUIRED, 
-          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, org.apache.airavata.allocation.manager.models.UserAllocationDetailPK.class)));
+      tmpMap.put(_Fields.REVIEWER_ID, new org.apache.thrift.meta_data.FieldMetaData("reviewerId", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       tmpMap.put(_Fields.USER_ALLOCATION_DETAIL, new org.apache.thrift.meta_data.FieldMetaData("userAllocationDetail", org.apache.thrift.TFieldRequirementType.REQUIRED, 
           new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, org.apache.airavata.allocation.manager.models.UserAllocationDetail.class)));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
@@ -12118,11 +12516,11 @@ public class AllocationRegistryService {
     }
 
     public updateRequestByReviewer_args(
-      org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId,
+      java.lang.String reviewerId,
       org.apache.airavata.allocation.manager.models.UserAllocationDetail userAllocationDetail)
     {
       this();
-      this.projectId = projectId;
+      this.reviewerId = reviewerId;
       this.userAllocationDetail = userAllocationDetail;
     }
 
@@ -12130,8 +12528,8 @@ public class AllocationRegistryService {
      * Performs a deep copy on <i>other</i>.
      */
     public updateRequestByReviewer_args(updateRequestByReviewer_args other) {
-      if (other.isSetProjectId()) {
-        this.projectId = new org.apache.airavata.allocation.manager.models.UserAllocationDetailPK(other.projectId);
+      if (other.isSetReviewerId()) {
+        this.reviewerId = other.reviewerId;
       }
       if (other.isSetUserAllocationDetail()) {
         this.userAllocationDetail = new org.apache.airavata.allocation.manager.models.UserAllocationDetail(other.userAllocationDetail);
@@ -12144,31 +12542,31 @@ public class AllocationRegistryService {
 
     @Override
     public void clear() {
-      this.projectId = null;
+      this.reviewerId = null;
       this.userAllocationDetail = null;
     }
 
-    public org.apache.airavata.allocation.manager.models.UserAllocationDetailPK getProjectId() {
-      return this.projectId;
+    public java.lang.String getReviewerId() {
+      return this.reviewerId;
     }
 
-    public updateRequestByReviewer_args setProjectId(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId) {
-      this.projectId = projectId;
+    public updateRequestByReviewer_args setReviewerId(java.lang.String reviewerId) {
+      this.reviewerId = reviewerId;
       return this;
     }
 
-    public void unsetProjectId() {
-      this.projectId = null;
+    public void unsetReviewerId() {
+      this.reviewerId = null;
     }
 
-    /** Returns true if field projectId is set (has been assigned a value) and false otherwise */
-    public boolean isSetProjectId() {
-      return this.projectId != null;
+    /** Returns true if field reviewerId is set (has been assigned a value) and false otherwise */
+    public boolean isSetReviewerId() {
+      return this.reviewerId != null;
     }
 
-    public void setProjectIdIsSet(boolean value) {
+    public void setReviewerIdIsSet(boolean value) {
       if (!value) {
-        this.projectId = null;
+        this.reviewerId = null;
       }
     }
 
@@ -12198,11 +12596,11 @@ public class AllocationRegistryService {
 
     public void setFieldValue(_Fields field, java.lang.Object value) {
       switch (field) {
-      case PROJECT_ID:
+      case REVIEWER_ID:
         if (value == null) {
-          unsetProjectId();
+          unsetReviewerId();
         } else {
-          setProjectId((org.apache.airavata.allocation.manager.models.UserAllocationDetailPK)value);
+          setReviewerId((java.lang.String)value);
         }
         break;
 
@@ -12219,8 +12617,8 @@ public class AllocationRegistryService {
 
     public java.lang.Object getFieldValue(_Fields field) {
       switch (field) {
-      case PROJECT_ID:
-        return getProjectId();
+      case REVIEWER_ID:
+        return getReviewerId();
 
       case USER_ALLOCATION_DETAIL:
         return getUserAllocationDetail();
@@ -12236,8 +12634,8 @@ public class AllocationRegistryService {
       }
 
       switch (field) {
-      case PROJECT_ID:
-        return isSetProjectId();
+      case REVIEWER_ID:
+        return isSetReviewerId();
       case USER_ALLOCATION_DETAIL:
         return isSetUserAllocationDetail();
       }
@@ -12259,12 +12657,12 @@ public class AllocationRegistryService {
       if (this == that)
         return true;
 
-      boolean this_present_projectId = true && this.isSetProjectId();
-      boolean that_present_projectId = true && that.isSetProjectId();
-      if (this_present_projectId || that_present_projectId) {
-        if (!(this_present_projectId && that_present_projectId))
+      boolean this_present_reviewerId = true && this.isSetReviewerId();
+      boolean that_present_reviewerId = true && that.isSetReviewerId();
+      if (this_present_reviewerId || that_present_reviewerId) {
+        if (!(this_present_reviewerId && that_present_reviewerId))
           return false;
-        if (!this.projectId.equals(that.projectId))
+        if (!this.reviewerId.equals(that.reviewerId))
           return false;
       }
 
@@ -12284,9 +12682,9 @@ public class AllocationRegistryService {
     public int hashCode() {
       int hashCode = 1;
 
-      hashCode = hashCode * 8191 + ((isSetProjectId()) ? 131071 : 524287);
-      if (isSetProjectId())
-        hashCode = hashCode * 8191 + projectId.hashCode();
+      hashCode = hashCode * 8191 + ((isSetReviewerId()) ? 131071 : 524287);
+      if (isSetReviewerId())
+        hashCode = hashCode * 8191 + reviewerId.hashCode();
 
       hashCode = hashCode * 8191 + ((isSetUserAllocationDetail()) ? 131071 : 524287);
       if (isSetUserAllocationDetail())
@@ -12303,12 +12701,12 @@ public class AllocationRegistryService {
 
       int lastComparison = 0;
 
-      lastComparison = java.lang.Boolean.valueOf(isSetProjectId()).compareTo(other.isSetProjectId());
+      lastComparison = java.lang.Boolean.valueOf(isSetReviewerId()).compareTo(other.isSetReviewerId());
       if (lastComparison != 0) {
         return lastComparison;
       }
-      if (isSetProjectId()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.projectId, other.projectId);
+      if (isSetReviewerId()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.reviewerId, other.reviewerId);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -12343,11 +12741,11 @@ public class AllocationRegistryService {
       java.lang.StringBuilder sb = new java.lang.StringBuilder("updateRequestByReviewer_args(");
       boolean first = true;
 
-      sb.append("projectId:");
-      if (this.projectId == null) {
+      sb.append("reviewerId:");
+      if (this.reviewerId == null) {
         sb.append("null");
       } else {
-        sb.append(this.projectId);
+        sb.append(this.reviewerId);
       }
       first = false;
       if (!first) sb.append(", ");
@@ -12364,16 +12762,13 @@ public class AllocationRegistryService {
 
     public void validate() throws org.apache.thrift.TException {
       // check for required fields
-      if (projectId == null) {
-        throw new org.apache.thrift.protocol.TProtocolException("Required field 'projectId' was not present! Struct: " + toString());
+      if (reviewerId == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'reviewerId' was not present! Struct: " + toString());
       }
       if (userAllocationDetail == null) {
         throw new org.apache.thrift.protocol.TProtocolException("Required field 'userAllocationDetail' was not present! Struct: " + toString());
       }
       // check for sub-struct validity
-      if (projectId != null) {
-        projectId.validate();
-      }
       if (userAllocationDetail != null) {
         userAllocationDetail.validate();
       }
@@ -12413,11 +12808,10 @@ public class AllocationRegistryService {
             break;
           }
           switch (schemeField.id) {
-            case 1: // PROJECT_ID
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-                struct.projectId = new org.apache.airavata.allocation.manager.models.UserAllocationDetailPK();
-                struct.projectId.read(iprot);
-                struct.setProjectIdIsSet(true);
+            case 1: // REVIEWER_ID
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.reviewerId = iprot.readString();
+                struct.setReviewerIdIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
@@ -12446,9 +12840,9 @@ public class AllocationRegistryService {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
-        if (struct.projectId != null) {
-          oprot.writeFieldBegin(PROJECT_ID_FIELD_DESC);
-          struct.projectId.write(oprot);
+        if (struct.reviewerId != null) {
+          oprot.writeFieldBegin(REVIEWER_ID_FIELD_DESC);
+          oprot.writeString(struct.reviewerId);
           oprot.writeFieldEnd();
         }
         if (struct.userAllocationDetail != null) {
@@ -12473,16 +12867,15 @@ public class AllocationRegistryService {
       @Override
       public void write(org.apache.thrift.protocol.TProtocol prot, updateRequestByReviewer_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        struct.projectId.write(oprot);
+        oprot.writeString(struct.reviewerId);
         struct.userAllocationDetail.write(oprot);
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, updateRequestByReviewer_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        struct.projectId = new org.apache.airavata.allocation.manager.models.UserAllocationDetailPK();
-        struct.projectId.read(iprot);
-        struct.setProjectIdIsSet(true);
+        struct.reviewerId = iprot.readString();
+        struct.setReviewerIdIsSet(true);
         struct.userAllocationDetail = new org.apache.airavata.allocation.manager.models.UserAllocationDetail();
         struct.userAllocationDetail.read(iprot);
         struct.setUserAllocationDetailIsSet(true);
@@ -15777,15 +16170,15 @@ public class AllocationRegistryService {
     }
   }
 
-  public static class getReviewsForRequest_args implements org.apache.thrift.TBase<getReviewsForRequest_args, getReviewsForRequest_args._Fields>, java.io.Serializable, Cloneable, Comparable<getReviewsForRequest_args>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getReviewsForRequest_args");
+  public static class getAllReviewsForARequest_args implements org.apache.thrift.TBase<getAllReviewsForARequest_args, getAllReviewsForARequest_args._Fields>, java.io.Serializable, Cloneable, Comparable<getAllReviewsForARequest_args>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getAllReviewsForARequest_args");
 
-    private static final org.apache.thrift.protocol.TField PROJECT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("projectId", org.apache.thrift.protocol.TType.STRUCT, (short)1);
+    private static final org.apache.thrift.protocol.TField PROJECT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("projectId", org.apache.thrift.protocol.TType.STRING, (short)1);
 
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new getReviewsForRequest_argsStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new getReviewsForRequest_argsTupleSchemeFactory();
+    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new getAllReviewsForARequest_argsStandardSchemeFactory();
+    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new getAllReviewsForARequest_argsTupleSchemeFactory();
 
-    public org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId; // required
+    public java.lang.String projectId; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -15850,16 +16243,16 @@ public class AllocationRegistryService {
     static {
       java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.PROJECT_ID, new org.apache.thrift.meta_data.FieldMetaData("projectId", org.apache.thrift.TFieldRequirementType.REQUIRED, 
-          new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, org.apache.airavata.allocation.manager.models.UserAllocationDetailPK.class)));
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getReviewsForRequest_args.class, metaDataMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getAllReviewsForARequest_args.class, metaDataMap);
     }
 
-    public getReviewsForRequest_args() {
+    public getAllReviewsForARequest_args() {
     }
 
-    public getReviewsForRequest_args(
-      org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId)
+    public getAllReviewsForARequest_args(
+      java.lang.String projectId)
     {
       this();
       this.projectId = projectId;
@@ -15868,14 +16261,14 @@ public class AllocationRegistryService {
     /**
      * Performs a deep copy on <i>other</i>.
      */
-    public getReviewsForRequest_args(getReviewsForRequest_args other) {
+    public getAllReviewsForARequest_args(getAllReviewsForARequest_args other) {
       if (other.isSetProjectId()) {
-        this.projectId = new org.apache.airavata.allocation.manager.models.UserAllocationDetailPK(other.projectId);
+        this.projectId = other.projectId;
       }
     }
 
-    public getReviewsForRequest_args deepCopy() {
-      return new getReviewsForRequest_args(this);
+    public getAllReviewsForARequest_args deepCopy() {
+      return new getAllReviewsForARequest_args(this);
     }
 
     @Override
@@ -15883,11 +16276,11 @@ public class AllocationRegistryService {
       this.projectId = null;
     }
 
-    public org.apache.airavata.allocation.manager.models.UserAllocationDetailPK getProjectId() {
+    public java.lang.String getProjectId() {
       return this.projectId;
     }
 
-    public getReviewsForRequest_args setProjectId(org.apache.airavata.allocation.manager.models.UserAllocationDetailPK projectId) {
+    public getAllReviewsForARequest_args setProjectId(java.lang.String projectId) {
       this.projectId = projectId;
       return this;
     }
@@ -15913,7 +16306,7 @@ public class AllocationRegistryService {
         if (value == null) {
           unsetProjectId();
         } else {
-          setProjectId((org.apache.airavata.allocation.manager.models.UserAllocationDetailPK)value);
+          setProjectId((java.lang.String)value);
         }
         break;
 
@@ -15946,12 +16339,12 @@ public class AllocationRegistryService {
     public boolean equals(java.lang.Object that) {
       if (that == null)
         return false;
-      if (that instanceof getReviewsForRequest_args)
-        return this.equals((getReviewsForRequest_args)that);
+      if (that instanceof getAllReviewsForARequest_args)
+        return this.equals((getAllReviewsForARequest_args)that);
       return false;
     }
 
-    public boolean equals(getReviewsForRequest_args that) {
+    public boolean equals(getAllReviewsForARequest_args that) {
       if (that == null)
         return false;
       if (this == that)
@@ -15981,7 +16374,7 @@ public class AllocationRegistryService {
     }
 
     @Override
-    public int compareTo(getReviewsForRequest_args other) {
+    public int compareTo(getAllReviewsForARequest_args other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
@@ -16015,7 +16408,7 @@ public class AllocationRegistryService {
 
     @Override
     public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("getReviewsForRequest_args(");
+      java.lang.StringBuilder sb = new java.lang.StringBuilder("getAllReviewsForARequest_args(");
       boolean first = true;
 
       sb.append("projectId:");
@@ -16035,9 +16428,6 @@ public class AllocationRegistryService {
         throw new org.apache.thrift.protocol.TProtocolException("Required field 'projectId' was not present! Struct: " + toString());
       }
       // check for sub-struct validity
-      if (projectId != null) {
-        projectId.validate();
-      }
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -16056,15 +16446,15 @@ public class AllocationRegistryService {
       }
     }
 
-    private static class getReviewsForRequest_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public getReviewsForRequest_argsStandardScheme getScheme() {
-        return new getReviewsForRequest_argsStandardScheme();
+    private static class getAllReviewsForARequest_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public getAllReviewsForARequest_argsStandardScheme getScheme() {
+        return new getAllReviewsForARequest_argsStandardScheme();
       }
     }
 
-    private static class getReviewsForRequest_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<getReviewsForRequest_args> {
+    private static class getAllReviewsForARequest_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<getAllReviewsForARequest_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, getReviewsForRequest_args struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getAllReviewsForARequest_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -16075,9 +16465,8 @@ public class AllocationRegistryService {
           }
           switch (schemeField.id) {
             case 1: // PROJECT_ID
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-                struct.projectId = new org.apache.airavata.allocation.manager.models.UserAllocationDetailPK();
-                struct.projectId.read(iprot);
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.projectId = iprot.readString();
                 struct.setProjectIdIsSet(true);
               } else { 
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -16094,13 +16483,13 @@ public class AllocationRegistryService {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, getReviewsForRequest_args struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getAllReviewsForARequest_args struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
         if (struct.projectId != null) {
           oprot.writeFieldBegin(PROJECT_ID_FIELD_DESC);
-          struct.projectId.write(oprot);
+          oprot.writeString(struct.projectId);
           oprot.writeFieldEnd();
         }
         oprot.writeFieldStop();
@@ -16109,25 +16498,24 @@ public class AllocationRegistryService {
 
     }
 
-    private static class getReviewsForRequest_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public getReviewsForRequest_argsTupleScheme getScheme() {
-        return new getReviewsForRequest_argsTupleScheme();
+    private static class getAllReviewsForARequest_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public getAllReviewsForARequest_argsTupleScheme getScheme() {
+        return new getAllReviewsForARequest_argsTupleScheme();
       }
     }
 
-    private static class getReviewsForRequest_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<getReviewsForRequest_args> {
+    private static class getAllReviewsForARequest_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<getAllReviewsForARequest_args> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, getReviewsForRequest_args struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol prot, getAllReviewsForARequest_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        struct.projectId.write(oprot);
+        oprot.writeString(struct.projectId);
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, getReviewsForRequest_args struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol prot, getAllReviewsForARequest_args struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        struct.projectId = new org.apache.airavata.allocation.manager.models.UserAllocationDetailPK();
-        struct.projectId.read(iprot);
+        struct.projectId = iprot.readString();
         struct.setProjectIdIsSet(true);
       }
     }
@@ -16137,13 +16525,13 @@ public class AllocationRegistryService {
     }
   }
 
-  public static class getReviewsForRequest_result implements org.apache.thrift.TBase<getReviewsForRequest_result, getReviewsForRequest_result._Fields>, java.io.Serializable, Cloneable, Comparable<getReviewsForRequest_result>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getReviewsForRequest_result");
+  public static class getAllReviewsForARequest_result implements org.apache.thrift.TBase<getAllReviewsForARequest_result, getAllReviewsForARequest_result._Fields>, java.io.Serializable, Cloneable, Comparable<getAllReviewsForARequest_result>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getAllReviewsForARequest_result");
 
     private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.LIST, (short)0);
 
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new getReviewsForRequest_resultStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new getReviewsForRequest_resultTupleSchemeFactory();
+    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new getAllReviewsForARequest_resultStandardSchemeFactory();
+    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new getAllReviewsForARequest_resultTupleSchemeFactory();
 
     public java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail> success; // required
 
@@ -16213,13 +16601,13 @@ public class AllocationRegistryService {
           new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
               new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, org.apache.airavata.allocation.manager.models.UserAllocationDetail.class))));
       metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getReviewsForRequest_result.class, metaDataMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getAllReviewsForARequest_result.class, metaDataMap);
     }
 
-    public getReviewsForRequest_result() {
+    public getAllReviewsForARequest_result() {
     }
 
-    public getReviewsForRequest_result(
+    public getAllReviewsForARequest_result(
       java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail> success)
     {
       this();
@@ -16229,7 +16617,7 @@ public class AllocationRegistryService {
     /**
      * Performs a deep copy on <i>other</i>.
      */
-    public getReviewsForRequest_result(getReviewsForRequest_result other) {
+    public getAllReviewsForARequest_result(getAllReviewsForARequest_result other) {
       if (other.isSetSuccess()) {
         java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail> __this__success = new java.util.ArrayList<org.apache.airavata.allocation.manager.models.UserAllocationDetail>(other.success.size());
         for (org.apache.airavata.allocation.manager.models.UserAllocationDetail other_element : other.success) {
@@ -16239,8 +16627,8 @@ public class AllocationRegistryService {
       }
     }
 
-    public getReviewsForRequest_result deepCopy() {
-      return new getReviewsForRequest_result(this);
+    public getAllReviewsForARequest_result deepCopy() {
+      return new getAllReviewsForARequest_result(this);
     }
 
     @Override
@@ -16267,7 +16655,7 @@ public class AllocationRegistryService {
       return this.success;
     }
 
-    public getReviewsForRequest_result setSuccess(java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail> success) {
+    public getAllReviewsForARequest_result setSuccess(java.util.List<org.apache.airavata.allocation.manager.models.UserAllocationDetail> success) {
       this.success = success;
       return this;
     }
@@ -16326,12 +16714,12 @@ public class AllocationRegistryService {
     public boolean equals(java.lang.Object that) {
       if (that == null)
         return false;
-      if (that instanceof getReviewsForRequest_result)
-        return this.equals((getReviewsForRequest_result)that);
+      if (that instanceof getAllReviewsForARequest_result)
+        return this.equals((getAllReviewsForARequest_result)that);
       return false;
     }
 
-    public boolean equals(getReviewsForRequest_result that) {
+    public boolean equals(getAllReviewsForARequest_result that) {
       if (that == null)
         return false;
       if (this == that)
@@ -16361,7 +16749,7 @@ public class AllocationRegistryService {
     }
 
     @Override
-    public int compareTo(getReviewsForRequest_result other) {
+    public int compareTo(getAllReviewsForARequest_result other) {
       if (!getClass().equals(other.getClass())) {
         return getClass().getName().compareTo(other.getClass().getName());
       }
@@ -16395,7 +16783,7 @@ public class AllocationRegistryService {
 
     @Override
     public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("getReviewsForRequest_result(");
+      java.lang.StringBuilder sb = new java.lang.StringBuilder("getAllReviewsForARequest_result(");
       boolean first = true;
 
       sb.append("success:");
@@ -16430,15 +16818,15 @@ public class AllocationRegistryService {
       }
     }
 
-    private static class getReviewsForRequest_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public getReviewsForRequest_resultStandardScheme getScheme() {
-        return new getReviewsForRequest_resultStandardScheme();
+    private static class getAllReviewsForARequest_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public getAllReviewsForARequest_resultStandardScheme getScheme() {
+        return new getAllReviewsForARequest_resultStandardScheme();
       }
     }
 
-    private static class getReviewsForRequest_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<getReviewsForRequest_result> {
+    private static class getAllReviewsForARequest_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<getAllReviewsForARequest_result> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, getReviewsForRequest_result struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getAllReviewsForARequest_result struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TField schemeField;
         iprot.readStructBegin();
         while (true)
@@ -16478,7 +16866,7 @@ public class AllocationRegistryService {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, getReviewsForRequest_result struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getAllReviewsForARequest_result struct) throws org.apache.thrift.TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -16500,16 +16888,16 @@ public class AllocationRegistryService {
 
     }
 
-    private static class getReviewsForRequest_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
-      public getReviewsForRequest_resultTupleScheme getScheme() {
-        return new getReviewsForRequest_resultTupleScheme();
+    private static class getAllReviewsForARequest_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public getAllReviewsForARequest_resultTupleScheme getScheme() {
+        return new getAllReviewsForARequest_resultTupleScheme();
       }
     }
 
-    private static class getReviewsForRequest_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<getReviewsForRequest_result> {
+    private static class getAllReviewsForARequest_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<getAllReviewsForARequest_result> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, getReviewsForRequest_result struct) throws org.apache.thrift.TException {
+      public void write(org.apache.thrift.protocol.TProtocol prot, getAllReviewsForARequest_result struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
         java.util.BitSet optionals = new java.util.BitSet();
         if (struct.isSetSuccess()) {
@@ -16528,7 +16916,7 @@ public class AllocationRegistryService {
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, getReviewsForRequest_result struct) throws org.apache.thrift.TException {
+      public void read(org.apache.thrift.protocol.TProtocol prot, getAllReviewsForARequest_result struct) throws org.apache.thrift.TException {
         org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
         java.util.BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
@@ -16541,6 +16929,1443 @@ public class AllocationRegistryService {
               _elem22 = new org.apache.airavata.allocation.manager.models.UserAllocationDetail();
               _elem22.read(iprot);
               struct.success.add(_elem22);
+            }
+          }
+          struct.setSuccessIsSet(true);
+        }
+      }
+    }
+
+    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
+      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
+    }
+  }
+
+  public static class getAllReviewers_args implements org.apache.thrift.TBase<getAllReviewers_args, getAllReviewers_args._Fields>, java.io.Serializable, Cloneable, Comparable<getAllReviewers_args>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getAllReviewers_args");
+
+
+    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new getAllReviewers_argsStandardSchemeFactory();
+    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new getAllReviewers_argsTupleSchemeFactory();
+
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+;
+
+      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+
+      static {
+        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(java.lang.String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final java.lang.String _fieldName;
+
+      _Fields(short thriftId, java.lang.String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public java.lang.String getFieldName() {
+        return _fieldName;
+      }
+    }
+    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getAllReviewers_args.class, metaDataMap);
+    }
+
+    public getAllReviewers_args() {
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getAllReviewers_args(getAllReviewers_args other) {
+    }
+
+    public getAllReviewers_args deepCopy() {
+      return new getAllReviewers_args(this);
+    }
+
+    @Override
+    public void clear() {
+    }
+
+    public void setFieldValue(_Fields field, java.lang.Object value) {
+      switch (field) {
+      }
+    }
+
+    public java.lang.Object getFieldValue(_Fields field) {
+      switch (field) {
+      }
+      throw new java.lang.IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new java.lang.IllegalArgumentException();
+      }
+
+      switch (field) {
+      }
+      throw new java.lang.IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(java.lang.Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getAllReviewers_args)
+        return this.equals((getAllReviewers_args)that);
+      return false;
+    }
+
+    public boolean equals(getAllReviewers_args that) {
+      if (that == null)
+        return false;
+      if (this == that)
+        return true;
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      int hashCode = 1;
+
+      return hashCode;
+    }
+
+    @Override
+    public int compareTo(getAllReviewers_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      scheme(iprot).read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      scheme(oprot).write(oprot, this);
+    }
+
+    @Override
+    public java.lang.String toString() {
+      java.lang.StringBuilder sb = new java.lang.StringBuilder("getAllReviewers_args(");
+      boolean first = true;
+
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class getAllReviewers_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public getAllReviewers_argsStandardScheme getScheme() {
+        return new getAllReviewers_argsStandardScheme();
+      }
+    }
+
+    private static class getAllReviewers_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<getAllReviewers_args> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getAllReviewers_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getAllReviewers_args struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class getAllReviewers_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public getAllReviewers_argsTupleScheme getScheme() {
+        return new getAllReviewers_argsTupleScheme();
+      }
+    }
+
+    private static class getAllReviewers_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<getAllReviewers_args> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, getAllReviewers_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, getAllReviewers_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+      }
+    }
+
+    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
+      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
+    }
+  }
+
+  public static class getAllReviewers_result implements org.apache.thrift.TBase<getAllReviewers_result, getAllReviewers_result._Fields>, java.io.Serializable, Cloneable, Comparable<getAllReviewers_result>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getAllReviewers_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.LIST, (short)0);
+
+    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new getAllReviewers_resultStandardSchemeFactory();
+    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new getAllReviewers_resultTupleSchemeFactory();
+
+    public java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+
+      static {
+        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(java.lang.String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final java.lang.String _fieldName;
+
+      _Fields(short thriftId, java.lang.String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public java.lang.String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
+              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, org.apache.airavata.allocation.manager.models.UserDetail.class))));
+      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getAllReviewers_result.class, metaDataMap);
+    }
+
+    public getAllReviewers_result() {
+    }
+
+    public getAllReviewers_result(
+      java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> success)
+    {
+      this();
+      this.success = success;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getAllReviewers_result(getAllReviewers_result other) {
+      if (other.isSetSuccess()) {
+        java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> __this__success = new java.util.ArrayList<org.apache.airavata.allocation.manager.models.UserDetail>(other.success.size());
+        for (org.apache.airavata.allocation.manager.models.UserDetail other_element : other.success) {
+          __this__success.add(new org.apache.airavata.allocation.manager.models.UserDetail(other_element));
+        }
+        this.success = __this__success;
+      }
+    }
+
+    public getAllReviewers_result deepCopy() {
+      return new getAllReviewers_result(this);
+    }
+
+    @Override
+    public void clear() {
+      this.success = null;
+    }
+
+    public int getSuccessSize() {
+      return (this.success == null) ? 0 : this.success.size();
+    }
+
+    public java.util.Iterator<org.apache.airavata.allocation.manager.models.UserDetail> getSuccessIterator() {
+      return (this.success == null) ? null : this.success.iterator();
+    }
+
+    public void addToSuccess(org.apache.airavata.allocation.manager.models.UserDetail elem) {
+      if (this.success == null) {
+        this.success = new java.util.ArrayList<org.apache.airavata.allocation.manager.models.UserDetail>();
+      }
+      this.success.add(elem);
+    }
+
+    public java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> getSuccess() {
+      return this.success;
+    }
+
+    public getAllReviewers_result setSuccess(java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> success) {
+      this.success = success;
+      return this;
+    }
+
+    public void unsetSuccess() {
+      this.success = null;
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return this.success != null;
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      if (!value) {
+        this.success = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, java.lang.Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>)value);
+        }
+        break;
+
+      }
+    }
+
+    public java.lang.Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return getSuccess();
+
+      }
+      throw new java.lang.IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new java.lang.IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new java.lang.IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(java.lang.Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getAllReviewers_result)
+        return this.equals((getAllReviewers_result)that);
+      return false;
+    }
+
+    public boolean equals(getAllReviewers_result that) {
+      if (that == null)
+        return false;
+      if (this == that)
+        return true;
+
+      boolean this_present_success = true && this.isSetSuccess();
+      boolean that_present_success = true && that.isSetSuccess();
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (!this.success.equals(that.success))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      int hashCode = 1;
+
+      hashCode = hashCode * 8191 + ((isSetSuccess()) ? 131071 : 524287);
+      if (isSetSuccess())
+        hashCode = hashCode * 8191 + success.hashCode();
+
+      return hashCode;
+    }
+
+    @Override
+    public int compareTo(getAllReviewers_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+
+      lastComparison = java.lang.Boolean.valueOf(isSetSuccess()).compareTo(other.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, other.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      scheme(iprot).read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      scheme(oprot).write(oprot, this);
+      }
+
+    @Override
+    public java.lang.String toString() {
+      java.lang.StringBuilder sb = new java.lang.StringBuilder("getAllReviewers_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      if (this.success == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.success);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class getAllReviewers_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public getAllReviewers_resultStandardScheme getScheme() {
+        return new getAllReviewers_resultStandardScheme();
+      }
+    }
+
+    private static class getAllReviewers_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<getAllReviewers_result> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getAllReviewers_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 0: // SUCCESS
+              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
+                {
+                  org.apache.thrift.protocol.TList _list24 = iprot.readListBegin();
+                  struct.success = new java.util.ArrayList<org.apache.airavata.allocation.manager.models.UserDetail>(_list24.size);
+                  org.apache.airavata.allocation.manager.models.UserDetail _elem25;
+                  for (int _i26 = 0; _i26 < _list24.size; ++_i26)
+                  {
+                    _elem25 = new org.apache.airavata.allocation.manager.models.UserDetail();
+                    _elem25.read(iprot);
+                    struct.success.add(_elem25);
+                  }
+                  iprot.readListEnd();
+                }
+                struct.setSuccessIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getAllReviewers_result struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.success != null) {
+          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+          {
+            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
+            for (org.apache.airavata.allocation.manager.models.UserDetail _iter27 : struct.success)
+            {
+              _iter27.write(oprot);
+            }
+            oprot.writeListEnd();
+          }
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class getAllReviewers_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public getAllReviewers_resultTupleScheme getScheme() {
+        return new getAllReviewers_resultTupleScheme();
+      }
+    }
+
+    private static class getAllReviewers_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<getAllReviewers_result> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, getAllReviewers_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+        java.util.BitSet optionals = new java.util.BitSet();
+        if (struct.isSetSuccess()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSuccess()) {
+          {
+            oprot.writeI32(struct.success.size());
+            for (org.apache.airavata.allocation.manager.models.UserDetail _iter28 : struct.success)
+            {
+              _iter28.write(oprot);
+            }
+          }
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, getAllReviewers_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+        java.util.BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          {
+            org.apache.thrift.protocol.TList _list29 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new java.util.ArrayList<org.apache.airavata.allocation.manager.models.UserDetail>(_list29.size);
+            org.apache.airavata.allocation.manager.models.UserDetail _elem30;
+            for (int _i31 = 0; _i31 < _list29.size; ++_i31)
+            {
+              _elem30 = new org.apache.airavata.allocation.manager.models.UserDetail();
+              _elem30.read(iprot);
+              struct.success.add(_elem30);
+            }
+          }
+          struct.setSuccessIsSet(true);
+        }
+      }
+    }
+
+    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
+      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
+    }
+  }
+
+  public static class getAllUnassignedReviewersForRequest_args implements org.apache.thrift.TBase<getAllUnassignedReviewersForRequest_args, getAllUnassignedReviewersForRequest_args._Fields>, java.io.Serializable, Cloneable, Comparable<getAllUnassignedReviewersForRequest_args>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getAllUnassignedReviewersForRequest_args");
+
+    private static final org.apache.thrift.protocol.TField PROJECT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("projectId", org.apache.thrift.protocol.TType.STRING, (short)1);
+
+    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new getAllUnassignedReviewersForRequest_argsStandardSchemeFactory();
+    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new getAllUnassignedReviewersForRequest_argsTupleSchemeFactory();
+
+    public java.lang.String projectId; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      PROJECT_ID((short)1, "projectId");
+
+      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+
+      static {
+        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 1: // PROJECT_ID
+            return PROJECT_ID;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(java.lang.String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final java.lang.String _fieldName;
+
+      _Fields(short thriftId, java.lang.String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public java.lang.String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.PROJECT_ID, new org.apache.thrift.meta_data.FieldMetaData("projectId", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getAllUnassignedReviewersForRequest_args.class, metaDataMap);
+    }
+
+    public getAllUnassignedReviewersForRequest_args() {
+    }
+
+    public getAllUnassignedReviewersForRequest_args(
+      java.lang.String projectId)
+    {
+      this();
+      this.projectId = projectId;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getAllUnassignedReviewersForRequest_args(getAllUnassignedReviewersForRequest_args other) {
+      if (other.isSetProjectId()) {
+        this.projectId = other.projectId;
+      }
+    }
+
+    public getAllUnassignedReviewersForRequest_args deepCopy() {
+      return new getAllUnassignedReviewersForRequest_args(this);
+    }
+
+    @Override
+    public void clear() {
+      this.projectId = null;
+    }
+
+    public java.lang.String getProjectId() {
+      return this.projectId;
+    }
+
+    public getAllUnassignedReviewersForRequest_args setProjectId(java.lang.String projectId) {
+      this.projectId = projectId;
+      return this;
+    }
+
+    public void unsetProjectId() {
+      this.projectId = null;
+    }
+
+    /** Returns true if field projectId is set (has been assigned a value) and false otherwise */
+    public boolean isSetProjectId() {
+      return this.projectId != null;
+    }
+
+    public void setProjectIdIsSet(boolean value) {
+      if (!value) {
+        this.projectId = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, java.lang.Object value) {
+      switch (field) {
+      case PROJECT_ID:
+        if (value == null) {
+          unsetProjectId();
+        } else {
+          setProjectId((java.lang.String)value);
+        }
+        break;
+
+      }
+    }
+
+    public java.lang.Object getFieldValue(_Fields field) {
+      switch (field) {
+      case PROJECT_ID:
+        return getProjectId();
+
+      }
+      throw new java.lang.IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new java.lang.IllegalArgumentException();
+      }
+
+      switch (field) {
+      case PROJECT_ID:
+        return isSetProjectId();
+      }
+      throw new java.lang.IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(java.lang.Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getAllUnassignedReviewersForRequest_args)
+        return this.equals((getAllUnassignedReviewersForRequest_args)that);
+      return false;
+    }
+
+    public boolean equals(getAllUnassignedReviewersForRequest_args that) {
+      if (that == null)
+        return false;
+      if (this == that)
+        return true;
+
+      boolean this_present_projectId = true && this.isSetProjectId();
+      boolean that_present_projectId = true && that.isSetProjectId();
+      if (this_present_projectId || that_present_projectId) {
+        if (!(this_present_projectId && that_present_projectId))
+          return false;
+        if (!this.projectId.equals(that.projectId))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      int hashCode = 1;
+
+      hashCode = hashCode * 8191 + ((isSetProjectId()) ? 131071 : 524287);
+      if (isSetProjectId())
+        hashCode = hashCode * 8191 + projectId.hashCode();
+
+      return hashCode;
+    }
+
+    @Override
+    public int compareTo(getAllUnassignedReviewersForRequest_args other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+
+      lastComparison = java.lang.Boolean.valueOf(isSetProjectId()).compareTo(other.isSetProjectId());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetProjectId()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.projectId, other.projectId);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      scheme(iprot).read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      scheme(oprot).write(oprot, this);
+    }
+
+    @Override
+    public java.lang.String toString() {
+      java.lang.StringBuilder sb = new java.lang.StringBuilder("getAllUnassignedReviewersForRequest_args(");
+      boolean first = true;
+
+      sb.append("projectId:");
+      if (this.projectId == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.projectId);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      if (projectId == null) {
+        throw new org.apache.thrift.protocol.TProtocolException("Required field 'projectId' was not present! Struct: " + toString());
+      }
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class getAllUnassignedReviewersForRequest_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public getAllUnassignedReviewersForRequest_argsStandardScheme getScheme() {
+        return new getAllUnassignedReviewersForRequest_argsStandardScheme();
+      }
+    }
+
+    private static class getAllUnassignedReviewersForRequest_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<getAllUnassignedReviewersForRequest_args> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getAllUnassignedReviewersForRequest_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 1: // PROJECT_ID
+              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+                struct.projectId = iprot.readString();
+                struct.setProjectIdIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getAllUnassignedReviewersForRequest_args struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.projectId != null) {
+          oprot.writeFieldBegin(PROJECT_ID_FIELD_DESC);
+          oprot.writeString(struct.projectId);
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class getAllUnassignedReviewersForRequest_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public getAllUnassignedReviewersForRequest_argsTupleScheme getScheme() {
+        return new getAllUnassignedReviewersForRequest_argsTupleScheme();
+      }
+    }
+
+    private static class getAllUnassignedReviewersForRequest_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<getAllUnassignedReviewersForRequest_args> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, getAllUnassignedReviewersForRequest_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+        oprot.writeString(struct.projectId);
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, getAllUnassignedReviewersForRequest_args struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+        struct.projectId = iprot.readString();
+        struct.setProjectIdIsSet(true);
+      }
+    }
+
+    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
+      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
+    }
+  }
+
+  public static class getAllUnassignedReviewersForRequest_result implements org.apache.thrift.TBase<getAllUnassignedReviewersForRequest_result, getAllUnassignedReviewersForRequest_result._Fields>, java.io.Serializable, Cloneable, Comparable<getAllUnassignedReviewersForRequest_result>   {
+    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getAllUnassignedReviewersForRequest_result");
+
+    private static final org.apache.thrift.protocol.TField SUCCESS_FIELD_DESC = new org.apache.thrift.protocol.TField("success", org.apache.thrift.protocol.TType.LIST, (short)0);
+
+    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new getAllUnassignedReviewersForRequest_resultStandardSchemeFactory();
+    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new getAllUnassignedReviewersForRequest_resultTupleSchemeFactory();
+
+    public java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> success; // required
+
+    /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
+    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+      SUCCESS((short)0, "success");
+
+      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+
+      static {
+        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
+          byName.put(field.getFieldName(), field);
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, or null if its not found.
+       */
+      public static _Fields findByThriftId(int fieldId) {
+        switch(fieldId) {
+          case 0: // SUCCESS
+            return SUCCESS;
+          default:
+            return null;
+        }
+      }
+
+      /**
+       * Find the _Fields constant that matches fieldId, throwing an exception
+       * if it is not found.
+       */
+      public static _Fields findByThriftIdOrThrow(int fieldId) {
+        _Fields fields = findByThriftId(fieldId);
+        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        return fields;
+      }
+
+      /**
+       * Find the _Fields constant that matches name, or null if its not found.
+       */
+      public static _Fields findByName(java.lang.String name) {
+        return byName.get(name);
+      }
+
+      private final short _thriftId;
+      private final java.lang.String _fieldName;
+
+      _Fields(short thriftId, java.lang.String fieldName) {
+        _thriftId = thriftId;
+        _fieldName = fieldName;
+      }
+
+      public short getThriftFieldId() {
+        return _thriftId;
+      }
+
+      public java.lang.String getFieldName() {
+        return _fieldName;
+      }
+    }
+
+    // isset id assignments
+    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    static {
+      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.SUCCESS, new org.apache.thrift.meta_data.FieldMetaData("success", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+          new org.apache.thrift.meta_data.ListMetaData(org.apache.thrift.protocol.TType.LIST, 
+              new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, org.apache.airavata.allocation.manager.models.UserDetail.class))));
+      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
+      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getAllUnassignedReviewersForRequest_result.class, metaDataMap);
+    }
+
+    public getAllUnassignedReviewersForRequest_result() {
+    }
+
+    public getAllUnassignedReviewersForRequest_result(
+      java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> success)
+    {
+      this();
+      this.success = success;
+    }
+
+    /**
+     * Performs a deep copy on <i>other</i>.
+     */
+    public getAllUnassignedReviewersForRequest_result(getAllUnassignedReviewersForRequest_result other) {
+      if (other.isSetSuccess()) {
+        java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> __this__success = new java.util.ArrayList<org.apache.airavata.allocation.manager.models.UserDetail>(other.success.size());
+        for (org.apache.airavata.allocation.manager.models.UserDetail other_element : other.success) {
+          __this__success.add(new org.apache.airavata.allocation.manager.models.UserDetail(other_element));
+        }
+        this.success = __this__success;
+      }
+    }
+
+    public getAllUnassignedReviewersForRequest_result deepCopy() {
+      return new getAllUnassignedReviewersForRequest_result(this);
+    }
+
+    @Override
+    public void clear() {
+      this.success = null;
+    }
+
+    public int getSuccessSize() {
+      return (this.success == null) ? 0 : this.success.size();
+    }
+
+    public java.util.Iterator<org.apache.airavata.allocation.manager.models.UserDetail> getSuccessIterator() {
+      return (this.success == null) ? null : this.success.iterator();
+    }
+
+    public void addToSuccess(org.apache.airavata.allocation.manager.models.UserDetail elem) {
+      if (this.success == null) {
+        this.success = new java.util.ArrayList<org.apache.airavata.allocation.manager.models.UserDetail>();
+      }
+      this.success.add(elem);
+    }
+
+    public java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> getSuccess() {
+      return this.success;
+    }
+
+    public getAllUnassignedReviewersForRequest_result setSuccess(java.util.List<org.apache.airavata.allocation.manager.models.UserDetail> success) {
+      this.success = success;
+      return this;
+    }
+
+    public void unsetSuccess() {
+      this.success = null;
+    }
+
+    /** Returns true if field success is set (has been assigned a value) and false otherwise */
+    public boolean isSetSuccess() {
+      return this.success != null;
+    }
+
+    public void setSuccessIsSet(boolean value) {
+      if (!value) {
+        this.success = null;
+      }
+    }
+
+    public void setFieldValue(_Fields field, java.lang.Object value) {
+      switch (field) {
+      case SUCCESS:
+        if (value == null) {
+          unsetSuccess();
+        } else {
+          setSuccess((java.util.List<org.apache.airavata.allocation.manager.models.UserDetail>)value);
+        }
+        break;
+
+      }
+    }
+
+    public java.lang.Object getFieldValue(_Fields field) {
+      switch (field) {
+      case SUCCESS:
+        return getSuccess();
+
+      }
+      throw new java.lang.IllegalStateException();
+    }
+
+    /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
+    public boolean isSet(_Fields field) {
+      if (field == null) {
+        throw new java.lang.IllegalArgumentException();
+      }
+
+      switch (field) {
+      case SUCCESS:
+        return isSetSuccess();
+      }
+      throw new java.lang.IllegalStateException();
+    }
+
+    @Override
+    public boolean equals(java.lang.Object that) {
+      if (that == null)
+        return false;
+      if (that instanceof getAllUnassignedReviewersForRequest_result)
+        return this.equals((getAllUnassignedReviewersForRequest_result)that);
+      return false;
+    }
+
+    public boolean equals(getAllUnassignedReviewersForRequest_result that) {
+      if (that == null)
+        return false;
+      if (this == that)
+        return true;
+
+      boolean this_present_success = true && this.isSetSuccess();
+      boolean that_present_success = true && that.isSetSuccess();
+      if (this_present_success || that_present_success) {
+        if (!(this_present_success && that_present_success))
+          return false;
+        if (!this.success.equals(that.success))
+          return false;
+      }
+
+      return true;
+    }
+
+    @Override
+    public int hashCode() {
+      int hashCode = 1;
+
+      hashCode = hashCode * 8191 + ((isSetSuccess()) ? 131071 : 524287);
+      if (isSetSuccess())
+        hashCode = hashCode * 8191 + success.hashCode();
+
+      return hashCode;
+    }
+
+    @Override
+    public int compareTo(getAllUnassignedReviewersForRequest_result other) {
+      if (!getClass().equals(other.getClass())) {
+        return getClass().getName().compareTo(other.getClass().getName());
+      }
+
+      int lastComparison = 0;
+
+      lastComparison = java.lang.Boolean.valueOf(isSetSuccess()).compareTo(other.isSetSuccess());
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+      if (isSetSuccess()) {
+        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.success, other.success);
+        if (lastComparison != 0) {
+          return lastComparison;
+        }
+      }
+      return 0;
+    }
+
+    public _Fields fieldForId(int fieldId) {
+      return _Fields.findByThriftId(fieldId);
+    }
+
+    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+      scheme(iprot).read(iprot, this);
+    }
+
+    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+      scheme(oprot).write(oprot, this);
+      }
+
+    @Override
+    public java.lang.String toString() {
+      java.lang.StringBuilder sb = new java.lang.StringBuilder("getAllUnassignedReviewersForRequest_result(");
+      boolean first = true;
+
+      sb.append("success:");
+      if (this.success == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.success);
+      }
+      first = false;
+      sb.append(")");
+      return sb.toString();
+    }
+
+    public void validate() throws org.apache.thrift.TException {
+      // check for required fields
+      // check for sub-struct validity
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+      try {
+        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+      try {
+        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
+      } catch (org.apache.thrift.TException te) {
+        throw new java.io.IOException(te);
+      }
+    }
+
+    private static class getAllUnassignedReviewersForRequest_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public getAllUnassignedReviewersForRequest_resultStandardScheme getScheme() {
+        return new getAllUnassignedReviewersForRequest_resultStandardScheme();
+      }
+    }
+
+    private static class getAllUnassignedReviewersForRequest_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<getAllUnassignedReviewersForRequest_result> {
+
+      public void read(org.apache.thrift.protocol.TProtocol iprot, getAllUnassignedReviewersForRequest_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TField schemeField;
+        iprot.readStructBegin();
+        while (true)
+        {
+          schemeField = iprot.readFieldBegin();
+          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+            break;
+          }
+          switch (schemeField.id) {
+            case 0: // SUCCESS
+              if (schemeField.type == org.apache.thrift.protocol.TType.LIST) {
+                {
+                  org.apache.thrift.protocol.TList _list32 = iprot.readListBegin();
+                  struct.success = new java.util.ArrayList<org.apache.airavata.allocation.manager.models.UserDetail>(_list32.size);
+                  org.apache.airavata.allocation.manager.models.UserDetail _elem33;
+                  for (int _i34 = 0; _i34 < _list32.size; ++_i34)
+                  {
+                    _elem33 = new org.apache.airavata.allocation.manager.models.UserDetail();
+                    _elem33.read(iprot);
+                    struct.success.add(_elem33);
+                  }
+                  iprot.readListEnd();
+                }
+                struct.setSuccessIsSet(true);
+              } else { 
+                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              }
+              break;
+            default:
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+          }
+          iprot.readFieldEnd();
+        }
+        iprot.readStructEnd();
+
+        // check for required fields of primitive type, which can't be checked in the validate method
+        struct.validate();
+      }
+
+      public void write(org.apache.thrift.protocol.TProtocol oprot, getAllUnassignedReviewersForRequest_result struct) throws org.apache.thrift.TException {
+        struct.validate();
+
+        oprot.writeStructBegin(STRUCT_DESC);
+        if (struct.success != null) {
+          oprot.writeFieldBegin(SUCCESS_FIELD_DESC);
+          {
+            oprot.writeListBegin(new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, struct.success.size()));
+            for (org.apache.airavata.allocation.manager.models.UserDetail _iter35 : struct.success)
+            {
+              _iter35.write(oprot);
+            }
+            oprot.writeListEnd();
+          }
+          oprot.writeFieldEnd();
+        }
+        oprot.writeFieldStop();
+        oprot.writeStructEnd();
+      }
+
+    }
+
+    private static class getAllUnassignedReviewersForRequest_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+      public getAllUnassignedReviewersForRequest_resultTupleScheme getScheme() {
+        return new getAllUnassignedReviewersForRequest_resultTupleScheme();
+      }
+    }
+
+    private static class getAllUnassignedReviewersForRequest_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<getAllUnassignedReviewersForRequest_result> {
+
+      @Override
+      public void write(org.apache.thrift.protocol.TProtocol prot, getAllUnassignedReviewersForRequest_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+        java.util.BitSet optionals = new java.util.BitSet();
+        if (struct.isSetSuccess()) {
+          optionals.set(0);
+        }
+        oprot.writeBitSet(optionals, 1);
+        if (struct.isSetSuccess()) {
+          {
+            oprot.writeI32(struct.success.size());
+            for (org.apache.airavata.allocation.manager.models.UserDetail _iter36 : struct.success)
+            {
+              _iter36.write(oprot);
+            }
+          }
+        }
+      }
+
+      @Override
+      public void read(org.apache.thrift.protocol.TProtocol prot, getAllUnassignedReviewersForRequest_result struct) throws org.apache.thrift.TException {
+        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+        java.util.BitSet incoming = iprot.readBitSet(1);
+        if (incoming.get(0)) {
+          {
+            org.apache.thrift.protocol.TList _list37 = new org.apache.thrift.protocol.TList(org.apache.thrift.protocol.TType.STRUCT, iprot.readI32());
+            struct.success = new java.util.ArrayList<org.apache.airavata.allocation.manager.models.UserDetail>(_list37.size);
+            org.apache.airavata.allocation.manager.models.UserDetail _elem38;
+            for (int _i39 = 0; _i39 < _list37.size; ++_i39)
+            {
+              _elem38 = new org.apache.airavata.allocation.manager.models.UserDetail();
+              _elem38.read(iprot);
+              struct.success.add(_elem38);
             }
           }
           struct.setSuccessIsSet(true);

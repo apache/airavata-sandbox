@@ -16,12 +16,14 @@
 <li><a href="#Fn_AllocationRegistryService_deleteAllocationRequest">deleteAllocationRequest</a></li>
 <li><a href="#Fn_AllocationRegistryService_getAllRequestsForAdmin">getAllRequestsForAdmin</a></li>
 <li><a href="#Fn_AllocationRegistryService_getAllRequestsForReviewers">getAllRequestsForReviewers</a></li>
+<li><a href="#Fn_AllocationRegistryService_getAllReviewers">getAllReviewers</a></li>
+<li><a href="#Fn_AllocationRegistryService_getAllReviewsForARequest">getAllReviewsForARequest</a></li>
+<li><a href="#Fn_AllocationRegistryService_getAllUnassignedReviewersForRequest">getAllUnassignedReviewersForRequest</a></li>
 <li><a href="#Fn_AllocationRegistryService_getAllocationManagerAdminEmail">getAllocationManagerAdminEmail</a></li>
 <li><a href="#Fn_AllocationRegistryService_getAllocationRequest">getAllocationRequest</a></li>
 <li><a href="#Fn_AllocationRegistryService_getAllocationRequestStatus">getAllocationRequestStatus</a></li>
 <li><a href="#Fn_AllocationRegistryService_getAllocationRequestUserEmail">getAllocationRequestUserEmail</a></li>
 <li><a href="#Fn_AllocationRegistryService_getAllocationRequestUserName">getAllocationRequestUserName</a></li>
-<li><a href="#Fn_AllocationRegistryService_getReviewsForRequest">getReviewsForRequest</a></li>
 <li><a href="#Fn_AllocationRegistryService_getUserDetails">getUserDetails</a></li>
 <li><a href="#Fn_AllocationRegistryService_isAdmin">isAdmin</a></li>
 <li><a href="#Fn_AllocationRegistryService_isAllocationRequestExists">isAllocationRequestExists</a></li>
@@ -75,11 +77,12 @@
 <pre><code>list&lt;<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code>&gt;</code> getAllRequestsForAdmin(<code>string</code> userName)
 </pre><pre><p>API method to get all requests for admin</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_assignReviewers">Function: AllocationRegistryService.assignReviewers</h4>
-<pre><code>bool</code> assignReviewers(<code><a href="allocation_manager_models.html#Struct_UserAllocationDetailPK">allocation_manager_models.UserAllocationDetailPK</a></code> projectId,
-                     <code>string</code> userName)
+<pre><code>bool</code> assignReviewers(<code>string</code> projectId,
+                     <code>string</code> reviewerId,
+                     <code>string</code> adminId)
 </pre><pre><p>API method to assign reviewers</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_updateRequestByReviewer">Function: AllocationRegistryService.updateRequestByReviewer</h4>
-<pre><code>bool</code> updateRequestByReviewer(<code><a href="allocation_manager_models.html#Struct_UserAllocationDetailPK">allocation_manager_models.UserAllocationDetailPK</a></code> projectId,
+<pre><code>bool</code> updateRequestByReviewer(<code>string</code> reviewerId,
                              <code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> userAllocationDetail)
 </pre><pre><p>API method to update request submitted by reviewer</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_isAdmin">Function: AllocationRegistryService.isAdmin</h4>
@@ -94,7 +97,13 @@
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getUserDetails">Function: AllocationRegistryService.getUserDetails</h4>
 <pre><code><a href="allocation_manager_models.html#Struct_UserDetail">allocation_manager_models.UserDetail</a></code> getUserDetails(<code>string</code> userName)
 </pre><pre><p>API method to get a user details</p>
-</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getReviewsForRequest">Function: AllocationRegistryService.getReviewsForRequest</h4>
-<pre><code>list&lt;<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code>&gt;</code> getReviewsForRequest(<code><a href="allocation_manager_models.html#Struct_UserAllocationDetailPK">allocation_manager_models.UserAllocationDetailPK</a></code> projectId)
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllReviewsForARequest">Function: AllocationRegistryService.getAllReviewsForARequest</h4>
+<pre><code>list&lt;<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code>&gt;</code> getAllReviewsForARequest(<code>string</code> projectId)
 </pre><pre><p>API method to get all the reviews for a request</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllReviewers">Function: AllocationRegistryService.getAllReviewers</h4>
+<pre><code>list&lt;<code><a href="allocation_manager_models.html#Struct_UserDetail">allocation_manager_models.UserDetail</a></code>&gt;</code> getAllReviewers()
+</pre><pre><p>API method to get all reviewers</p>
+</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllUnassignedReviewersForRequest">Function: AllocationRegistryService.getAllUnassignedReviewersForRequest</h4>
+<pre><code>list&lt;<code><a href="allocation_manager_models.html#Struct_UserDetail">allocation_manager_models.UserDetail</a></code>&gt;</code> getAllUnassignedReviewersForRequest(<code>string</code> projectId)
+</pre><pre><p>API method to get all unassigned reviewers for a request</p>
 </pre><br/></div></div></body></html>
