@@ -27,5 +27,4 @@ public class ProjectReviewerRepository extends AbstractRepository<ProjectReviewe
         queryParameters.put(DBConstants.ProjectReviewerTable.REVIEWER, reviewerUserName);
         return select(query, queryParameters, 0, -1);
     }
-    
 }

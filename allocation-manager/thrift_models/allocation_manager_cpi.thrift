@@ -62,12 +62,12 @@ service AllocationRegistryService{
 /**
     <p>API method to assign reviewers</p>
     */
-    bool assignReviewers(1:required allocation_manager_models.UserAllocationDetailPK projectId , 2: required string userName)
+    bool assignReviewers(1:required string projectId , 2: required string reviewerId, 3: required string adminId)
 
 /**
     <p>API method to update request submitted by reviewer</p>
     */
-    bool updateRequestByReviewer(1:required allocation_manager_models.UserAllocationDetailPK projectId, 2:required allocation_manager_models.UserAllocationDetail userAllocationDetail)
+    bool updateRequestByReviewer(1:required string reviewerId, 2:required allocation_manager_models.UserAllocationDetail userAllocationDetail)
 
     
     /**
@@ -93,5 +93,14 @@ service AllocationRegistryService{
     /**
         <p>API method to get all the reviews for a request</p>
         */
-        list<allocation_manager_models.UserAllocationDetail> getReviewsForRequest(1:required allocation_manager_models.UserAllocationDetailPK projectId)
+        list<allocation_manager_models.UserAllocationDetail> getAllReviewsForARequest(1:required string projectId)
+
+ 	/**
+        <p>API method to get all reviewers</p>
+        */
+        list<allocation_manager_models.UserDetail> getAllReviewers()
+	/**
+        <p>API method to get all unassigned reviewers for a request</p>
+        */
+        list<allocation_manager_models.UserDetail> getAllUnassignedReviewersForRequest(1:required string projectId)
 }

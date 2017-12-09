@@ -4,7 +4,10 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigInteger;
 
-
+/**
+ *
+ * @author harsha
+ */
 /**
  * The persistent class for the USER_ALLOCATION_DETAILS database table.
  * 
