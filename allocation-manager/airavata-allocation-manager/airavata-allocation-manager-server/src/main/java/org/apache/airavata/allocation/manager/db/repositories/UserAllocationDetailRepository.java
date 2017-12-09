@@ -26,4 +26,22 @@ public class UserAllocationDetailRepository extends AbstractRepository<UserAlloc
         queryParameters.put(DBConstants.UserAllocationDetailTable.PROJECTID, projectId);
         return select(query, queryParameters, 0, -1).get(0).getId().getUsername();
     }
+    
+    public List<UserAllocationDetail> getAllUserRequests() throws Exception{
+        Map<String,Object> queryParameters = new HashMap<>();
+        String query = "SELECT * from " + UserAllocationDetailEntity.class.getSimpleName();
+        query += " WHERE ";
+        query += DBConstants.UserAllocationDetailTable.ISPRIMARYOWNER + " = TRUE" ;
+        return select(query, queryParameters, 0, -1);
+    }
+    
+     public List<UserAllocationDetail> getAllReviewsForARequest(String projectId) throws Exception{
+        Map<String,Object> queryParameters = new HashMap<>();
+        String query = "SELECT * from " + UserAllocationDetailEntity.class.getSimpleName();
+        query += " WHERE ";
+        query += DBConstants.UserAllocationDetailTable.PROJECTID + " = " + projectId + " AND "; 
+        query += DBConstants.UserAllocationDetailTable.ISPRIMARYOWNER + " = FALSE" ;
+        queryParameters.put(DBConstants.UserAllocationDetailTable.PROJECTID, projectId);
+        return select(query, queryParameters, 0, -1);
+    }
 }

@@ -23,11 +23,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DBConstants {
+
     private final static Logger logger = LoggerFactory.getLogger(DBConstants.class);
 
     public static int SELECT_MAX_ROWS = 1000;
 
     public static class DomainTable {
+
         public static final String DOMAIN_ID = "domainId";
         public static final String NAME = "name";
         public static final String DESCRIPTION = "description";
@@ -36,17 +38,35 @@ public class DBConstants {
     }
 
     // Added the ProjectReviewer table fields
-    public static class ProjectReviewerTable{
+    public static class ProjectReviewerTable {
+
         public static final String PROJECTID = "PROJECT_ID";
-        public static final String REVIEWER = "REVIEWER";  
+        public static final String REVIEWER = "REVIEWER";
     }
-    
-    public static class UserAllocationDetailTable{
+
+    public static class UserAllocationDetailTable {
+
         public static final String PROJECTID = "PROJECT_ID";
         public static final String ISPRIMARYOWNER = "IS_PRIMARY_OWNER";
     }
-    
-    public static class UserDetailTable{
+
+    public static class UserDetailTable {
+
         public static final String USERTYPE = "USER_TYPE";
+    }
+
+    public static class UserType {
+
+        public static final String REVIEWER = "REVIEWER";
+        public static final String ADMIN = "ADMIN";
+        public static final String USER = "USER";
+    }
+
+    public static class RequestStatus {
+
+        public static final String PENDING = "PENDING";
+        public static final String UNDER_REVIEW = "UNDER_REVIEW";
+        public static final String APPROVED = "APPROVED";
+         public static final String REJECTED = "REJECTED";
     }
 }
