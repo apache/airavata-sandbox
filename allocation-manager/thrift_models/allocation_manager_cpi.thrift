@@ -111,4 +111,9 @@ service AllocationRegistryService{
         <p>API method to reject a request</p>
         */
         bool rejectRequest(1:required string projectId, 2:required string adminId)
+
+        /**
+        <p>API method to create a new user</p>
+        */
+        bool createUser(1:required string userName)
 }
