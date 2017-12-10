@@ -1,0 +1,79 @@
+node {
+
+    checkout scm
+
+    env.DOCKER_API_VERSION="1.23"
+
+    sh "git rev-parse --short HEAD > commit-id"
+
+    tag = readFile('commit-id').replace("\n", "").replace("\r", "")
+    registryHost = "192.168.1.114:5000"
+
+    api_server_imageName = "${registryHost}/api-server:${tag}"
+    env.BUILDIMG_API_SERVER=api_server_imageName
+
+    event_sink_imageName = "${registryHost}/event-sink:${tag}"
+    env.BUILDIMG_EVENT_SINK=event_sink_imageName
+
+    helix_controller_imageName = "${registryHost}/helix-controller:${tag}"
+    env.BUILDIMG_HELIX_CONTROLLER=helix_controller_imageName
+
+    task_scheduler_imageName = "${registryHost}/task-scheduler:${tag}"
+    env.BUILDIMG_TASK_SCHEDULER=task_scheduler_imageName
+
+    command_task_imageName = "${registryHost}/command-task:${tag}"
+    env.BUILDIMG_COMMAND_TASK=command_task_imageName
+
+    data_in_task_imageName = "${registryHost}/data-in-task:${tag}"
+    env.BUILDIMG_DATA_IN_TASK=data_in_task_imageName
+
+    data_out_task_imageName = "${registryHost}/data-out-task:${tag}"
+    env.BUILDIMG_DATA_OUT_TASK=data_out_task_imageName
+
+    stage "Build"
+        sh "/opt/maven/bin/mvn -N -f airavata-kubernetes clean install"
+        sh "/opt/maven/bin/mvn -f airavata-kubernetes/modules/api-resource/ clean install"
+        sh "/opt/maven/bin/mvn -f airavata-kubernetes/modules/compute-resource-api/ clean install"
+        sh "/opt/maven/bin/mvn -f airavata-kubernetes/modules/helix-task-api/ clean install"
+        sh "/opt/maven/bin/mvn -f airavata-kubernetes/modules/microservices/api-server/ clean install docker:build -DdockerImageTags=${tag} -Ddocker.image.prefix=${registryHost}"
+        sh "/opt/maven/bin/mvn -f airavata-kubernetes/modules/microservices/event-sink/ clean install docker:build -DdockerImageTags=${tag} -Ddocker.image.prefix=${registryHost}"
+        sh "/opt/maven/bin/mvn -f airavata-kubernetes/modules/microservices/helix-controller/ clean install docker:build -DdockerImageTags=${tag} -Ddocker.image.prefix=${registryHost}"
+        sh "/opt/maven/bin/mvn -f airavata-kubernetes/modules/microservices/workflow-scheduler/ clean install docker:build -DdockerImageTags=${tag} -Ddocker.image.prefix=${registryHost}"
+        sh "/opt/maven/bin/mvn -f airavata-kubernetes/modules/microservices/tasks/command-task/ clean install docker:build -DdockerImageTags=${tag} -Ddocker.image.prefix=${registryHost}"
+        sh "/opt/maven/bin/mvn -f airavata-kubernetes/modules/microservices/tasks/data-in-task/ clean install docker:build -DdockerImageTags=${tag} -Ddocker.image.prefix=${registryHost}"
+        sh "/opt/maven/bin/mvn -f airavata-kubernetes/modules/microservices/tasks/data-out-task/ clean install docker:build -DdockerImageTags=${tag} -Ddocker.image.prefix=${registryHost}"
+
+    stage "Push"
+
+        sh "docker push ${api_server_imageName}"
+        sh "docker push ${event_sink_imageName}"
+        sh "docker push ${helix_controller_imageName}"
+        sh "docker push ${task_scheduler_imageName}"
+        sh "docker push ${command_task_imageName}"
+        sh "docker push ${data_in_task_imageName}"
+        sh "docker push ${data_out_task_imageName}"
+
+    stage "Deploy"
+
+        sh "sed 's#dimuthuupe/api-server:v1.0#'$BUILDIMG_API_SERVER'#' airavata-kubernetes/scripts/k8s/api-server/api-server-dep.yml | kubectl apply -f -"
+        sh "kubectl rollout status deployment/api-server"
+
+        sh "sed 's#dimuthuupe/event-sink:v1.0#'$BUILDIMG_EVENT_SINK'#' airavata-kubernetes/scripts/k8s/event-sink/event-sink-dep.yml | kubectl apply -f -"
+        sh "kubectl rollout status deployment/event-sink"
+
+        sh "sed 's#dimuthuupe/helix-controller:v1.0#'$BUILDIMG_HELIX_CONTROLLER'#' airavata-kubernetes/scripts/k8s/helix-controller/helix-controller-dep.yml | kubectl apply -f -"
+        sh "kubectl rollout status deployment/helix-controller"
+
+        sh "sed 's#dimuthuupe/task-scheduler:v1.0#'$BUILDIMG_TASK_SCHEDULER'#' airavata-kubernetes/scripts/k8s/task-scheduler/task-scheduler-dep.yml | kubectl apply -f -"
+        sh "kubectl rollout status deployment/task-scheduler"
+
+        sh "sed 's#dimuthuupe/command-task:v1.0#'$BUILDIMG_COMMAND_TASK'#' airavata-kubernetes/scripts/k8s/tasks/command-task/command-task-dep.yml | kubectl apply -f -"
+        sh "kubectl rollout status deployment/command-task"
+
+        sh "sed 's#dimuthuupe/data-in-task:v1.0#'$BUILDIMG_DATA_IN_TASK'#' airavata-kubernetes/scripts/k8s/tasks/data-in-task/data-in-task-dep.yml | kubectl apply -f -"
+        sh "kubectl rollout status deployment/data-in-task"
+
+        sh "sed 's#dimuthuupe/data-out-task:v1.0#'$BUILDIMG_DATA_OUT_TASK'#' airavata-kubernetes/scripts/k8s/tasks/data-out-task/data-out-task-dep.yml | kubectl apply -f -"
+        sh "kubectl rollout status deployment/data-out-task"
+
+}

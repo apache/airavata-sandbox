@@ -32,15 +32,20 @@
     <modules>
         <module>modules/api-resource</module>
         <module>modules/compute-resource-api</module>
+        <module>modules/helix-task-api</module>
         <module>modules/microservices/api-server</module>
-        <module>modules/microservices/workflow-generator</module>
-        <module>modules/microservices/task-scheduler</module>
         <module>modules/microservices/event-sink</module>
-        <module>modules/microservices/tasks/ingress-staging-task</module>
-        <module>modules/microservices/tasks/env-setup-task</module>
-        <module>modules/microservices/tasks/job-submission-task</module>
-        <module>modules/microservices/tasks/env-cleanup-task</module>
-        <module>modules/microservices/tasks/egress-staging-task</module>
+        <module>modules/microservices/helix-controller</module>
+        <module>modules/microservices/workflow-generator</module>
+        <module>modules/microservices/workflow-scheduler</module>
+        <module>modules/microservices/tasks/command-task</module>
+        <module>modules/microservices/tasks/data-in-task</module>
+        <module>modules/microservices/tasks/data-out-task</module>
+        <module>modules/agents/agent-core</module>
+        <module>modules/agents/thrift-agent</module>
+        <module>modules/microservices/tasks/async-command-task</module>
+        <module>modules/microservices/async-event-listener</module>
+        <module>modules/microservices/tasks/async-command-monitor</module>
     </modules>
 
     <dependencyManagement>
@@ -74,6 +79,31 @@
                 <groupId>com.jcraft</groupId>
                 <artifactId>jsch</artifactId>
                 <version>0.1.53</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.helix</groupId>
+                <artifactId>helix-core</artifactId>
+                <version>0.6.7</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-clients</artifactId>
+                <version>0.10.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-framework</artifactId>
+                <version>2.8.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

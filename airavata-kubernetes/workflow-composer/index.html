@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Airavata Workflow Composer</title>
+    <script type="text/javascript">
+        mxBasePath = 'src';
+    </script>
+    <script type="text/javascript" src="src/js/mxClient.js"></script>
+    <script type="text/javascript" src="src/js/components.js"></script>
+    <script type="text/javascript">
+        function main(container, tbContainer)
+        {
+            if (!mxClient.isBrowserSupported())
+            {
+                // Displays an error message if the browser is not supported.
+                mxUtils.error('Browser is not supported!', 200, false);
+            }
+            else
+            {
+                var toolbar = new mxToolbar(tbContainer);
+                toolbar.enabled = false
+
+                // Workaround for Internet Explorer ignoring certain styles
+                if (mxClient.IS_QUIRKS)
+                {
+                    document.body.style.overflow = 'hidden';
+                    new mxDivResizer(tbContainer);
+                    new mxDivResizer(container);
+                }
+
+                var doc = mxUtils.createXmlDocument();
+
+                var relation = doc.createElement('Edge');
+
+                var graph = new mxGraph(container);
+
+                graph.dropEnabled = true;
+
+                mxDragSource.prototype.getDropTarget = function(graph, x, y)
+                {
+                    var cell = graph.getCellAt(x, y);
+
+                    if (!graph.isValidDropTarget(cell))
+                    {
+                        cell = null;
+                    }
+
+                    return cell;
+                };
+
+                // Enables new connections in the graph
+                graph.setConnectable(true);
+                graph.setMultigraph(false);
+
+                var addVertex = function(icon, w, h, componentName)
+                {
+                    addToolbarItem(graph, toolbar, fetchComponent(componentName, doc), icon);
+                };
+
+                addVertex('src/icons/start.png', 40, 40, 'START');
+                addVertex('src/icons/stop.png', 40, 40, 'STOP');
+                addVertex('src/icons/parallel.png', 40, 40, 'PARALLEL');
+                addVertex('src/icons/ssh.png', 40, 60, 'SSH');
+                addVertex('src/icons/copy.png', 40, 60, 'CP');
+                addVertex('src/icons/s3.png', 40, 60, 'S3');
+                toolbar.addLine();
+
+                graph.setCellsResizable(false);
+                graph.setResizeContainer(true);
+                graph.minimumContainerSize = new mxRectangle(0, 0, 500, 380);
+                graph.setBorder(60);
+
+                new mxKeyHandler(graph);
+
+                // Overrides method to disallow edge label editing
+                graph.isCellEditable = function(cell)
+                {
+                    return !this.getModel().isEdge(cell);
+                };
+
+                // Overrides method to provide a cell label in the display
+                graph.convertValueToString = function(cell)
+                {
+                    if (mxUtils.isNode(cell.value))
+                    {
+                        if (cell.value.nodeName.toLowerCase() == 'processingelement')
+                        {
+                            var name = cell.getAttribute('name', '');
+
+                            return name;
+                        }
+                        else if (cell.value.nodeName.toLowerCase() == 'edge')
+                        {
+                            return '';
+                        }
+
+                    }
+
+                    return '';
+                };
+
+                // Overrides method to store a cell label in the model
+                var cellLabelChanged = graph.cellLabelChanged;
+                graph.cellLabelChanged = function(cell, newValue, autoSize)
+                {
+                    if (mxUtils.isNode(cell.value) &&
+                        cell.value.nodeName.toLowerCase() == 'processingelement')
+                    {
+                        // Clones the value for correct undo/redo
+                        var elt = cell.value.cloneNode(true);
+
+                        elt.setAttribute('name', newValue);
+                        newValue = elt;
+                        autoSize = true;
+                    }
+
+                    cellLabelChanged.apply(this, arguments);
+                };
+
+                // Overrides method to create the editing value
+                var getEditingValue = graph.getEditingValue;
+                graph.getEditingValue = function(cell)
+                {
+                    if (mxUtils.isNode(cell.value) &&
+                        cell.value.nodeName.toLowerCase() == 'processingelement')
+                    {
+                        var name = cell.getAttribute('name', '');
+
+                        return name;
+                    }
+                };
+
+                new mxRubberband(graph);
+
+                document.body.appendChild(mxUtils.button('View XML', function()
+                {
+                    var encoder = new mxCodec();
+                    var node = encoder.encode(graph.getModel());
+                    mxUtils.popup(mxUtils.getPrettyXml(node), true);
+                }));
+
+                // Changes the style for match the markup
+                // Creates the default style for vertices
+                var style = graph.getStylesheet().getDefaultVertexStyle();
+                style[mxConstants.STYLE_STROKECOLOR] = 'gray';
+                style[mxConstants.STYLE_ROUNDED] = true;
+                style[mxConstants.STYLE_SHADOW] = true;
+                style[mxConstants.STYLE_FILLCOLOR] = '#DFDFDF';
+                style[mxConstants.STYLE_GRADIENTCOLOR] = 'white';
+                style[mxConstants.STYLE_FONTCOLOR] = 'black';
+                style[mxConstants.STYLE_FONTSIZE] = '12';
+                style[mxConstants.STYLE_SPACING] = 4;
+
+                // Creates the default style for edges
+                style = graph.getStylesheet().getDefaultEdgeStyle();
+                style[mxConstants.STYLE_STROKECOLOR] = '#0C0C0C';
+                style[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = 'white';
+                style[mxConstants.STYLE_EDGE] = mxEdgeStyle.ElbowConnector;
+                style[mxConstants.STYLE_ROUNDED] = true;
+                style[mxConstants.STYLE_FONTCOLOR] = 'black';
+                style[mxConstants.STYLE_FONTSIZE] = '10';
+
+                var parent = graph.getDefaultParent();
+                graph.getModel().beginUpdate();
+                try
+                {
+                    //var v1 = graph.insertVertex(parent, null, pe1, 40, 40, 80, 30);
+                    //var v2 = graph.insertVertex(parent, null, pe2, 200, 150, 80, 30);
+                    //var e1 = graph.insertEdge(parent, null, relation, v1, v2);
+                }
+                finally
+                {
+                    // Updates the display
+                    graph.getModel().endUpdate();
+                }
+
+                // Implements a properties panel that uses
+                // mxCellAttributeChange to change properties
+                graph.getSelectionModel().addListener(mxEvent.CHANGE, function(sender, evt)
+                {
+                    selectionChanged(graph);
+                });
+
+                selectionChanged(graph);
+
+            }
+
+            /**
+             * Updates the properties panel
+             */
+            function selectionChanged(graph)
+            {
+                var div = document.getElementById('properties');
+
+                // Forces focusout in IE
+                graph.container.focus();
+
+                // Clears the DIV the non-DOM way
+                div.innerHTML = '';
+
+                // Gets the selection cell
+                var cell = graph.getSelectionCell();
+
+                if (cell == null)
+                {
+                    mxUtils.writeln(div, 'Nothing selected.');
+                }
+                else if (cell.value)
+                {
+                    // Writes the title
+                    var center = document.createElement('center');
+                    mxUtils.writeln(center, cell.value.nodeName + ' (' + cell.id + ')');
+                    div.appendChild(center);
+                    mxUtils.br(div);
+
+                    // Creates the form from the attributes of the user object
+                    var form = new mxForm();
+
+                    var attrs = cell.value.attributes;
+
+                    for (var i = 0; i < attrs.length; i++)
+                    {
+                        if (!attrs[i].nodeName.startsWith("in-") && !attrs[i].nodeName.startsWith("out-")) {
+                            createTextField(graph, form, cell, attrs[i]);
+                        }
+                    }
+
+                    div.appendChild(form.getTable());
+                    mxUtils.br(div);
+                }
+            }
+
+            function createTextField(graph, form, cell, attribute)
+            {
+                var input = form.addText(attribute.nodeName + ':', attribute.nodeValue);
+
+                var applyHandler = function()
+                {
+                    var newValue = input.value || '';
+                    var oldValue = cell.getAttribute(attribute.nodeName, '');
+
+                    if (newValue != oldValue)
+                    {
+                        graph.getModel().beginUpdate();
+
+                        try
+                        {
+                            var edit = new mxCellAttributeChange(
+                                cell, attribute.nodeName,
+                                newValue);
+                            graph.getModel().execute(edit);
+                            graph.updateCellSize(cell);
+                        }
+                        finally
+                        {
+                            graph.getModel().endUpdate();
+                        }
+                    }
+                };
+
+                mxEvent.addListener(input, 'keypress', function (evt)
+                {
+                    // Needs to take shift into account for textareas
+                    if (evt.keyCode == /*enter*/13 &&
+                        !mxEvent.isShiftDown(evt))
+                    {
+                        input.blur();
+                    }
+                });
+
+                if (mxClient.IS_IE)
+                {
+                    mxEvent.addListener(input, 'focusout', applyHandler);
+                }
+                else
+                {
+                    // Note: Known problem is the blurring of fields in
+                    // Firefox by changing the selection, in which case
+                    // no event is fired in FF and the change is lost.
+                    // As a workaround you should use a local variable
+                    // that stores the focused field and invoke blur
+                    // explicitely where we do the graph.focus above.
+                    mxEvent.addListener(input, 'blur', applyHandler);
+                }
+            }
+
+            function addToolbarItem(graph, toolbar, prototype, image)
+            {
+                // Function that is executed when the image is dropped on
+                // the graph. The cell argument points to the cell under
+                // the mousepointer if there is one.
+                var funct = function(graph, evt, cell, x, y)
+                {
+
+                    var parent = graph.getDefaultParent();
+                    var model = graph.getModel();
+
+                    var v1 = null;
+
+                    model.beginUpdate();
+
+                    try
+                    {
+                        v1 = graph.insertVertex(parent, null, prototype.cloneNode(true), x, y, 80, 60);
+                        v1.setConnectable(false);
+
+                        var inputs = [];
+                        var outputs = [];
+                        for (var i = 0; i < prototype.attributes.length; i++)
+                        {
+                            attr = prototype.attributes[i];
+                            if (attr.nodeName.startsWith("in-")) {
+                                inputs.push(attr.nodeValue);
+                            }
+                            if (attr.nodeName.startsWith("out-")) {
+                                outputs.push(attr.nodeValue);
+                            }
+                        }
+
+                        var inputDivision = 1/(inputs.length + 1);
+                        var outputDivision = 1/(outputs.length + 1);
+
+                        inputs.forEach(function(input, index) {
+                            var v11 = graph.insertVertex(v1, null, input, 0, (index*inputDivision + inputDivision), 10, 10);
+                            v11.geometry.offset = new mxPoint(-5, -5);
+                            v11.geometry.relative = true;
+                        });
+
+                        outputs.forEach(function(output, index) {
+                            var v11 = graph.insertVertex(v1, null, output, 1, (index*outputDivision + outputDivision), 10, 10);
+                            v11.geometry.offset = new mxPoint(-5, -5);
+                            v11.geometry.relative = true;
+                        });
+                    }
+                    finally
+                    {
+                        // Updates the display
+                        graph.getModel().endUpdate();
+                    }
+
+                    graph.updateCellSize(v1);
+                    graph.setSelectionCell(v1);
+                };
+
+                // Creates the image which is used as the drag icon (preview)
+                var img = toolbar.addMode(null, image, funct);
+                mxUtils.makeDraggable(img, graph, funct);
+            }
+        };
+    </script>
+</head>
+<body onload="main(document.getElementById('graphContainer'), document.getElementById('toolContainer'))">
+<table style="position:relative;">
+    <tr>
+        <td>
+            <div id="toolContainer" style="border: solid 1px black; width: 80px; cursor: default">
+
+            </div>
+        </td>
+        <td>
+            <div id="graphContainer"
+                 style="border: solid 1px black;overflow:hidden;width:321px; cursor:default;">
+            </div>
+        </td>
+        <td valign="top">
+            <div id="properties"
+                 style="border: solid 1px black; padding: 10px;">
+            </div>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

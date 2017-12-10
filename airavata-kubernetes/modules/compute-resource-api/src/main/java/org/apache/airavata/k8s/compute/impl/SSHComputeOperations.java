@@ -1,5 +1,4 @@
 /**
- *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -7,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -51,46 +50,11 @@ public class SSHComputeOperations implements ComputeOperations {
         this.port = port;
     }
 
-    public ExecutionResult executeCommand(String command) throws JSchException, IOException {
-        JSch jsch = new JSch();
-        Session session = jsch.getSession(userName, this.computeHost, port);
-        session.setConfig("StrictHostKeyChecking", "no");
+    public ExecutionResult executeCommand(String command) throws Exception {
+        Session session = getConnectedSession(this.userName, this.password, this.computeHost, this.port);
 
-        session.setUserInfo(new UserInfo() {
-            @Override
-            public String getPassphrase() {
-                return password;
-            }
-
-            @Override
-            public String getPassword() {
-                return password;
-            }
-
-            @Override
-            public boolean promptPassword(String s) {
-                return true;
-            }
-
-            @Override
-            public boolean promptPassphrase(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean promptYesNo(String s) {
-                return false;
-            }
-
-            @Override
-            public void showMessage(String s) {
-
-            }
-        });
-
-        session.connect();
-        Channel channel=session.openChannel("exec");
-        ((ChannelExec)channel).setCommand(command);
+        Channel channel = session.openChannel("exec");
+        ((ChannelExec) channel).setCommand(command);
 
         ByteArrayOutputStream sysOut = new ByteArrayOutputStream();
         channel.setOutputStream(sysOut);
@@ -104,9 +68,9 @@ public class SSHComputeOperations implements ComputeOperations {
         ExecutionResult result = new ExecutionResult();
         byte[] tmp = new byte[1024];
         while (true) {
-            while (in.available()>0) {
+            while (in.available() > 0) {
                 int i = in.read(tmp, 0, 1024);
-                if (i<0) break;
+                if (i < 0) break;
                 System.out.print(new String(tmp, 0, i));
             }
             if (channel.isClosed()) {
@@ -117,7 +81,8 @@ public class SSHComputeOperations implements ComputeOperations {
             }
             try {
                 Thread.sleep(1000);
-            } catch(Exception e){}
+            } catch (Exception e) {
+            }
         }
 
         channel.disconnect();
@@ -128,16 +93,27 @@ public class SSHComputeOperations implements ComputeOperations {
         return result;
     }
 
-    public void transferDataIn(String source, String target, String protocol) {
-
+    public void transferDataIn(String source, String target, String protocol) throws Exception {
+        Session session = getConnectedSession(this.userName, this.password, this.computeHost, this.port);
+        copyLocalToRemote(session, source, target);
     }
 
     public void transferDataOut(String source, String target, String protocol) throws Exception {
-        JSch jsch = new JSch();
-        Session session = jsch.getSession(userName, this.computeHost, port);
-        session.setConfig("StrictHostKeyChecking", "no");
+        Session session = getConnectedSession(this.userName, this.password, this.computeHost, this.port);
+        copyRemoteToLocal(session, source, target);
+    }
 
-        session.setUserInfo(new UserInfo() {
+    private static Session getConnectedSession(String userName, String password, String computeHost, int port) throws Exception {
+        JSch jsch = new JSch();
+        Session session = jsch.getSession(userName, computeHost, port);
+        session.setConfig("StrictHostKeyChecking", "no");
+        session.setUserInfo(getUserInfo(password));
+        session.connect();
+        return session;
+    }
+
+    private static UserInfo getUserInfo(String password) {
+        return new UserInfo() {
             @Override
             public String getPassphrase() {
                 return password;
@@ -167,11 +143,79 @@ public class SSHComputeOperations implements ComputeOperations {
             public void showMessage(String s) {
 
             }
-        });
+        };
+    }
 
-        session.connect();
+    private static void copyLocalToRemote(Session session, String source, String target) throws Exception {
 
-        copyRemoteToLocal(session, source, target);
+        FileInputStream fis = null;
+        boolean ptimestamp = true;
+
+        // exec 'scp -t rfile' remotely
+        String command = "scp " + (ptimestamp ? "-p" : "") + " -t " + target;
+        Channel channel = session.openChannel("exec");
+        ((ChannelExec) channel).setCommand(command);
+
+        // get I/O streams for remote scp
+        OutputStream out = channel.getOutputStream();
+        InputStream in = channel.getInputStream();
+
+        channel.connect();
+
+        if (checkAck(in) != 0) {
+            return;
+        }
+
+        File _lfile = new File(source);
+
+        if (ptimestamp) {
+            command = "T" + (_lfile.lastModified() / 1000) + " 0";
+            // The access time should be sent here,
+            // but it is not accessible with JavaAPI ;-<
+            command += (" " + (_lfile.lastModified() / 1000) + " 0\n");
+            out.write(command.getBytes());
+            out.flush();
+            if (checkAck(in) != 0) {
+                return;
+            }
+        }
+
+        // send "C0644 filesize filename", where filename should not include '/'
+        long filesize = _lfile.length();
+        command = "C0644 " + filesize + " ";
+        if (source.lastIndexOf('/') > 0) {
+            command += source.substring(source.lastIndexOf('/') + 1);
+        } else {
+            command += source;
+        }
+        command += "\n";
+        out.write(command.getBytes());
+        out.flush();
+        if (checkAck(in) != 0) {
+            return;
+        }
+
+        // send a content of lfile
+        fis = new FileInputStream(source);
+        byte[] buf = new byte[1024];
+        while (true) {
+            int len = fis.read(buf, 0, buf.length);
+            if (len <= 0) break;
+            out.write(buf, 0, len); //out.flush();
+        }
+        fis.close();
+        fis = null;
+        // send '\0'
+        buf[0] = 0;
+        out.write(buf, 0, 1);
+        out.flush();
+        if (checkAck(in) != 0) {
+            return;
+        }
+        out.close();
+
+        channel.disconnect();
+        session.disconnect();
     }
 
     private static void copyRemoteToLocal(Session session, String source, String target) throws JSchException, IOException {
@@ -246,7 +290,7 @@ public class SSHComputeOperations implements ComputeOperations {
             }
 
             if (checkAck(in) != 0) {
-                System.exit(0);
+                return;
             }
 
             // send '\0'
@@ -297,6 +341,6 @@ public class SSHComputeOperations implements ComputeOperations {
         //ExecutionResult result = operations.executeCommand("sh /opt/sample.sh > /tmp/stdout.txt 2> /tmp/stderr.txt");
         //System.out.println(result.getStdOut());
         //System.out.println(result.getStdErr());
-        operations.transferDataOut("/tmp/stdout.txt", "/tmp/b.txt", "SCP");
+        operations.transferDataIn("/tmp/a.txt", "/tmp/b.txt", "SCP");
     }
 }

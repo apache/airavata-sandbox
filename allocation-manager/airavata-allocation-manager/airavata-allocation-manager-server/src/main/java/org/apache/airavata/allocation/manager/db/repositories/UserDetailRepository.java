@@ -1,6 +1,7 @@
 package org.apache.airavata.allocation.manager.db.repositories;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.airavata.allocation.manager.db.entities.UserDetailEntity;
@@ -25,4 +26,11 @@ public class UserDetailRepository extends AbstractRepository<UserDetail, UserDet
 
 		return (UserDetail) select(queryString, queryParameters, 0, -1);
 	}
+        
+    public List<UserDetail> getAllReviewers() throws Exception {
+        String queryString = "SELECT * FROM " + UserDetailEntity.class.getSimpleName() + "WHERE"
+                + DBConstants.UserDetailTable.USERTYPE + "=" + DBConstants.UserType.REVIEWER;
+        Map<String, Object> queryParameters = new HashMap<>();
+        return select(queryString, queryParameters, 0, -1);
+    }
 }

@@ -22,6 +22,7 @@ public class AllocationManagerAdminClient {
 			if (requestType.equals("UPDATE_REQUEST")) {
 				client.updateAllocationRequestStatus(projectId, status);
 			} else if(requestType.equals("GET_REQUEST")){
+                            
 				client.getAllocationRequest(projectId);
 			}	else if(requestType.equals("GET_REQUEST_STATUS")){
 				client.getAllocationRequestStatus(projectId);

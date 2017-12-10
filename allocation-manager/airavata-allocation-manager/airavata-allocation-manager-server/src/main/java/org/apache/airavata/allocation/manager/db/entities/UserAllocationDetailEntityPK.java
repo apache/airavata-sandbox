@@ -4,6 +4,10 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
+ *
+ * @author harsha
+ */
+/**
  * The primary key class for the USER_ALLOCATION_DETAILS database table.
  * 
  */

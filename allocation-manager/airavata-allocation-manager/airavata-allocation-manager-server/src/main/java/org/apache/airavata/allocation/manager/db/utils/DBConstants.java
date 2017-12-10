@@ -23,11 +23,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class DBConstants {
+
     private final static Logger logger = LoggerFactory.getLogger(DBConstants.class);
 
     public static int SELECT_MAX_ROWS = 1000;
 
     public static class DomainTable {
+
         public static final String DOMAIN_ID = "domainId";
         public static final String NAME = "name";
         public static final String DESCRIPTION = "description";
@@ -35,80 +37,36 @@ public class DBConstants {
         public static final String UPDATED_TIME = "updatedTime";
     }
 
-    public static class UserTable {
-        public static final String USER_ID = "userId";
-        public static final String DOMAIN_ID = "domainId";
-        public static final String USER_NAME = "userName";
-        public static final String CREATED_TIME = "createdTime";
-        public static final String UPDATED_TIME = "updatedTime";
+    // Added the ProjectReviewer table fields
+    public static class ProjectReviewerTable {
+
+        public static final String PROJECTID = "PROJECT_ID";
+        public static final String REVIEWER = "REVIEWER";
     }
 
-    public static class UserGroupTable {
-        public static final String GROUP_ID = "groupId";
-        public static final String DOMAIN_ID = "domainId";
-        public static final String NAME = "name";
-        public static final String DESCRIPTION = "description";
-        public static final String OWNER_ID = "ownerId";
-        public static final String GROUP_TYPE = "groupType";
-        public static final String GROUP_CARDINALITY = "groupCardinality";
-        public static final String CREATED_TIME = "createdTime";
-        public static final String UPDATED_TIME = "updatedTime";
+    public static class UserAllocationDetailTable {
+
+        public static final String PROJECTID = "PROJECT_ID";
+        public static final String ISPRIMARYOWNER = "IS_PRIMARY_OWNER";
     }
 
-    public static class GroupMembershipTable {
-        public static final String PARENT_ID = "parentId";
-        public static final String CHILD_ID = "childId";
-        public static final String CHILD_TYPE = "childType";
-        public static final String DOMAIN_ID = "domainId";
-        public static final String CREATED_TIME = "createdTime";
-        public static final String UPDATED_TIME = "updatedTime";
-    }
-
-    public static class EntityTypeTable {
-        public static final String ENTITY_TYPE_ID = "entityTypeId";
-        public static final String DOMAIN_ID = "domainId";
-        public static final String CREATED_TIME = "createdTime";
-        public static final String UPDATED_TIME = "updatedTime";
-    }
-
-    public static class PermissionTypeTable {
-        public static final String ENTITY_TYPE_ID = "permissionTypeId";
-        public static final String DOMAIN_ID = "domainId";
-        public static final String NAME = "name";
-        public static final String CREATED_TIME = "createdTime";
-        public static final String UPDATED_TIME = "updatedTime";
-    }
-
-    public static class EntityTable {
-        public static final String ENTITY_ID = "entityId";
-        public static final String PARENT_ENTITY_ID = "parentEntityId";
-        public static final String ENTITY_TYPE_ID = "entityTypeId";
-        public static final String NAME = "name";
-        public static final String DESCRIPTION = "description";
-        public static final String FULL_TEXT = "fullText";
-        public static final String CREATED_TIME = "createdTime";
-        public static final String UPDATED_TIME = "updatedTime";
-        public static final String DOMAIN_ID = "domainId";
-        public static final String ORIGINAL_ENTITY_CREATION_TIME = "originalEntityCreationTime";
-        public static final String SHARED = "shared";
-    }
-
-    public static class SharingTable {
-        public static final String DOMAIN_ID = "domainId";
-        public static final String PERMISSION_TYPE_ID = "permissionTypeId";
-        public static final String ENTITY_ID = "entityId";
-        public static final String GROUP_ID = "groupId";
-        public static final String INHERITED_PARENT_ID = "inheritedParentId";
-        public static final String SHARING_TYPE = "sharingType";
-        public static final String CREATED_TIME = "createdTime";
-        public static final String UPDATED_TIME = "updatedTime";
-    }
-    // Added the UserDetail table fields 
     public static class UserDetailTable {
-        public static final String USERNAME = "username";
-        public static final String EMAIL = "email";
-        public static final String FULLNAME = "fullName";
-        public static final String PASSWORD = "password";
-        public static final String USERTYPE = "userType";
+
+        public static final String USERTYPE = "USER_TYPE";
+    }
+
+    public static class UserType {
+
+        public static final String REVIEWER = "REVIEWER";
+        public static final String ADMIN = "ADMIN";
+        public static final String USER = "USER";
+    }
+
+    public static class RequestStatus {
+
+        public static final String PENDING = "PENDING";
+        public static final String UNDER_REVIEW = "UNDER_REVIEW";
+        public static final String APPROVED = "APPROVED";
+         public static final String REJECTED = "REJECTED";
     }
 }

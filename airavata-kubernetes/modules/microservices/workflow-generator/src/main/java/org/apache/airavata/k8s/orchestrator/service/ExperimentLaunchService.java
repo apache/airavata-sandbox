@@ -102,7 +102,7 @@ public class ExperimentLaunchService {
 
         List<TaskResource> taskDag = new ArrayList<>();
 
-        AtomicInteger dagOrder = new AtomicInteger(0);
+        /*AtomicInteger dagOrder = new AtomicInteger(0);
 
         TaskResource dataDirTaskReasource = new TaskResource();
         dataDirTaskReasource.setTaskType(TaskResource.TaskTypes.ENV_SETUP);
@@ -114,7 +114,7 @@ public class ExperimentLaunchService {
                 new TaskParamResource().setKey("compute-id").setValue(computeResource.getId() + ""),
                 new TaskParamResource().setKey("compute-name").setValue(computeResource.getName() + "")));
 
-        dataDirTaskReasource.setOrder(dagOrder.incrementAndGet());
+        dataDirTaskReasource.setReferenceId(dagOrder.incrementAndGet());
         taskDag.add(dataDirTaskReasource);
 
         Optional.ofNullable(appDepRes.getPreJobCommand()).ifPresent(preJob -> {
@@ -127,7 +127,7 @@ public class ExperimentLaunchService {
                     new TaskParamResource().setKey("command").setValue(preJob),
                     new TaskParamResource().setKey("compute-id").setValue(computeResource.getId() + ""),
                     new TaskParamResource().setKey("compute-name").setValue(computeResource.getName() + "")));
-            resource.setOrder(dagOrder.incrementAndGet());
+            resource.setReferenceId(dagOrder.incrementAndGet());
             taskDag.add(resource);
         });
 
@@ -150,7 +150,7 @@ public class ExperimentLaunchService {
                             new TaskParamResource().setKey("target").setValue(localPath),
                             new TaskParamResource().setKey("compute-id").setValue(computeResource.getId() + ""),
                             new TaskParamResource().setKey("compute-name").setValue(computeResource.getName() + "")));
-                    resource.setOrder(dagOrder.incrementAndGet());
+                    resource.setReferenceId(dagOrder.incrementAndGet());
 
                     inputArgument.append(" ");
                     if (expInp.getArguments() != null && !expInp.getArguments().isEmpty()) {
@@ -189,7 +189,7 @@ public class ExperimentLaunchService {
                     new TaskParamResource().setKey("arguments").setValue(inputArgument.toString()),
                     new TaskParamResource().setKey("compute-id").setValue(computeResource.getId() + ""),
                     new TaskParamResource().setKey("compute-name").setValue(computeResource.getName() + "")));
-            resource.setOrder(dagOrder.incrementAndGet());
+            resource.setReferenceId(dagOrder.incrementAndGet());
             taskDag.add(resource);
         });
 
@@ -205,7 +205,7 @@ public class ExperimentLaunchService {
                         new TaskParamResource().setKey("target").setValue(expOut.getId() + ""),
                         new TaskParamResource().setKey("compute-id").setValue(computeResource.getId() + ""),
                         new TaskParamResource().setKey("compute-name").setValue(computeResource.getName() + "")));
-                resource.setOrder(dagOrder.incrementAndGet());
+                resource.setReferenceId(dagOrder.incrementAndGet());
                 taskDag.add(resource);
             }
 
@@ -220,7 +220,7 @@ public class ExperimentLaunchService {
                         new TaskParamResource().setKey("target").setValue(expOut.getId() + ""),
                         new TaskParamResource().setKey("compute-id").setValue(computeResource.getId() + ""),
                         new TaskParamResource().setKey("compute-name").setValue(computeResource.getName() + "")));
-                resource.setOrder(dagOrder.incrementAndGet());
+                resource.setReferenceId(dagOrder.incrementAndGet());
                 taskDag.add(resource);
             }
 
@@ -235,7 +235,7 @@ public class ExperimentLaunchService {
                         new TaskParamResource().setKey("target").setValue(expOut.getId() + ""),
                         new TaskParamResource().setKey("compute-id").setValue(computeResource.getId() + ""),
                         new TaskParamResource().setKey("compute-name").setValue(computeResource.getName() + "")));
-                resource.setOrder(dagOrder.incrementAndGet());
+                resource.setReferenceId(dagOrder.incrementAndGet());
                 taskDag.add(resource);
             }
         }));
@@ -250,9 +250,9 @@ public class ExperimentLaunchService {
                     new TaskParamResource().setKey("command").setValue(postJob),
                     new TaskParamResource().setKey("compute-id").setValue(computeResource.getId() + ""),
                     new TaskParamResource().setKey("compute-name").setValue(computeResource.getName() + "")));
-            resource.setOrder(dagOrder.incrementAndGet());
+            resource.setReferenceId(dagOrder.incrementAndGet());
             taskDag.add(resource);
-        });
+        });*/
 
         return taskDag;
     }

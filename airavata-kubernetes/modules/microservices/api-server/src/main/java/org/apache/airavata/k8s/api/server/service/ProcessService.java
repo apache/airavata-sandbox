@@ -21,12 +21,16 @@ package org.apache.airavata.k8s.api.server.service;
 
 import org.apache.airavata.k8s.api.resources.process.ProcessStatusResource;
 import org.apache.airavata.k8s.api.server.ServerRuntimeException;
+import org.apache.airavata.k8s.api.server.model.process.ProcessBootstrapData;
 import org.apache.airavata.k8s.api.server.model.process.ProcessModel;
 import org.apache.airavata.k8s.api.server.model.process.ProcessStatus;
 import org.apache.airavata.k8s.api.server.model.task.TaskModel;
-import org.apache.airavata.k8s.api.server.repository.ProcessRepository;
+import org.apache.airavata.k8s.api.server.repository.process.ProcessBootstrapDataRepository;
+import org.apache.airavata.k8s.api.server.repository.process.ProcessRepository;
 import org.apache.airavata.k8s.api.resources.process.ProcessResource;
-import org.apache.airavata.k8s.api.server.repository.ProcessStatusRepository;
+import org.apache.airavata.k8s.api.server.repository.process.ProcessStatusRepository;
+import org.apache.airavata.k8s.api.server.repository.workflow.WorkflowRepository;
+import org.apache.airavata.k8s.api.server.service.task.TaskService;
 import org.apache.airavata.k8s.api.server.service.util.ToResourceUtil;
 import org.springframework.stereotype.Service;
 
@@ -43,19 +47,26 @@ public class ProcessService {
 
     private ProcessRepository processRepository;
     private ProcessStatusRepository processStatusRepository;
+    private ProcessBootstrapDataRepository bootstrapDataRepository;
 
     private ExperimentService experimentService;
     private TaskService taskService;
 
+    private WorkflowRepository workflowRepository;
+
     public ProcessService(ProcessRepository processRepository,
                           ProcessStatusRepository processStatusRepository,
                           ExperimentService experimentService,
-                          TaskService taskService) {
+                          TaskService taskService,
+                          WorkflowRepository workflowRepository,
+                          ProcessBootstrapDataRepository bootstrapDataRepository) {
 
         this.processRepository = processRepository;
         this.processStatusRepository = processStatusRepository;
         this.experimentService = experimentService;
         this.taskService = taskService;
+        this.workflowRepository = workflowRepository;
+        this.bootstrapDataRepository = bootstrapDataRepository;
     }
 
     public long create(ProcessResource resource) {
@@ -64,9 +75,21 @@ public class ProcessService {
         processModel.setId(resource.getId());
         processModel.setCreationTime(resource.getCreationTime());
         processModel.setLastUpdateTime(resource.getLastUpdateTime());
-        processModel.setExperiment(experimentService.findEntityById(resource.getExperimentId())
-                .orElseThrow(() -> new ServerRuntimeException("Can not find experiment with id " +
-                        resource.getExperimentId())));
+        processModel.setName(resource.getName());
+        processModel.setProcessType(ProcessModel.ProcessType.valueOf(resource.getProcessType()));
+
+        if (resource.getExperimentId() != 0) {
+            processModel.setExperiment(experimentService.findEntityById(resource.getExperimentId())
+                    .orElseThrow(() -> new ServerRuntimeException("Can not find experiment with id " +
+                            resource.getExperimentId())));
+        }
+
+        if (resource.getWorkflowId() != 0) {
+            processModel.setWorkflow(workflowRepository.findById(resource.getWorkflowId())
+                    .orElseThrow(() -> new ServerRuntimeException("Can not find workflow with id " +
+                            resource.getWorkflowId())));
+        }
+
         processModel.setExperimentDataDir(resource.getExperimentDataDir());
 
         ProcessModel saved = processRepository.save(processModel);
@@ -75,6 +98,14 @@ public class ProcessService {
             TaskModel taskModel = new TaskModel();
             taskRes.setParentProcessId(saved.getId());
             taskModel.setId(taskService.create(taskRes));
+        }));
+
+        Optional.ofNullable(resource.getProcessBootstrapData()).ifPresent(bootstrapDatas -> bootstrapDatas.forEach(data -> {
+            ProcessBootstrapData bootstrapData = new ProcessBootstrapData();
+            bootstrapData.setProcessModel(saved);
+            bootstrapData.setKey(data.getKey());
+            bootstrapData.setValue(data.getValue());
+            this.bootstrapDataRepository.save(bootstrapData);
         }));
 
         return saved.getId();

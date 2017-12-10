@@ -15,6 +15,10 @@ import {FormsModule} from "@angular/forms";
 import {ExperimentDetailComponent} from "./components/experiment/detail/experiment.detail";
 import {ProcessDetailComponent} from "./components/process/detail/process.detail.component";
 import {SetupComponent} from "./components/setup/setup.component";
+import {WorkflowCreateComponent} from "./components/workflow/create/create.component";
+import {WorkflowListComponent} from "./components/workflow/list/workflow.list.component";
+import {WorkflowDetailComponent} from "./components/workflow/detail/workflow.detail";
+import {UtilService} from "./services/util.service";
 
 @NgModule({
   declarations: [
@@ -27,7 +31,10 @@ import {SetupComponent} from "./components/setup/setup.component";
     ExperimentListComponent,
     ExperimentDetailComponent,
     ProcessDetailComponent,
-    SetupComponent
+    SetupComponent,
+    WorkflowCreateComponent,
+    WorkflowListComponent,
+    WorkflowDetailComponent
   ],
   imports: [
     NgbModule.forRoot(),
@@ -36,7 +43,7 @@ import {SetupComponent} from "./components/setup/setup.component";
     HttpModule,
     FormsModule
   ],
-  providers: [],
+  providers: [UtilService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

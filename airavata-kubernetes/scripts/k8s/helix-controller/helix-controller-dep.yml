@@ -1,0 +1,24 @@
+apiVersion: apps/v1beta2 # for versions before 1.7.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: helix-controller
+  labels:
+    app: helix-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: helix-controller
+  template:
+    metadata:
+      labels:
+        app: helix-controller
+    spec:
+      containers:
+      - name: helix-controller
+        image: dimuthuupe/helix-controller:v1.0
+        env:
+        - name: zookeeper_connection_url
+          value: zk.default.svc.cluster.local:2199
+        ports:
+        - containerPort: 8080

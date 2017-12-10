@@ -1,0 +1,33 @@
+<div class="container">
+
+  <div class="row" style="margin-bottom: 20px; margin-top: 20px">
+
+    <div class="col-8">
+      <label for="worklow-name">Workflow Name</label>
+      <input [(ngModel)]="workFlowName" name="worklow-name" id="worklow-name"/>
+    </div>
+
+    <div class="col-4">
+      <button (click)="onShowWorkflowXMLClicked()" class="btn btn-info">Show XML</button>
+      <button (click)="onCreateWorkflowClicked()" class="btn btn-success">Create Workflow</button>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-1" id="toolContainer" style="border: solid 1px black; cursor: default"></div>
+
+    <div class="col-7">
+      <div id="graphContainer"
+           style="border: solid 1px black;overflow:hidden;width:321px; cursor:default;">
+      </div>
+    </div>
+
+    <div class="col-4">
+      <div id="properties" style="border: solid 1px black; padding: 10px;"></div>
+    </div>
+
+  </div>
+
+</div>

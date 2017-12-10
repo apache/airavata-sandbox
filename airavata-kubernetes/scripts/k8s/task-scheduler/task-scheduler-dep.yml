@@ -1,0 +1,24 @@
+apiVersion: apps/v1beta2 # for versions before 1.7.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: task-scheduler
+  labels:
+    app: task-scheduler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: task-scheduler
+  template:
+    metadata:
+      labels:
+        app: task-scheduler
+    spec:
+      containers:
+      - name: task-scheduler
+        image: dimuthuupe/task-scheduler:v1.0
+        env:
+        - name: zookeeper_connection_url
+          value: zk.default.svc.cluster.local:2199
+        ports:
+        - containerPort: 8080

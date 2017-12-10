@@ -4,7 +4,10 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigInteger;
 
-
+/**
+ *
+ * @author harsha
+ */
 /**
  * The persistent class for the USER_ALLOCATION_DETAILS database table.
  * 
@@ -22,6 +25,9 @@ public class UserAllocationDetailEntity implements Serializable {
 	@Column(name="APPLICATIONS_TO_BE_USED")
 	private String applicationsToBeUsed;
 
+	@Column(name="AWARD_ALLOCATION")
+	private BigInteger awardAllocation;
+
 	@Column(name="DISK_USAGE_RANGE_PER_JOB")
 	private BigInteger diskUsageRangePerJob;
 
@@ -29,9 +35,15 @@ public class UserAllocationDetailEntity implements Serializable {
 	@Column(name="DOCUMENTS")
 	private byte[] documents;
 
+	@Column(name="END_DATE")
+	private BigInteger endDate;
+
 	@Lob
 	@Column(name="FIELD_OF_SCIENCE")
 	private String fieldOfScience;
+
+	@Column(name="IS_PRIMARY_OWNER")
+	private byte isPrimaryOwner;
 
 	@Lob
 	@Column(name="KEYWORDS")
@@ -51,8 +63,8 @@ public class UserAllocationDetailEntity implements Serializable {
 	@Column(name="PROJECT_REVIEWED_AND_FUNDED_BY")
 	private String projectReviewedAndFundedBy;
 
-	@Column(name="REQ_DATE")
-	private BigInteger reqDate;
+	@Column(name="REQUESTED_DATE")
+	private BigInteger requestedDate;
 
 	@Column(name="SERVICE_UNITS")
 	private BigInteger serviceUnits;
@@ -60,6 +72,12 @@ public class UserAllocationDetailEntity implements Serializable {
 	@Lob
 	@Column(name="SPECIFIC_RESOURCE_SELECTION")
 	private String specificResourceSelection;
+
+	@Column(name="START_DATE")
+	private BigInteger startDate;
+
+	@Column(name="STATUS")
+	private String status;
 
 	@Lob
 	@Column(name="TITLE")
@@ -90,6 +108,14 @@ public class UserAllocationDetailEntity implements Serializable {
 		this.applicationsToBeUsed = applicationsToBeUsed;
 	}
 
+	public BigInteger getAwardAllocation() {
+		return this.awardAllocation;
+	}
+
+	public void setAwardAllocation(BigInteger awardAllocation) {
+		this.awardAllocation = awardAllocation;
+	}
+
 	public BigInteger getDiskUsageRangePerJob() {
 		return this.diskUsageRangePerJob;
 	}
@@ -106,12 +132,28 @@ public class UserAllocationDetailEntity implements Serializable {
 		this.documents = documents;
 	}
 
+	public BigInteger getEndDate() {
+		return this.endDate;
+	}
+
+	public void setEndDate(BigInteger endDate) {
+		this.endDate = endDate;
+	}
+
 	public String getFieldOfScience() {
 		return this.fieldOfScience;
 	}
 
 	public void setFieldOfScience(String fieldOfScience) {
 		this.fieldOfScience = fieldOfScience;
+	}
+
+	public byte getIsPrimaryOwner() {
+		return this.isPrimaryOwner;
+	}
+
+	public void setIsPrimaryOwner(byte isPrimaryOwner) {
+		this.isPrimaryOwner = isPrimaryOwner;
 	}
 
 	public String getKeywords() {
@@ -154,12 +196,12 @@ public class UserAllocationDetailEntity implements Serializable {
 		this.projectReviewedAndFundedBy = projectReviewedAndFundedBy;
 	}
 
-	public BigInteger getReqDate() {
-		return this.reqDate;
+	public BigInteger getRequestedDate() {
+		return this.requestedDate;
 	}
 
-	public void setReqDate(BigInteger reqDate) {
-		this.reqDate = reqDate;
+	public void setRequestedDate(BigInteger requestedDate) {
+		this.requestedDate = requestedDate;
 	}
 
 	public BigInteger getServiceUnits() {
@@ -176,6 +218,22 @@ public class UserAllocationDetailEntity implements Serializable {
 
 	public void setSpecificResourceSelection(String specificResourceSelection) {
 		this.specificResourceSelection = specificResourceSelection;
+	}
+
+	public BigInteger getStartDate() {
+		return this.startDate;
+	}
+
+	public void setStartDate(BigInteger startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public String getTitle() {

@@ -22,12 +22,11 @@ package org.apache.airavata.k8s.api.server.model.task;
 import org.apache.airavata.k8s.api.server.model.commons.ErrorModel;
 import org.apache.airavata.k8s.api.server.model.job.JobModel;
 import org.apache.airavata.k8s.api.server.model.process.ProcessModel;
+import org.apache.airavata.k8s.api.server.model.task.type.TaskModelType;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * TODO: Class level comments please
@@ -43,7 +42,12 @@ public class TaskModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private TaskTypes taskType;
+    private int referenceId; // to track workflows
+
+    private String name;
+
+    @ManyToOne
+    private TaskModelType taskType;
 
     @ManyToOne
     private ProcessModel parentProcess;
@@ -51,6 +55,10 @@ public class TaskModel {
     private long creationTime;
     private long lastUpdateTime;
     private int orderIndex;
+
+    private boolean startingTask;
+
+    private boolean stoppingTask;
 
     @OneToMany(mappedBy = "taskModel", cascade = CascadeType.ALL)
     private List<TaskStatus> taskStatuses = new ArrayList<>();
@@ -64,7 +72,13 @@ public class TaskModel {
     private List<JobModel> jobs = new ArrayList<>();
 
     @OneToMany(mappedBy = "taskModel", cascade = CascadeType.ALL)
-    private List<TaskParam> taskParams = new ArrayList<>();
+    private List<TaskInput> taskInputs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "taskModel", cascade = CascadeType.ALL)
+    private List<TaskOutput> taskOutputs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "taskModel", cascade = CascadeType.ALL)
+    private List<TaskOutPort> taskOutPorts = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -72,14 +86,6 @@ public class TaskModel {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public TaskTypes getTaskType() {
-        return taskType;
-    }
-
-    public void setTaskType(TaskTypes taskType) {
-        this.taskType = taskType;
     }
 
     public ProcessModel getParentProcess() {
@@ -138,12 +144,48 @@ public class TaskModel {
         this.jobs = jobs;
     }
 
-    public List<TaskParam> getTaskParams() {
-        return taskParams;
+    public List<TaskInput> getTaskInputs() {
+        return taskInputs;
     }
 
-    public TaskModel setTaskParams(List<TaskParam> taskParams) {
-        this.taskParams = taskParams;
+    public TaskModel setTaskInputs(List<TaskInput> taskInputs) {
+        this.taskInputs = taskInputs;
+        return this;
+    }
+
+    public List<TaskOutput> getTaskOutputs() {
+        return taskOutputs;
+    }
+
+    public TaskModel setTaskOutputs(List<TaskOutput> taskOutputs) {
+        this.taskOutputs = taskOutputs;
+        return this;
+    }
+
+    public TaskModelType getTaskType() {
+        return taskType;
+    }
+
+    public TaskModel setTaskType(TaskModelType taskType) {
+        this.taskType = taskType;
+        return this;
+    }
+
+    public boolean isStartingTask() {
+        return startingTask;
+    }
+
+    public TaskModel setStartingTask(boolean startingTask) {
+        this.startingTask = startingTask;
+        return this;
+    }
+
+    public boolean isStoppingTask() {
+        return stoppingTask;
+    }
+
+    public TaskModel setStoppingTask(boolean stoppingTask) {
+        this.stoppingTask = stoppingTask;
         return this;
     }
 
@@ -156,35 +198,28 @@ public class TaskModel {
         return this;
     }
 
-    public enum TaskTypes {
-        ENV_SETUP(0),
-        INGRESS_DATA_STAGING(1),
-        EGRESS_DATA_STAGING(2),
-        JOB_SUBMISSION(3),
-        ENV_CLEANUP(4),
-        MONITORING(5),
-        OUTPUT_FETCHING(6);
-
-        private static Map<Integer, TaskTypes> map = new HashMap<>();
-
-        static {
-            for (TaskTypes taskType : TaskTypes.values()) {
-                map.put(taskType.value, taskType);
-            }
-        }
-        private final int value;
-
-        public static TaskTypes valueOf(int taskType) {
-            return map.get(taskType);
-        }
-
-        private TaskTypes(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
+    public String getName() {
+        return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<TaskOutPort> getTaskOutPorts() {
+        return taskOutPorts;
+    }
+
+    public void setTaskOutPorts(List<TaskOutPort> taskOutPorts) {
+        this.taskOutPorts = taskOutPorts;
+    }
+
+    public int getReferenceId() {
+        return referenceId;
+    }
+
+    public TaskModel setReferenceId(int referenceId) {
+        this.referenceId = referenceId;
+        return this;
+    }
 }

@@ -46,18 +46,19 @@ public class DataStoreController {
     @Resource
     private DataStoreService dataStoreService;
 
-    @PostMapping("{taskId}/{expOutputId}/upload")
+    @PostMapping("{taskId}/{identifier}/upload")
     public long uploadData(@RequestParam("file") MultipartFile file, @PathVariable("taskId") long taskId,
-                           @PathVariable("expOutputId") long expOutputId, RedirectAttributes redirectAttributes) {
+                           @PathVariable("identifier") String identifier, RedirectAttributes redirectAttributes) {
 
-        System.out.println("Received data for task id " + taskId + " and experiment output id " + expOutputId);
+        System.out.println("Received data for task id " + taskId + " and identifier " + identifier);
         if (file.isEmpty()) {
             throw new ServerRuntimeException("Data file is empty");
         }
         try {
             // Get the file and save it somewhere
             byte[] bytes = file.getBytes();
-            return this.dataStoreService.createEntry(taskId, expOutputId, bytes);
+            return this.dataStoreService.createEntry(taskId, identifier, bytes);
+
         } catch (IOException e) {
             e.printStackTrace();
             throw new ServerRuntimeException("Failed to store file", e);

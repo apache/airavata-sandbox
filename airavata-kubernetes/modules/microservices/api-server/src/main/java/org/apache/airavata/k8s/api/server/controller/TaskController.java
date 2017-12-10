@@ -19,14 +19,16 @@
  */
 package org.apache.airavata.k8s.api.server.controller;
 
+import org.apache.airavata.k8s.api.resources.task.TaskDagResource;
 import org.apache.airavata.k8s.api.resources.task.TaskResource;
 import org.apache.airavata.k8s.api.resources.task.TaskStatusResource;
 import org.apache.airavata.k8s.api.server.ServerRuntimeException;
-import org.apache.airavata.k8s.api.server.service.TaskService;
+import org.apache.airavata.k8s.api.server.service.task.TaskService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Set;
 
 /**
  * TODO: Class level comments please
@@ -61,5 +63,10 @@ public class TaskController {
     public TaskStatusResource findTaskStatusById(@PathVariable("id") long id) {
         return this.taskService.findTaskStatusById(id)
                 .orElseThrow(() -> new ServerRuntimeException("Task status with id " + id + " not found"));
+    }
+
+    @GetMapping(path = "dag/{process_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Set<TaskDagResource> getDagForProcess(@PathVariable("process_id") long processId) {
+        return this.taskService.getDagForProcess(processId);
     }
 }
