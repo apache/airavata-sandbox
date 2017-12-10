@@ -55,9 +55,9 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             objAllocationDetailEntityPK.setProjectId(reqDetails.id.projectId);
             objAllocationDetailEntityPK.setUsername(reqDetails.id.username);
 
-            if ((new UserAllocationDetailRepository()).isExists(objAllocationDetailEntityPK)) {
-                throw new TException("There exist project with the id");
-            }
+//            if ((new UserAllocationDetailRepository()).isExists(objAllocationDetailEntityPK)) {
+//                throw new TException("There exist project with the id");
+//            }
             reqDetails.setStatus(DBConstants.RequestStatus.PENDING);
             reqDetails.setIsPrimaryOwner(true);
             UserAllocationDetail create = (new UserAllocationDetailRepository()).create(reqDetails);
@@ -196,7 +196,7 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             if (objUser == null) {
                 throw new IllegalArgumentException();
             }
-            return objUser.userType.equals("admin");
+            return objUser.userType.equals(DBConstants.UserType.ADMIN);
         } catch (Exception ex) {
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }
@@ -209,7 +209,7 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             if (objUser == null) {
                 throw new IllegalArgumentException();
             }
-            return objUser.userType.equals("reviewer");
+            return objUser.userType.equals(DBConstants.UserType.REVIEWER);
         } catch (Exception ex) {
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }
@@ -238,6 +238,7 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
     @Override
     public UserDetail getUserDetails(String userName) throws AllocationManagerException, TException {
         try {
+        	System.out.println("dvd"+ userName);
             return (new UserDetailRepository()).get(userName);
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
@@ -413,5 +414,23 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
         } catch (Exception ex) {
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }
+    }
+
+    @Override
+    public boolean createUser(String userName) throws TException {
+         try {
+            UserDetail obj = new UserDetail();
+            obj.setUsername(userName);
+            obj.setEmail("dcd");
+            obj.setFullName("xsx");
+            obj.setUserType("ADMIN1");
+            obj.setPassword("cdc");
+            UserDetail create = (new UserDetailRepository()).create(obj);
+            return true;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+        }
+         
     }
 }
