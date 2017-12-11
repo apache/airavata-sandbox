@@ -8,6 +8,13 @@ urlpatterns = [
     # url(r'^$', views.index, name='index'),
     url(r'^$', views.IndexView.as_view(), name='index'),
 
+    # /dashboard/reviewer
+    url(r'^reviewer/$', views.ReviewerView.as_view(), name='reviewer'),
+
+
+    # /dashboard/admin
+    url(r'^admin/$', views.AdminView.as_view(), name='admin'),
+
 
     url(r'^register/$', views.UserFormView.as_view(), name='register'),
 

@@ -1,8 +1,8 @@
 {% extends 'dashboard/base.html' %}
-{% block title %} Allocation Manager - Home{% endblock %}
+{% block title %} Allocation Manager - Reviewer{% endblock %}
 {% block body %}
     {% if all_requests %}
-        <h3 style="margin-left: 7%">My Requests</h3>
+        <h3 style="margin-left: 7%">Requests to Review</h3>
         <!-- All Requests-->
         <div class="container">
           <table class="table table-hover table-bordered table-striped table-responsive">
@@ -12,7 +12,6 @@
                 <th>Request Title</th>
                 <th>Request Description</th>
                 <th>Allocation Requested</th>
-                <th>Allocation Status</th>
               </tr>
             </thead>
             <tbody>
@@ -21,16 +20,14 @@
                     <td>{{ request.id }}</td>
                     <td>{{ request.request_title }}</td>
                     <td>{{ request.request_description }}</td>
-                    <td>10</td>
-                    <td>{{ request.request_status }}</td>
+                    <td>{{ request.service_units}}</td>
                   </tr>
                 {% endfor %}
             </tbody>
           </table>
         </div>
 
-
     {%  else %}
-        <h3>You don't have any requests</h3>
+        <h3>No Requests to Review</h3>
     {% endif %}
 {%  endblock %}
