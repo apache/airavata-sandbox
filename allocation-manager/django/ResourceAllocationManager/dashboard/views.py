@@ -15,6 +15,22 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         return Request.objects.all()
 
+class ReviewerView(generic.ListView):
+    template_name = 'dashboard/reviewer.html'
+    context_object_name = 'all_requests'
+
+    def get_queryset(self):
+        return Request.objects.all()
+
+
+class AdminView(generic.ListView):
+    template_name = 'dashboard/admin.html'
+    context_object_name = 'all_requests'
+
+    def get_queryset(self):
+        return Request.objects.all()
+
+
 
 class DetailView(generic.DetailView):
     model = Request
