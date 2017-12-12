@@ -55,9 +55,9 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             objAllocationDetailEntityPK.setProjectId(reqDetails.id.projectId);
             objAllocationDetailEntityPK.setUsername(reqDetails.id.username);
 
-            if ((new UserAllocationDetailRepository()).isExists(objAllocationDetailEntityPK)) {
-                throw new TException("There exist project with the id");
-            }
+//            if ((new UserAllocationDetailRepository()).isExists(objAllocationDetailEntityPK)) {
+//                throw new TException("There exist project with the id");
+//            }
             reqDetails.setStatus(DBConstants.RequestStatus.PENDING);
             reqDetails.setIsPrimaryOwner(true);
             UserAllocationDetail create = (new UserAllocationDetailRepository()).create(reqDetails);
@@ -116,28 +116,14 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
     @Override
     public boolean updateAllocationRequest(UserAllocationDetail reqDetails) throws TException {
         try {
-            UserAllocationDetail userAlloc = new UserAllocationDetail();
-            //Update UserAllocationDetail field.
-            userAlloc.id.setProjectId(reqDetails.id.projectId);
-            userAlloc.setApplicationsToBeUsed(reqDetails.applicationsToBeUsed);
-            userAlloc.setDiskUsageRangePerJob(reqDetails.diskUsageRangePerJob);
-            userAlloc.setDocuments(reqDetails.documents);
-            userAlloc.setFieldOfScience(reqDetails.fieldOfScience);
-            userAlloc.setKeywords(reqDetails.keywords);
-            userAlloc.setMaxMemoryPerCpu(reqDetails.maxMemoryPerCpu);
-            userAlloc.setNumberOfCpuPerJob(reqDetails.numberOfCpuPerJob);
-            userAlloc.setProjectDescription(reqDetails.projectDescription);
-            userAlloc.setServiceUnits(reqDetails.serviceUnits);
-            userAlloc.setSpecificResourceSelection(reqDetails.specificResourceSelection);
-            userAlloc.setTypeOfAllocation(reqDetails.typeOfAllocation);
-            userAlloc.setTypicalSuPerJob(reqDetails.typicalSuPerJob);
-
-            (new UserAllocationDetailRepository()).update(userAlloc);
-            return true;
+            if ((new UserAllocationDetailRepository()).update(reqDetails).getId() != null) {
+                return true;
+            }
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }
+        return false;
     }
 
     @Override
@@ -210,7 +196,7 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             if (objUser == null) {
                 throw new IllegalArgumentException();
             }
-            return objUser.userType.equals("admin");
+            return objUser.userType.equals(DBConstants.UserType.ADMIN);
         } catch (Exception ex) {
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }
@@ -223,7 +209,7 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             if (objUser == null) {
                 throw new IllegalArgumentException();
             }
-            return objUser.userType.equals("reviewer");
+            return objUser.userType.equals(DBConstants.UserType.REVIEWER);
         } catch (Exception ex) {
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }
@@ -252,6 +238,7 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
     @Override
     public UserDetail getUserDetails(String userName) throws AllocationManagerException, TException {
         try {
+        	System.out.println("dvd"+ userName);
             return (new UserDetailRepository()).get(userName);
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
@@ -283,6 +270,8 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             if (!isReviewer(reviewerId)) {
                 throw new AllocationManagerException().setMessage("Invalid reviewer id!");
             }
+            
+            //Insert a new row for the reviewer in ProjectReviewer table
             ProjectReviewerEntityPK projectReviewerEntityPK = new ProjectReviewerEntityPK();
             projectReviewerEntityPK.setProjectId(projectId);
             projectReviewerEntityPK.setReviewer(reviewerId);
@@ -291,7 +280,19 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
 
             ProjectReviewer projectReviewerObj = new ProjectReviewerRepository().create(projectReviewer);
             if (projectReviewerObj.getId() != null) {
-                return true;
+                //Update the status to under review.
+                 //Construct the primary key
+                UserAllocationDetailEntityPK userAllocDetailPk = new UserAllocationDetailEntityPK();
+                userAllocDetailPk.setProjectId(projectId);
+                userAllocDetailPk.setUsername(new UserAllocationDetailRepository().getPrimaryOwner(projectId));
+
+                //Create UserAllocationDetail object to call update method
+                UserAllocationDetail userAllocDetail = new UserAllocationDetail();
+                userAllocDetail = new UserAllocationDetailRepository().get(userAllocDetailPk);
+                userAllocDetail.setStatus(DBConstants.RequestStatus.UNDER_REVIEW);
+
+                //Updates the request
+                return updateAllocationRequest(userAllocDetail);
             }
         } catch (Exception ex) {
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
@@ -344,6 +345,7 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
         return false;
     }
 
+    /*Method to get a list of all reviewers not yet assigned to a request*/
     @Override
     public List<UserDetail> getAllUnassignedReviewersForRequest(String projectId) throws TException {
         List<UserDetail> userDetailList = getAllReviewers();
@@ -361,5 +363,74 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             }
         }
         return reviewerList;
+    }
+
+    /*Method to update the request's start date, end date, status and award allocation on approval*/
+    @Override
+    public boolean approveRequest(String projectId, String adminId, long startDate, long endDate, long awardAllocation) throws TException {
+        try {
+            if (!isAdmin(adminId)) {
+                throw new AllocationManagerException().setMessage("Invalid admin id!");
+            }
+            //Construct the primary key
+            UserAllocationDetailEntityPK userAllocDetailPk = new UserAllocationDetailEntityPK();
+            userAllocDetailPk.setProjectId(projectId);
+            userAllocDetailPk.setUsername(new UserAllocationDetailRepository().getPrimaryOwner(projectId));
+
+            //Create UserAllocationDetail object to call update method
+            UserAllocationDetail userAllocDetail = new UserAllocationDetail();
+            userAllocDetail = new UserAllocationDetailRepository().get(userAllocDetailPk);
+            userAllocDetail.setStatus(DBConstants.RequestStatus.APPROVED);
+            userAllocDetail.setStartDate(startDate);
+            userAllocDetail.setEndDate(endDate);
+            userAllocDetail.setAwardAllocation(awardAllocation);
+
+            //updates the request
+            return updateAllocationRequest(userAllocDetail);
+        } catch (Exception ex) {
+            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+        }
+    }
+
+    /*Method to update the request status to rejected on reject of a request*/
+    @Override
+    public boolean rejectRequest(String projectId, String adminId) throws TException {
+        try {
+            if (!isAdmin(adminId)) {
+                throw new AllocationManagerException().setMessage("Invalid admin id!");
+            }
+            //Construct the primary key
+            UserAllocationDetailEntityPK userAllocDetailPk = new UserAllocationDetailEntityPK();
+            userAllocDetailPk.setProjectId(projectId);
+            userAllocDetailPk.setUsername(new UserAllocationDetailRepository().getPrimaryOwner(projectId));
+
+            //Create UserAllocationDetail object to call update method
+            UserAllocationDetail userAllocDetail = new UserAllocationDetail();
+            userAllocDetail = new UserAllocationDetailRepository().get(userAllocDetailPk);
+            userAllocDetail.setStatus(DBConstants.RequestStatus.REJECTED);
+            
+            //Updates the request
+            return updateAllocationRequest(userAllocDetail);
+        } catch (Exception ex) {
+            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+        }
+    }
+
+    @Override
+    public boolean createUser(String userName) throws TException {
+         try {
+            UserDetail obj = new UserDetail();
+            obj.setUsername(userName);
+            obj.setEmail("dcd");
+            obj.setFullName("xsx");
+            obj.setUserType("ADMIN1");
+            obj.setPassword("cdc");
+            UserDetail create = (new UserDetailRepository()).create(obj);
+            return true;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
+        }
+         
     }
 }

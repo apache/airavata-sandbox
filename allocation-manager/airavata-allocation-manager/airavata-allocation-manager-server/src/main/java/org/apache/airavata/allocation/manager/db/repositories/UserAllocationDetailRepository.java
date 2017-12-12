@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class UserAllocationDetailRepository extends AbstractRepository<UserAllocationDetail, UserAllocationDetailEntity, UserAllocationDetailEntityPK> {
-    private final static Logger logger = LoggerFactory.getLogger(DomainRepository.class);
+   // private final static Logger logger = LoggerFactory.getLogger(DomainRepository.class);
 
     public UserAllocationDetailRepository(){
         super(UserAllocationDetail.class, UserAllocationDetailEntity.class);

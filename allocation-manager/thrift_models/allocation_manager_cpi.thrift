@@ -101,6 +101,19 @@ service AllocationRegistryService{
         list<allocation_manager_models.UserDetail> getAllReviewers()
 	/**
         <p>API method to get all unassigned reviewers for a request</p>
-        */
+    */
         list<allocation_manager_models.UserDetail> getAllUnassignedReviewersForRequest(1:required string projectId)
+        /**
+        <p>API method to approve a request</p>
+        */
+        bool approveRequest(1:required string projectId, 2:required string adminId, 3:required i64 startDate, 4:required i64 endDate, 5:required i64 awardAllocation)
+ /**
+        <p>API method to reject a request</p>
+        */
+        bool rejectRequest(1:required string projectId, 2:required string adminId)
+
+        /**
+        <p>API method to create a new user</p>
+        */
+        bool createUser(1:required string userName)
 }

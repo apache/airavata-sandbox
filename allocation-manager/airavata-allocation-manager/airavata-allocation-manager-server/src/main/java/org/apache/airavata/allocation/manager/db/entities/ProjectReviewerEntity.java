@@ -3,10 +3,7 @@ package org.apache.airavata.allocation.manager.db.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 
-/**
- *
- * @author harsha
- */
+
 /**
  * The persistent class for the PROJECT_REVIEWER database table.
  * 

@@ -87,22 +87,6 @@ struct UserDetail{
 }
 
 /**
-* <p>An entity for maintaining various domains</p>
-* <li>domainId : Unique id of the domain</li>
-* <li>name : Name of the domain</li>
-* <li>description: Description of the domain</li>
-* <li>createdTime: Time when the domain was created</li>
-* <li>updatedTime: Time when domain was updated</li>
-**/
-struct Domain{
-	1: optional string domainId,
- 	2: optional string name,
- 	3: optional string description,
- 	4: optional i64 createdTime,
- 	5: optional i64 updatedTime
-}
-
-/**
 * <p>Exception model used in the allocation manager service</p>
 **/
 exception AllocationManagerException {
