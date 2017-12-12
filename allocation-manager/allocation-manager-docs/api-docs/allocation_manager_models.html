@@ -7,7 +7,7 @@
 <title>Thrift module: allocation_manager_models</title></head><body>
 <div class="container-fluid">
 <h1>Thrift module: allocation_manager_models</h1>
-<pre><p>Required allocation request details</p>
+<p>Required allocation request details</p>
 <li>id : (primary key) Ask the user to assign project ID, but this project should unique, we will need an API endpoint to check whether this ID is not used by other projects and the username</li>
 <li>applicationsToBeUsed : Select the application that the user intends to use, according to application chosen here, resources that can be allocable will be fetch from resource discovery module. User will not be restricted to these application upon allocation grant, provided the resources allocated support the application.</li>
 <li>diskUsageRangePerJob : An optional field to help reviewer and PI for allocation approval</li>
@@ -25,7 +25,7 @@
 <li>typeOfAllocation : If the User has an exclusive allocation with third party organization and wants to use airavata middleware to manage jobs.</li>
 <li>typicalSuPerJob :  An optional field to help reviewer and PI for allocation approval</li>
 
-</pre><br/><table class="table-bordered table-striped table-condensed"><thead><th>Module</th><th>Services</th><th>Data types</th><th>Constants</th></thead>
+<br/><table class="table-bordered table-striped table-condensed"><thead><th>Module</th><th>Services</th><th>Data types</th><th>Constants</th></thead>
 <tr>
 <td>allocation_manager_models</td><td></td>
 <td><a href="#Struct_AllocationManagerException">AllocationManagerException</a><br/>
@@ -60,7 +60,7 @@
 <tr><td>19</td><td>endDate</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>20</td><td>status</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>21</td><td>username</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
-</table><br/><pre><p>Required allocation request details</p>
+</table><br/><p>Required allocation request details</p>
 <li>id : (primary key) Ask the user to assign project ID, but this project should unique, we will need an API endpoint to check whether this ID is not used by other projects and the username</li>
 <li>applicationsToBeUsed : Select the application that the user intends to use, according to application chosen here, resources that can be allocable will be fetch from resource discovery module. User will not be restricted to these application upon allocation grant, provided the resources allocated support the application.</li>
 <li>diskUsageRangePerJob : An optional field to help reviewer and PI for allocation approval</li>
@@ -78,7 +78,7 @@
 <li>typeOfAllocation : If the User has an exclusive allocation with third party organization and wants to use airavata middleware to manage jobs.</li>
 <li>typicalSuPerJob :  An optional field to help reviewer and PI for allocation approval</li>
 
-</pre><br/></div><div class="definition"><h3 id="Struct_ReviewerAllocationDetail">Struct: ReviewerAllocationDetail</h3>
+<br/></div><div class="definition"><h3 id="Struct_ReviewerAllocationDetail">Struct: ReviewerAllocationDetail</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
 <tr><td>1</td><td>projectId</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>2</td><td>applicationsToBeUsed</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
@@ -107,7 +107,7 @@
 <tr><td>1</td><td>projectId</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>2</td><td>reviewer</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>3</td><td>id</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
-</table><br/><pre><p>Allocation Request status details</p>
+</table><br/><p>Allocation Request status details</p>
 <li>projectId: Unique id of the project</li>
 <li>awardAllocation: Allocation awarded</li>
 <li>endDate: End date of the request</li>
@@ -115,23 +115,23 @@
 <li>startDate: Start date of the allocation</li>
 <li>status: Status of the allocation request</li>
 
-</pre><br/></div><div class="definition"><h3 id="Struct_UserDetail">Struct: UserDetail</h3>
+<br/></div><div class="definition"><h3 id="Struct_UserDetail">Struct: UserDetail</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
 <tr><td>1</td><td>username</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>2</td><td>email</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>3</td><td>fullName</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>4</td><td>password</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>5</td><td>userType</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
-</table><br/><pre><p>A user should have an account with airavata to request an allocation</p>
+</table><br/><p>A user should have an account with airavata to request an allocation</p>
 <li>username : Login Username</li>
 <li>email :Login email</li>
 <li>fullName: Full name of the user</li>
 <li>Password: Password of the user</li>
 <li>userType: Type of the user</li>
 
-</pre><br/></div><div class="definition"><h3 id="Struct_AllocationManagerException">Exception: AllocationManagerException</h3>
+<br/></div><div class="definition"><h3 id="Struct_AllocationManagerException">Exception: AllocationManagerException</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
 <tr><td>1</td><td>message</td><td><code>string</code></td><td></td><td>required</td><td></td></tr>
-</table><br/><pre><p>Exception model used in the allocation manager service</p>
+</table><br/><p>Exception model used in the allocation manager service</p>
 
-</pre><br/></div></div></body></html>
+<br/></div></div></body></html>
