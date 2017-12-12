@@ -40,19 +40,20 @@ public class DBConstants {
     // Added the ProjectReviewer table fields
     public static class ProjectReviewerTable {
 
-        public static final String PROJECTID = "PROJECT_ID";
-        public static final String REVIEWER = "REVIEWER";
+        public static final String PROJECTID = "projectId";
+        public static final String REVIEWER = "reviewer";
     }
 
     public static class UserAllocationDetailTable {
 
-        public static final String PROJECTID = "PROJECT_ID";
-        public static final String ISPRIMARYOWNER = "IS_PRIMARY_OWNER";
+        public static final String PROJECTID = "projectId";
+        public static final String USERNAME = "username";
+        public static final String ISPRIMARYOWNER = "isPrimaryOwner";
     }
 
     public static class UserDetailTable {
 
-        public static final String USERTYPE = "USER_TYPE";
+        public static final String USERTYPE = "userType";
     }
 
     public static class UserType {

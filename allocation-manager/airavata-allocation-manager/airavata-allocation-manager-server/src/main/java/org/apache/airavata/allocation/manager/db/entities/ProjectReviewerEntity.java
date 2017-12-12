@@ -14,18 +14,41 @@ import javax.persistence.*;
 public class ProjectReviewerEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private ProjectReviewerEntityPK id;
+	@Id
+	@Column(name="ID")
+	private int id;
+
+	@Column(name="PROJECT_ID")
+	private String projectId;
+
+	@Column(name="REVIEWER")
+	private String reviewer;
 
 	public ProjectReviewerEntity() {
 	}
 
-	public ProjectReviewerEntityPK getId() {
+	public int getId() {
 		return this.id;
 	}
 
-	public void setId(ProjectReviewerEntityPK id) {
+	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getProjectId() {
+		return this.projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public String getReviewer() {
+		return this.reviewer;
+	}
+
+	public void setReviewer(String reviewer) {
+		this.reviewer = reviewer;
 	}
 
 }
