@@ -23,17 +23,20 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
 
   private static final org.apache.thrift.protocol.TField PROJECT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("projectId", org.apache.thrift.protocol.TType.STRING, (short)1);
   private static final org.apache.thrift.protocol.TField REVIEWER_FIELD_DESC = new org.apache.thrift.protocol.TField("reviewer", org.apache.thrift.protocol.TType.STRING, (short)2);
+  private static final org.apache.thrift.protocol.TField ID_FIELD_DESC = new org.apache.thrift.protocol.TField("id", org.apache.thrift.protocol.TType.I64, (short)3);
 
   private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new ProjectReviewerStandardSchemeFactory();
   private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new ProjectReviewerTupleSchemeFactory();
 
   public java.lang.String projectId; // optional
   public java.lang.String reviewer; // optional
+  public long id; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     PROJECT_ID((short)1, "projectId"),
-    REVIEWER((short)2, "reviewer");
+    REVIEWER((short)2, "reviewer"),
+    ID((short)3, "id");
 
     private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -52,6 +55,8 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
           return PROJECT_ID;
         case 2: // REVIEWER
           return REVIEWER;
+        case 3: // ID
+          return ID;
         default:
           return null;
       }
@@ -92,7 +97,9 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
   }
 
   // isset id assignments
-  private static final _Fields optionals[] = {_Fields.PROJECT_ID,_Fields.REVIEWER};
+  private static final int __ID_ISSET_ID = 0;
+  private byte __isset_bitfield = 0;
+  private static final _Fields optionals[] = {_Fields.PROJECT_ID,_Fields.REVIEWER,_Fields.ID};
   public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -100,6 +107,8 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.REVIEWER, new org.apache.thrift.meta_data.FieldMetaData("reviewer", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.ID, new org.apache.thrift.meta_data.FieldMetaData("id", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
     metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(ProjectReviewer.class, metaDataMap);
   }
@@ -111,12 +120,14 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
    * Performs a deep copy on <i>other</i>.
    */
   public ProjectReviewer(ProjectReviewer other) {
+    __isset_bitfield = other.__isset_bitfield;
     if (other.isSetProjectId()) {
       this.projectId = other.projectId;
     }
     if (other.isSetReviewer()) {
       this.reviewer = other.reviewer;
     }
+    this.id = other.id;
   }
 
   public ProjectReviewer deepCopy() {
@@ -127,6 +138,8 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
   public void clear() {
     this.projectId = null;
     this.reviewer = null;
+    setIdIsSet(false);
+    this.id = 0;
   }
 
   public java.lang.String getProjectId() {
@@ -177,6 +190,29 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
     }
   }
 
+  public long getId() {
+    return this.id;
+  }
+
+  public ProjectReviewer setId(long id) {
+    this.id = id;
+    setIdIsSet(true);
+    return this;
+  }
+
+  public void unsetId() {
+    __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __ID_ISSET_ID);
+  }
+
+  /** Returns true if field id is set (has been assigned a value) and false otherwise */
+  public boolean isSetId() {
+    return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __ID_ISSET_ID);
+  }
+
+  public void setIdIsSet(boolean value) {
+    __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __ID_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, java.lang.Object value) {
     switch (field) {
     case PROJECT_ID:
@@ -195,6 +231,14 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
       }
       break;
 
+    case ID:
+      if (value == null) {
+        unsetId();
+      } else {
+        setId((java.lang.Long)value);
+      }
+      break;
+
     }
   }
 
@@ -205,6 +249,9 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
 
     case REVIEWER:
       return getReviewer();
+
+    case ID:
+      return getId();
 
     }
     throw new java.lang.IllegalStateException();
@@ -221,6 +268,8 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
       return isSetProjectId();
     case REVIEWER:
       return isSetReviewer();
+    case ID:
+      return isSetId();
     }
     throw new java.lang.IllegalStateException();
   }
@@ -258,6 +307,15 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
         return false;
     }
 
+    boolean this_present_id = true && this.isSetId();
+    boolean that_present_id = true && that.isSetId();
+    if (this_present_id || that_present_id) {
+      if (!(this_present_id && that_present_id))
+        return false;
+      if (this.id != that.id)
+        return false;
+    }
+
     return true;
   }
 
@@ -272,6 +330,10 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
     hashCode = hashCode * 8191 + ((isSetReviewer()) ? 131071 : 524287);
     if (isSetReviewer())
       hashCode = hashCode * 8191 + reviewer.hashCode();
+
+    hashCode = hashCode * 8191 + ((isSetId()) ? 131071 : 524287);
+    if (isSetId())
+      hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(id);
 
     return hashCode;
   }
@@ -300,6 +362,16 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
     }
     if (isSetReviewer()) {
       lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.reviewer, other.reviewer);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
+    lastComparison = java.lang.Boolean.valueOf(isSetId()).compareTo(other.isSetId());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetId()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.id, other.id);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -343,6 +415,12 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
       }
       first = false;
     }
+    if (isSetId()) {
+      if (!first) sb.append(", ");
+      sb.append("id:");
+      sb.append(this.id);
+      first = false;
+    }
     sb.append(")");
     return sb.toString();
   }
@@ -362,6 +440,8 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
 
   private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
     try {
+      // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+      __isset_bitfield = 0;
       read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
     } catch (org.apache.thrift.TException te) {
       throw new java.io.IOException(te);
@@ -402,6 +482,14 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 3: // ID
+            if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
+              struct.id = iprot.readI64();
+              struct.setIdIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -431,6 +519,11 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
           oprot.writeFieldEnd();
         }
       }
+      if (struct.isSetId()) {
+        oprot.writeFieldBegin(ID_FIELD_DESC);
+        oprot.writeI64(struct.id);
+        oprot.writeFieldEnd();
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -455,19 +548,25 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
       if (struct.isSetReviewer()) {
         optionals.set(1);
       }
-      oprot.writeBitSet(optionals, 2);
+      if (struct.isSetId()) {
+        optionals.set(2);
+      }
+      oprot.writeBitSet(optionals, 3);
       if (struct.isSetProjectId()) {
         oprot.writeString(struct.projectId);
       }
       if (struct.isSetReviewer()) {
         oprot.writeString(struct.reviewer);
       }
+      if (struct.isSetId()) {
+        oprot.writeI64(struct.id);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, ProjectReviewer struct) throws org.apache.thrift.TException {
       org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-      java.util.BitSet incoming = iprot.readBitSet(2);
+      java.util.BitSet incoming = iprot.readBitSet(3);
       if (incoming.get(0)) {
         struct.projectId = iprot.readString();
         struct.setProjectIdIsSet(true);
@@ -475,6 +574,10 @@ public class ProjectReviewer implements org.apache.thrift.TBase<ProjectReviewer,
       if (incoming.get(1)) {
         struct.reviewer = iprot.readString();
         struct.setReviewerIsSet(true);
+      }
+      if (incoming.get(2)) {
+        struct.id = iprot.readI64();
+        struct.setIdIsSet(true);
       }
     }
   }

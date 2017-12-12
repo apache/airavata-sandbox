@@ -64,7 +64,8 @@ struct ReviewerAllocationDetail{
 18:optional i64 startDate,
 19:optional i64 endDate,
 20:optional string status,
-21:optional string username
+21:optional string username,
+22:optional i64 id
 }
 
 /**
@@ -78,7 +79,8 @@ struct ReviewerAllocationDetail{
 **/
 struct ProjectReviewer{
 	1:optional string projectId,
-	2:optional string reviewer
+	2:optional string reviewer,
+	3:optional i64 id
 }
 
 /**

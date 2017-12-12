@@ -44,11 +44,6 @@ service AllocationRegistryService{
     */
     string getAllocationRequestUserName(1: required string projectId)
 
-     /**
-    <p>API method to update the status of a request</p>
-    */
-    void updateAllocationRequestStatus(1: required string projectId, 2: required string status)
-
 /**
     <p>API method to get all requests for admin</p>
     */

@@ -231,9 +231,8 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
         	ReviewerAllocationDetail reviewerAllocationDetailObj = new ReviewerAllocationDetail();
         	reviewerAllocationDetailObj = new ReviewerAllocationDetailRepository().isProjectExists(reviewerAllocationDetail.getProjectId(),reviewerAllocationDetail.getUsername());
         	if (reviewerAllocationDetailObj!=null) {
-        		if(reviewerAllocationDetail.isSetMaxMemoryPerCpu())
-        		reviewerAllocationDetailObj.setMaxMemoryPerCpu(reviewerAllocationDetail.getMaxMemoryPerCpu());
-        		reviewerAllocationDetailObj = (new ReviewerAllocationDetailRepository()).update(reviewerAllocationDetailObj);
+        		reviewerAllocationDetail.setId(reviewerAllocationDetailObj.getId());
+        		reviewerAllocationDetailObj = (new ReviewerAllocationDetailRepository()).update(reviewerAllocationDetail);
             } else {
             	reviewerAllocationDetailObj = (new ReviewerAllocationDetailRepository()).create(reviewerAllocationDetail);
             }
@@ -345,21 +344,5 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
             logger.error(ex.getMessage(), ex);
             throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
         }
-    }
-
-    @Override
-    public void updateAllocationRequestStatus(String projectId, String status) throws TException {
-        // TODO Auto-generated method stub
-        try {
-        	UserAllocationDetail userAllocationDetail = new UserAllocationDetailRepository().get(projectId);
-        	userAllocationDetail.setStatus(status);
-        	new UserAllocationDetailRepository().update(userAllocationDetail);
-            //once status updated notify user
-            (new NotificationManager()).notificationSender(projectId);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-            throw new AllocationManagerException().setMessage(ex.getMessage() + " Stack trace:" + ExceptionUtils.getStackTrace(ex));
-        }
-
     }
 }
