@@ -15,6 +15,10 @@ urlpatterns = [
     # /dashboard/admin
     url(r'^admin/$', views.AdminView.as_view(), name='admin'),
 
+    # /dashboard/admin/141
+    url(r'^admin/request-view/$', views.AdminRequestView.as_view(), name='admin-request-view'),
+
+
 
     url(r'^register/$', views.UserFormView.as_view(), name='register'),
 

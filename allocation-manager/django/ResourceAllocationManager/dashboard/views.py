@@ -30,6 +30,11 @@ class AdminView(generic.ListView):
     def get_queryset(self):
         return Request.objects.all()
 
+class AdminRequestView(generic.ListView):
+    model = Request
+    template_name = 'dashboard/admin-request-view.html'
+
+
 
 
 class DetailView(generic.DetailView):
