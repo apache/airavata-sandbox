@@ -11,7 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class UserDetailRepository extends AbstractRepository<UserDetail, UserDetailEntity, String> {
-	//private final static Logger logger = LoggerFactory.getLogger(DomainRepository.class);
+	// private final static Logger logger =
+	// LoggerFactory.getLogger(DomainRepository.class);
 
 	public UserDetailRepository() {
 		super(UserDetail.class, UserDetailEntity.class);
@@ -26,11 +27,12 @@ public class UserDetailRepository extends AbstractRepository<UserDetail, UserDet
 
 		return (UserDetail) select(queryString, queryParameters, 0, -1);
 	}
-        
-    public List<UserDetail> getAllReviewers() throws Exception {
-        String queryString = "SELECT * FROM " + UserDetailEntity.class.getSimpleName() + "WHERE"
-                + DBConstants.UserDetailTable.USERTYPE + "=" + DBConstants.UserType.REVIEWER;
-        Map<String, Object> queryParameters = new HashMap<>();
-        return select(queryString, queryParameters, 0, -1);
-    }
+
+	public List<UserDetail> getAllReviewers() throws Exception {
+		Map<String, Object> queryParameters = new HashMap<>();
+		String query = "SELECT DISTINCT p from " + UserDetailEntity.class.getSimpleName() + " as p";
+		query += " WHERE ";
+		query += "p." + DBConstants.UserDetailTable.USERTYPE + " ='" + DBConstants.UserType.REVIEWER + "'";
+		return select(query, queryParameters, 0, -1);
+	}
 }

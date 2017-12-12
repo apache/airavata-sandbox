@@ -1,6 +1,5 @@
 package org.apache.airavata.allocation.manager.server;
 
-import static org.apache.airavata.allocation.manager.server.AllocationManagerAdminServer.StartsimpleServer;
 import org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService;
 import org.apache.airavata.common.exception.ApplicationSettingsException;
 import org.apache.thrift.TException;
@@ -14,7 +13,7 @@ public class TestServer {
 
  public static void StartsimpleServer(AllocationRegistryService.Processor<AllocationManagerServerHandler> processor) {
   try {
-   TServerTransport serverTransport = new TServerSocket(9000);
+   TServerTransport serverTransport = new TServerSocket(9030);
    TServer server = new TSimpleServer(
      new Args(serverTransport).processor(processor));
 

@@ -5,10 +5,6 @@ import javax.persistence.*;
 
 
 /**
- *
- * @author harsha
- */
-/**
  * The persistent class for the USER_DETAILS database table.
  * 
  */

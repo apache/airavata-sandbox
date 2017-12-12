@@ -10,19 +10,14 @@ service AllocationRegistryService{
     string createAllocationRequest(1: required allocation_manager_models.UserAllocationDetail allocDetail)
     
     /**
-     <p>API method to check if the allocation request exists</p>
-    */
-    bool isAllocationRequestExists(1: required string projectId, 2: required string userName)
-    
-    /**
      <p>API method to delete allocation request</p>
     */
-    bool deleteAllocationRequest(1: required string projectId, 2: required string userName)
+    bool deleteAllocationRequest(1: required string projectId)
     
     /**
      <p>API method to get an allocation Request</p>
     */
-    allocation_manager_models.UserAllocationDetail getAllocationRequest(1: required string projectId, 2: required string userName)
+    allocation_manager_models.UserAllocationDetail getAllocationRequest(1: required string projectId)
     
     /**
      <p>API method to update an allocation Request</p>
@@ -32,7 +27,7 @@ service AllocationRegistryService{
    /**
     <p>API method to get an allocation Request status</p>
     */
-    string getAllocationRequestStatus(1: required string projectId, 2: required string userName)
+    string getAllocationRequestStatus(1: required string projectId)
 
     /**
     <p>API method to get an allocation Request PI email</p>
@@ -49,11 +44,6 @@ service AllocationRegistryService{
     */
     string getAllocationRequestUserName(1: required string projectId)
 
-     /**
-    <p>API method to update the status of a request</p>
-    */
-    void updateAllocationRequestStatus(1: required string projectId, 2: required string status)
-
 /**
     <p>API method to get all requests for admin</p>
     */
@@ -67,7 +57,7 @@ service AllocationRegistryService{
 /**
     <p>API method to update request submitted by reviewer</p>
     */
-    bool updateRequestByReviewer(1:required string reviewerId, 2:required allocation_manager_models.UserAllocationDetail userAllocationDetail)
+    bool updateRequestByReviewer(1:required allocation_manager_models.ReviewerAllocationDetail reviewerAllocationDetail)
 
     
     /**
@@ -93,7 +83,7 @@ service AllocationRegistryService{
     /**
         <p>API method to get all the reviews for a request</p>
         */
-        list<allocation_manager_models.UserAllocationDetail> getAllReviewsForARequest(1:required string projectId)
+        list<allocation_manager_models.ReviewerAllocationDetail> getAllReviewsForARequest(1:required string projectId)
 
  	/**
         <p>API method to get all reviewers</p>
@@ -115,5 +105,5 @@ service AllocationRegistryService{
         /**
         <p>API method to create a new user</p>
         */
-        bool createUser(1:required string userName)
+        bool createUser(1:required allocation_manager_models.UserDetail userDetail)
 }
