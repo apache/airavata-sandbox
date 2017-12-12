@@ -6,18 +6,17 @@ import java.math.BigInteger;
 
 
 /**
- * The persistent class for the USER_ALLOCATION_DETAILS database table.
+ * The persistent class for the REVIEWER_ALLOCATION_DETAILS database table.
  * 
  */
 @Entity
-@Table(name="USER_ALLOCATION_DETAILS")
-@NamedQuery(name="UserAllocationDetailEntity.findAll", query="SELECT u FROM UserAllocationDetailEntity u")
-public class UserAllocationDetailEntity implements Serializable {
+@Table(name="REVIEWER_ALLOCATION_DETAILS")
+@NamedQuery(name="ReviewerAllocationDetailEntity.findAll", query="SELECT r FROM ReviewerAllocationDetailEntity r")
+public class ReviewerAllocationDetailEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="PROJECT_ID")
-	private String projectId;
+	@EmbeddedId
+	private ReviewerAllocationDetailEntityPK id;
 
 	@Lob
 	@Column(name="APPLICATIONS_TO_BE_USED")
@@ -84,18 +83,15 @@ public class UserAllocationDetailEntity implements Serializable {
 	@Column(name="TYPICAL_SU_PER_JOB")
 	private BigInteger typicalSuPerJob;
 
-	@Column(name="USERNAME")
-	private String username;
-
-	public UserAllocationDetailEntity() {
+	public ReviewerAllocationDetailEntity() {
 	}
 
-	public String getProjectId() {
-		return this.projectId;
+	public ReviewerAllocationDetailEntityPK getId() {
+		return this.id;
 	}
 
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
+	public void setId(ReviewerAllocationDetailEntityPK id) {
+		this.id = id;
 	}
 
 	public String getApplicationsToBeUsed() {
@@ -248,14 +244,6 @@ public class UserAllocationDetailEntity implements Serializable {
 
 	public void setTypicalSuPerJob(BigInteger typicalSuPerJob) {
 		this.typicalSuPerJob = typicalSuPerJob;
-	}
-
-	public String getUsername() {
-		return this.username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 }

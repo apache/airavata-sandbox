@@ -5,14 +5,11 @@
 * <li>projectId : Id of the project</li>
 * <li>sponsorName : Name of supervisor, manager, group leader or self</li>
 **/
-struct UserAllocationDetailPK{
+struct ReviewerAllocationDetailPK{
 	1:optional string projectId,
-	4:optional string username
+	2:optional string username
 }
-struct ProjectReviewerPK{
-	1:optional string projectId,
-	4:optional string reviewer
-}
+
 
 /**
 * <p>Required allocation request details</p>
@@ -34,7 +31,7 @@ struct ProjectReviewerPK{
 * <li>typicalSuPerJob :  An optional field to help reviewer and PI for allocation approval</li>
 **/
 struct UserAllocationDetail{
-1:optional UserAllocationDetailPK id,
+1:optional string projectId,
 2:optional string applicationsToBeUsed,
 3:optional i64 diskUsageRangePerJob,
 4:optional binary documents,
@@ -54,7 +51,30 @@ struct UserAllocationDetail{
 18:optional i64 startDate,
 19:optional i64 endDate,
 20:optional string status,
-21:optional bool isPrimaryOwner
+21:optional string username
+}
+
+struct ReviewerAllocationDetail{
+1:optional ReviewerAllocationDetailPK id,
+2:optional string applicationsToBeUsed,
+3:optional i64 diskUsageRangePerJob,
+4:optional binary documents,
+5:optional string fieldOfScience,
+6:optional string keywords,
+7:optional i64 maxMemoryPerCpu,
+8:optional i64 numberOfCpuPerJob,
+9:optional string projectDescription,
+10:optional string projectReviewedAndFundedBy,
+11:optional i64 requestedDate,
+12:optional i64 serviceUnits,
+13:optional string specificResourceSelection,
+14:optional string title,
+15:optional string typeOfAllocation,
+16:optional i64 typicalSuPerJob,
+17:optional i64 awardAllocation,
+18:optional i64 startDate,
+19:optional i64 endDate,
+20:optional string status
 }
 
 /**
@@ -67,7 +87,8 @@ struct UserAllocationDetail{
 * <li>status: Status of the allocation request</li>
 **/
 struct ProjectReviewer{
-1:optional ProjectReviewerPK id
+	1:optional string projectId,
+	2:optional string reviewer
 }
 
 /**

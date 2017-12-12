@@ -28,7 +28,6 @@
 <li><a href="#Fn_AllocationRegistryService_getAllocationRequestUserName">getAllocationRequestUserName</a></li>
 <li><a href="#Fn_AllocationRegistryService_getUserDetails">getUserDetails</a></li>
 <li><a href="#Fn_AllocationRegistryService_isAdmin">isAdmin</a></li>
-<li><a href="#Fn_AllocationRegistryService_isAllocationRequestExists">isAllocationRequestExists</a></li>
 <li><a href="#Fn_AllocationRegistryService_isReviewer">isReviewer</a></li>
 <li><a href="#Fn_AllocationRegistryService_rejectRequest">rejectRequest</a></li>
 <li><a href="#Fn_AllocationRegistryService_updateAllocationRequest">updateAllocationRequest</a></li>
@@ -44,24 +43,17 @@
 <div class="definition"><h4 id="Fn_AllocationRegistryService_createAllocationRequest">Function: AllocationRegistryService.createAllocationRequest</h4>
 <pre><code>string</code> createAllocationRequest(<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> allocDetail)
 </pre><pre><p>API method to create new allocation requests</p>
-</pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_isAllocationRequestExists">Function: AllocationRegistryService.isAllocationRequestExists</h4>
-<pre><code>bool</code> isAllocationRequestExists(<code>string</code> projectId,
-                               <code>string</code> userName)
-</pre><pre><p>API method to check if the allocation request exists</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_deleteAllocationRequest">Function: AllocationRegistryService.deleteAllocationRequest</h4>
-<pre><code>bool</code> deleteAllocationRequest(<code>string</code> projectId,
-                             <code>string</code> userName)
+<pre><code>bool</code> deleteAllocationRequest(<code>string</code> projectId)
 </pre><pre><p>API method to delete allocation request</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequest">Function: AllocationRegistryService.getAllocationRequest</h4>
-<pre><code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> getAllocationRequest(<code>string</code> projectId,
-                                                                    <code>string</code> userName)
+<pre><code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> getAllocationRequest(<code>string</code> projectId)
 </pre><pre><p>API method to get an allocation Request</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_updateAllocationRequest">Function: AllocationRegistryService.updateAllocationRequest</h4>
 <pre><code>bool</code> updateAllocationRequest(<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> allocDetail)
 </pre><pre><p>API method to update an allocation Request</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequestStatus">Function: AllocationRegistryService.getAllocationRequestStatus</h4>
-<pre><code>string</code> getAllocationRequestStatus(<code>string</code> projectId,
-                                  <code>string</code> userName)
+<pre><code>string</code> getAllocationRequestStatus(<code>string</code> projectId)
 </pre><pre><p>API method to get an allocation Request status</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllocationRequestUserEmail">Function: AllocationRegistryService.getAllocationRequestUserEmail</h4>
 <pre><code>string</code> getAllocationRequestUserEmail(<code>string</code> userName)
@@ -85,8 +77,7 @@
                      <code>string</code> adminId)
 </pre><pre><p>API method to assign reviewers</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_updateRequestByReviewer">Function: AllocationRegistryService.updateRequestByReviewer</h4>
-<pre><code>bool</code> updateRequestByReviewer(<code>string</code> reviewerId,
-                             <code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code> userAllocationDetail)
+<pre><code>bool</code> updateRequestByReviewer(<code><a href="allocation_manager_models.html#Struct_ReviewerAllocationDetail">allocation_manager_models.ReviewerAllocationDetail</a></code> reviewerAllocationDetail)
 </pre><pre><p>API method to update request submitted by reviewer</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_isAdmin">Function: AllocationRegistryService.isAdmin</h4>
 <pre><code>bool</code> isAdmin(<code>string</code> userName)
@@ -101,7 +92,7 @@
 <pre><code><a href="allocation_manager_models.html#Struct_UserDetail">allocation_manager_models.UserDetail</a></code> getUserDetails(<code>string</code> userName)
 </pre><pre><p>API method to get a user details</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllReviewsForARequest">Function: AllocationRegistryService.getAllReviewsForARequest</h4>
-<pre><code>list&lt;<code><a href="allocation_manager_models.html#Struct_UserAllocationDetail">allocation_manager_models.UserAllocationDetail</a></code>&gt;</code> getAllReviewsForARequest(<code>string</code> projectId)
+<pre><code>list&lt;<code><a href="allocation_manager_models.html#Struct_ReviewerAllocationDetail">allocation_manager_models.ReviewerAllocationDetail</a></code>&gt;</code> getAllReviewsForARequest(<code>string</code> projectId)
 </pre><pre><p>API method to get all the reviews for a request</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_getAllReviewers">Function: AllocationRegistryService.getAllReviewers</h4>
 <pre><code>list&lt;<code><a href="allocation_manager_models.html#Struct_UserDetail">allocation_manager_models.UserDetail</a></code>&gt;</code> getAllReviewers()
@@ -121,6 +112,6 @@
                    <code>string</code> adminId)
 </pre><pre><p>API method to reject a request</p>
 </pre><br/></div><div class="definition"><h4 id="Fn_AllocationRegistryService_createUser">Function: AllocationRegistryService.createUser</h4>
-<pre><code>bool</code> createUser(<code>string</code> userName)
+<pre><code>bool</code> createUser(<code><a href="allocation_manager_models.html#Struct_UserDetail">allocation_manager_models.UserDetail</a></code> userDetail)
 </pre><pre><p>API method to create a new user</p>
 </pre><br/></div></div></body></html>

@@ -4,15 +4,11 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- *
- * @author harsha
- */
-/**
- * The primary key class for the USER_ALLOCATION_DETAILS database table.
+ * The primary key class for the REVIEWER_ALLOCATION_DETAILS database table.
  * 
  */
 @Embeddable
-public class UserAllocationDetailEntityPK implements Serializable {
+public class ReviewerAllocationDetailEntityPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
@@ -22,7 +18,7 @@ public class UserAllocationDetailEntityPK implements Serializable {
 	@Column(name="USERNAME")
 	private String username;
 
-	public UserAllocationDetailEntityPK() {
+	public ReviewerAllocationDetailEntityPK() {
 	}
 	public String getProjectId() {
 		return this.projectId;
@@ -41,10 +37,10 @@ public class UserAllocationDetailEntityPK implements Serializable {
 		if (this == other) {
 			return true;
 		}
-		if (!(other instanceof UserAllocationDetailEntityPK)) {
+		if (!(other instanceof ReviewerAllocationDetailEntityPK)) {
 			return false;
 		}
-		UserAllocationDetailEntityPK castOther = (UserAllocationDetailEntityPK)other;
+		ReviewerAllocationDetailEntityPK castOther = (ReviewerAllocationDetailEntityPK)other;
 		return 
 			this.projectId.equals(castOther.projectId)
 			&& this.username.equals(castOther.username);

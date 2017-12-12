@@ -16,29 +16,25 @@
 <td>allocation_manager_models</td><td></td>
 <td><a href="#Struct_AllocationManagerException">AllocationManagerException</a><br/>
 <a href="#Struct_ProjectReviewer">ProjectReviewer</a><br/>
-<a href="#Struct_ProjectReviewerPK">ProjectReviewerPK</a><br/>
+<a href="#Struct_ReviewerAllocationDetail">ReviewerAllocationDetail</a><br/>
+<a href="#Struct_ReviewerAllocationDetailPK">ReviewerAllocationDetailPK</a><br/>
 <a href="#Struct_UserAllocationDetail">UserAllocationDetail</a><br/>
-<a href="#Struct_UserAllocationDetailPK">UserAllocationDetailPK</a><br/>
 <a href="#Struct_UserDetail">UserDetail</a><br/>
 </td>
 <td></code></td>
 </tr></table>
 <hr/><h2 id="Structs">Data structures</h2>
-<div class="definition"><h3 id="Struct_UserAllocationDetailPK">Struct: UserAllocationDetailPK</h3>
+<div class="definition"><h3 id="Struct_ReviewerAllocationDetailPK">Struct: ReviewerAllocationDetailPK</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
 <tr><td>1</td><td>projectId</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
-<tr><td>4</td><td>username</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>2</td><td>username</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
 </table><br/><pre><p>Field to share sponsorship details</p>
 <li>projectId : Id of the project</li>
 <li>sponsorName : Name of supervisor, manager, group leader or self</li>
 
-</pre><br/></div><div class="definition"><h3 id="Struct_ProjectReviewerPK">Struct: ProjectReviewerPK</h3>
+</pre><br/></div><div class="definition"><h3 id="Struct_UserAllocationDetail">Struct: UserAllocationDetail</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
 <tr><td>1</td><td>projectId</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
-<tr><td>4</td><td>reviewer</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
-</table><br/></div><div class="definition"><h3 id="Struct_UserAllocationDetail">Struct: UserAllocationDetail</h3>
-<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
-<tr><td>1</td><td>id</td><td><code><a href="#Struct_UserAllocationDetailPK">UserAllocationDetailPK</a></code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>2</td><td>applicationsToBeUsed</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>3</td><td>diskUsageRangePerJob</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>4</td><td>documents</td><td><code>binary</code></td><td></td><td>optional</td><td></td></tr>
@@ -58,7 +54,7 @@
 <tr><td>18</td><td>startDate</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>19</td><td>endDate</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
 <tr><td>20</td><td>status</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
-<tr><td>21</td><td>isPrimaryOwner</td><td><code>bool</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>21</td><td>username</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
 </table><br/><pre><p>Required allocation request details</p>
 <li>id : (primary key) Ask the user to assign project ID, but this project should unique, we will need an API endpoint to check whether this ID is not used by other projects and the username</li>
 <li>applicationsToBeUsed : Select the application that the user intends to use, according to application chosen here, resources that can be allocable will be fetch from resource discovery module. User will not be restricted to these application upon allocation grant, provided the resources allocated support the application.</li>
@@ -77,9 +73,32 @@
 <li>typeOfAllocation : If the User has an exclusive allocation with third party organization and wants to use airavata middleware to manage jobs.</li>
 <li>typicalSuPerJob :  An optional field to help reviewer and PI for allocation approval</li>
 
-</pre><br/></div><div class="definition"><h3 id="Struct_ProjectReviewer">Struct: ProjectReviewer</h3>
+</pre><br/></div><div class="definition"><h3 id="Struct_ReviewerAllocationDetail">Struct: ReviewerAllocationDetail</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
-<tr><td>1</td><td>id</td><td><code><a href="#Struct_ProjectReviewerPK">ProjectReviewerPK</a></code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>1</td><td>id</td><td><code><a href="#Struct_ReviewerAllocationDetailPK">ReviewerAllocationDetailPK</a></code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>2</td><td>applicationsToBeUsed</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>3</td><td>diskUsageRangePerJob</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>4</td><td>documents</td><td><code>binary</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>5</td><td>fieldOfScience</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>6</td><td>keywords</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>7</td><td>maxMemoryPerCpu</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>8</td><td>numberOfCpuPerJob</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>9</td><td>projectDescription</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>10</td><td>projectReviewedAndFundedBy</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>11</td><td>requestedDate</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>12</td><td>serviceUnits</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>13</td><td>specificResourceSelection</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>14</td><td>title</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>15</td><td>typeOfAllocation</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>16</td><td>typicalSuPerJob</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>17</td><td>awardAllocation</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>18</td><td>startDate</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>19</td><td>endDate</td><td><code>i64</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>20</td><td>status</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
+</table><br/></div><div class="definition"><h3 id="Struct_ProjectReviewer">Struct: ProjectReviewer</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>projectId</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
+<tr><td>2</td><td>reviewer</td><td><code>string</code></td><td></td><td>optional</td><td></td></tr>
 </table><br/><pre><p>Allocation Request status details</p>
 <li>projectId: Unique id of the project</li>
 <li>awardAllocation: Allocation awarded</li>

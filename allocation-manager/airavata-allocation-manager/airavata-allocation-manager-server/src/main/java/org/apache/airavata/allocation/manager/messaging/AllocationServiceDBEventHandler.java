@@ -67,39 +67,39 @@ public class AllocationServiceDBEventHandler implements MessageHandler {
                         userProfile.setUserId(userProfile.getAiravataInternalUserId());
                         UserAllocationDetail user = ThriftDataModelConversion.getUser(userProfile);
 
-                        switch (dBEventMessageContext.getPublisher().getPublisherContext().getCrudType()){
-
-                            case CREATE:
-                                log.info("Creating user. User name: " + user.id.getUsername());
-
-                                allocationManagerClient.createAllocationRequest(user);
-                                log.debug("User created. User name : " + user.id.getUsername());
-
-                                break;
-
-                            case READ:
-                                log.info("Updating user. User name : " + user.id.getUsername());
-
-                                allocationManagerClient.getAllocationRequest(user.id.projectId, user.id.getUsername());
-                                log.debug("User updated. User Id : " + user.id.getUsername());
-
-                                break;
-
-                            case UPDATE:
-                                log.info("Updating user. User name : " + user.id.getUsername());
-                                //To be done
-                                log.debug("User updated. User Id : " + user.id.getUsername());
-
-                                break;
-
-                            case DELETE:
-                                log.info("Deleting user. User name : " + user.id.getUsername());
-
-                                allocationManagerClient.deleteAllocationRequest(user.id.projectId, user.id.getUsername());
-                                log.debug("User deleted. User name : " + user.id.getUsername());
-
-                                break;
-                        }
+//                        switch (dBEventMessageContext.getPublisher().getPublisherContext().getCrudType()){
+//
+//                            case CREATE:
+//                                log.info("Creating user. User name: " + user.id.getUsername());
+//
+//                                allocationManagerClient.createAllocationRequest(user);
+//                                log.debug("User created. User name : " + user.id.getUsername());
+//
+//                                break;
+//
+//                            case READ:
+//                                log.info("Updating user. User name : " + user.id.getUsername());
+//
+//                                allocationManagerClient.getAllocationRequest(user.id.projectId, user.id.getUsername());
+//                                log.debug("User updated. User Id : " + user.id.getUsername());
+//
+//                                break;
+//
+//                            case UPDATE:
+//                                log.info("Updating user. User name : " + user.id.getUsername());
+//                                //To be done
+//                                log.debug("User updated. User Id : " + user.id.getUsername());
+//
+//                                break;
+//
+//                            case DELETE:
+//                                log.info("Deleting user. User name : " + user.id.getUsername());
+//
+//                                allocationManagerClient.deleteAllocationRequest(user.id.projectId, user.id.getUsername());
+//                                log.debug("User deleted. User name : " + user.id.getUsername());
+//
+//                                break;
+//                        }
                         break;
 
                     default: log.error("Handler not defined for " + dBEventMessageContext.getPublisher().getPublisherContext().getEntityType());
