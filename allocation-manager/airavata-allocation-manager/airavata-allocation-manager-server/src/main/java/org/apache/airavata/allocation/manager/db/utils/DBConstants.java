@@ -47,12 +47,13 @@ public class DBConstants {
     public static class UserAllocationDetailTable {
 
         public static final String PROJECTID = "projectId";
+        public static final String USERNAME = "username";
         public static final String ISPRIMARYOWNER = "isPrimaryOwner";
     }
 
     public static class UserDetailTable {
 
-        public static final String USERTYPE = "USER_TYPE";
+        public static final String USERTYPE = "userType";
     }
 
     public static class UserType {

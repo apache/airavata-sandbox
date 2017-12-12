@@ -1,17 +1,6 @@
  namespace java org.apache.airavata.allocation.manager.models
  
 /**
-* <p>Field to share sponsorship details</p>
-* <li>projectId : Id of the project</li>
-* <li>sponsorName : Name of supervisor, manager, group leader or self</li>
-**/
-struct ReviewerAllocationDetailPK{
-	1:optional string projectId,
-	2:optional string username
-}
-
-
-/**
 * <p>Required allocation request details</p>
 * <li>id : (primary key) Ask the user to assign project ID, but this project should unique, we will need an API endpoint to check whether this ID is not used by other projects and the username</li>
 * <li>applicationsToBeUsed : Select the application that the user intends to use, according to application chosen here, resources that can be allocable will be fetch from resource discovery module. User will not be restricted to these application upon allocation grant, provided the resources allocated support the application.</li>
@@ -55,7 +44,7 @@ struct UserAllocationDetail{
 }
 
 struct ReviewerAllocationDetail{
-1:optional ReviewerAllocationDetailPK id,
+1:optional string projectId,
 2:optional string applicationsToBeUsed,
 3:optional i64 diskUsageRangePerJob,
 4:optional binary documents,
@@ -74,7 +63,8 @@ struct ReviewerAllocationDetail{
 17:optional i64 awardAllocation,
 18:optional i64 startDate,
 19:optional i64 endDate,
-20:optional string status
+20:optional string status,
+21:optional string username
 }
 
 /**

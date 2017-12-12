@@ -6,6 +6,7 @@
 package org.apache.airavata.allocation.manager.client;
 
 import java.util.List;
+import org.apache.airavata.allocation.manager.models.ReviewerAllocationDetail;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
@@ -139,22 +140,58 @@ public class testClient {
 //          
 //            System.out.println(client.assignReviewers("123456","reviewer1","admin"));
 //           System.out.println(client.assignReviewers("123456","reviewer2","admin"));
-//            System.out.println(client.assignReviewers("1234","reviewer2","admin"));
+ //           System.out.println(client.assignReviewers("1234","reviewer2","admin"));
 //            System.out.println(client.assignReviewers("1234","reviewer3","admin"));
             
-          System.out.println("Testing getAllRequestsForReviewers() ");
-          
-          List<UserAllocationDetail> userAllocationDetailList= client.getAllRequestsForReviewers("reviewer2");
-          for(UserAllocationDetail object: userAllocationDetailList)
-          {
-               System.out.println(object.getProjectId());
-          }
-          
-          System.out.println("Testing getUserDetails() ");
-          
-          UserDetail userDetail= client.getUserDetails("admin");
-               System.out.println(userDetail.getEmail());
+//          System.out.println("Testing getAllRequestsForReviewers() ");
+//          
+//          List<UserAllocationDetail> userAllocationDetailList= client.getAllRequestsForReviewers("reviewer2");
+//          for(UserAllocationDetail object: userAllocationDetailList)
+//          {
+//               System.out.println(object.getProjectId());
+//          }
+//          
+//          System.out.println("Testing getUserDetails() ");
+//          
+//          UserDetail userDetail= client.getUserDetails("admin");
+//               System.out.println(userDetail.getEmail());
 
+          System.out.println("Testing updateRequestByReviewer() ");
+            ReviewerAllocationDetail reviewerAllocationDetail = new ReviewerAllocationDetail();
+            reviewerAllocationDetail.setProjectId("123456");
+            reviewerAllocationDetail.setUsername("reviewer2");
+            reviewerAllocationDetail.setMaxMemoryPerCpu(15L);
+           System.out.println(client.updateRequestByReviewer(reviewerAllocationDetail));
+
+//            ReviewerAllocationDetail reviewerAllocationDetail1 = new ReviewerAllocationDetail();
+//            reviewerAllocationDetail1.setProjectId("123456");
+//            reviewerAllocationDetail1.setUsername("reviewer1");
+//            reviewerAllocationDetail1.setMaxMemoryPerCpu(5L);
+//           System.out.println(client.updateRequestByReviewer(reviewerAllocationDetail1));
+             
+//          System.out.println("Testing getAllReviewsForARequest() ");
+//          
+//          List<ReviewerAllocationDetail> reviewerAllocationDetailList = client.getAllReviewsForARequest("123456");
+//          for(ReviewerAllocationDetail object: reviewerAllocationDetailList)
+//          {
+//               System.out.println(object.getMaxMemoryPerCpu());
+//          }
+          
+//          System.out.println("Testing getAllUnassignedReviewersForRequest() ");
+//          
+//          List<UserDetail> userDetailList = client.getAllUnassignedReviewersForRequest("123456");
+//          for(UserDetail object: userDetailList)
+//          {
+//               System.out.println(object.getUsername());
+//          }
+
+//          System.out.println("Testing approveRequest() ");
+//          
+//         System.out.println(client.approveRequest("123456","admin",1l,2l,50l));
+         
+//            System.out.println("Testing rejectRequest() ");
+//          
+//         System.out.println(client.rejectRequest("1234","admin"));
 
             transport.close();
         } catch (TTransportException e) {

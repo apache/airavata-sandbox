@@ -11,7 +11,7 @@ package org.apache.airavata.allocation.manager.models;
 public class ReviewerAllocationDetail implements org.apache.thrift.TBase<ReviewerAllocationDetail, ReviewerAllocationDetail._Fields>, java.io.Serializable, Cloneable, Comparable<ReviewerAllocationDetail> {
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("ReviewerAllocationDetail");
 
-  private static final org.apache.thrift.protocol.TField ID_FIELD_DESC = new org.apache.thrift.protocol.TField("id", org.apache.thrift.protocol.TType.STRUCT, (short)1);
+  private static final org.apache.thrift.protocol.TField PROJECT_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("projectId", org.apache.thrift.protocol.TType.STRING, (short)1);
   private static final org.apache.thrift.protocol.TField APPLICATIONS_TO_BE_USED_FIELD_DESC = new org.apache.thrift.protocol.TField("applicationsToBeUsed", org.apache.thrift.protocol.TType.STRING, (short)2);
   private static final org.apache.thrift.protocol.TField DISK_USAGE_RANGE_PER_JOB_FIELD_DESC = new org.apache.thrift.protocol.TField("diskUsageRangePerJob", org.apache.thrift.protocol.TType.I64, (short)3);
   private static final org.apache.thrift.protocol.TField DOCUMENTS_FIELD_DESC = new org.apache.thrift.protocol.TField("documents", org.apache.thrift.protocol.TType.STRING, (short)4);
@@ -31,11 +31,12 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
   private static final org.apache.thrift.protocol.TField START_DATE_FIELD_DESC = new org.apache.thrift.protocol.TField("startDate", org.apache.thrift.protocol.TType.I64, (short)18);
   private static final org.apache.thrift.protocol.TField END_DATE_FIELD_DESC = new org.apache.thrift.protocol.TField("endDate", org.apache.thrift.protocol.TType.I64, (short)19);
   private static final org.apache.thrift.protocol.TField STATUS_FIELD_DESC = new org.apache.thrift.protocol.TField("status", org.apache.thrift.protocol.TType.STRING, (short)20);
+  private static final org.apache.thrift.protocol.TField USERNAME_FIELD_DESC = new org.apache.thrift.protocol.TField("username", org.apache.thrift.protocol.TType.STRING, (short)21);
 
   private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new ReviewerAllocationDetailStandardSchemeFactory();
   private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new ReviewerAllocationDetailTupleSchemeFactory();
 
-  public ReviewerAllocationDetailPK id; // optional
+  public java.lang.String projectId; // optional
   public java.lang.String applicationsToBeUsed; // optional
   public long diskUsageRangePerJob; // optional
   public java.nio.ByteBuffer documents; // optional
@@ -55,10 +56,11 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
   public long startDate; // optional
   public long endDate; // optional
   public java.lang.String status; // optional
+  public java.lang.String username; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-    ID((short)1, "id"),
+    PROJECT_ID((short)1, "projectId"),
     APPLICATIONS_TO_BE_USED((short)2, "applicationsToBeUsed"),
     DISK_USAGE_RANGE_PER_JOB((short)3, "diskUsageRangePerJob"),
     DOCUMENTS((short)4, "documents"),
@@ -77,7 +79,8 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
     AWARD_ALLOCATION((short)17, "awardAllocation"),
     START_DATE((short)18, "startDate"),
     END_DATE((short)19, "endDate"),
-    STATUS((short)20, "status");
+    STATUS((short)20, "status"),
+    USERNAME((short)21, "username");
 
     private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
 
@@ -92,8 +95,8 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
      */
     public static _Fields findByThriftId(int fieldId) {
       switch(fieldId) {
-        case 1: // ID
-          return ID;
+        case 1: // PROJECT_ID
+          return PROJECT_ID;
         case 2: // APPLICATIONS_TO_BE_USED
           return APPLICATIONS_TO_BE_USED;
         case 3: // DISK_USAGE_RANGE_PER_JOB
@@ -132,6 +135,8 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
           return END_DATE;
         case 20: // STATUS
           return STATUS;
+        case 21: // USERNAME
+          return USERNAME;
         default:
           return null;
       }
@@ -182,12 +187,12 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
   private static final int __STARTDATE_ISSET_ID = 7;
   private static final int __ENDDATE_ISSET_ID = 8;
   private short __isset_bitfield = 0;
-  private static final _Fields optionals[] = {_Fields.ID,_Fields.APPLICATIONS_TO_BE_USED,_Fields.DISK_USAGE_RANGE_PER_JOB,_Fields.DOCUMENTS,_Fields.FIELD_OF_SCIENCE,_Fields.KEYWORDS,_Fields.MAX_MEMORY_PER_CPU,_Fields.NUMBER_OF_CPU_PER_JOB,_Fields.PROJECT_DESCRIPTION,_Fields.PROJECT_REVIEWED_AND_FUNDED_BY,_Fields.REQUESTED_DATE,_Fields.SERVICE_UNITS,_Fields.SPECIFIC_RESOURCE_SELECTION,_Fields.TITLE,_Fields.TYPE_OF_ALLOCATION,_Fields.TYPICAL_SU_PER_JOB,_Fields.AWARD_ALLOCATION,_Fields.START_DATE,_Fields.END_DATE,_Fields.STATUS};
+  private static final _Fields optionals[] = {_Fields.PROJECT_ID,_Fields.APPLICATIONS_TO_BE_USED,_Fields.DISK_USAGE_RANGE_PER_JOB,_Fields.DOCUMENTS,_Fields.FIELD_OF_SCIENCE,_Fields.KEYWORDS,_Fields.MAX_MEMORY_PER_CPU,_Fields.NUMBER_OF_CPU_PER_JOB,_Fields.PROJECT_DESCRIPTION,_Fields.PROJECT_REVIEWED_AND_FUNDED_BY,_Fields.REQUESTED_DATE,_Fields.SERVICE_UNITS,_Fields.SPECIFIC_RESOURCE_SELECTION,_Fields.TITLE,_Fields.TYPE_OF_ALLOCATION,_Fields.TYPICAL_SU_PER_JOB,_Fields.AWARD_ALLOCATION,_Fields.START_DATE,_Fields.END_DATE,_Fields.STATUS,_Fields.USERNAME};
   public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-    tmpMap.put(_Fields.ID, new org.apache.thrift.meta_data.FieldMetaData("id", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
-        new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, ReviewerAllocationDetailPK.class)));
+    tmpMap.put(_Fields.PROJECT_ID, new org.apache.thrift.meta_data.FieldMetaData("projectId", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.APPLICATIONS_TO_BE_USED, new org.apache.thrift.meta_data.FieldMetaData("applicationsToBeUsed", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.DISK_USAGE_RANGE_PER_JOB, new org.apache.thrift.meta_data.FieldMetaData("diskUsageRangePerJob", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
@@ -226,6 +231,8 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
     tmpMap.put(_Fields.STATUS, new org.apache.thrift.meta_data.FieldMetaData("status", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.USERNAME, new org.apache.thrift.meta_data.FieldMetaData("username", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(ReviewerAllocationDetail.class, metaDataMap);
   }
@@ -238,8 +245,8 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
    */
   public ReviewerAllocationDetail(ReviewerAllocationDetail other) {
     __isset_bitfield = other.__isset_bitfield;
-    if (other.isSetId()) {
-      this.id = new ReviewerAllocationDetailPK(other.id);
+    if (other.isSetProjectId()) {
+      this.projectId = other.projectId;
     }
     if (other.isSetApplicationsToBeUsed()) {
       this.applicationsToBeUsed = other.applicationsToBeUsed;
@@ -280,6 +287,9 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
     if (other.isSetStatus()) {
       this.status = other.status;
     }
+    if (other.isSetUsername()) {
+      this.username = other.username;
+    }
   }
 
   public ReviewerAllocationDetail deepCopy() {
@@ -288,7 +298,7 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
 
   @Override
   public void clear() {
-    this.id = null;
+    this.projectId = null;
     this.applicationsToBeUsed = null;
     setDiskUsageRangePerJobIsSet(false);
     this.diskUsageRangePerJob = 0;
@@ -317,29 +327,30 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
     setEndDateIsSet(false);
     this.endDate = 0;
     this.status = null;
+    this.username = null;
   }
 
-  public ReviewerAllocationDetailPK getId() {
-    return this.id;
+  public java.lang.String getProjectId() {
+    return this.projectId;
   }
 
-  public ReviewerAllocationDetail setId(ReviewerAllocationDetailPK id) {
-    this.id = id;
+  public ReviewerAllocationDetail setProjectId(java.lang.String projectId) {
+    this.projectId = projectId;
     return this;
   }
 
-  public void unsetId() {
-    this.id = null;
+  public void unsetProjectId() {
+    this.projectId = null;
   }
 
-  /** Returns true if field id is set (has been assigned a value) and false otherwise */
-  public boolean isSetId() {
-    return this.id != null;
+  /** Returns true if field projectId is set (has been assigned a value) and false otherwise */
+  public boolean isSetProjectId() {
+    return this.projectId != null;
   }
 
-  public void setIdIsSet(boolean value) {
+  public void setProjectIdIsSet(boolean value) {
     if (!value) {
-      this.id = null;
+      this.projectId = null;
     }
   }
 
@@ -800,13 +811,37 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
     }
   }
 
+  public java.lang.String getUsername() {
+    return this.username;
+  }
+
+  public ReviewerAllocationDetail setUsername(java.lang.String username) {
+    this.username = username;
+    return this;
+  }
+
+  public void unsetUsername() {
+    this.username = null;
+  }
+
+  /** Returns true if field username is set (has been assigned a value) and false otherwise */
+  public boolean isSetUsername() {
+    return this.username != null;
+  }
+
+  public void setUsernameIsSet(boolean value) {
+    if (!value) {
+      this.username = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, java.lang.Object value) {
     switch (field) {
-    case ID:
+    case PROJECT_ID:
       if (value == null) {
-        unsetId();
+        unsetProjectId();
       } else {
-        setId((ReviewerAllocationDetailPK)value);
+        setProjectId((java.lang.String)value);
       }
       break;
 
@@ -966,13 +1001,21 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
       }
       break;
 
+    case USERNAME:
+      if (value == null) {
+        unsetUsername();
+      } else {
+        setUsername((java.lang.String)value);
+      }
+      break;
+
     }
   }
 
   public java.lang.Object getFieldValue(_Fields field) {
     switch (field) {
-    case ID:
-      return getId();
+    case PROJECT_ID:
+      return getProjectId();
 
     case APPLICATIONS_TO_BE_USED:
       return getApplicationsToBeUsed();
@@ -1031,6 +1074,9 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
     case STATUS:
       return getStatus();
 
+    case USERNAME:
+      return getUsername();
+
     }
     throw new java.lang.IllegalStateException();
   }
@@ -1042,8 +1088,8 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
     }
 
     switch (field) {
-    case ID:
-      return isSetId();
+    case PROJECT_ID:
+      return isSetProjectId();
     case APPLICATIONS_TO_BE_USED:
       return isSetApplicationsToBeUsed();
     case DISK_USAGE_RANGE_PER_JOB:
@@ -1082,6 +1128,8 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
       return isSetEndDate();
     case STATUS:
       return isSetStatus();
+    case USERNAME:
+      return isSetUsername();
     }
     throw new java.lang.IllegalStateException();
   }
@@ -1101,12 +1149,12 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
     if (this == that)
       return true;
 
-    boolean this_present_id = true && this.isSetId();
-    boolean that_present_id = true && that.isSetId();
-    if (this_present_id || that_present_id) {
-      if (!(this_present_id && that_present_id))
+    boolean this_present_projectId = true && this.isSetProjectId();
+    boolean that_present_projectId = true && that.isSetProjectId();
+    if (this_present_projectId || that_present_projectId) {
+      if (!(this_present_projectId && that_present_projectId))
         return false;
-      if (!this.id.equals(that.id))
+      if (!this.projectId.equals(that.projectId))
         return false;
     }
 
@@ -1281,6 +1329,15 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
         return false;
     }
 
+    boolean this_present_username = true && this.isSetUsername();
+    boolean that_present_username = true && that.isSetUsername();
+    if (this_present_username || that_present_username) {
+      if (!(this_present_username && that_present_username))
+        return false;
+      if (!this.username.equals(that.username))
+        return false;
+    }
+
     return true;
   }
 
@@ -1288,9 +1345,9 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
   public int hashCode() {
     int hashCode = 1;
 
-    hashCode = hashCode * 8191 + ((isSetId()) ? 131071 : 524287);
-    if (isSetId())
-      hashCode = hashCode * 8191 + id.hashCode();
+    hashCode = hashCode * 8191 + ((isSetProjectId()) ? 131071 : 524287);
+    if (isSetProjectId())
+      hashCode = hashCode * 8191 + projectId.hashCode();
 
     hashCode = hashCode * 8191 + ((isSetApplicationsToBeUsed()) ? 131071 : 524287);
     if (isSetApplicationsToBeUsed())
@@ -1368,6 +1425,10 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
     if (isSetStatus())
       hashCode = hashCode * 8191 + status.hashCode();
 
+    hashCode = hashCode * 8191 + ((isSetUsername()) ? 131071 : 524287);
+    if (isSetUsername())
+      hashCode = hashCode * 8191 + username.hashCode();
+
     return hashCode;
   }
 
@@ -1379,12 +1440,12 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
 
     int lastComparison = 0;
 
-    lastComparison = java.lang.Boolean.valueOf(isSetId()).compareTo(other.isSetId());
+    lastComparison = java.lang.Boolean.valueOf(isSetProjectId()).compareTo(other.isSetProjectId());
     if (lastComparison != 0) {
       return lastComparison;
     }
-    if (isSetId()) {
-      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.id, other.id);
+    if (isSetProjectId()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.projectId, other.projectId);
       if (lastComparison != 0) {
         return lastComparison;
       }
@@ -1579,6 +1640,16 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
         return lastComparison;
       }
     }
+    lastComparison = java.lang.Boolean.valueOf(isSetUsername()).compareTo(other.isSetUsername());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetUsername()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.username, other.username);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -1599,12 +1670,12 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
     java.lang.StringBuilder sb = new java.lang.StringBuilder("ReviewerAllocationDetail(");
     boolean first = true;
 
-    if (isSetId()) {
-      sb.append("id:");
-      if (this.id == null) {
+    if (isSetProjectId()) {
+      sb.append("projectId:");
+      if (this.projectId == null) {
         sb.append("null");
       } else {
-        sb.append(this.id);
+        sb.append(this.projectId);
       }
       first = false;
     }
@@ -1762,6 +1833,16 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
       }
       first = false;
     }
+    if (isSetUsername()) {
+      if (!first) sb.append(", ");
+      sb.append("username:");
+      if (this.username == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.username);
+      }
+      first = false;
+    }
     sb.append(")");
     return sb.toString();
   }
@@ -1769,9 +1850,6 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
   public void validate() throws org.apache.thrift.TException {
     // check for required fields
     // check for sub-struct validity
-    if (id != null) {
-      id.validate();
-    }
   }
 
   private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
@@ -1810,11 +1888,10 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
           break;
         }
         switch (schemeField.id) {
-          case 1: // ID
-            if (schemeField.type == org.apache.thrift.protocol.TType.STRUCT) {
-              struct.id = new ReviewerAllocationDetailPK();
-              struct.id.read(iprot);
-              struct.setIdIsSet(true);
+          case 1: // PROJECT_ID
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.projectId = iprot.readString();
+              struct.setProjectIdIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
@@ -1971,6 +2048,14 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
+          case 21: // USERNAME
+            if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              struct.username = iprot.readString();
+              struct.setUsernameIsSet(true);
+            } else { 
+              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+            }
+            break;
           default:
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
         }
@@ -1986,10 +2071,10 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
       struct.validate();
 
       oprot.writeStructBegin(STRUCT_DESC);
-      if (struct.id != null) {
-        if (struct.isSetId()) {
-          oprot.writeFieldBegin(ID_FIELD_DESC);
-          struct.id.write(oprot);
+      if (struct.projectId != null) {
+        if (struct.isSetProjectId()) {
+          oprot.writeFieldBegin(PROJECT_ID_FIELD_DESC);
+          oprot.writeString(struct.projectId);
           oprot.writeFieldEnd();
         }
       }
@@ -2108,6 +2193,13 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
           oprot.writeFieldEnd();
         }
       }
+      if (struct.username != null) {
+        if (struct.isSetUsername()) {
+          oprot.writeFieldBegin(USERNAME_FIELD_DESC);
+          oprot.writeString(struct.username);
+          oprot.writeFieldEnd();
+        }
+      }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
     }
@@ -2126,7 +2218,7 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
     public void write(org.apache.thrift.protocol.TProtocol prot, ReviewerAllocationDetail struct) throws org.apache.thrift.TException {
       org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
       java.util.BitSet optionals = new java.util.BitSet();
-      if (struct.isSetId()) {
+      if (struct.isSetProjectId()) {
         optionals.set(0);
       }
       if (struct.isSetApplicationsToBeUsed()) {
@@ -2186,9 +2278,12 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
       if (struct.isSetStatus()) {
         optionals.set(19);
       }
-      oprot.writeBitSet(optionals, 20);
-      if (struct.isSetId()) {
-        struct.id.write(oprot);
+      if (struct.isSetUsername()) {
+        optionals.set(20);
+      }
+      oprot.writeBitSet(optionals, 21);
+      if (struct.isSetProjectId()) {
+        oprot.writeString(struct.projectId);
       }
       if (struct.isSetApplicationsToBeUsed()) {
         oprot.writeString(struct.applicationsToBeUsed);
@@ -2247,16 +2342,18 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
       if (struct.isSetStatus()) {
         oprot.writeString(struct.status);
       }
+      if (struct.isSetUsername()) {
+        oprot.writeString(struct.username);
+      }
     }
 
     @Override
     public void read(org.apache.thrift.protocol.TProtocol prot, ReviewerAllocationDetail struct) throws org.apache.thrift.TException {
       org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-      java.util.BitSet incoming = iprot.readBitSet(20);
+      java.util.BitSet incoming = iprot.readBitSet(21);
       if (incoming.get(0)) {
-        struct.id = new ReviewerAllocationDetailPK();
-        struct.id.read(iprot);
-        struct.setIdIsSet(true);
+        struct.projectId = iprot.readString();
+        struct.setProjectIdIsSet(true);
       }
       if (incoming.get(1)) {
         struct.applicationsToBeUsed = iprot.readString();
@@ -2333,6 +2430,10 @@ public class ReviewerAllocationDetail implements org.apache.thrift.TBase<Reviewe
       if (incoming.get(19)) {
         struct.status = iprot.readString();
         struct.setStatusIsSet(true);
+      }
+      if (incoming.get(20)) {
+        struct.username = iprot.readString();
+        struct.setUsernameIsSet(true);
       }
     }
   }

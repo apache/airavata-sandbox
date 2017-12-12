@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.logging.Level;
 import org.apache.airavata.common.exception.ApplicationSettingsException;
 import org.apache.airavata.allocation.manager.client.NotificationManager;
-import org.apache.airavata.allocation.manager.db.entities.ReviewerAllocationDetailEntityPK;
 import org.apache.airavata.allocation.manager.db.repositories.*;
 import org.apache.airavata.allocation.manager.db.utils.DBConstants;
 import org.apache.airavata.allocation.manager.db.utils.JPAUtils;
@@ -230,15 +229,15 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
     public boolean updateRequestByReviewer(ReviewerAllocationDetail reviewerAllocationDetail) throws TException {
         try {
         	ReviewerAllocationDetail reviewerAllocationDetailObj = new ReviewerAllocationDetail();
-        	ReviewerAllocationDetailEntityPK reviewerAllocationDetailEntityPK = new ReviewerAllocationDetailEntityPK();
-        	reviewerAllocationDetailEntityPK.setProjectId(reviewerAllocationDetail.getId().getProjectId());
-        	reviewerAllocationDetailEntityPK.setUsername(reviewerAllocationDetail.getId().getUsername());
-        	if ((new ReviewerAllocationDetailRepository()).isExists(reviewerAllocationDetailEntityPK)) {
-        		reviewerAllocationDetailObj = (new ReviewerAllocationDetailRepository()).update(reviewerAllocationDetail);
+        	reviewerAllocationDetailObj = new ReviewerAllocationDetailRepository().isProjectExists(reviewerAllocationDetail.getProjectId(),reviewerAllocationDetail.getUsername());
+        	if (reviewerAllocationDetailObj!=null) {
+        		if(reviewerAllocationDetail.isSetMaxMemoryPerCpu())
+        		reviewerAllocationDetailObj.setMaxMemoryPerCpu(reviewerAllocationDetail.getMaxMemoryPerCpu());
+        		reviewerAllocationDetailObj = (new ReviewerAllocationDetailRepository()).update(reviewerAllocationDetailObj);
             } else {
             	reviewerAllocationDetailObj = (new ReviewerAllocationDetailRepository()).create(reviewerAllocationDetail);
             }
-            if (reviewerAllocationDetailObj.getId().getProjectId() != null) {
+            if (reviewerAllocationDetailObj.getProjectId() != null) {
                 return true;
             }
         } catch (Exception ex) {
@@ -253,20 +252,17 @@ public class AllocationManagerServerHandler implements AllocationRegistryService
     public List<UserDetail> getAllUnassignedReviewersForRequest(String projectId) throws TException {
         List<UserDetail> userDetailList = getAllReviewers();
         // TO_DO part
-//        List<UserDetail> reviewerList = new ArrayList<UserDetail>();
-//        for (UserDetail userDetailObj : userDetailList) {
-//            ProjectReviewerEntityPK projectReviewerEntityPK = new ProjectReviewerEntityPK();
-//            projectReviewerEntityPK.setProjectId(projectId);
-//            projectReviewerEntityPK.setReviewer(userDetailObj.getUsername());
-//            try {
-//                if (!new ProjectReviewerRepository().isExists(projectReviewerEntityPK)) {
-//                    reviewerList.add(userDetailObj);
-//                }
-//            } catch (Exception ex) {
-//                java.util.logging.Logger.getLogger(AllocationManagerServerHandler.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-        return userDetailList;
+        List<UserDetail> reviewerList = new ArrayList<UserDetail>();
+        for (UserDetail userDetailObj : userDetailList) {
+            try {
+                if (!new ProjectReviewerRepository().isProjectExists(projectId,userDetailObj.getUsername())) {
+                    reviewerList.add(userDetailObj);
+                }
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(AllocationManagerServerHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return reviewerList;
     }
 
     /*Method to update the request's start date, end date, status and award allocation on approval*/

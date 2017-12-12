@@ -15,12 +15,12 @@ import java.math.BigInteger;
 public class ReviewerAllocationDetailEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private ReviewerAllocationDetailEntityPK id;
+	@Id
+	@Column(name="ID")
+	private int id;
 
-	@Lob
 	@Column(name="APPLICATIONS_TO_BE_USED")
-	private String applicationsToBeUsed;
+	private Object applicationsToBeUsed;
 
 	@Column(name="AWARD_ALLOCATION")
 	private BigInteger awardAllocation;
@@ -28,20 +28,17 @@ public class ReviewerAllocationDetailEntity implements Serializable {
 	@Column(name="DISK_USAGE_RANGE_PER_JOB")
 	private BigInteger diskUsageRangePerJob;
 
-	@Lob
 	@Column(name="DOCUMENTS")
-	private byte[] documents;
+	private Object documents;
 
 	@Column(name="END_DATE")
 	private BigInteger endDate;
 
-	@Lob
 	@Column(name="FIELD_OF_SCIENCE")
-	private String fieldOfScience;
+	private Object fieldOfScience;
 
-	@Lob
 	@Column(name="KEYWORDS")
-	private String keywords;
+	private Object keywords;
 
 	@Column(name="MAX_MEMORY_PER_CPU")
 	private BigInteger maxMemoryPerCpu;
@@ -49,13 +46,14 @@ public class ReviewerAllocationDetailEntity implements Serializable {
 	@Column(name="NUMBER_OF_CPU_PER_JOB")
 	private BigInteger numberOfCpuPerJob;
 
-	@Lob
 	@Column(name="PROJECT_DESCRIPTION")
-	private String projectDescription;
+	private Object projectDescription;
 
-	@Lob
+	@Column(name="PROJECT_ID")
+	private String projectId;
+
 	@Column(name="PROJECT_REVIEWED_AND_FUNDED_BY")
-	private String projectReviewedAndFundedBy;
+	private Object projectReviewedAndFundedBy;
 
 	@Column(name="REQUESTED_DATE")
 	private BigInteger requestedDate;
@@ -63,9 +61,8 @@ public class ReviewerAllocationDetailEntity implements Serializable {
 	@Column(name="SERVICE_UNITS")
 	private BigInteger serviceUnits;
 
-	@Lob
 	@Column(name="SPECIFIC_RESOURCE_SELECTION")
-	private String specificResourceSelection;
+	private Object specificResourceSelection;
 
 	@Column(name="START_DATE")
 	private BigInteger startDate;
@@ -73,9 +70,8 @@ public class ReviewerAllocationDetailEntity implements Serializable {
 	@Column(name="STATUS")
 	private String status;
 
-	@Lob
 	@Column(name="TITLE")
-	private String title;
+	private Object title;
 
 	@Column(name="TYPE_OF_ALLOCATION")
 	private String typeOfAllocation;
@@ -83,22 +79,25 @@ public class ReviewerAllocationDetailEntity implements Serializable {
 	@Column(name="TYPICAL_SU_PER_JOB")
 	private BigInteger typicalSuPerJob;
 
+	@Column(name="USERNAME")
+	private String username;
+
 	public ReviewerAllocationDetailEntity() {
 	}
 
-	public ReviewerAllocationDetailEntityPK getId() {
+	public int getId() {
 		return this.id;
 	}
 
-	public void setId(ReviewerAllocationDetailEntityPK id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public String getApplicationsToBeUsed() {
+	public Object getApplicationsToBeUsed() {
 		return this.applicationsToBeUsed;
 	}
 
-	public void setApplicationsToBeUsed(String applicationsToBeUsed) {
+	public void setApplicationsToBeUsed(Object applicationsToBeUsed) {
 		this.applicationsToBeUsed = applicationsToBeUsed;
 	}
 
@@ -118,11 +117,11 @@ public class ReviewerAllocationDetailEntity implements Serializable {
 		this.diskUsageRangePerJob = diskUsageRangePerJob;
 	}
 
-	public byte[] getDocuments() {
+	public Object getDocuments() {
 		return this.documents;
 	}
 
-	public void setDocuments(byte[] documents) {
+	public void setDocuments(Object documents) {
 		this.documents = documents;
 	}
 
@@ -134,19 +133,19 @@ public class ReviewerAllocationDetailEntity implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public String getFieldOfScience() {
+	public Object getFieldOfScience() {
 		return this.fieldOfScience;
 	}
 
-	public void setFieldOfScience(String fieldOfScience) {
+	public void setFieldOfScience(Object fieldOfScience) {
 		this.fieldOfScience = fieldOfScience;
 	}
 
-	public String getKeywords() {
+	public Object getKeywords() {
 		return this.keywords;
 	}
 
-	public void setKeywords(String keywords) {
+	public void setKeywords(Object keywords) {
 		this.keywords = keywords;
 	}
 
@@ -166,19 +165,27 @@ public class ReviewerAllocationDetailEntity implements Serializable {
 		this.numberOfCpuPerJob = numberOfCpuPerJob;
 	}
 
-	public String getProjectDescription() {
+	public Object getProjectDescription() {
 		return this.projectDescription;
 	}
 
-	public void setProjectDescription(String projectDescription) {
+	public void setProjectDescription(Object projectDescription) {
 		this.projectDescription = projectDescription;
 	}
 
-	public String getProjectReviewedAndFundedBy() {
+	public String getProjectId() {
+		return this.projectId;
+	}
+
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	public Object getProjectReviewedAndFundedBy() {
 		return this.projectReviewedAndFundedBy;
 	}
 
-	public void setProjectReviewedAndFundedBy(String projectReviewedAndFundedBy) {
+	public void setProjectReviewedAndFundedBy(Object projectReviewedAndFundedBy) {
 		this.projectReviewedAndFundedBy = projectReviewedAndFundedBy;
 	}
 
@@ -198,11 +205,11 @@ public class ReviewerAllocationDetailEntity implements Serializable {
 		this.serviceUnits = serviceUnits;
 	}
 
-	public String getSpecificResourceSelection() {
+	public Object getSpecificResourceSelection() {
 		return this.specificResourceSelection;
 	}
 
-	public void setSpecificResourceSelection(String specificResourceSelection) {
+	public void setSpecificResourceSelection(Object specificResourceSelection) {
 		this.specificResourceSelection = specificResourceSelection;
 	}
 
@@ -222,11 +229,11 @@ public class ReviewerAllocationDetailEntity implements Serializable {
 		this.status = status;
 	}
 
-	public String getTitle() {
+	public Object getTitle() {
 		return this.title;
 	}
 
-	public void setTitle(String title) {
+	public void setTitle(Object title) {
 		this.title = title;
 	}
 
@@ -244,6 +251,14 @@ public class ReviewerAllocationDetailEntity implements Serializable {
 
 	public void setTypicalSuPerJob(BigInteger typicalSuPerJob) {
 		this.typicalSuPerJob = typicalSuPerJob;
+	}
+
+	public String getUsername() {
+		return this.username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }
