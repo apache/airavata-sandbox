@@ -17,27 +17,26 @@ public class NotificationReceiver {
 	public static void StartsimpleServer() {
 		try {
 
-			// Create a connection factory
 			ConnectionFactory factory = new ConnectionFactory();
-			// Set the host to the location of the RabbitMQ server
 			factory.setHost("localHost");
-			// Open a new connection
 			Connection connection = factory.newConnection();
-
 			Channel channel = connection.createChannel();
-
 			channel.queueDeclare("notify", false, false, false, null);
 			// Comfort logging
 			System.out.println("Waiting for notification");
-
 			Consumer consumer = new DefaultConsumer(channel) {
 				@Override
 				public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,
 						byte[] body) throws IOException {
-					String requestID = new String(body, "UTF-8");
+					String request = new String(body, "UTF-8");
 
-					NotificationInformation information = (new NotificationDetails()).getRequestDetails(requestID);
-					(new MailNotification()).sendMail(requestID, information.getStatus(), information.getSenderList());
+					String notificationDetails[] = request.split(",");
+					String projectId = notificationDetails[0];
+					String notificationType = notificationDetails[1];
+
+					NotificationInformation information = (new NotificationDetails()).getRequestDetails(projectId,
+							notificationType);
+					(new MailNotification()).sendMail(projectId, notificationType, information.getSenderList(),projectId);
 
 				}
 			};

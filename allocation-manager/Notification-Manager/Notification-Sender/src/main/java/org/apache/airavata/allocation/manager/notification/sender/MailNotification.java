@@ -11,7 +11,7 @@ import org.apache.commons.mail.SimpleEmail;
 public class MailNotification {
 
 
-	public void sendMail(String requestId, String status, List<String> senderList) {
+	public void sendMail(String requestId, String status, List<String> senderList, String projectId) {
 
 		EmailNotificationMessage message = new EmailNotificationMessage();
 		EmailNotificationConfiguration emailConfiguration = new EmailNotificationConfiguration();
@@ -19,8 +19,8 @@ public class MailNotification {
 		String username = emailConfiguration.getCredentials().getUserName();
 		String password = emailConfiguration.getCredentials().getPassword();
 		
-		String subject = message.getEmailMessage(status).getSubject();
-		String body = message.getEmailMessage(status).getMessage();
+		String subject = message.getEmailMessage(status ,projectId).getSubject();
+		String body = message.getEmailMessage(status, projectId).getMessage();
 		
 		mail( username,  password,  subject,  body,  senderList);
 
@@ -48,5 +48,6 @@ public class MailNotification {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("Mail sent");
 	}
 }

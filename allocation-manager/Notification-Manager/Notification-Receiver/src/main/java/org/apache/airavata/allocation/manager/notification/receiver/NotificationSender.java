@@ -11,18 +11,14 @@ public class NotificationSender {
 
 		try {
 
-			// Create a connection factory
 			ConnectionFactory factory = new ConnectionFactory();
-			// Set the host to the location of the RabbitMQ server
 			factory.setHost("localhost");
-			// Open a new connection
 			Connection connection = factory.newConnection();
-			// Channel is the abstraction for interacting with a queue
 			Channel channel = connection.createChannel();
-			// Create the Queue if it does not exist
 			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-			// assuming this is the request id send
-			String project_ID = "1001";
+
+			// this is the project id and notification type that is sent 
+			String project_ID = "1234,DENY_REQUEST";
 
 			channel.basicPublish("", QUEUE_NAME, null, project_ID.getBytes());
 
