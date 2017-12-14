@@ -13,7 +13,7 @@ public class TestServer {
 
  public static void StartsimpleServer(AllocationRegistryService.Processor<AllocationManagerServerHandler> processor) {
   try {
-   TServerTransport serverTransport = new TServerSocket(9030);
+   TServerTransport serverTransport = new TServerSocket(9040);
    TServer server = new TSimpleServer(
      new Args(serverTransport).processor(processor));
 

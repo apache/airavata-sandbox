@@ -24,7 +24,7 @@ public class testClient {
         try {
             TTransport transport;
 
-            transport = new TSocket("localhost", 9030);
+            transport = new TSocket("localhost", 9040);
             transport.open();
 
             TProtocol protocol = new TBinaryProtocol(transport);

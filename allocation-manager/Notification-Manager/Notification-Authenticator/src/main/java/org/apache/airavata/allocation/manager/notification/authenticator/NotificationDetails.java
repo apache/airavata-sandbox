@@ -9,26 +9,33 @@ import org.apache.thrift.TException;
 
 public class NotificationDetails {
 
-	public NotificationInformation getRequestDetails(String projectID) {
-		NotificationInformation result = new NotificationInformation() ;
-		
-		 try {
-			 AllocationManagerServerHandler obj  = new AllocationManagerServerHandler();
-			 //String status =  obj.getAllocationRequestStatus(projectID);
-			 
-			 	List<String>senderList = new ArrayList<String>() ;
-		
-				senderList.add(obj.getAllocationRequestUserName(projectID));
+	public NotificationInformation getRequestDetails(String projectID, String notificationType) {
+
+		NotificationInformation result = new NotificationInformation();
+
+		try {
+			AllocationManagerServerHandler obj = new AllocationManagerServerHandler();
+			List<String> senderList = new ArrayList<String>();
+
+			if (notificationType.equals("NEW_REQUEST") || notificationType.equals("DELETE_REQUEST")) {
+				senderList.add(obj.getAllocationRequestUserEmail(projectID));
 				senderList.add(obj.getAllocationManagerAdminEmail("ADMIN"));
-				
-			//result.setStatus(status);
+
+			} else if (notificationType.equals("ASSIGN_REQUEST")) {
+				senderList = obj.getEmailIdsOfReviewersForRequest(projectID);
+			} else if (notificationType.equals("APPROVE_REQUEST")) {
+				senderList.add(obj.getAllocationRequestUserEmail(projectID));
+			} else if (notificationType.equals("DENY_REQUEST")) {
+				senderList.add(obj.getAllocationRequestUserEmail(projectID));
+			}
+
 			result.setSenderList(senderList);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
 }

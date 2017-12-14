@@ -19,13 +19,11 @@ public class UserDetailRepository extends AbstractRepository<UserDetail, UserDet
 	}
 
 	public UserDetail getAdminDetails() throws Exception {
-		String userType = "ADMIN";
-		String queryString = "SELECT * FROM " + UserDetailEntity.class.getSimpleName() + "WHERE"
-				+ DBConstants.UserDetailTable.USERTYPE + "=" + userType;
 		Map<String, Object> queryParameters = new HashMap<>();
-		queryParameters.put(DBConstants.UserDetailTable.USERTYPE, userType);
-
-		return (UserDetail) select(queryString, queryParameters, 0, -1);
+		String query = "SELECT DISTINCT p from " + UserDetailEntity.class.getSimpleName() + " as p";
+		query += " WHERE ";
+		query += "p." + DBConstants.UserDetailTable.USERTYPE + " ='" + DBConstants.UserType.ADMIN + "'";
+		return select(query, queryParameters, 0, -1).get(0);
 	}
 
 	public List<UserDetail> getAllReviewers() throws Exception {
