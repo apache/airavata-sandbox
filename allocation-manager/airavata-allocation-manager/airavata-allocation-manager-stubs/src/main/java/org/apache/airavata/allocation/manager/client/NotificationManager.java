@@ -11,7 +11,6 @@ public class NotificationManager {
 	private final static String QUEUE_NAME = "notify";
 
 	public void notificationSender(String projectID, String notificationType) {
-		
 		try {
 
 			ConnectionFactory factory = new ConnectionFactory();

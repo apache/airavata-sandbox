@@ -30,7 +30,7 @@ public class NotificationTestClient {
             TProtocol protocol = new TBinaryProtocol(transport);
             AllocationRegistryService.Client client = new AllocationRegistryService.Client(protocol);
             System.out.println("Started client");
-            
+
             System.out.println("Testing createAllocationRequest() ");
 
             UserAllocationDetail requestDetails = new UserAllocationDetail();
@@ -48,6 +48,7 @@ public class NotificationTestClient {
 
             System.out.println(client.assignReviewers("1234", "reviewer2", "admin"));
             System.out.println(client.assignReviewers("1234", "reviewer3", "admin"));
+
 
             System.out.println("Testing approveRequest() ");
 
