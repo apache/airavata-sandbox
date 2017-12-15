@@ -1,0 +1,189 @@
+2017-12-12 18:45:42,238 [main] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 18:46:05,520 [main] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 18:46:05,532 [main] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 18:46:05,535 [main] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: main
+2017-12-12 18:46:05,667 [main] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 18:46:05,669 [main] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 18:46:05,674 [main] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 18:46:07,726 [main] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - This configuration disallows runtime optimization, but the following listed types were not enhanced at build time or at class load time with a javaagent: "
+org.apache.airavata.allocation.manager.db.entities.UserDetailEntity".
+org.apache.openjpa.persistence.ArgumentException: This configuration disallows runtime optimization, but the following listed types were not enhanced at build time or at class load time with a javaagent: "
+org.apache.airavata.allocation.manager.db.entities.UserDetailEntity".
+	at org.apache.openjpa.enhance.ManagedClassSubclasser.prepareUnenhancedClasses(ManagedClassSubclasser.java:115)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.loadPersistentTypes(AbstractBrokerFactory.java:314)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.initializeBroker(AbstractBrokerFactory.java:238)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.newBroker(AbstractBrokerFactory.java:212)
+	at org.apache.openjpa.kernel.DelegatingBrokerFactory.newBroker(DelegatingBrokerFactory.java:156)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:227)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:154)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:60)
+	at org.apache.airavata.allocation.manager.db.utils.JPAUtils.getEntityManager(JPAUtils.java:74)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:153)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.update(AbstractRepository.java:60)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.create(AbstractRepository.java:49)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.createUser(AllocationManagerServerHandler.java:52)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createUser.getResult(AllocationRegistryService.java:1892)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createUser.getResult(AllocationRegistryService.java:1)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39)
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39)
+	at org.apache.thrift.server.TSimpleServer.serve(TSimpleServer.java:80)
+	at org.apache.airavata.allocation.manager.server.TestServer.StartsimpleServer(TestServer.java:25)
+	at org.apache.airavata.allocation.manager.server.TestServer.main(TestServer.java:33)
+2017-12-12 18:46:07,730 [main] ERROR o.a.thrift.ProcessFunction  - Internal error processing createUser
+org.apache.airavata.allocation.manager.models.AllocationManagerException: This configuration disallows runtime optimization, but the following listed types were not enhanced at build time or at class load time with a javaagent: "
+org.apache.airavata.allocation.manager.db.entities.UserDetailEntity". Stack trace:<openjpa-2.2.0-r422266:1244990 nonfatal user error> org.apache.openjpa.persistence.ArgumentException: This configuration disallows runtime optimization, but the following listed types were not enhanced at build time or at class load time with a javaagent: "
+org.apache.airavata.allocation.manager.db.entities.UserDetailEntity".
+	at org.apache.openjpa.enhance.ManagedClassSubclasser.prepareUnenhancedClasses(ManagedClassSubclasser.java:115)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.loadPersistentTypes(AbstractBrokerFactory.java:314)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.initializeBroker(AbstractBrokerFactory.java:238)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.newBroker(AbstractBrokerFactory.java:212)
+	at org.apache.openjpa.kernel.DelegatingBrokerFactory.newBroker(DelegatingBrokerFactory.java:156)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:227)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:154)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:60)
+	at org.apache.airavata.allocation.manager.db.utils.JPAUtils.getEntityManager(JPAUtils.java:74)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:153)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.update(AbstractRepository.java:60)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.create(AbstractRepository.java:49)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.createUser(AllocationManagerServerHandler.java:52)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createUser.getResult(AllocationRegistryService.java:1892)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createUser.getResult(AllocationRegistryService.java:1)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39)
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39)
+	at org.apache.thrift.server.TSimpleServer.serve(TSimpleServer.java:80)
+	at org.apache.airavata.allocation.manager.server.TestServer.StartsimpleServer(TestServer.java:25)
+	at org.apache.airavata.allocation.manager.server.TestServer.main(TestServer.java:33)
+
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.createUser(AllocationManagerServerHandler.java:56)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createUser.getResult(AllocationRegistryService.java:1892)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createUser.getResult(AllocationRegistryService.java:1)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39)
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39)
+	at org.apache.thrift.server.TSimpleServer.serve(TSimpleServer.java:80)
+	at org.apache.airavata.allocation.manager.server.TestServer.StartsimpleServer(TestServer.java:25)
+	at org.apache.airavata.allocation.manager.server.TestServer.main(TestServer.java:33)
+2017-12-12 18:46:59,166 [main] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 18:47:36,340 [main] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - This operation cannot be performed while a Transaction is active.
+org.apache.openjpa.persistence.InvalidStateException: This operation cannot be performed while a Transaction is active.
+	at org.apache.openjpa.kernel.BrokerImpl.close(BrokerImpl.java:4353)
+	at org.apache.openjpa.kernel.DelegatingBroker.close(DelegatingBroker.java:1354)
+	at org.apache.openjpa.persistence.EntityManagerImpl.close(EntityManagerImpl.java:1307)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:160)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.update(AbstractRepository.java:60)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.create(AbstractRepository.java:49)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.createUser(AllocationManagerServerHandler.java:52)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createUser.getResult(AllocationRegistryService.java:1892)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createUser.getResult(AllocationRegistryService.java:1)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39)
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39)
+	at org.apache.thrift.server.TSimpleServer.serve(TSimpleServer.java:80)
+	at org.apache.airavata.allocation.manager.server.TestServer.StartsimpleServer(TestServer.java:25)
+	at org.apache.airavata.allocation.manager.server.TestServer.main(TestServer.java:33)
+2017-12-12 18:47:36,361 [main] ERROR o.a.thrift.ProcessFunction  - Internal error processing createUser
+org.apache.airavata.allocation.manager.models.AllocationManagerException: This operation cannot be performed while a Transaction is active. Stack trace:<openjpa-2.2.0-r422266:1244990 nonfatal user error> org.apache.openjpa.persistence.InvalidStateException: This operation cannot be performed while a Transaction is active.
+	at org.apache.openjpa.kernel.BrokerImpl.close(BrokerImpl.java:4353)
+	at org.apache.openjpa.kernel.DelegatingBroker.close(DelegatingBroker.java:1354)
+	at org.apache.openjpa.persistence.EntityManagerImpl.close(EntityManagerImpl.java:1307)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:160)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.update(AbstractRepository.java:60)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.create(AbstractRepository.java:49)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.createUser(AllocationManagerServerHandler.java:52)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createUser.getResult(AllocationRegistryService.java:1892)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createUser.getResult(AllocationRegistryService.java:1)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39)
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39)
+	at org.apache.thrift.server.TSimpleServer.serve(TSimpleServer.java:80)
+	at org.apache.airavata.allocation.manager.server.TestServer.StartsimpleServer(TestServer.java:25)
+	at org.apache.airavata.allocation.manager.server.TestServer.main(TestServer.java:33)
+
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.createUser(AllocationManagerServerHandler.java:56)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createUser.getResult(AllocationRegistryService.java:1892)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createUser.getResult(AllocationRegistryService.java:1)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39)
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39)
+	at org.apache.thrift.server.TSimpleServer.serve(TSimpleServer.java:80)
+	at org.apache.airavata.allocation.manager.server.TestServer.StartsimpleServer(TestServer.java:25)
+	at org.apache.airavata.allocation.manager.server.TestServer.main(TestServer.java:33)
+2017-12-12 18:49:05,759 [main] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 18:49:53,499 [main] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 18:50:36,494 [main] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 18:50:36,625 [main] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 18:50:36,632 [main] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: main
+2017-12-12 18:50:36,909 [main] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 18:50:36,911 [main] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 18:50:36,919 [main] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 19:30:51,588 [main] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 19:52:45,457 [main] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 19:53:55,973 [main] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 19:53:55,982 [main] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 19:53:55,986 [main] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: main
+2017-12-12 19:53:56,072 [main] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 19:53:56,073 [main] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 19:53:56,076 [main] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 19:53:57,594 [main] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - There exist project with the id
+org.apache.thrift.TException: There exist project with the id
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.createAllocationRequest(AllocationManagerServerHandler.java:65)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createAllocationRequest.getResult(AllocationRegistryService.java:1484)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createAllocationRequest.getResult(AllocationRegistryService.java:1)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39)
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39)
+	at org.apache.thrift.server.TSimpleServer.serve(TSimpleServer.java:80)
+	at org.apache.airavata.allocation.manager.server.TestServer.StartsimpleServer(TestServer.java:25)
+	at org.apache.airavata.allocation.manager.server.TestServer.main(TestServer.java:33)
+2017-12-12 19:53:57,602 [main] ERROR o.a.thrift.ProcessFunction  - Internal error processing createAllocationRequest
+org.apache.airavata.allocation.manager.models.AllocationManagerException: There exist project with the id Stack trace:org.apache.thrift.TException: There exist project with the id
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.createAllocationRequest(AllocationManagerServerHandler.java:65)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createAllocationRequest.getResult(AllocationRegistryService.java:1484)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createAllocationRequest.getResult(AllocationRegistryService.java:1)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39)
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39)
+	at org.apache.thrift.server.TSimpleServer.serve(TSimpleServer.java:80)
+	at org.apache.airavata.allocation.manager.server.TestServer.StartsimpleServer(TestServer.java:25)
+	at org.apache.airavata.allocation.manager.server.TestServer.main(TestServer.java:33)
+
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.createAllocationRequest(AllocationManagerServerHandler.java:72)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createAllocationRequest.getResult(AllocationRegistryService.java:1484)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createAllocationRequest.getResult(AllocationRegistryService.java:1)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39)
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39)
+	at org.apache.thrift.server.TSimpleServer.serve(TSimpleServer.java:80)
+	at org.apache.airavata.allocation.manager.server.TestServer.StartsimpleServer(TestServer.java:25)
+	at org.apache.airavata.allocation.manager.server.TestServer.main(TestServer.java:33)
+2017-12-12 23:11:25,737 [main] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:11:35,320 [main] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 23:11:35,327 [main] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 23:11:35,329 [main] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: main
+2017-12-12 23:11:35,388 [main] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 23:11:35,389 [main] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 23:11:35,392 [main] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 23:18:32,874 [main] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - There exist project with the id
+org.apache.thrift.TException: There exist project with the id
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.createAllocationRequest(AllocationManagerServerHandler.java:68)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createAllocationRequest.getResult(AllocationRegistryService.java:1484)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createAllocationRequest.getResult(AllocationRegistryService.java:1)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39)
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39)
+	at org.apache.thrift.server.TSimpleServer.serve(TSimpleServer.java:80)
+	at org.apache.airavata.allocation.manager.server.TestServer.StartsimpleServer(TestServer.java:25)
+	at org.apache.airavata.allocation.manager.server.TestServer.main(TestServer.java:33)
+2017-12-12 23:18:32,880 [main] ERROR o.a.thrift.ProcessFunction  - Internal error processing createAllocationRequest
+org.apache.airavata.allocation.manager.models.AllocationManagerException: There exist project with the id Stack trace:org.apache.thrift.TException: There exist project with the id
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.createAllocationRequest(AllocationManagerServerHandler.java:68)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createAllocationRequest.getResult(AllocationRegistryService.java:1484)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createAllocationRequest.getResult(AllocationRegistryService.java:1)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39)
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39)
+	at org.apache.thrift.server.TSimpleServer.serve(TSimpleServer.java:80)
+	at org.apache.airavata.allocation.manager.server.TestServer.StartsimpleServer(TestServer.java:25)
+	at org.apache.airavata.allocation.manager.server.TestServer.main(TestServer.java:33)
+
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.createAllocationRequest(AllocationManagerServerHandler.java:77)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createAllocationRequest.getResult(AllocationRegistryService.java:1484)
+	at org.apache.airavata.allocation.manager.service.cpi.AllocationRegistryService$Processor$createAllocationRequest.getResult(AllocationRegistryService.java:1)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:39)
+	at org.apache.thrift.TBaseProcessor.process(TBaseProcessor.java:39)
+	at org.apache.thrift.server.TSimpleServer.serve(TSimpleServer.java:80)
+	at org.apache.airavata.allocation.manager.server.TestServer.StartsimpleServer(TestServer.java:25)
+	at org.apache.airavata.allocation.manager.server.TestServer.main(TestServer.java:33)
+2017-12-12 23:33:34,442 [main] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:35:50,917 [main] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!

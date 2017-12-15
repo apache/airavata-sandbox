@@ -1,5 +1,7 @@
 package org.apache.airavata.allocation.manager.client;
 
+import org.apache.airavata.allocation.manager.models.AllocationManagerException;
+
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -9,6 +11,7 @@ public class NotificationManager {
 	private final static String QUEUE_NAME = "notify";
 
 	public void notificationSender(String projectID, String notificationType) {
+		
 		try {
 
 			ConnectionFactory factory = new ConnectionFactory();
