@@ -1,0 +1,3 @@
+test_file: test.py
+arg_file1: airavata-client1.ini
+arg_file2: airavata-client2.ini
