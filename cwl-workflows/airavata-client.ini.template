@@ -1,0 +1,10 @@
+[credentials]
+Username =
+AccessToken =
+
+[config]
+GatewayID =
+HostName =
+Port =
+ProjectID =
+ExperimentName =
