@@ -60,7 +60,7 @@ public class RabbitMQConsumerTest {
             logger.info("Started Message Broker!!!");
             Thread.sleep(4000);
         } catch (Exception e) {
-            logger.error("Exception occured while starting the message broker!! " + e);
+            logger.error("Exception occurred while starting the message broker!! " + e);
         }
     }
 
@@ -70,7 +70,7 @@ public class RabbitMQConsumerTest {
             //publish test data
             publish(MessageType.EXPERIMENT_OUTPUT);
 
-            //wait for the consumer to recieve the message
+            //wait for the consumer to receive the message
             Thread.sleep(4000);
         } catch (Exception e) {
             logger.error(e);

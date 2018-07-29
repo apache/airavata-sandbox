@@ -195,7 +195,7 @@ public class GramProvider extends AbstractProvider {
                             gssCred.getName().toString(), null, job.getRSL());
 
             /*
-             * Block untill job is done
+             * Block until job is done
              */
             listener.waitFor();
 
