@@ -1,0 +1,81 @@
+This file contains ideas and information for scheduling algorithms and policies for batch oriented jobs for HPC Clusters
+
+
+Requirement:
+
+Apache Airavata currently does not have a scheduler that intelligently throttles jobs before submitting to compute
+resources (clusters) and directly relays to the queuing and scheduling policy of the clusters that ensure fair use of
+the resources. In this context there is much that can be improved by implementing an internal scheduler for Airavata.
+
+This scheduler will help in:
+
+(1) throttling jobs before submitting to compute resources,
+(2) be aware of the load on various clusters and intelligently dispatch series of user jobs to multiple clusters thereby
+increasing throughput and
+(3) making it easy and fair for multiple users to use a single community account.
+
+
+Background:
+
+Types of batch scheduling policies:
+•FCFS (First come first serve)
+•SJF (Shortest job first)
+•LJF(Longest job first)
+•Advance reservation  —> can we do this? Since at the physical machine lvl it will also have its own scheduler?
+•Backfilling
+•Preemptive backfilling —> let high priority jobs be given precedence over lower
+
+
+Not sure how Backfilling will be used? Since we at Airavata level deal with the cluster queue and don’t have control
+over the resources of the cluster such that we manage which job to be in execution ...
+		So even if we do this my hunch is that it will be roughly equivalent to SJF??
+
+
+The job state types in Airavata:
+
+1 - Airavata Queue
+2 - Cluster Queue
+3 - Executing
+4 - Stoped
+
+Job priority calculation:
+
+> Resource
+> Queue time
+> Expansion
+> Target
+> Fair share
+> QoS
+
+
+Expansion is based on the following equation: XFactor = (Queue Time + Job Time Limit) / Job Time Limit [10]
+
+A job with low time limit will increase its priority more quickly than a long job, pushing it to the front of the queue [10]. If the expansion factor is not enough to meet the scheduling goals, there is a Target factor that is increased exponentially as the actual queue time approach the target queue time [10].
+
+
+Backfill: It is important to note that each job have a start time as well as a wall clock limit. Therefore, Maui is capable of finding out the finishing time of all the jobs that are in the queue along with the earliest time the resources are going to be free in order to start the high priority jobs. Maui basically uses backfill to be able to make the most out of the available resources
+
+
+Bypass (BYPASS) Subcomponent
+
+It was originally introduced to prevent backfill based starvation. It is based on the 'bypass' count of a job where
+the bypass count is increased by one every time the job is 'bypassed' by a lower priority job via backfill.
+
+
+Fairshare (FS) Component
+
+Fairshare components allow a site to favor jobs based on short term historical usage. The Fairshare Overview describes
+the configuration and use of Fairshare in detail.
+
+After the brief reprieve from complexity found in the QOS factor, we come to the Fairshare factor. This factor is used
+to adjust a job's priority based on the historical percentage system utilization of the jobs user, group, account, or
+QOS. This allows you to 'steer' the workload toward a particular usage mix across user, group, account, and QOS
+dimensions.
+
+
+
+TODOs:
+
+Write the Scheduler and test it with the simulation infrastructure
+
+Integrate it into Airavata
