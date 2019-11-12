@@ -1,0 +1,689 @@
+2017-12-12 12:49:05,657 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+org.apache.openjpa.persistence.ArgumentException: A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+	at org.apache.openjpa.jdbc.schema.DataSourceFactory.newDataSource(DataSourceFactory.java:72)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.createConnectionFactory(JDBCConfigurationImpl.java:844)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.getDBDictionaryInstance(JDBCConfigurationImpl.java:602)
+	at org.apache.openjpa.jdbc.meta.MappingRepository.endConfiguration(MappingRepository.java:1510)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:518)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:443)
+	at org.apache.openjpa.lib.conf.PluginValue.instantiate(PluginValue.java:104)
+	at org.apache.openjpa.conf.MetaDataRepositoryValue.instantiate(MetaDataRepositoryValue.java:68)
+	at org.apache.openjpa.lib.conf.ObjectValue.instantiate(ObjectValue.java:83)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.newMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:968)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.getMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:959)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.makeReadOnly(AbstractBrokerFactory.java:638)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.newBroker(AbstractBrokerFactory.java:203)
+	at org.apache.openjpa.kernel.DelegatingBrokerFactory.newBroker(DelegatingBrokerFactory.java:156)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:227)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:154)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:60)
+	at org.apache.airavata.allocation.manager.db.utils.JPAUtils.getEntityManager(JPAUtils.java:74)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:153)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.get(AbstractRepository.java:88)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:158)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 12:53:23,508 [pool-1-thread-5] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+org.apache.openjpa.persistence.ArgumentException: A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+	at org.apache.openjpa.jdbc.schema.DataSourceFactory.newDataSource(DataSourceFactory.java:72)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.createConnectionFactory(JDBCConfigurationImpl.java:844)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.getDBDictionaryInstance(JDBCConfigurationImpl.java:602)
+	at org.apache.openjpa.jdbc.meta.MappingRepository.endConfiguration(MappingRepository.java:1510)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:518)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:443)
+	at org.apache.openjpa.lib.conf.PluginValue.instantiate(PluginValue.java:104)
+	at org.apache.openjpa.conf.MetaDataRepositoryValue.instantiate(MetaDataRepositoryValue.java:68)
+	at org.apache.openjpa.lib.conf.ObjectValue.instantiate(ObjectValue.java:83)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.newMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:968)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.getMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:959)
+	at org.apache.openjpa.kernel.BrokerImpl.initialize(BrokerImpl.java:337)
+	at org.apache.openjpa.kernel.BrokerImpl.initialize(BrokerImpl.java:325)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.initializeBroker(AbstractBrokerFactory.java:228)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.newBroker(AbstractBrokerFactory.java:212)
+	at org.apache.openjpa.kernel.DelegatingBrokerFactory.newBroker(DelegatingBrokerFactory.java:156)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:227)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:154)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:60)
+	at org.apache.airavata.allocation.manager.db.utils.JPAUtils.getEntityManager(JPAUtils.java:74)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:153)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.get(AbstractRepository.java:88)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:158)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 12:53:44,951 [pool-1-thread-6] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+org.apache.openjpa.persistence.ArgumentException: A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+	at org.apache.openjpa.jdbc.schema.DataSourceFactory.newDataSource(DataSourceFactory.java:72)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.createConnectionFactory(JDBCConfigurationImpl.java:844)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.getDBDictionaryInstance(JDBCConfigurationImpl.java:602)
+	at org.apache.openjpa.jdbc.meta.MappingRepository.endConfiguration(MappingRepository.java:1510)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:518)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:443)
+	at org.apache.openjpa.lib.conf.PluginValue.instantiate(PluginValue.java:104)
+	at org.apache.openjpa.conf.MetaDataRepositoryValue.instantiate(MetaDataRepositoryValue.java:68)
+	at org.apache.openjpa.lib.conf.ObjectValue.instantiate(ObjectValue.java:83)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.newMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:968)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.getMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:959)
+	at org.apache.openjpa.kernel.BrokerImpl.initialize(BrokerImpl.java:337)
+	at org.apache.openjpa.kernel.BrokerImpl.initialize(BrokerImpl.java:325)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.initializeBroker(AbstractBrokerFactory.java:228)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.newBroker(AbstractBrokerFactory.java:212)
+	at org.apache.openjpa.kernel.DelegatingBrokerFactory.newBroker(DelegatingBrokerFactory.java:156)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:227)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:154)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:60)
+	at org.apache.airavata.allocation.manager.db.utils.JPAUtils.getEntityManager(JPAUtils.java:74)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:153)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.get(AbstractRepository.java:88)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:158)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 12:55:05,853 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+org.apache.openjpa.persistence.ArgumentException: A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+	at org.apache.openjpa.jdbc.schema.DataSourceFactory.newDataSource(DataSourceFactory.java:72)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.createConnectionFactory(JDBCConfigurationImpl.java:844)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.getDBDictionaryInstance(JDBCConfigurationImpl.java:602)
+	at org.apache.openjpa.jdbc.meta.MappingRepository.endConfiguration(MappingRepository.java:1510)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:518)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:443)
+	at org.apache.openjpa.lib.conf.PluginValue.instantiate(PluginValue.java:104)
+	at org.apache.openjpa.conf.MetaDataRepositoryValue.instantiate(MetaDataRepositoryValue.java:68)
+	at org.apache.openjpa.lib.conf.ObjectValue.instantiate(ObjectValue.java:83)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.newMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:968)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.getMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:959)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.makeReadOnly(AbstractBrokerFactory.java:638)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.newBroker(AbstractBrokerFactory.java:203)
+	at org.apache.openjpa.kernel.DelegatingBrokerFactory.newBroker(DelegatingBrokerFactory.java:156)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:227)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:154)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:60)
+	at org.apache.airavata.allocation.manager.db.utils.JPAUtils.getEntityManager(JPAUtils.java:74)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:153)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.get(AbstractRepository.java:88)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:158)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 13:03:07,450 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+org.apache.openjpa.persistence.ArgumentException: A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+	at org.apache.openjpa.jdbc.schema.DataSourceFactory.newDataSource(DataSourceFactory.java:72)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.createConnectionFactory(JDBCConfigurationImpl.java:844)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.getDBDictionaryInstance(JDBCConfigurationImpl.java:602)
+	at org.apache.openjpa.jdbc.meta.MappingRepository.endConfiguration(MappingRepository.java:1510)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:518)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:443)
+	at org.apache.openjpa.lib.conf.PluginValue.instantiate(PluginValue.java:104)
+	at org.apache.openjpa.conf.MetaDataRepositoryValue.instantiate(MetaDataRepositoryValue.java:68)
+	at org.apache.openjpa.lib.conf.ObjectValue.instantiate(ObjectValue.java:83)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.newMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:968)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.getMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:959)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.makeReadOnly(AbstractBrokerFactory.java:638)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.newBroker(AbstractBrokerFactory.java:203)
+	at org.apache.openjpa.kernel.DelegatingBrokerFactory.newBroker(DelegatingBrokerFactory.java:156)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:227)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:154)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:60)
+	at org.apache.airavata.allocation.manager.db.utils.JPAUtils.getEntityManager(JPAUtils.java:74)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:153)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.get(AbstractRepository.java:88)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:158)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:22)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 13:07:23,337 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+org.apache.openjpa.persistence.ArgumentException: A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+	at org.apache.openjpa.jdbc.schema.DataSourceFactory.newDataSource(DataSourceFactory.java:72)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.createConnectionFactory(JDBCConfigurationImpl.java:844)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.getDBDictionaryInstance(JDBCConfigurationImpl.java:602)
+	at org.apache.openjpa.jdbc.meta.MappingRepository.endConfiguration(MappingRepository.java:1510)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:518)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:443)
+	at org.apache.openjpa.lib.conf.PluginValue.instantiate(PluginValue.java:104)
+	at org.apache.openjpa.conf.MetaDataRepositoryValue.instantiate(MetaDataRepositoryValue.java:68)
+	at org.apache.openjpa.lib.conf.ObjectValue.instantiate(ObjectValue.java:83)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.newMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:968)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.getMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:959)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.makeReadOnly(AbstractBrokerFactory.java:638)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.newBroker(AbstractBrokerFactory.java:203)
+	at org.apache.openjpa.kernel.DelegatingBrokerFactory.newBroker(DelegatingBrokerFactory.java:156)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:227)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:154)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:60)
+	at org.apache.airavata.allocation.manager.db.utils.JPAUtils.getEntityManager(JPAUtils.java:74)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:153)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.get(AbstractRepository.java:88)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:158)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:22)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 13:07:23,353 [pool-1-thread-4] ERROR c.r.c.i.ForgivingExceptionHandler  - Consumer org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1@2a843c94 (amq.ctag-jxVYu5oBOXYUmwjBzeaODA) method handleDelivery for channel AMQChannel(amqp://guest@127.0.0.1:5672/,1) threw an exception for channel AMQChannel(amqp://guest@127.0.0.1:5672/,1)
+java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+	at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+	at java.util.ArrayList.get(ArrayList.java:429)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:40)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 13:08:17,075 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+org.apache.openjpa.persistence.ArgumentException: A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+	at org.apache.openjpa.jdbc.schema.DataSourceFactory.newDataSource(DataSourceFactory.java:72)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.createConnectionFactory(JDBCConfigurationImpl.java:844)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.getDBDictionaryInstance(JDBCConfigurationImpl.java:602)
+	at org.apache.openjpa.jdbc.meta.MappingRepository.endConfiguration(MappingRepository.java:1510)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:518)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:443)
+	at org.apache.openjpa.lib.conf.PluginValue.instantiate(PluginValue.java:104)
+	at org.apache.openjpa.conf.MetaDataRepositoryValue.instantiate(MetaDataRepositoryValue.java:68)
+	at org.apache.openjpa.lib.conf.ObjectValue.instantiate(ObjectValue.java:83)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.newMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:968)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.getMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:959)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.makeReadOnly(AbstractBrokerFactory.java:638)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.newBroker(AbstractBrokerFactory.java:203)
+	at org.apache.openjpa.kernel.DelegatingBrokerFactory.newBroker(DelegatingBrokerFactory.java:156)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:227)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:154)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:60)
+	at org.apache.airavata.allocation.manager.db.utils.JPAUtils.getEntityManager(JPAUtils.java:74)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:153)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.get(AbstractRepository.java:88)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:158)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:22)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 13:09:59,166 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+org.apache.openjpa.persistence.ArgumentException: A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+	at org.apache.openjpa.jdbc.schema.DataSourceFactory.newDataSource(DataSourceFactory.java:72)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.createConnectionFactory(JDBCConfigurationImpl.java:844)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.getDBDictionaryInstance(JDBCConfigurationImpl.java:602)
+	at org.apache.openjpa.jdbc.meta.MappingRepository.endConfiguration(MappingRepository.java:1510)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:518)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:443)
+	at org.apache.openjpa.lib.conf.PluginValue.instantiate(PluginValue.java:104)
+	at org.apache.openjpa.conf.MetaDataRepositoryValue.instantiate(MetaDataRepositoryValue.java:68)
+	at org.apache.openjpa.lib.conf.ObjectValue.instantiate(ObjectValue.java:83)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.newMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:968)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.getMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:959)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.makeReadOnly(AbstractBrokerFactory.java:638)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.newBroker(AbstractBrokerFactory.java:203)
+	at org.apache.openjpa.kernel.DelegatingBrokerFactory.newBroker(DelegatingBrokerFactory.java:156)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:227)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:154)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:60)
+	at org.apache.airavata.allocation.manager.db.utils.JPAUtils.getEntityManager(JPAUtils.java:74)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:153)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.get(AbstractRepository.java:88)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:158)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:22)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 13:12:18,654 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+org.apache.openjpa.persistence.ArgumentException: A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+	at org.apache.openjpa.jdbc.schema.DataSourceFactory.newDataSource(DataSourceFactory.java:72)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.createConnectionFactory(JDBCConfigurationImpl.java:844)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.getDBDictionaryInstance(JDBCConfigurationImpl.java:602)
+	at org.apache.openjpa.jdbc.meta.MappingRepository.endConfiguration(MappingRepository.java:1510)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:518)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:443)
+	at org.apache.openjpa.lib.conf.PluginValue.instantiate(PluginValue.java:104)
+	at org.apache.openjpa.conf.MetaDataRepositoryValue.instantiate(MetaDataRepositoryValue.java:68)
+	at org.apache.openjpa.lib.conf.ObjectValue.instantiate(ObjectValue.java:83)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.newMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:968)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.getMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:959)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.makeReadOnly(AbstractBrokerFactory.java:638)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.newBroker(AbstractBrokerFactory.java:203)
+	at org.apache.openjpa.kernel.DelegatingBrokerFactory.newBroker(DelegatingBrokerFactory.java:156)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:227)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:154)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:60)
+	at org.apache.airavata.allocation.manager.db.utils.JPAUtils.getEntityManager(JPAUtils.java:74)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:153)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.get(AbstractRepository.java:88)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:158)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:22)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 13:12:18,694 [pool-1-thread-5] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+org.apache.openjpa.persistence.ArgumentException: A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+	at org.apache.openjpa.jdbc.schema.DataSourceFactory.newDataSource(DataSourceFactory.java:72)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.createConnectionFactory(JDBCConfigurationImpl.java:844)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.getDBDictionaryInstance(JDBCConfigurationImpl.java:602)
+	at org.apache.openjpa.jdbc.meta.MappingRepository.endConfiguration(MappingRepository.java:1510)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:518)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:443)
+	at org.apache.openjpa.lib.conf.PluginValue.instantiate(PluginValue.java:104)
+	at org.apache.openjpa.conf.MetaDataRepositoryValue.instantiate(MetaDataRepositoryValue.java:68)
+	at org.apache.openjpa.lib.conf.ObjectValue.instantiate(ObjectValue.java:83)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.newMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:968)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.getMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:959)
+	at org.apache.openjpa.kernel.BrokerImpl.initialize(BrokerImpl.java:337)
+	at org.apache.openjpa.kernel.BrokerImpl.initialize(BrokerImpl.java:325)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.initializeBroker(AbstractBrokerFactory.java:228)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.newBroker(AbstractBrokerFactory.java:212)
+	at org.apache.openjpa.kernel.DelegatingBrokerFactory.newBroker(DelegatingBrokerFactory.java:156)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:227)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:154)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:60)
+	at org.apache.airavata.allocation.manager.db.utils.JPAUtils.getEntityManager(JPAUtils.java:74)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:153)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.get(AbstractRepository.java:88)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:158)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:22)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 13:14:30,424 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+org.apache.openjpa.persistence.ArgumentException: A JDBC Driver or DataSource class name must be specified in the ConnectionDriverName property. Available properties in configuration are "org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl@442ce698".
+	at org.apache.openjpa.jdbc.schema.DataSourceFactory.newDataSource(DataSourceFactory.java:72)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.createConnectionFactory(JDBCConfigurationImpl.java:844)
+	at org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl.getDBDictionaryInstance(JDBCConfigurationImpl.java:602)
+	at org.apache.openjpa.jdbc.meta.MappingRepository.endConfiguration(MappingRepository.java:1510)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:518)
+	at org.apache.openjpa.lib.conf.Configurations.configureInstance(Configurations.java:443)
+	at org.apache.openjpa.lib.conf.PluginValue.instantiate(PluginValue.java:104)
+	at org.apache.openjpa.conf.MetaDataRepositoryValue.instantiate(MetaDataRepositoryValue.java:68)
+	at org.apache.openjpa.lib.conf.ObjectValue.instantiate(ObjectValue.java:83)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.newMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:968)
+	at org.apache.openjpa.conf.OpenJPAConfigurationImpl.getMetaDataRepositoryInstance(OpenJPAConfigurationImpl.java:959)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.makeReadOnly(AbstractBrokerFactory.java:638)
+	at org.apache.openjpa.kernel.AbstractBrokerFactory.newBroker(AbstractBrokerFactory.java:203)
+	at org.apache.openjpa.kernel.DelegatingBrokerFactory.newBroker(DelegatingBrokerFactory.java:156)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:227)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:154)
+	at org.apache.openjpa.persistence.EntityManagerFactoryImpl.createEntityManager(EntityManagerFactoryImpl.java:60)
+	at org.apache.airavata.allocation.manager.db.utils.JPAUtils.getEntityManager(JPAUtils.java:74)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:153)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.get(AbstractRepository.java:88)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:158)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:22)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 19:48:39,283 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 19:48:42,545 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 19:48:42,552 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 19:48:42,553 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 19:48:42,612 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 19:48:42,613 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 19:48:42,616 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 19:48:42,618 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - null
+java.lang.NullPointerException: null
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:333)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:322)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 19:48:42,626 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - null Stack trace:java.lang.NullPointerException
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:333)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:322)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+
+org.apache.airavata.allocation.manager.models.AllocationManagerException: null Stack trace:java.lang.NullPointerException
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:333)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:322)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:336)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:322)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 19:51:24,932 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 19:51:25,715 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 19:51:25,723 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 19:51:25,724 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 19:51:25,787 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 19:51:25,788 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 19:51:25,792 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 19:51:25,795 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - null
+java.lang.NullPointerException: null
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:334)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:322)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 19:51:25,802 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - null Stack trace:java.lang.NullPointerException
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:334)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:322)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+
+org.apache.airavata.allocation.manager.models.AllocationManagerException: null Stack trace:java.lang.NullPointerException
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:334)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:322)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserName(AllocationManagerServerHandler.java:339)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:322)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 19:54:48,136 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 19:54:48,301 [pool-1-thread-5] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - null
+java.lang.NullPointerException: null
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:323)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 19:55:17,399 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 19:55:17,407 [pool-1-thread-6] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - null
+java.lang.NullPointerException: null
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:323)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 19:57:52,699 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 19:57:54,748 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 19:57:54,757 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 19:57:54,760 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 19:57:54,814 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 19:57:54,815 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 19:57:54,818 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 19:57:54,928 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - null
+java.lang.NullPointerException: null
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:323)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 20:04:15,123 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 20:04:16,276 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 20:04:16,285 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 20:04:16,288 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 20:04:16,349 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 20:04:16,351 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 20:04:16,357 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 20:04:16,487 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - null
+java.lang.NullPointerException: null
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:323)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 20:06:29,353 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 20:06:30,194 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 20:06:30,199 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 20:06:30,201 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 20:06:30,263 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 20:06:30,264 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 20:06:30,267 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 20:06:30,359 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - null
+java.lang.NullPointerException: null
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:323)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 20:11:41,790 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 20:11:41,809 [pool-1-thread-5] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - null
+java.lang.NullPointerException: null
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:323)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 20:12:17,692 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 20:12:19,545 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 20:12:19,550 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 20:12:19,552 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 20:12:19,608 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 20:12:19,608 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 20:12:19,611 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 20:12:19,731 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - null
+java.lang.NullPointerException: null
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationRequestUserEmail(AllocationManagerServerHandler.java:323)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:21)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 20:15:26,483 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 20:15:26,596 [pool-1-thread-5] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - This operation cannot be performed while a Transaction is active.
+org.apache.openjpa.persistence.InvalidStateException: This operation cannot be performed while a Transaction is active.
+	at org.apache.openjpa.kernel.BrokerImpl.close(BrokerImpl.java:4353)
+	at org.apache.openjpa.kernel.DelegatingBroker.close(DelegatingBroker.java:1354)
+	at org.apache.openjpa.persistence.EntityManagerImpl.close(EntityManagerImpl.java:1307)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:160)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.select(AbstractRepository.java:139)
+	at org.apache.airavata.allocation.manager.db.repositories.UserDetailRepository.getAdminDetails(UserDetailRepository.java:28)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationManagerAdminEmail(AllocationManagerServerHandler.java:346)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:22)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 20:19:27,246 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 20:19:28,622 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 20:19:28,628 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 20:19:28,629 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 20:19:28,685 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 20:19:28,686 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 20:19:28,689 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 20:19:28,832 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - This operation cannot be performed while a Transaction is active.
+org.apache.openjpa.persistence.InvalidStateException: This operation cannot be performed while a Transaction is active.
+	at org.apache.openjpa.kernel.BrokerImpl.close(BrokerImpl.java:4353)
+	at org.apache.openjpa.kernel.DelegatingBroker.close(DelegatingBroker.java:1354)
+	at org.apache.openjpa.persistence.EntityManagerImpl.close(EntityManagerImpl.java:1307)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:160)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.select(AbstractRepository.java:139)
+	at org.apache.airavata.allocation.manager.db.repositories.UserDetailRepository.getAdminDetails(UserDetailRepository.java:28)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationManagerAdminEmail(AllocationManagerServerHandler.java:348)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:22)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 20:20:23,999 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 20:20:24,854 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 20:20:24,859 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 20:20:24,861 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 20:20:24,915 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 20:20:24,916 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 20:20:24,919 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 20:20:25,086 [pool-1-thread-4] ERROR o.a.a.a.m.s.AllocationManagerServerHandler  - This operation cannot be performed while a Transaction is active.
+org.apache.openjpa.persistence.InvalidStateException: This operation cannot be performed while a Transaction is active.
+	at org.apache.openjpa.kernel.BrokerImpl.close(BrokerImpl.java:4353)
+	at org.apache.openjpa.kernel.DelegatingBroker.close(DelegatingBroker.java:1354)
+	at org.apache.openjpa.persistence.EntityManagerImpl.close(EntityManagerImpl.java:1307)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.execute(AbstractRepository.java:160)
+	at org.apache.airavata.allocation.manager.db.repositories.AbstractRepository.select(AbstractRepository.java:139)
+	at org.apache.airavata.allocation.manager.db.repositories.UserDetailRepository.getAdminDetails(UserDetailRepository.java:28)
+	at org.apache.airavata.allocation.manager.server.AllocationManagerServerHandler.getAllocationManagerAdminEmail(AllocationManagerServerHandler.java:348)
+	at org.apache.airavata.allocation.manager.notification.authenticator.NotificationDetails.getRequestDetails(NotificationDetails.java:22)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-12 20:34:10,727 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 20:34:11,714 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 20:34:11,723 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 20:34:11,726 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 20:34:11,780 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 20:34:11,781 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 20:34:11,784 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 20:56:02,111 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 20:56:02,968 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 20:56:02,976 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 20:56:02,978 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 20:56:03,040 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 20:56:03,041 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 20:56:03,044 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 21:19:07,398 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 21:19:08,321 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 21:19:08,328 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 21:19:08,330 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 21:19:08,386 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 21:19:08,387 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 21:19:08,390 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 21:20:18,886 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 21:20:41,910 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 21:22:00,459 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 21:22:01,468 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 21:22:01,473 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 21:22:01,474 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 21:22:01,521 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 21:22:01,522 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 21:22:01,526 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 21:22:21,991 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 21:31:07,584 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 21:32:54,814 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 21:32:55,964 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 21:32:55,970 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 21:32:55,971 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 21:32:56,030 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 21:32:56,031 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 21:32:56,034 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 22:40:41,091 [pool-1-thread-8] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 22:41:57,712 [pool-1-thread-9] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 22:42:47,019 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 22:42:47,890 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 22:42:47,895 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 22:42:47,897 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 22:42:47,948 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 22:42:47,949 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 22:42:47,953 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 23:11:35,980 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:11:37,149 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 23:11:37,155 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 23:11:37,157 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 23:11:37,214 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 23:11:37,214 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 23:11:37,218 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 23:20:00,539 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:20:02,272 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 23:20:02,295 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 23:20:02,299 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 23:20:02,366 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 23:20:02,367 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 23:20:02,370 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 23:39:11,900 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:42:42,103 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:42:42,919 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:42:44,274 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-12 23:42:44,283 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-12 23:42:44,285 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-12 23:42:44,375 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-12 23:42:44,377 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-12 23:42:44,382 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-12 23:43:53,116 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:43:53,248 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:44:54,507 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:44:54,651 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:52:02,111 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:52:13,578 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:54:02,682 [pool-1-thread-8] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:54:15,317 [pool-1-thread-9] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:54:27,025 [pool-1-thread-9] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-12 23:54:38,698 [pool-1-thread-9] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!

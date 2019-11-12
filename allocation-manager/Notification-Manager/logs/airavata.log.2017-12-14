@@ -1,0 +1,198 @@
+2017-12-14 13:06:34,280 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:06:35,213 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-14 13:06:35,219 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-14 13:06:35,221 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-14 13:06:35,268 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-14 13:06:35,269 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-14 13:06:35,272 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-14 13:06:49,062 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:07:00,496 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:07:11,891 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:07:23,188 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:07:36,903 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:07:48,110 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:07:59,320 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:08:29,705 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:16:07,542 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:16:08,464 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-14 13:16:08,469 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-14 13:16:08,471 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-14 13:16:08,540 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-14 13:16:08,540 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-14 13:16:08,544 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-14 13:16:20,556 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:16:31,955 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:16:43,284 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:16:54,899 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:17:08,591 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:17:19,903 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:17:31,244 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:17:42,596 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:26:12,971 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:26:24,520 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:26:36,087 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:26:47,370 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:26:59,207 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:28:01,766 [pool-1-thread-8] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:28:13,474 [pool-1-thread-9] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:28:24,748 [pool-1-thread-9] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:30:03,553 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:30:04,414 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-14 13:30:04,420 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-14 13:30:04,422 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-14 13:30:04,480 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-14 13:30:04,481 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-14 13:30:04,484 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-14 13:30:16,459 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:30:27,847 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:30:39,398 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:30:50,788 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:31:02,287 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:31:13,512 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:31:24,901 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:31:36,372 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:37:47,876 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:38:01,953 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:38:13,374 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:38:24,777 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:38:36,206 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:38:48,344 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:39:00,283 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:39:11,945 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 13:39:24,011 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:07:11,678 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:07:11,710 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:07:13,454 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-14 14:07:13,530 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-14 14:07:13,533 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-14 14:07:13,642 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-14 14:07:13,683 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-14 14:07:13,690 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-14 14:07:14,020 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-14 14:07:14,028 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-14 14:07:14,030 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-14 14:07:14,092 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-14 14:07:14,093 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-14 14:07:14,095 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-14 14:07:26,197 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:07:26,844 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:07:37,510 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:07:38,267 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:07:48,752 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:07:49,539 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:08:00,922 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:24:21,403 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:24:21,466 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:24:33,070 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:24:33,786 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:24:44,871 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:24:45,669 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:24:56,205 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:24:57,115 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:25:07,602 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:25:08,692 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:25:18,836 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:25:20,031 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:25:30,084 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:25:31,273 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:25:41,479 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:25:42,479 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:32:29,782 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:32:30,801 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-14 14:32:30,808 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-14 14:32:30,810 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-14 14:32:30,881 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-14 14:32:30,882 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-14 14:32:30,886 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-14 14:32:42,986 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:32:54,376 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:33:05,613 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:33:17,091 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:33:28,359 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:33:39,668 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:33:51,263 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:34:02,966 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:34:32,010 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:34:43,375 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:34:54,964 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:35:07,160 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:35:18,523 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:35:29,884 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:37:40,267 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:37:40,273 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:37:41,674 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-14 14:37:41,680 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-14 14:37:41,681 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-14 14:37:41,748 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-14 14:37:41,749 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-14 14:37:41,753 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-14 14:37:41,789 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-14 14:37:41,807 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-14 14:37:41,819 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-14 14:37:41,913 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-14 14:37:41,916 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-14 14:37:41,920 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-14 14:37:53,811 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:37:54,032 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:38:05,130 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:38:05,905 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:38:16,431 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:38:17,293 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:38:29,777 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:39:24,363 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:39:24,550 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:39:24,900 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:39:25,885 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-14 14:39:25,893 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-14 14:39:25,895 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-14 14:39:25,952 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-14 14:39:25,952 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-14 14:39:25,955 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-14 14:39:36,146 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:39:36,150 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:39:38,084 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:56:57,935 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:56:59,070 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-14 14:56:59,076 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-14 14:56:59,078 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-14 14:56:59,138 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-14 14:56:59,139 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-14 14:56:59,142 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-14 14:57:00,996 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:57:02,162 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:57:03,070 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:57:03,992 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:57:04,978 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:57:05,932 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:57:06,990 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 14:57:07,985 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:02:26,821 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:02:27,837 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:02:28,875 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:02:29,828 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:02:30,836 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:02:31,915 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:02:32,825 [pool-1-thread-8] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:02:33,880 [pool-1-thread-8] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:02:34,816 [pool-1-thread-8] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:09:41,754 [pool-1-thread-9] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:09:42,263 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:09:43,165 [pool-1-thread-10] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:09:43,511 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-14 15:09:43,517 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-14 15:09:43,518 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-14 15:09:43,585 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-14 15:09:43,586 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-14 15:09:43,590 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-14 15:09:43,627 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:09:44,132 [pool-1-thread-10] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:09:44,683 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-14 15:09:44,689 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-14 15:09:44,690 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-14 15:09:44,749 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-14 15:09:44,751 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-14 15:09:44,754 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-14 15:09:45,904 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:09:46,583 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:09:47,286 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-14 15:09:48,084 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!

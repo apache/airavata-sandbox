@@ -1,0 +1,117 @@
+2017-12-13 00:02:07,701 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 00:02:08,613 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-13 00:02:08,618 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-13 00:02:08,620 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-13 00:02:08,675 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-13 00:02:08,676 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-13 00:02:08,679 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-13 00:02:08,814 [pool-1-thread-4] ERROR c.r.c.i.ForgivingExceptionHandler  - Consumer org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1@7e5550fc (amq.ctag-i-NQFg_DkrHLvshef4ywvA) method handleDelivery for channel AMQChannel(amqp://guest@127.0.0.1:5672/,1) threw an exception for channel AMQChannel(amqp://guest@127.0.0.1:5672/,1)
+java.lang.NullPointerException: null
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:595)
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:555)
+	at javax.mail.internet.InternetAddress.<init>(InternetAddress.java:91)
+	at org.apache.commons.mail.Email.createInternetAddress(Email.java:1884)
+	at org.apache.commons.mail.Email.setFrom(Email.java:749)
+	at org.apache.commons.mail.Email.setFrom(Email.java:732)
+	at org.apache.commons.mail.Email.setFrom(Email.java:712)
+	at org.apache.airavata.allocation.manager.notification.sender.MailNotification.mail(MailNotification.java:38)
+	at org.apache.airavata.allocation.manager.notification.sender.MailNotification.sendMail(MailNotification.java:25)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-13 00:02:08,861 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 00:02:08,875 [pool-1-thread-5] ERROR c.r.c.i.ForgivingExceptionHandler  - Consumer org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1@7e5550fc (amq.ctag-i-NQFg_DkrHLvshef4ywvA) method handleDelivery for channel AMQChannel(amqp://guest@127.0.0.1:5672/,1) threw an exception for channel AMQChannel(amqp://guest@127.0.0.1:5672/,1)
+java.lang.NullPointerException: null
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:595)
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:555)
+	at javax.mail.internet.InternetAddress.<init>(InternetAddress.java:91)
+	at org.apache.commons.mail.Email.createInternetAddress(Email.java:1884)
+	at org.apache.commons.mail.Email.setFrom(Email.java:749)
+	at org.apache.commons.mail.Email.setFrom(Email.java:732)
+	at org.apache.commons.mail.Email.setFrom(Email.java:712)
+	at org.apache.airavata.allocation.manager.notification.sender.MailNotification.mail(MailNotification.java:38)
+	at org.apache.airavata.allocation.manager.notification.sender.MailNotification.sendMail(MailNotification.java:25)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-13 00:02:08,923 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 00:02:08,962 [pool-1-thread-5] ERROR c.r.c.i.ForgivingExceptionHandler  - Consumer org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1@7e5550fc (amq.ctag-i-NQFg_DkrHLvshef4ywvA) method handleDelivery for channel AMQChannel(amqp://guest@127.0.0.1:5672/,1) threw an exception for channel AMQChannel(amqp://guest@127.0.0.1:5672/,1)
+java.lang.NullPointerException: null
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:595)
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:555)
+	at javax.mail.internet.InternetAddress.<init>(InternetAddress.java:91)
+	at org.apache.commons.mail.Email.createInternetAddress(Email.java:1884)
+	at org.apache.commons.mail.Email.setFrom(Email.java:749)
+	at org.apache.commons.mail.Email.setFrom(Email.java:732)
+	at org.apache.commons.mail.Email.setFrom(Email.java:712)
+	at org.apache.airavata.allocation.manager.notification.sender.MailNotification.mail(MailNotification.java:38)
+	at org.apache.airavata.allocation.manager.notification.sender.MailNotification.sendMail(MailNotification.java:25)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-13 00:02:09,015 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 00:02:09,021 [pool-1-thread-5] ERROR c.r.c.i.ForgivingExceptionHandler  - Consumer org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1@7e5550fc (amq.ctag-i-NQFg_DkrHLvshef4ywvA) method handleDelivery for channel AMQChannel(amqp://guest@127.0.0.1:5672/,1) threw an exception for channel AMQChannel(amqp://guest@127.0.0.1:5672/,1)
+java.lang.NullPointerException: null
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:595)
+	at javax.mail.internet.InternetAddress.parse(InternetAddress.java:555)
+	at javax.mail.internet.InternetAddress.<init>(InternetAddress.java:91)
+	at org.apache.commons.mail.Email.createInternetAddress(Email.java:1884)
+	at org.apache.commons.mail.Email.setFrom(Email.java:749)
+	at org.apache.commons.mail.Email.setFrom(Email.java:732)
+	at org.apache.commons.mail.Email.setFrom(Email.java:712)
+	at org.apache.airavata.allocation.manager.notification.sender.MailNotification.mail(MailNotification.java:38)
+	at org.apache.airavata.allocation.manager.notification.sender.MailNotification.sendMail(MailNotification.java:25)
+	at org.apache.airavata.allocation.manager.notification.receiver.NotificationReceiver$1.handleDelivery(NotificationReceiver.java:39)
+	at com.rabbitmq.client.impl.ConsumerDispatcher$5.run(ConsumerDispatcher.java:149)
+	at com.rabbitmq.client.impl.ConsumerWorkService$WorkPoolRunnable.run(ConsumerWorkService.java:100)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+2017-12-13 00:06:56,279 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 00:06:56,388 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 00:06:57,422 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-13 00:06:57,429 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-13 00:06:57,430 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-13 00:06:57,493 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-13 00:06:57,494 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-13 00:06:57,498 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-13 00:06:57,582 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-13 00:06:57,592 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-13 00:06:57,595 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-13 00:06:57,679 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-13 00:06:57,680 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-13 00:06:57,684 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-13 00:07:09,707 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 00:07:09,945 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:43:00,613 [pool-1-thread-4] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:43:02,056 [pool-1-thread-4] INFO  o.dozer.config.GlobalSettings  - Trying to find Dozer configuration file: dozer.properties
+2017-12-13 18:43:02,066 [pool-1-thread-4] WARN  o.dozer.config.GlobalSettings  - Dozer configuration file not found: dozer.properties.  Using defaults for all Dozer global properties.
+2017-12-13 18:43:02,069 [pool-1-thread-4] INFO  org.dozer.DozerInitializer  - Initializing Dozer. Version: 5.4.0, Thread Name: pool-1-thread-4
+2017-12-13 18:43:02,147 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerStatisticsController] auto registered with the Platform MBean Server
+2017-12-13 18:43:02,148 [pool-1-thread-4] INFO  org.dozer.jmx.JMXPlatformImpl  - Dozer JMX MBean [org.dozer.jmx:type=DozerAdminController] auto registered with the Platform MBean Server
+2017-12-13 18:43:02,155 [pool-1-thread-4] INFO  org.dozer.DozerBeanMapper  - Initializing a new instance of dozer bean mapper.
+2017-12-13 18:43:15,678 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:43:27,248 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:43:38,702 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:43:49,968 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:44:01,134 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:44:12,550 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:44:23,765 [pool-1-thread-5] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:48:49,861 [pool-1-thread-6] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:49:01,415 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:49:12,812 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:49:24,516 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:49:35,986 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:49:47,465 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:49:58,646 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:50:09,988 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!
+2017-12-13 18:50:21,324 [pool-1-thread-7] INFO  o.a.a.a.m.db.utils.JPAUtils  - Database already created for Sharing Catalog !!!

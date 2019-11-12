@@ -18,28 +18,28 @@ public class EmailNotificationMessage {
 
 			switch (status) {
 			case "APPROVE_REQUEST":
-				result.setMessage(prop.getProperty("SUBJECT_APPROVED")+" "+projectID);
-				result.setSubject(prop.getProperty("MESSAGE_APPROVED")+" "+projectID);
+				result.setSubject(prop.getProperty("SUBJECT_APPROVED")+" "+projectID);
+				result.setMessage(prop.getProperty("MESSAGE_APPROVED")+" "+projectID);
 				break;
 			case "DENY_REQUEST":
-				result.setMessage(prop.getProperty("SUBJECT_REJECTED")+" "+projectID);
-				result.setSubject(prop.getProperty("MESSAGE_REJECTED")+" "+projectID);
+				result.setSubject(prop.getProperty("SUBJECT_REJECTED")+" "+projectID);
+				result.setMessage(prop.getProperty("MESSAGE_REJECTED")+" "+projectID);
 				break;
 			case "IN_PROGRESS":
-				result.setMessage(prop.getProperty("SUBJECT_IN_PROCESS")+" "+projectID);
-				result.setSubject(prop.getProperty("MESSAGE_IN_PROCESS")+" "+projectID);
+				result.setSubject(prop.getProperty("SUBJECT_IN_PROCESS")+" "+projectID);
+				result.setMessage(prop.getProperty("MESSAGE_IN_PROCESS")+" "+projectID);
 				break;
 			case "NEW_REQUEST":
-				result.setMessage(prop.getProperty("SUBJECT_NEW_REQUEST")+" "+projectID);
-				result.setSubject(prop.getProperty("MESSAGE_NEW_REQUEST")+" "+projectID);
+				result.setSubject(prop.getProperty("SUBJECT_NEW_REQUEST")+" "+projectID);
+				result.setMessage(prop.getProperty("MESSAGE_NEW_REQUEST")+" "+projectID);
 				break;
 			case "ASSIGN_REQUEST":
-				result.setMessage(prop.getProperty("SUBJECT_ASSIGN_REQUEST")+" "+projectID);
-				result.setSubject(prop.getProperty("MESSAGE_ASSIGN_REQUEST")+" "+projectID);
+				result.setSubject(prop.getProperty("SUBJECT_ASSIGN_REQUEST")+" "+projectID);
+				result.setMessage(prop.getProperty("MESSAGE_ASSIGN_REQUEST")+" "+projectID);
 				break;
 			case "DELETE_REQUEST":
-				result.setMessage(prop.getProperty("SUBJECT_DELETE_REQUEST")+" "+projectID);
-				result.setSubject(prop.getProperty("MESSAGE_DELETE_REQUEST")+" "+projectID);
+				result.setSubject(prop.getProperty("SUBJECT_DELETE_REQUEST")+" "+projectID);
+				result.setMessage(prop.getProperty("MESSAGE_DELETE_REQUEST")+" "+projectID);
 				break;
 			}
 

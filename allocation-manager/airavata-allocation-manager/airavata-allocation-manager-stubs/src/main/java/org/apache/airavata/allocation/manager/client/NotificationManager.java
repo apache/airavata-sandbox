@@ -1,5 +1,7 @@
 package org.apache.airavata.allocation.manager.client;
 
+import org.apache.airavata.allocation.manager.models.AllocationManagerException;
+
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
