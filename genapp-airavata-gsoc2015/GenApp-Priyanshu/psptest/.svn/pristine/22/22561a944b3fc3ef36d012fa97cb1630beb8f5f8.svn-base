@@ -1,0 +1,108 @@
+# this is a module file, any module specific info belongs here
+{
+    "moduleid" : "data_interpolation",
+    "label"    : "Data_interpolation",
+#    "session"  : "true",
+#    "newsession"  : "true",
+    "fields"   : [
+                  {
+                   "role"       : "input",
+                   "id"       : "startx",
+                   "label"    : "Start x",
+                   "type"     : "float",
+                   "default"  : 0.0,
+#                   "min"      : 0.0,
+#                   "max"      : 1e50,
+                   "required" : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "endx",
+                   "label"   : "End x",
+                   "type"    : "float",
+                   "default" : 26,
+#                   "min"     : -10,
+#                   "max"     : 10,
+                   "required" : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "deltax",
+                   "label"   : "Delta x",
+                   "type"    : "float",
+                   "default" : 0.1,
+#                   "min"     : -10,
+#                   "max"     : 10,
+                   "required" : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "abs",
+                   "label"   : "abs",
+                   "type"    : "checkbox",
+                   "checked" : "false"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "output1",
+                   "label" : "output integer",
+                   "type"  : "integer"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "output2",
+                   "label" : "output float",
+                   "type"  : "float"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "output3",
+                   "label" : "output text",
+                   "type"  : "text"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "output3",
+                   "label" : "output checkbox",
+                   "type"  : "checkbox"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "plotout4",
+                   "label" : "plot 2d",
+                   "type"  : "plot2d",
+                   "help"  : "this is a plot"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "outputref",
+                   "label" : "input json reference",
+                   "type"  : "file"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "outputres",
+                   "label" : "results json reference",
+                   "type"  : "file"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "outputpdb",
+                   "label" : "test pdb output",
+                   "type"  : "atomicstructure",
+                   "height" : "850",
+                   "width" : "850"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "outputpdb2",
+                   "label" : "test pdb output2",
+                   "type"  : "atomicstructure",
+                   "height" : "850",
+                   "width" : "850"
+                   }
+                  ],
+# the executable will take inputs in order and produce output
+    "executable" : "data_interpolation"
+    ,"uniqueid"  : "on"
+}

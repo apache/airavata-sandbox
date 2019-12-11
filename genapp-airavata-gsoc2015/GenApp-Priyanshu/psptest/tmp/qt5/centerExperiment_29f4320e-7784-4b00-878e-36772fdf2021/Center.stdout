@@ -1,0 +1,1 @@
+{"Notice":"UDP messaging is not setup. Messaging in currently only available in language html5.  If you are running html5, it could be that you have not defined udphost or updport in appconfig.json","output1":"Fully completed 1 runs of sleep 60s","_message":{"text":"test message","icon":"information.png"},"output3":1}

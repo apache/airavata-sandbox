@@ -1,0 +1,15 @@
+__~height{<div style="height:__height__; overflow:auto">}
+<form id="__moduleid__">
+<span id="__moduleid___input_area"></span>
+<script>
+__~nofcrefresh{ga.data.nofcrefresh[ "__moduleid__" ] = true;}
+input_eval = "";
+input_html = "<table>";
+input_repeats = "";
+input_trees = [];
+skipped_row = 0;
+__moduleid___done_eval = "";
+_jmol_info = {};
+// jmol = "jmol";
+ga.pull.clearPull();
+$('#__moduleid__').on("keyup keypress", function(e) { var code = e.keyCode || e.which;  if (code  == 13) { e.preventDefault(); return false; }});

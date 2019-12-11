@@ -1,0 +1,86 @@
+# this is a module file, any module specific info belongs here
+{
+    "moduleid" : "center",
+    "label"    : "Center",
+    "help"     : "help for Center",
+    "executable"   : "center",
+    "submitpolicy"   : "all",
+    "fields"   : [
+                  {
+                   "role"     : "input",
+                   "id"       : "input1",
+                   "label"    : "Center value 1",
+                   "type"     : "float",
+                   "default"  : 0.0,
+                   "min"      : 0.0,
+                   "max"      : 1e50,
+                   "step"     : 0.01,
+                   "required" : "true"
+                   },
+                  {
+                   "role"    : "input", 
+                   "id"      : "runminutes",
+                   "label"   : "Minutes to run",
+                   "type"    : "float",
+                   "default" : 1,
+                   "min"     : 0,
+                   "max"     : 10000,
+                   "required" : "true"
+                   },
+                  {
+                   "role"    : "input", 
+                   "id"      : "usemessage",
+                   "label"   : "Message results",
+                   "type"    : "checkbox",
+                   "checked"  : "true",
+                   "repeater" : "true"
+                   },
+                  {
+                   "role"    : "input", 
+                   "id"      : "usemessagebox",
+                   "label"   : "Message box results",
+                   "type"    : "checkbox",
+                   "checked"  : "false",
+                   "repeater" : "true"
+                   },
+                  {
+                   "role"    : "input", 
+                   "id"      : "messagesecs",
+                   "label"   : "Results interval in seconds",
+                   "type"    : "integer",
+                   "default" : 10,
+                   "min"     : 5,
+                   "max"     : 1000,
+                   "repeat"  : "usemessage"
+                   },
+#                  {
+#                   "role"     : "input", 
+#                   "id"       : "filetext",
+#                   "label"    : "filetext",
+#                   "type"     : "text",
+#                   "safefile" : "on"
+#                   },
+                   {
+                   "role"    : "output",
+                   "id"      : "output2",
+                   "label"   : "Message text",
+                   "type"    : "textarea",
+                   "append"  : "on",
+                   "cols"    : 60
+                   },
+                   {
+                   "role"    : "output",
+                   "id"      : "output1",
+                   "label"   : "Output value 1",
+                   "type"    : "text",
+                   "size"    : 60
+                   },
+                   {
+                   "role"    : "output",
+                   "id"      : "output3",
+                   "label"   : "Progress",
+                   "type"    : "progress",
+                   "max"     : 1.0
+                   }
+                  ]
+}

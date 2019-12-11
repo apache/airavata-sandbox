@@ -1,0 +1,105 @@
+{
+ "header" : "psptest",
+ "menu" : [
+           { 
+            "id"      : "tools",
+            "label"   : "Tools",
+            "icon"    : "pngs/tools.png",
+            "help"    : "tools help text",
+            "modules" : [ 
+                         { 
+                          "id"    : "center",
+                          "label" : "Center"
+                         },
+                         { 
+                          "id"    : "align",
+                          "label" : "Align"
+                         },
+                         { 
+                          "id"    : "filetest",
+                          "label" : "Filetest"
+                         },
+                         { 
+                          "id"    : "data_interpolation",
+                          "label" : "Data Interpolation"
+                         }
+                        ]
+            },
+           { 
+            "id"      : "build",
+            "label"   : "Build",
+            "icon"    : "pngs/build.png",
+            "help"    : "build help text",
+            "modules" : [ 
+                         { 
+                          "id"    : "build_1",
+                          "label" : "Build 1"
+                         },
+                         { 
+                          "id"    : "build_2",
+                          "label" : "Build 2"
+                         }
+                        ]
+            },
+           { 
+            "id"      : "interact",
+            "label"   : "Interact",
+            "icon"    : "pngs/interact.png",
+            "help"    : "interact help text",
+            "modules" : [ 
+                         { 
+                          "id"    : "interact_1",
+                          "label" : "Interact 1"
+                         },
+                         { 
+                          "id"    : "plottest",
+                          "label" : "Plot Test"
+                         }
+                        ]
+            },
+           { 
+            "id"      : "simulate",
+            "label"   : "Simulate",
+            "icon"    : "pngs/simulate.png",
+            "help"    : "simulate help text",
+            "modules" : [ 
+                         { 
+                          "id"    : "simulate_1",
+                          "label" : "Simulate 1"
+                         },
+                         { 
+                          "id"    : "simulate_2",
+                          "label" : "Simulate 2"
+                         }
+                        ]
+            },
+           { 
+            "id"      : "calculate",
+            "label"   : "Calculate",
+            "icon"    : "pngs/calculate.png",
+            "help"    : "calculate help text",
+            "modules" : [ 
+                         { 
+                          "id"    : "calculate_1",
+                          "label" : "Calculate 1"
+                         },
+                         { 
+                          "id"    : "calculate_2",
+                          "label" : "Calculate 2"
+                         }
+                        ]
+            },
+           { 
+            "id"      : "analyze",
+            "label"   : "Analyze",
+            "icon"    : "pngs/analyze.png",
+            "help"    : "analyze help text",
+            "modules" : [ 
+                         { 
+                          "id"    : "synctest",
+                          "label" : "Sync Test"
+                         }
+                        ]
+            }
+          ]
+}

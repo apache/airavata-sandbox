@@ -1,0 +1,25 @@
+QPushButton {
+  padding: 5;
+  padding-left: 2px; 
+  padding-right: 2px; 
+  border-radius: .3em;
+  border: 0px;
+  outline: none;
+  background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #E4FFFA, stop: 1 #80AA06 ); 
+}
+QPushButton:hover {
+  background-color: qlineargradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #FFFFFF, stop: 1 #E4FFFA ); 
+}
+
+QAbstractButton::indicator {
+  background-color: white;
+}
+QAbstractButton::indicator:checked {
+  background-color: rgb( 50, 128, 128 );
+}
+
+QFrame {
+background: rgb( 0,0,95 );
+color: rgb( 220,210,210 );
+font: 16px;
+}

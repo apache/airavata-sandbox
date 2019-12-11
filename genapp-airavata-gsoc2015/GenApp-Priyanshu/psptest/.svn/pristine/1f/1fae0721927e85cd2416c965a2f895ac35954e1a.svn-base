@@ -1,0 +1,126 @@
+# this is a module file, any module specific info belongs here
+{
+    "moduleid" : "build_2",
+    "label"    : "Build_2",
+    "help"     : "help for Build_2",
+    "fields"   : [
+                  {
+                   "role"       : "input",
+                   "id"       : "input1",
+                   "label"    : "Input value 1",
+                   "type"     : "float",
+                   "default"  : 0.0,
+                   "min"      : 0.0,
+                   "max"      : 1e50,
+                   "required" : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "input2",
+                   "label"   : "Input value 2",
+                   "type"    : "integer",
+                   "default" : 1,
+                   "min"     : -10,
+                   "max"     : 10,
+                   "required" : "false"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "input3",
+                   "label"   : "Input value 3",
+                   "type"    : "checkbox",
+                   "checked" : "true"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input4a",
+                   "name"    : "input4",
+                   "label"   : "Radiobutton a",
+                   "type"    : "radio"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input4b",
+                   "name"    : "input4",
+                   "label"   : "Radiobutton b",
+                   "type"    : "radio"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input4c",
+                   "name"    : "input4",
+                   "label"   : "Radiobutton c",
+                   "type"    : "radio",
+                   "checked" : "true"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input5",
+                   "name"    : "input5",
+                   "label"   : "1st listbox",
+                   "type"    : "listbox",
+                   "values"  : "choice 1~c1~choice 2~c2~choice 3~c3",
+                   "default" : "c2"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input6",
+                   "name"    : "input6",
+                   "label"   : "textarea",
+                   "type"    : "textarea",
+                   "default" : "this is a text areamultiline",
+                   "rows"    : 4,
+                   "cols"    : 40
+                   },
+                   {
+                   "role"  : "output",
+                   "id"    : "output1",
+                   "label" : "Output value 1",
+                   "type"  : "float"
+                   },
+                   {
+                   "role"  : "output",
+                   "name"  : "output2",
+                   "id"    : "output2a",
+                   "label" : "Radio output 2a",
+                   "type"  : "radio"
+                   },
+                   {
+                   "role"  : "output",
+                   "name"  : "output2",
+                   "id"    : "output2b",
+                   "label" : "Radio output 2b",
+                   "type"  : "radio"
+                   },
+                   {
+                   "role"  : "output",
+                   "name"  : "output2",
+                   "id"    : "output2c",
+                   "label" : "Radio output 2c",
+                   "type"  : "radio"
+                   },
+                   {
+                   "role"  : "output",
+                   "id"    : "output3",
+                   "label" : "checkbox out 3",
+                   "type"  : "checkbox"
+                   },
+                   {
+                   "role"  : "output",
+                   "id"    : "output4",
+                   "label" : "checkbox out 4",
+                   "type"  : "checkbox"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"      : "output5",
+                   "name"    : "output5",
+                   "label"   : "output textarea",
+                   "type"    : "textarea",
+                   "rows"    : 6,
+                   "cols"    : 60
+                   }
+                  ],
+# the executable will take inputs in order and produce output
+    "executable" : "build_2"
+}

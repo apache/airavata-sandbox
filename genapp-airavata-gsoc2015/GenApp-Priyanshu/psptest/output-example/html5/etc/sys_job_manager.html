@@ -1,0 +1,442 @@
+<div style="height:65vh; overflow:auto">
+<form id="sys_job_manager">
+<span id="sys_job_manager_input_area"></span>
+<script>
+
+input_eval = "";
+input_html = "<table>";
+input_repeats = "";
+input_trees = [];
+skipped_row = 0;
+sys_job_manager_done_eval = "";
+_jmol_info = {};
+// jmol = "jmol";
+ga.pull.clearPull();
+$('#sys_job_manager').on("keyup keypress", function(e) { var code = e.keyCode || e.which;  if (code  == 13) { e.preventDefault(); return false; }});
+this_html = '<tr><td><label id="label1_label" class="header3 ">Jobs</label>' + 
+'</td>' +
+'<td><div id="label1"></div>' +
+'</td></tr>';
+this_eval = '';
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label id="serverdate_label" class="help_link">Server date</label>' + 
+'<span class="help">This is the date and time from the server at the time you opened this window</span></td>' +
+'<td><div id="serverdate" class="help_link"></div>' +
+'<span class="help">This is the date and time from the server at the time you opened this window</span></td></tr>';
+this_eval = '';
+this_eval='ga.pull.toPull("sys_job_manager","#serverdate","label","datetime","#__fields:repeat__" );';input_eval+=this_eval;
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '</table><table><tr><td colspan=3><table id="jobgrid"  class="help_link"></table>'
+ + '<span class="help">right click on a column header to sort</span>'
++' <div id="jobgrid_grid_pager"></div></td></tr></table><table>';
+
+this_eval = "$.ajax({type:'GET',url:'ajax/sys_config/sys_jobs.php?_window='+window.name,data:'',dataType:'json',success:function(result){var $grid=$('#jobgrid'),cbColModel,idsOfSelectedRows=[],columnData=result.jobgrid.outerwrapper,columnNames=result.colNames,columnModel=result.colModel;$grid.jqGrid({rowNum:999999,datatype:'jsonstring',datastr:columnData,colNames:columnNames,colModel:columnModel,jsonReader:{root:'innerwrapper.rows',repeatitems:false},gridview:true,height:'auto',viewrecords:true,loadonce:true,multiselect:true,onSelectRow:function(id,isSelected){var p=this.p,item=p.data[p._index[id]],i=$.inArray(id,idsOfSelectedRows);item.cb=isSelected;if(!isSelected&&i >=0){idsOfSelectedRows.splice(i,1);}else if(i<0){idsOfSelectedRows.push(id);}console.log('rows selected'+idsOfSelectedRows.length);},loadComplete:function(){console.log('loadcomplete c');var p=this.p,data=p.data,item,$this=$(this),index=p._index,rowid,i,selCount;for(i=0,selCount=idsOfSelectedRows.length;i<selCount;i++){rowid=idsOfSelectedRows[i];item=data[index[rowid]];if('cb'in item&&item.cb){$this.jqGrid('setSelection',rowid,false);}};var rows=this.rows,i,c=rows.length;console.log('rows'+c);for(i=0;i<c;i+=1){$(rows[i].cells[1]).click(function(e){var id=$(e.target).closest('tr')[0].id,isChecked=$(e.target).is(':checked');console.log('row click'+id);console.log(isChecked?'checked':'not checked');})}}});$('#cb_'+$grid[0].id).hide();$('#jqgh_'+$grid[0].id+'_cb').addClass('ui-jqgrid-sortable');cbColModel=$grid.jqGrid('getColProp','cb');cbColModel.sortable=true;cbColModel.sorttype=function(value,item){return'cb'in item&&item.cb?1:0;};}});";
+
+input_html += this_html;
+input_eval += this_eval;
+sys_job_manager_done_eval += "$('#jobgrid').jqGrid('GridUnload');" + this_eval;
+
+
+this_html = '<tr><td><label for="refresh" class="highlight">Refresh </label></td><td><input type="radio" name="action" id="refresh" value="refresh" checked class="help_link"><span class="help">Selecting this will refresh the job state table above.</span></td></tr>';
+this_eval = 'ga.value.setLastValue( "sys_job_manager", "#refresh" );';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+skipped_row=1;this_html = this_html.replace(/<\/tr>$/, "" );
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="cancel" class="highlight">Cancel </label></td><td><input type="radio" name="action" id="cancel" value="cancel" class="help_link"><span class="help">Selecting this will cancel a running job or jobs selected above. Not yet functional.</span></td></tr>';
+this_eval = 'ga.value.setLastValue( "sys_job_manager", "#cancel" );';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+skipped_row=1;this_html = this_html.replace(/<\/tr>$/, "" );
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="clearlock" class="highlight">Clear Lock </label></td><td><input type="radio" name="action" id="clearlock" value="clearlock" class="help_link"><span class="help">Selecting this will clear the lock on a running job or jobs selected above. Use with caution, as if the job is really still running you could clobber the results by running another job in that directory.</span></td></tr>';
+this_eval = 'ga.value.setLastValue( "sys_job_manager", "#clearlock" );';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+skipped_row=1;this_html = this_html.replace(/<\/tr>$/, "" );
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="removejob" class="highlight">Remove Job </label></td><td><input type="radio" name="action" id="removejob" value="removejob"></td></tr>';
+this_eval = 'ga.value.setLastValue( "sys_job_manager", "#removejob" );';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+skipped_row=1;this_html = this_html.replace(/<\/tr>$/, "" );
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="reattach" class="highlight">Reattach </label></td><td><input type="radio" name="action" id="reattach" value="reattach"></td></tr>';
+this_eval = 'ga.value.setLastValue( "sys_job_manager", "#reattach" );';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+if( skipped_row == 1 ){ input_html += "</tr>"; }
+input_html += '</table>';
+$( '#sys_job_manager_input_area' ).html( input_html );
+eval( input_eval );
+</script>
+<p><button id="sys_job_manager_submit" class="help_link"><span class="buttontext">Submit</span></button>
+<span class="help">this is help for the submit button</span>
+<button id="sys_job_manager_reset" class="help_link"><span class="buttontext">Reset to default values</span></button>
+<span class="help">this is help for the reset to default values button</span>
+
+</p>
+<span id="sys_job_manager_progress"></span>
+<script>
+$( "#sys_job_manager_reset" ).remove();
+$( "#sys_job_manager_submit .buttontext" ).html( "Submit" );
+
+
+var sys_job_manager_output_msgs = $("#sys_job_manager_output_msgs");
+sys_job_manager_output_msgs.text( "" );
+
+var sys_job_manager_timeout_handler = "unset";
+
+function get_results_sys_job_manager( id, last_timeout, getlastmsg, getinput )
+{
+
+//             url:"ajax/get_results.php?_window=" +  window.name + "&_logon=" +$( "#_state" ).data( "_logon" ) + '&_uuid=' + id,
+    var job_status = "";
+    $.getJSON( 
+             "ajax/get_results.php",
+             {
+                tagmode: "any",
+                format: "json",
+                _window : window.name,
+                _logon : $( "#_state" ).data( "_logon" ),
+                _uuid : id,
+                _getlastmsg : getlastmsg,
+                _getinput : getinput ? true : false
+             } )
+    .done( function( data, status, xhr ) {
+
+           var do_refresh = 1;
+           do_refresh = 0;
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( id );
+           }
+
+           job_status = ga.data.update( "sys_job_manager", data ).job_status;
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+              if ( sys_job_manager_timeout_handler != "unset" )
+              {
+                  clearTimeout( sys_job_manager_timeout_handler );
+                  sys_job_manager_timeout_handler = "unset";
+              }
+              unsubMsging( id, "sys_job_manager" );
+              eval( sys_job_manager_done_eval );
+           } else {
+               if ( !last_timeout || last_timeout < 2000 )
+               { 
+                  last_timeout = 2000;
+               } else {
+                  if ( last_timeout < 16000 )
+                  {
+                      last_timeout *= 2;
+                  } else {
+                      last_timeout = 16000;
+                  }
+               }
+
+               sys_job_manager_timeout_handler =  setTimeout( get_results_sys_job_manager, last_timeout, id, last_timeout, 0 );
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+           $( "#sys_job_manager_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/center.php </span>" );
+           $('#sys_job_manager_progress').html( "" );
+           if ( sys_job_manager_timeout_handler != "unset" )
+           {
+               clearTimeout( sys_job_manager_timeout_handler );
+               sys_job_manager_timeout_handler = "unset";
+           }
+           unsubMsging( id, "sys_job_manager" );
+           eval( sys_job_manager_done_eval );
+          } );
+    return false;
+};
+
+function msg_sys_job_manager ( id, data )
+{
+   ga.data.update( "sys_job_manager", data, get_results_sys_job_manager, id );
+};
+
+$( "#sys_job_manager_submit" ).click( function( e ) {
+   e.preventDefault();
+   e.returnValue = false;
+
+   var $ok = 0;
+      $ok = 1;
+   
+
+   ga.event( "", "sys_job_manager", "submit clicked" );
+
+   
+
+
+
+
+
+   if ( !ga.valid.checksubmit( "sys_job_manager" ) ) {
+       return false;
+   }
+
+   var $form = $(this);
+
+   $.ajax({
+       type: 'get'
+       ,url: "ajax/sys_config/sys_joblocked.php?_window=" +  window.name + "&_logon=" + $( "#_state" ).data( "_logon" )
+
+       ,context: $form
+       ,success: function( data ) { // your success handler
+
+          if ( !$ok )
+          {
+          switch ( data )
+          {
+             case "1" :
+             {
+                 messagebox( { icon:"warning.png", text:"This project directory is currently locked by another project.\nYou can wait until it completes, change the project in user configuration or clear the lock in the job manager." } );
+                 return;
+             } break;
+             case "2" :
+             {
+                 messagebox( { icon:"warning.png", text:"You must be logged in to submit this module." } );
+                 return;
+             } break;
+             default :
+             {
+
+                 $ok = 1;
+             }
+          }
+          }
+       }
+       ,error: function() { // your error handler
+          messagebox( { icon:"toast.png", text:"Checking the project lock failed. This is possibly a server or network issue" } );
+       }
+       ,complete: function() { 
+          this.off('submit');
+          if ( $ok )
+          {
+
+
+              $( "#sys_job_manager_results" ).text( "" );
+
+              ga.value.saveLastValues( "sys_job_manager" );
+              ga.value.resetDefaultValues( "sys_job_manager_output", true );
+
+              var found_errors = 0;
+              $("#sys_job_manager").find("input").each(function(i){
+                 if ( $(this).attr( 'required' ) && $(this).val().length == 0 )
+                 {
+                    var tag =  "#sys_job_manager " + "#" + $(this).attr('id') + "_msg";
+
+                    $( tag ).html( "missing required field" );
+                    found_errors = 1;
+                 }
+              });
+              if ( found_errors ) {
+                  return;
+              }
+
+    var tree_html = "";
+    $( "._hidden_tree_selects" ).remove( );
+    $.each( input_trees, function( k, v ){
+
+        $( 'input[type=hidden][name="' + v + '[]"]' ).remove();
+        var selectedElms = $('#' + v).jstree("get_selected", true);
+        var i = 0;
+        $.each(selectedElms, function() {
+           tree_html += '<input type="hidden" name="' + v + '[]" value="' + this.id + '" class="_hidden_tree_selects"/>';
+
+        });
+    });
+
+    $( this ).append( tree_html );
+
+
+    var logonadd = $("<input>").attr("type", "hidden").attr("name", "_logon").val( $( "#_state" ).data( "_logon" ) );$( this ).append($(logonadd));
+    var projectadd = $("<input>").attr("type", "hidden").attr("name", "_project").val( $( "#_state" ).data( "_project" ) );$( this ).append($(projectadd));
+    var windowadd = $("<input>").attr("type", "hidden").attr("name", "_window").val( window.name );$( this ).append($(windowadd));
+    var vuuid = uuid.v1();
+
+
+
+
+
+
+    var uuidadd = $("<input>").attr("type", "hidden").attr("name", "_uuid").val( vuuid );$( this ).append($(uuidadd));
+//    ga.altfile.add( "sys_job_manager" );
+    ga.valuen.addhtml( "sys_job_manager" );
+
+    subMsging( vuuid, msg_sys_job_manager, "sys_job_manager" );
+
+    var formData = new FormData($('form')[0]);
+
+
+    $('#sys_job_manager_progress').html( "Uploading:<progress></progress>" );
+
+    var job_status = "";
+
+    ga.event( "", "sys_job_manager", "submit: passed submit checks, submitting" );
+
+    $.ajax( {
+             dataType: "json",
+             cache:false,
+//             timeout:3000,  // for testing
+             type:"POST",
+             url:"ajax/sys_config/sys_job_manager.php",
+             data: formData,
+             xhr: function() {  // Custom XMLHttpRequest
+                 var myXhr = $.ajaxSettings.xhr();
+                 if(myXhr.upload){ // Check if upload property exists
+                     myXhr.upload.addEventListener('progress',
+                         function(e) {
+                         if(e.lengthComputable){
+                           $('#sys_job_manager_progress progress').attr({value:e.loaded,max:e.total});
+                         } }
+//                     progressHandlingFunction
+                    , false);
+                 }
+                 return myXhr;
+             },
+             contentType: false,
+             processData: false
+            } )
+    .done( function( data, status, xhr ) {
+
+
+
+
+// refresh cache for this project
+           $('#sys_job_manager_progress').html( "" );
+   
+           var do_refresh = 1;
+           do_refresh = 0;
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( vuuid );
+           }
+           
+// loop through data pairs
+           sys_job_manager_output_msgs.text( "" );
+           job_status = ga.data.update( "sys_job_manager", data ).job_status;
+
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+               if ( sys_job_manager_timeout_handler != "unset" )
+               {
+                   clearTimeout( sys_job_manager_timeout_handler );
+                   sys_job_manager_timeout_handler = "unset";
+               }
+               unsubMsging( vuuid, "sys_job_manager" );
+               eval( sys_job_manager_done_eval );
+           } else {
+               sys_job_manager_timeout_handler = setTimeout( get_results_sys_job_manager, 2000, vuuid, 2000, 0 );
+
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+
+
+
+           $( "#sys_job_manager_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/sys_config/sys_job_manager.php </span>" );
+           $('#sys_job_manager_progress').html( "" );
+           if ( sys_job_manager_timeout_handler != "unset" )
+           {
+               clearTimeout( sys_job_manager_timeout_handler );
+               sys_job_manager_timeout_handler = "unset";
+           }
+           unsubMsging( vuuid, "sys_job_manager" );
+           eval( sys_job_manager_done_eval );
+          } );
+          } else {
+
+          }
+       }
+   });
+}); 
+
+$( "#sys_job_manager_reset" ).click( function() {
+    
+    
+    ga.event( "", "sys_job_manager", "reset clicked" );
+    //    ga.value.resetDefaultValues( "sys_job_manager" );
+    ga.valuen.restore.dflt(  "sys_job_manager" );
+    ga.value.resetDefaultValues( "sys_job_manager_output", true );
+    
+    eval( input_repeats );
+    return false;
+});
+setHoverHelp();
+ga.value.resetDefaultValues( "sys_job_manager" );ga.value.resetDefaultValues( "sys_job_manager_output" ); ga.value.resetDefaultValue( "sys_job_manager_output", "sys_job_manager_output_msgs" );
+
+eval( input_repeats );
+ga.pull.doPull();
+</script>
+</form>
+<div id="sys_job_manager_results"></div>
+<script>
+ga.tmp.html = "<hr>";
+
+$("#sys_job_manager").append( ga.tmp.html );
+</script>
+<form id="sys_job_manager_output">
+<div id="sys_job_manager_output_msgs" class="warning" type="msgs"></div>
+<script>
+ga.value.setLastValueOutput( "sys_job_manager_output" );
+ga.value.extra_resets.clear();
+</script>
+
+<table>
+<tr>
+<td colspan="4" style="vertical-align:top"><label hidden id="sys_job_manager_output_textarea_label" for="sys_job_manager_output_textarea" class="header3 ">Report:</label>
+<textarea readonly hidden id="sys_job_manager_output_textarea" rows="10" cols="60" class="help_link"></textarea>
+<span class="help">general textarea help</span>
+</td>
+</tr>
+<tr><td><label for="messages">Messages </label></td><td><textarea name="messages" id="messages" rows="8" cols="60" readonly></textarea>
+</td></tr>
+<script>
+
+ga.value.setLastValue( "sys_job_manager_output", "#messages" );
+</script>
+</table>
+</form>
+</div>

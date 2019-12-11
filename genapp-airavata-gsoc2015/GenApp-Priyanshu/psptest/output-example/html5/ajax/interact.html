@@ -1,0 +1,45 @@
+<style>
+#panel_interact {
+    position: relative;
+    display: block;  
+}
+</style>
+<p>
+<center>
+
+    <button id="interact_interact_1" class="help_link">Interact 1</button><span class="help">help for Interact_1</span>
+<script>
+    $( "#interact_interact_1" ).click(function() {
+        var d=$( "#tab_docs > a" );
+        if ( d.length ) { d.attr( "href", "__docsbaseurl__/interact/interact_1/interact_1.html" ); };
+    
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+
+        if ( ga.valuen.lastload != "interact_1" || !$( "#" + ga.valuen.lastload ).is( ":visible" ) ) {
+            $( "#panel_interact" ).load( "ajax/interact/interact_1.html", function() { ga.valuen.save( "interact_1", true ); ga.valuen.restore( "interact_1" ); ga.valuen.lastload = "interact_1"; });
+        }
+    });
+</script>
+    <button id="interact_plottest" class="help_link">Plot Test</button>
+<script>
+    $( "#interact_plottest" ).click(function() {
+        var d=$( "#tab_docs > a" );
+        if ( d.length ) { d.attr( "href", "__docsbaseurl__/interact/plottest/plottest.html" ); };
+    
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+
+        if ( ga.valuen.lastload != "plottest" || !$( "#" + ga.valuen.lastload ).is( ":visible" ) ) {
+            $( "#panel_interact" ).load( "ajax/interact/plottest.html", function() { ga.valuen.save( "plottest", true ); ga.valuen.restore( "plottest" ); ga.valuen.lastload = "plottest"; });
+        }
+    });
+</script>
+</center>
+</p>
+
+<div id="panel_interact">
+</div>
+
+
+<script>
+    $( "#panel_interact" ).text("");
+</script>

@@ -1,0 +1,19 @@
+# this is a module file, any module specific info belongs here
+{
+    "moduleid" : "sys_pull",
+    "label"    : "Pull",
+    "submit_label" : "Pull",
+    "noreset"  : "true",
+    "fields"   : [
+                  {
+                   "role"     : "input",
+                   "id"       : "label1",
+                   "label"    : "Pull",
+                   "type"     : "label",
+                   "default"  : "header3",
+                   "posthline"   : "true"
+                   }
+                  ],
+# the executable will take inputs in json and produce output in json
+    "executable" : "sys_pull"
+}

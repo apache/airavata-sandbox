@@ -1,0 +1,50 @@
+# this is a module file, any module specific info belongs here
+{
+    "moduleid" : "build_1",
+    "label"    : "Build_1",
+    "help"     : "help for Build_1",
+    "fields"   : [
+                  {
+                   "role"       : "input",
+                   "id"       : "input1",
+                   "label"    : "Input value 1",
+                   "type"     : "float",
+                   "default"  : 0.0,
+                   "min"      : 0.0,
+                   "max"      : 1e50,
+                   "required" : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "input2",
+                   "label"   : "Input value 2",
+                   "type"    : "integer",
+                   "default" : 1,
+                   "min"     : -10,
+                   "max"     : 10,
+                   "required" : "false"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "input3",
+                   "label"   : "Input value 3",
+                   "type"    : "checkbox",
+                   "checked" : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "input4",
+                   "label"   : "Input text 10",
+                   "type"    : "text",
+                   "maxlength" : "10"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "output1",
+                   "label" : "Output value 1",
+                   "type"  : "float"
+                   }
+                  ],
+# the executable will take inputs in order and produce output
+    "executable" : "build_1"
+}

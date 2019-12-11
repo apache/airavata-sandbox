@@ -1,0 +1,42 @@
+# this is a module file, any module specific info belongs here
+{
+    "moduleid" : "simulate_2",
+    "label"    : "simulate_2",
+    "help"     : "help for simulate_2",
+    "fields"   : [
+                   {
+                   "role"     : "input",
+                   "id"       : "input1",
+                   "label"    : "Input file",
+                   "type"     : "file",
+                   "required" : "true"
+                   },
+                   {
+                   "role"  : "output",
+                   "id"    : "output1",
+                   "label" : "Output value 1",
+                   "type"  : "float"
+                   },
+                   {
+                   "role"  : "output",
+                   "id"    : "output2",
+                   "label" : "output file",
+                   "type"  : "file"
+                   },
+                   {
+                   "role"  : "output",
+                   "id"    : "output3",
+                   "label" : "output file 2",
+                   "type"  : "file"
+                   },
+                   {
+                   "role"     : "output",
+                   "id"       : "output4",
+                   "label"    : "output files",
+                   "type"     : "file",
+                   "multiple" : "true"
+                   }
+                  ],
+# the executable will take inputs in order and produce output
+    "executable" : "simulate_2"
+}

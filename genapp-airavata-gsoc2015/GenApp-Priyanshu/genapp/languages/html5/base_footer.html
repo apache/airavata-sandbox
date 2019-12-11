@@ -1,0 +1,462 @@
+$( "#navul" ).append( ga.tmp.menu );
+$( ga.admin.ids.join() ).hide();
+
+</script>
+</ul>
+</nav>
+
+<div id="panelmain" >
+<p></p>
+</div>
+<script>
+    var count = 0;
+    var sidewidth = parseFloat( $( ".sidebar" ).css( "width" ) ) + 
+                    parseFloat( $( ".sidebar" ).css( "padding-left" ) ) +
+                    parseFloat( $( ".sidebar" ).css( "padding-right" ) ) +
+                    parseFloat( $( ".sidebar" ).css( "border-left-width" ) ) +
+                    parseFloat( $( ".sidebar" ).css( "border-right-width" ) ) +
+                    parseFloat( $( ".sidebar" ).css( "margin-left" ) ) +
+                    parseFloat( $( ".sidebar" ).css( "margin-right" ) )
+    ;
+    var speed = 400;
+    $( "#panelmain" ).css( "left", count % 2 ? 0 : sidewidth );
+__~debug:css{ console.log( "sidewidth: " + sidewidth );}
+    $( ".sidebar ul li" ).click( function() {
+__~altversion{  // this was is simpler, but bugs out on seamonkey linux}
+__~altversion{        // var myImg = $( "header span img" );}
+__~altversion{        // myImg.attr( 'src', 'pngs/' +  $( this ).attr( "id" ) + '.png' );}
+__~altversion{        // myImg.attr( 'id', $( this ).attr( "id" ) );}
+__~altversion{        // this is what we needed to do}
+__~altversion{        // var myHtml = "<img height=50px id='" + $( this ).attr( "id" ) + "' src='pngs/" +  $( this ).attr( "id" ) + ".png'>";}
+__~altversion{        // console.log( $( "#seabug" ).html() );}
+__~altversion{        // console.log( myHtml );}
+        var myTag = $( this ).attr( "id" );
+        $( "#seabug" ).html( "<img height=50px style=\"vertical-align:middle\" id='" + myTag + "' src='" + ga.set.data[ "icon:" + myTag ] + "'>" );
+        ga.event( "global", myTag, "load" );
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+        $( "#panelmain" ).load( "ajax/" + myTag + ".html", function(){ resetHoverHelp();} );
+__~docsbaseurl{        $( "#tab_docs > a" ).attr( "href", "__docsbaseurl__/" + myTag + "/" + myTag + ".html" );}
+        $( "#menuspan" ).trigger( "click" );
+    } );
+
+    function menuOnOff(event) {
+        count++;
+// __~debug:css{        // console.log( count % 2 ? "menuonoff true" : "menuonoff false" );}
+        var ofs = count % 2 ? 0 : sidewidth;
+        var wid = count % 2 ? '100%' : $("#panelmain").parent().parent().width() - sidewidth - 20;
+__~debug:css{        // console.log( $("#panelmain").parent().parent().width() );}
+__~debug:css{        // console.log( "sidewidth at click: " + sidewidth );}
+__~debug:css{        // console.log( "parentparentwidth at click: " + $("#panelmain").parent().parent().width() );}
+__~debug:css{        // console.log( "width on click: " + wid );}
+        $( ".toggle" ).toggle( speed );
+        $( "#panelmain" ).animate( {left: ofs, width: wid }, speed );
+    }
+
+    $( window ).resize(function() {
+        var ofs = count % 2 ? 0 : sidewidth;
+        var wid = count % 2 ? '100%' : $( "#panelmain" ).parent().parent().width() - sidewidth - 20;
+__~debug:css{        // console.log( "sidewidth at resize: " + sidewidth );}
+__~debug:css{        // console.log( "parentparentwidth at resize: " + $("#panelmain").parent().parent().width() );}
+__~debug:css{        // console.log( "width on resize: " + wid );}
+        $( "#panelmain" ).css( "left", ofs ).css( "width", wid );
+    } );
+
+$( "#hoverhelp" ).click(function() {
+    __~debug:help{console.log( "hoverhelp clicked()");}
+    __~debug:help{console.log( "hoverhelp clicked() gd hoverhelp " + $( "#global_data" ).data( "hoverhelp" ) );}
+    __~debug:help{console.log( "hoverhelp clicked() logically " + $( "#global_data" ).data( "hoverhelp" ) ? "true" : "false" );}
+   if ( !$( "#global_data" ).data( "hoverhelp" ) ||
+        $( "#global_data" ).data( "hoverhelp" ) == 0 )
+   {
+    __~debug:help{console.log( "hoverhelp clicked() evaluates off");}
+       $( "#global_data" ).data( "hoverhelp", 1 );
+   } else {
+    __~debug:help{console.log( "hoverhelp clicked() evaluates on");}
+       $( "#global_data" ).data( "hoverhelp", 0 );
+   }
+   setHoverHelp();
+});
+$( "#global_data" ).data( "hoverhelp", 1 );
+setHoverHelp();
+
+$( "#config" ).click( function() {
+   var s = $( '#_state' );
+   var l = s.data( '_logon' );
+   ga.repeats.save();
+   if ( l && l.length )
+   {
+       ga.event( "global", "user_config" , "load" );
+       $( "#configbody" ).load( "etc/sys_user_config.html" );
+   } else {
+       ga.event( "global", "user_register" , "load" );
+       $( "#configbody" ).load( "etc/sys_register.html" );
+   }
+   $( ".modalDialog" ).addClass( "modalDialog_on" );
+});
+
+function closeModal()
+{
+   ga.repeats.restore();
+   $( ".modalDialog" ).removeClass( "modalDialog_on" );
+   setTimeout(function(){
+       $( "#configbody" ).html( "" );
+   }, 400);
+}
+
+$( "#closeModal" ).click( function() {
+   closeModal();
+});
+
+function closeModal2()
+{
+   ga.repeats.restore();
+   $( ".modalDialog2" ).removeClass( "modalDialog2_on" );
+   setTimeout(function(){
+       $( "#configbody2" ).html( "" );
+   }, 400);
+}
+
+$( "#closeModal2" ).click( function() {
+   closeModal2();
+});
+
+function closeModal3()
+{
+   ga.repeats.restore();
+   $( ".modalDialog3" ).removeClass( "modalDialog3_on" );
+   $( "#configbody3" ).html( "" );
+   var ws = $( "#_state" ).data( "__msgs" );
+   if ( ws && ws.length )
+   {
+__~debug:msg{       console.log( "popping message" );}
+       var m = ws.shift();
+       $( "#_state" ).data( "__msgs", ws );
+       messagebox( m, 1 );
+   }
+}
+
+$( "#closeModal3" ).click( function() {
+   closeModal3();
+});
+
+$( "#tab_feedback" ).click( function() {
+   ga.repeats.save();
+   ga.event( "global", "feedback" , "load" );
+   $( "#configbody2" ).load( "etc/sys_feedback.html" );
+   $( ".modalDialog2" ).addClass( "modalDialog2_on" );
+});
+
+$( "#tab_feedback2" ).click( function() {
+   ga.repeats.save();
+   ga.event( "global", "feedback2" , "load" );
+   $( "#configbody2" ).load( "etc/sys_feedback2.html" );
+   $( ".modalDialog2" ).addClass( "modalDialog2_on" );
+});
+
+$( "#login" ).click( function() {
+   ga.repeats.save();
+   ga.event( "global", "login" , "load" );
+   $( "#configbody" ).load( "etc/sys_login.html" );
+   $( ".modalDialog" ).addClass( "modalDialog_on" );
+});
+
+$( "#files" ).click( function() {
+   var s = $( '#_state' );
+   var l = s.data( '_logon' );
+   if ( l && l.length )
+   {
+      ga.repeats.save();
+      ga.event( "global", "file_manager" , "load" );
+      $( "#configbody" ).load( "etc/sys_file_manager.html" );
+      $( ".modalDialog" ).addClass( "modalDialog_on" );
+   }
+});
+
+$( "#jobs" ).click( function() {
+   var s = $( '#_state' );
+   var l = s.data( '_logon' );
+
+   if ( l && l.length )
+   {
+      ga.repeats.save();
+      ga.event( "global", "job_manager" , "load" );
+      $( "#configbody" ).load( "etc/sys_job_manager.html" );
+      $( ".modalDialog" ).addClass( "modalDialog_on" );
+   }
+});
+
+$( "#logoff" ).click( function() {
+   ga.repeats.save();
+   ga.event( "global", "logoff" , "load" );
+   $( "#configbody" ).load( "etc/sys_logoff.html" );
+   $( ".modalDialog" ).addClass( "modalDialog_on" );
+});
+
+$( "#register" ).click( function() {
+   ga.repeats.save();
+   ga.event( "global", "register" , "load" );
+   $( "#configbody" ).load( "etc/sys_register.html" );
+   $( ".modalDialog" ).addClass( "modalDialog_on" );
+});
+
+function messagebox( m, force )
+{
+   if ( !force )
+   {
+      if ( $( ".modalDialog3" ).hasClass( "modalDialog3_on" ) )
+      {
+          var ws = $( "#_state" ).data( "__msgs" );
+          if ( !ws || (ws && ( Object.prototype.toString.call( ws ) != '[object Array]' ) ) )
+          {
+             ws = [];
+          }
+          ws.push( m );
+          $( "#_state" ).data( "__msgs",  ws );
+          return;
+      }
+   }
+   if ( m.icon )
+   {
+      $( "#configbody3" ).html( "<table style='width:95%;vertical-align:middle'><tr><td style='width:10%'><img src='pngs/" + m.icon + "' width=40px></td><td style='text-align:center'>" + m.text + "</td></tr></table>" );
+   } else {
+      $( "#configbody3" ).html( "<center>" + m.text + "</center>" );
+   }
+
+   if ( m.buttons ) {
+      tmp = "<center><table><tr>";
+      for ( i = 0; i < m.buttons.length; i++ ) {
+          tmp = tmp + '<td><button id="_mbb_' + m.buttons[ i ].id + '">' + m.buttons[ i ].label + '</button></td>';
+      }
+      tmp = tmp + "</tr></table><center>";
+__~debug:mb{      console.log( 'm buttons' + tmp );}
+      $( "#configbody3" ).append( tmp );
+      for ( i = 0; i < m.buttons.length; i++ ) {
+          if ( m.buttons[ i ].cb ) {
+              $( "#_mbb_" + m.buttons[ i ].id ).off().one( "click" , m.buttons[ i ], function( event ) { __~debug:fc{console.log( "you callback clicked " + event.data.label );} event.data.cb( event.data.data ); closeModal3(); } );
+          } else {
+              $( "#_mbb_" + m.buttons[ i ].id ).off().one( "click" , m.buttons[ i ], function( event ) { __~debug:fc{console.log( "you clicked " + event.data.label );} closeModal3(); } );
+          }
+      }
+   }      
+   if ( m.ptext ) {
+      $( "#configbody3" ).append( m.ptext );
+   }
+
+   ga.repeats.save();
+   $( ".modalDialog3" ).addClass( "modalDialog3_on" );
+}
+
+function syncState()
+{
+   window.history.replaceState( {}, "__title__ __version__", "/__application__/" );
+   var s = $( '#_state' );
+   var l = s.data( '_logon' );
+   var ll = s.data( '_logon:last' );
+   var tmp,
+       clearem = 0,
+       hm = 0,
+       hideadmin = 0;;
+       
+   if ( !ll || l != ll ) {
+      if ( l && l.length ) {
+          if ( $( "#files" ).is(":hidden") ) {
+              clearem = 1;
+          }
+
+          $( "#login" ).html( "" );
+          $( "#logoff" ).html( "Logoff " + l );
+          $( "#files" ).show();
+          $( "#jobs" ).show();
+//          $( "#register" ).html( "" );
+//          $( "#userconfig" ).html( "<img src=\"etc/config.png\" width=40px id=\"config\" class=\"config\">" );
+          ga.license.get();
+          hm = 1;
+      } else {
+          if ( !$( "#files" ).is(":hidden") ) {
+              clearem = 1;
+          }
+          $( "#login" ).html( "Login" );
+          $( "#logoff" ).html( "" );
+          $( "#sel_project" ).html( "" );
+          $( "#files" ).hide();
+          $( "#jobs" ).hide();
+          ga.license.data = {};
+//          $( "#register" ).html( "Register" );
+          $( ga.admin.ids.join(",") ).hide();
+          hideadmin = 1;
+      }
+      s.data( '_logon:last', l );
+      if ( clearem ) {
+        $( "#global_data" ).removeData();
+        ga.fc.clear( "#" ); 
+        ga.jc.clear( "#" ); 
+        ga.valuen.reset();
+        $( "#panelmain" ).html( "" );
+        $( "#seabug" ).html( "" );
+        if ( !$( ".sidebar" ).is(':visible') ) {
+            $( "#menuspan" ).trigger( "click" );
+        }
+        $( "#global_data" ).data( "hoverhelp", 1 );
+        resetHoverHelp();
+        if ( hideadmin ) {
+          $( ga.admin.ids.join(",") ).hide();
+        }
+        __~help:register{$( "#userconfig + span" ).html( hm ? "__help:user_config__" : "__help:register__" );}
+      }
+   }
+   var fsr = s.data( '_fs_refresh' );
+   if ( fsr && fsr.length )
+   {
+__~debug:fc{      console.log( "fs_refresh of " + fsr + " called" );}
+      if ( fsr !== "#" )
+      { 
+         fsr = $.base64.encode( "./" + fsr );
+      }
+__~debug:fc{      console.log( "fs_refresh used " + fsr );}
+      ga.fc.clear( fsr );
+//      ga.jc.clear( "#" );
+      s.removeData( '_fs_refresh' );
+   }
+
+   var swl = s.data( '_switch' );
+   if ( swl && swl.length )
+   {
+      var sw = swl.split( "/" );
+      if ( sw && sw.length == 4 )
+      {
+__~debug:job{         console.log( "switch to " + sw[0] + " module " + sw[1] + " project " + sw[2] + " id " + sw[3] );}
+__~debug:job{         console.log( "ajax/" + sw[0] + ".html" );}
+         s.data( '_project', sw[ 2 ] );
+         $( "#seabug" ).html( "<img height=50px style=\"vertical-align:middle\" id='" + sw[0] + "' src='pngs/" + sw[0] + ".png'>" );
+         if ( !( count % 2 ) )
+         {
+            menuOnOff();
+         }
+         var tmp =  sw[1] + "_timeout_handler";
+         var chk = "if( typeof " + tmp + " !== 'undefined' && " + tmp + " != 'unset' ){ console.log( 'clearing timeout' );clearTimeout(" + tmp + ");};";
+__~debug:job{         console.log( chk );}
+         eval( chk );
+         ga.event( "reattach", sw[0] , "load" );
+         $( "#panelmain" ).load( "ajax/" + sw[0] + ".html", function(){
+__~debug:job{           console.log( "now load complete" );}
+__~debug:job{           console.log( "#panel_" + sw[ 0 ] );}
+__~debug:job{           console.log( "ajax/" + sw[0] + "/" + sw[1] + ".html" );}
+__~docsbaseurl{           $( "#tab_docs > a" ).attr( "href", "__docsbaseurl__/" + sw[0] + "/" + sw[1] + "/" + sw[1] + ".html" );}
+           $( "#panel_" + sw[ 0 ] ).load( "ajax/" + sw[0] + "/" + sw[1] + ".html",
+               function(){
+__~debug:job{            console.log( "now to eval: subMsging( '" + sw[3] + "', msg_" + sw[1] + ",'" + sw[1] + "');get_results_" + sw[1] + "('" + sw[3] + "',0,1,1);" );}
+                   ga.value.resetDefaultValues( sw[1] + "_output", true );
+                   eval( "subMsging('" + sw[3] + "', msg_" + sw[1] + ",'" + sw[1] + "');get_results_" + sw[1] + "('" + sw[3] + "',0,1,1);" );
+               }); 
+         });
+   
+         s.removeData( '_switch' );
+      }
+   }
+   var p = s.data( '_project' );
+   var pl = s.data( '_project:last' );
+   if ( !pl || p != pl )
+   {
+      if ( p && p.length && p != "no_project_specified" )
+      {
+          $( "#sel_project" ).html( "Project " + p );
+      } else {
+          $( "#sel_project" ).html( "" );
+      }
+      s.data( '_project:last', p );
+   }
+__~debug:project{   console.log( "project " + p );}
+   var m = s.data( '_message' );
+   if ( m ) {
+       messagebox( m );
+       s.removeData( '_message' );
+   }
+   var fsc = s.data( '_fs_clear' );
+   if ( fsc && fsc.length )
+   {
+__~debug:fc{    console.log( "fsc clear " + fsc );}
+       ga.fc.clear( fsc );
+       s.removeData( '_fs_clear' );
+   }
+}
+
+$.getJSON( "ajax/sys_config/sys_status.php", {
+tags: "_logon",
+tagmode: "any",
+format: "json",
+_window : window.name
+})
+.done(function( data ) {
+$( '#_state' ).data( "_logon", data[ "_logon" ] );
+$( '#_state' ).data( "_project", data[ "_project" ] );
+__~debug:{console.log( "project from sysstatus:" + data[ "_project" ] );}
+syncState();
+});
+
+ga.fc.delete_warn_delete = function( ids ) {
+    messagebox( {
+                   icon  : "warning.png",
+                   text  : ga.fc.delete_node_message( ids ),
+                   ptext : ga.fc.delete_node_message_files( ids ),
+                   buttons : [
+                              { id    : "remove",
+                                label : "Yes, remove them",
+                                cb    : ga.fc.delete_node,
+                                data  : ids
+                              },
+                              { id    : "cancel",
+                                label : "Cancel"
+                              }
+                             ]
+                 } );
+}
+
+ga.fc.delete_error_msg = function( ids, text ) {
+    messagebox( {
+                   icon : "warning.png",
+                   text : text,
+                   buttons : [
+                     { id    : "ok",
+                       label : "OK" } ]
+                } );
+}
+
+ga.fc.ajax_error_msg = function( text ) {
+    messagebox( {
+                   icon : "toast.png",
+                   text : text,
+                   buttons : [
+                     { id    : "ok",
+                       label : "OK" } ]
+                } );
+}
+
+$(function() {
+    $('.pagetitle').css({
+        'position' : 'absolute',
+        'left' : '50%',
+        'top' : '0%'
+    });
+    $('.pagetitle h2').css({
+        'position' : 'relative',
+        'top'      : -$('.pagetitle').outerHeight() / 11,
+        'left'     : -$('.pagetitle').outerWidth() / 2
+    });
+});
+
+$( "#_alttitle" ).on( "click", function() { 
+                       window.open( ".", "_blank" );
+                       return false;
+}).hover( function() {
+                       $( ".title" ).css( { "color" : "rgb(__select_color_rgb__)" } );
+                       },
+                       function() {
+                       $( ".title" ).css( { "color" : "rgb(__text_color_rgb__)" } );
+                       }
+);
+
+
+</script>
+__~footer{<footer><hr>__footer__</footer>}
+</body>
+</html>

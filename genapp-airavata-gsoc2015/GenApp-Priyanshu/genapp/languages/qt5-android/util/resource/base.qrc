@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/images">
+        <file alias="pngs/build.png">../pngs/build.png</file>
+        <file alias="pngs/analyze.png">../pngs/analyze.png</file>
+        <file alias="pngs/calculate.png">../pngs/calculate.png</file>
+        <file alias="pngs/interact.png">../pngs/interact.png</file>
+        <file alias="pngs/simulate.png">../pngs/simulate.png</file>
+        <file alias="pngs/tools.png">../pngs/tools.png</file>
+    </qresource>
+    <qresource prefix="/stylesheets">
+        <file>style.qss</file>
+    </qresource>
+    <qresource prefix="/jsons">
+        <file alias="appconfig.json">../../../appconfig.json</file>
+        <file alias="directives.json">../../../directives.json</file>
+        <file alias="menu.json">../../../menu.json</file>
+    </qresource>
+</RCC>

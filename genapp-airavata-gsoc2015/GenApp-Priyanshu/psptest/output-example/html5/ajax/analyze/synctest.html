@@ -1,0 +1,568 @@
+
+<form id="synctest">
+<span id="synctest_input_area"></span>
+<script>
+
+input_eval = "";
+input_html = "<table>";
+input_repeats = "";
+input_trees = [];
+skipped_row = 0;
+synctest_done_eval = "";
+_jmol_info = {};
+// jmol = "jmol";
+ga.pull.clearPull();
+$('#synctest').on("keyup keypress", function(e) { var code = e.keyCode || e.which;  if (code  == 13) { e.preventDefault(); return false; }});
+ga.tmp.html = '';
+
+
+this_html = '<tr>' +
+'<td><label for="integerrepeater0">Base repeater </label></td>' + 
+'<td><input type="number" name="integerrepeater0" id="integerrepeater0" value="0" min="0" max="5"' +
+'><span id="integerrepeater0_msg" class="warning field_msg" > </span></td></tr>'
+
+;
+
+this_eval = 
+'ga.value.setLastValue( "synctest", "#integerrepeater0" );'
+
++ '$( "#integerrepeater0" ).on("change blur", function() { ga.valid.checkInt( "#integerrepeater0" );'
+
++ 'ga.sync.change("synctest","integerrepeater0","a");'
++ '});'
+
++ '$( "#integerrepeater0" ).keypress( function() { $( "#integerrepeater0_msg" ).html( "" ); });'
+
+ + 'ga.sync( "synctest", "integerrepeater0","a");'
+
+;
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="checkboxrepeater1" class="highlight">a synced sub set </label></td><td><input type="checkbox" name="checkboxrepeater1" id="checkboxrepeater1" data-repeater="checkbox"></td></tr>'
++ '<tr><td></td><td colspan="4"><span id="checkboxrepeater1-repeater"></span></td></tr>'
+;
+this_eval = 
+'ga.value.setLastValue( "synctest", "#checkboxrepeater1" );'
+
+
+
+ + 'ga.repeat.repeater( "synctest", "checkboxrepeater1", "checkbox" );$( "#checkboxrepeater1" ).change( function() { ga.repeat.change( "synctest", "checkboxrepeater1" ); } );'
+
+
+
+ input_repeats += 'ga.repeat.change( "synctest", "checkboxrepeater1", 1 );';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+ga.tmp.html = '';
+ga.tmp.html = '<tr><td></td><td colspan="4"><span id="integerrepeater1-repeater"></span></td></tr>';
+ga.tmp.html = ga.tmp.html.replace( '<td></td>', '' );
+this_html = '<tr class="hidden">' +
+'<td class="hidden"><label for="integerrepeater1">How about a number of repeatings </label></td>' + 
+'<td class="hidden"><input type="number" name="integerrepeater1" id="integerrepeater1" data-repeater="integer" value="0" min="0" max="5"' +
+'><span id="integerrepeater1_msg" class="warning field_msg" > </span></td></tr>'
++ ga.tmp.html
+;
+
+this_eval = 
+'ga.value.setLastValue( "synctest", "#integerrepeater1" );'
++ 'ga.repeat.repeater( "synctest", "integerrepeater1", "integer" );'
++ '$( "#integerrepeater1" ).on("change blur", function() { ga.valid.checkInt( "#integerrepeater1" );'
++ 'ga.repeat.change( "synctest", "integerrepeater1" );'
++ 'ga.sync.change("synctest","integerrepeater1","a");'
++ '});'
+
++ '$( "#integerrepeater1" ).keypress( function() { $( "#integerrepeater1_msg" ).html( "" ); });'
+
+ + 'ga.sync( "synctest", "integerrepeater1","a");'
+
+;
+
+ input_repeats += 'ga.repeat.change( "synctest", "integerrepeater1", 1 );';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+this_html = ga.repeat.repeat( "synctest", "integerrepeater1", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("synctest", "integerrepeater1", "checkboxrepeater1" );';
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label id="labelr1_label" class="help_link">this is a label repeat</label>' + 
+'<span class="help">this is a label repeat on an integer repeater</span></td>' +
+'<td><div id="labelr1" class="help_link"></div>' +
+'<span class="help">this is a label repeat on an integer repeater</span></td></tr>';
+this_eval = '';
+
+
+this_html = ga.repeat.repeat( "synctest", "labelr1", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("synctest", "labelr1", "integerrepeater1" );';
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="lrfile1" >this is a lrfile repeat </label></td>' +
+'<td><input type="file" name="lrfile1" id="lrfile1" data-add="lrfile1_altval" class="help_link"><span class="help">this is a lrfile repeat on an integer repeater</span>' +
+' or <button id="lrfile1_button" name="lrfile1_button" data-type="lrfile" class="help_link"><span class="buttontext">Browse server</span></button>' +
+'<span class="help">this is a lrfile repeat on an integer repeater</span>' +
+' <span id="lrfile1_altval"></span>' +
+'<span id="lrfile1_msg" class="warning field_msg" > </span></td><input type="hidden" name="_selaltval_lrfile1" value="lrfile1_altval"</input></tr>';
+
+this_eval = 'ga.value.setLastValue( "synctest", "#lrfile1" );' +
+'ga.altfile("synctest","lrfile1","lrfile1_altval");' +
+'$( "#lrfile1" ).change( function(){console.log("change on #lrfile1");$("#lrfile1_altval").html( "<i>Local</i>: " + $("#lrfile1").val().replace(/^C:.fakepath./,""));$("#lrfile1_msg").html("");});' +
+'ga.altfile.button("synctest","lrfile1","this is a lrfile repeat","rfile",function(v){ga.altfile.button.lrfile(v,"synctest","lrfile1");});' +
+'$("#lrfile1_button").on("click",function(){return ga.altfile.button.call("synctest","lrfile1");});';
+
+// var s = $(v).jstree("get_selected", true),r="";$.each(s,function(){r=r+$.base64.decode(this.id).substr(2)+" "});$("#lrfile1_altval").html( r.length ? "<i>Server</i>: " + r : "");r.length?$("#lrfile1").val(""):""});' +
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+this_html = ga.repeat.repeat( "synctest", "lrfile1", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("synctest", "lrfile1", "integerrepeater1" );';
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="checkboxrepeater2" class="highlight">another synced sub set </label></td><td><input type="checkbox" name="checkboxrepeater2" id="checkboxrepeater2" data-repeater="checkbox"></td></tr>'
++ '<tr><td></td><td colspan="4"><span id="checkboxrepeater2-repeater"></span></td></tr>'
+;
+this_eval = 
+'ga.value.setLastValue( "synctest", "#checkboxrepeater2" );'
+
+
+
+ + 'ga.repeat.repeater( "synctest", "checkboxrepeater2", "checkbox" );$( "#checkboxrepeater2" ).change( function() { ga.repeat.change( "synctest", "checkboxrepeater2" ); } );'
+
+
+
+ input_repeats += 'ga.repeat.change( "synctest", "checkboxrepeater2", 1 );';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+ga.tmp.html = '';
+ga.tmp.html = '<tr><td></td><td colspan="4"><span id="integerrepeater2-repeater"></span></td></tr>';
+ga.tmp.html = ga.tmp.html.replace( '<td></td>', '' );
+this_html = '<tr class="hidden">' +
+'<td class="hidden"><label for="integerrepeater2">Again how about a number of repeatings </label></td>' + 
+'<td class="hidden"><input type="number" name="integerrepeater2" id="integerrepeater2" data-repeater="integer" value="0" min="0" max="5"' +
+'><span id="integerrepeater2_msg" class="warning field_msg" > </span></td></tr>'
++ ga.tmp.html
+;
+
+this_eval = 
+'ga.value.setLastValue( "synctest", "#integerrepeater2" );'
++ 'ga.repeat.repeater( "synctest", "integerrepeater2", "integer" );'
++ '$( "#integerrepeater2" ).on("change blur", function() { ga.valid.checkInt( "#integerrepeater2" );'
++ 'ga.repeat.change( "synctest", "integerrepeater2" );'
++ 'ga.sync.change("synctest","integerrepeater2","a");'
++ '});'
+
++ '$( "#integerrepeater2" ).keypress( function() { $( "#integerrepeater2_msg" ).html( "" ); });'
+
+ + 'ga.sync( "synctest", "integerrepeater2","a");'
+
+;
+
+ input_repeats += 'ga.repeat.change( "synctest", "integerrepeater2", 1 );';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+this_html = ga.repeat.repeat( "synctest", "integerrepeater2", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("synctest", "integerrepeater2", "checkboxrepeater2" );';
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label id="labelr2_label" class="help_link">this is a label repeat again</label>' + 
+'<span class="help">this is a label repeat on an integer repeater2</span></td>' +
+'<td><div id="labelr2" class="help_link"></div>' +
+'<span class="help">this is a label repeat on an integer repeater2</span></td></tr>';
+this_eval = '';
+
+
+this_html = ga.repeat.repeat( "synctest", "labelr2", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("synctest", "labelr2", "integerrepeater2" );';
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr id="rpath2-tr"><td><label for="rpath2" >this is a rpath repeat </label></td>' +
+'<td><button id="rpath2"  name="rpath2" data-type="rpath" data-add="rpath2_altval" class="help_link"><span class="buttontext">Browse server for a path</span></button>' +
+'<span class="help">this is a rpath repeat on an integer repeater2</span>' +
+'<span id="rpath2_altval"></span>' +
+'<span id="rpath2_msg" class="warning field_msg" > </span></td>';
+
+this_eval = 'ga.value.setLastValue( "synctest", "#rpath2" );' +
+'ga.altfile("synctest","rpath2","rpath2_altval");' +
+'ga.altfile.button("synctest","rpath2","this is a rpath repeat","rpath",function(v){ga.altfile.button.rpath(v,"synctest","rpath2");});' +
+'$("#rpath2").on("click",function(){return ga.altfile.button.call("synctest","rpath2");});';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+this_html = ga.repeat.repeat( "synctest", "rpath2", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("synctest", "rpath2", "integerrepeater2" );';
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+if( skipped_row == 1 ){ input_html += "</tr>"; }
+input_html += '</table>';
+$( '#synctest_input_area' ).html( input_html );
+eval( input_eval );
+</script>
+<p><button id="synctest_submit" class="help_link"><span class="buttontext">Submit</span></button>
+<span class="help">this is help for the submit button</span>
+<button id="synctest_reset" class="help_link"><span class="buttontext">Reset to default values</span></button>
+<span class="help">this is help for the reset to default values button</span>
+
+</p>
+<span id="synctest_progress"></span>
+<script>
+
+
+
+
+var synctest_output_msgs = $("#synctest_output_msgs");
+synctest_output_msgs.text( "" );
+
+var synctest_timeout_handler = "unset";
+
+function get_results_synctest( id, last_timeout, getlastmsg, getinput )
+{
+
+//             url:"ajax/get_results.php?_window=" +  window.name + "&_logon=" +$( "#_state" ).data( "_logon" ) + '&_uuid=' + id,
+    var job_status = "";
+    $.getJSON( 
+             "ajax/get_results.php",
+             {
+                tagmode: "any",
+                format: "json",
+                _window : window.name,
+                _logon : $( "#_state" ).data( "_logon" ),
+                _uuid : id,
+                _getlastmsg : getlastmsg,
+                _getinput : getinput ? true : false
+             } )
+    .done( function( data, status, xhr ) {
+
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( id );
+           }
+
+           job_status = ga.data.update( "synctest", data ).job_status;
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+              if ( synctest_timeout_handler != "unset" )
+              {
+                  clearTimeout( synctest_timeout_handler );
+                  synctest_timeout_handler = "unset";
+              }
+              unsubMsging( id, "synctest" );
+              eval( synctest_done_eval );
+           } else {
+               if ( !last_timeout || last_timeout < 2000 )
+               { 
+                  last_timeout = 2000;
+               } else {
+                  if ( last_timeout < 16000 )
+                  {
+                      last_timeout *= 2;
+                  } else {
+                      last_timeout = 16000;
+                  }
+               }
+
+               synctest_timeout_handler =  setTimeout( get_results_synctest, last_timeout, id, last_timeout, 0 );
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+           $( "#synctest_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/center.php </span>" );
+           $('#synctest_progress').html( "" );
+           if ( synctest_timeout_handler != "unset" )
+           {
+               clearTimeout( synctest_timeout_handler );
+               synctest_timeout_handler = "unset";
+           }
+           unsubMsging( id, "synctest" );
+           eval( synctest_done_eval );
+          } );
+    return false;
+};
+
+function msg_synctest ( id, data )
+{
+   ga.data.update( "synctest", data, get_results_synctest, id );
+};
+
+$( "#synctest_submit" ).click( function( e ) {
+   e.preventDefault();
+   e.returnValue = false;
+
+   var $ok = 0;
+   
+   
+
+   ga.event( "", "synctest", "submit clicked" );
+
+   
+
+
+
+
+
+   if ( !ga.valid.checksubmit( "synctest" ) ) {
+       return false;
+   }
+
+   var $form = $(this);
+
+   $.ajax({
+       type: 'get'
+       ,url: "ajax/sys_config/sys_joblocked.php?_window=" +  window.name + "&_logon=" + $( "#_state" ).data( "_logon" )
+
+       ,context: $form
+       ,success: function( data ) { // your success handler
+
+          if ( !$ok )
+          {
+          switch ( data )
+          {
+             case "1" :
+             {
+                 messagebox( { icon:"warning.png", text:"This project directory is currently locked by another project.\nYou can wait until it completes, change the project in user configuration or clear the lock in the job manager." } );
+                 return;
+             } break;
+             case "2" :
+             {
+                 messagebox( { icon:"warning.png", text:"You must be logged in to submit this module." } );
+                 return;
+             } break;
+             default :
+             {
+
+                 $ok = 1;
+             }
+          }
+          }
+       }
+       ,error: function() { // your error handler
+          messagebox( { icon:"toast.png", text:"Checking the project lock failed. This is possibly a server or network issue" } );
+       }
+       ,complete: function() { 
+          this.off('submit');
+          if ( $ok )
+          {
+
+
+              $( "#synctest_results" ).text( "" );
+
+              ga.value.saveLastValues( "synctest" );
+              ga.value.resetDefaultValues( "synctest_output", true );
+
+              var found_errors = 0;
+              $("#synctest").find("input").each(function(i){
+                 if ( $(this).attr( 'required' ) && $(this).val().length == 0 )
+                 {
+                    var tag =  "#synctest " + "#" + $(this).attr('id') + "_msg";
+
+                    $( tag ).html( "missing required field" );
+                    found_errors = 1;
+                 }
+              });
+              if ( found_errors ) {
+                  return;
+              }
+
+    var tree_html = "";
+    $( "._hidden_tree_selects" ).remove( );
+    $.each( input_trees, function( k, v ){
+
+        $( 'input[type=hidden][name="' + v + '[]"]' ).remove();
+        var selectedElms = $('#' + v).jstree("get_selected", true);
+        var i = 0;
+        $.each(selectedElms, function() {
+           tree_html += '<input type="hidden" name="' + v + '[]" value="' + this.id + '" class="_hidden_tree_selects"/>';
+
+        });
+    });
+
+    $( this ).append( tree_html );
+
+
+    var logonadd = $("<input>").attr("type", "hidden").attr("name", "_logon").val( $( "#_state" ).data( "_logon" ) );$( this ).append($(logonadd));
+    var projectadd = $("<input>").attr("type", "hidden").attr("name", "_project").val( $( "#_state" ).data( "_project" ) );$( this ).append($(projectadd));
+    var windowadd = $("<input>").attr("type", "hidden").attr("name", "_window").val( window.name );$( this ).append($(windowadd));
+    var vuuid = uuid.v1();
+
+
+
+
+
+
+    var uuidadd = $("<input>").attr("type", "hidden").attr("name", "_uuid").val( vuuid );$( this ).append($(uuidadd));
+//    ga.altfile.add( "synctest" );
+    ga.valuen.addhtml( "synctest" );
+
+    subMsging( vuuid, msg_synctest, "synctest" );
+
+    var formData = new FormData($('form')[0]);
+
+
+    $('#synctest_progress').html( "Uploading:<progress></progress>" );
+
+    var job_status = "";
+
+    ga.event( "", "synctest", "submit: passed submit checks, submitting" );
+
+    $.ajax( {
+             dataType: "json",
+             cache:false,
+//             timeout:3000,  // for testing
+             type:"POST",
+             url:"ajax/analyze/synctest.php",
+             data: formData,
+             xhr: function() {  // Custom XMLHttpRequest
+                 var myXhr = $.ajaxSettings.xhr();
+                 if(myXhr.upload){ // Check if upload property exists
+                     myXhr.upload.addEventListener('progress',
+                         function(e) {
+                         if(e.lengthComputable){
+                           $('#synctest_progress progress').attr({value:e.loaded,max:e.total});
+                         } }
+//                     progressHandlingFunction
+                    , false);
+                 }
+                 return myXhr;
+             },
+             contentType: false,
+             processData: false
+            } )
+    .done( function( data, status, xhr ) {
+
+
+
+
+// refresh cache for this project
+           $('#synctest_progress').html( "" );
+   
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( vuuid );
+           }
+           
+// loop through data pairs
+           synctest_output_msgs.text( "" );
+           job_status = ga.data.update( "synctest", data ).job_status;
+
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+               if ( synctest_timeout_handler != "unset" )
+               {
+                   clearTimeout( synctest_timeout_handler );
+                   synctest_timeout_handler = "unset";
+               }
+               unsubMsging( vuuid, "synctest" );
+               eval( synctest_done_eval );
+           } else {
+               synctest_timeout_handler = setTimeout( get_results_synctest, 2000, vuuid, 2000, 0 );
+
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+
+
+
+           $( "#synctest_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/analyze/synctest.php </span>" );
+           $('#synctest_progress').html( "" );
+           if ( synctest_timeout_handler != "unset" )
+           {
+               clearTimeout( synctest_timeout_handler );
+               synctest_timeout_handler = "unset";
+           }
+           unsubMsging( vuuid, "synctest" );
+           eval( synctest_done_eval );
+          } );
+          } else {
+
+          }
+       }
+   });
+}); 
+
+$( "#synctest_reset" ).click( function() {
+    
+    
+    ga.event( "", "synctest", "reset clicked" );
+    //    ga.value.resetDefaultValues( "synctest" );
+    ga.valuen.restore.dflt(  "synctest" );
+    ga.value.resetDefaultValues( "synctest_output", true );
+    
+    eval( input_repeats );
+    return false;
+});
+setHoverHelp();
+
+
+eval( input_repeats );
+ga.pull.doPull();
+</script>
+</form>
+<div id="synctest_results"></div>
+<script>
+ga.tmp.html = "<hr>";
+
+$("#synctest").append( ga.tmp.html );
+</script>
+<form id="synctest_output">
+<div id="synctest_output_msgs" class="warning" type="msgs"></div>
+<script>
+ga.value.setLastValueOutput( "synctest_output" );
+ga.value.extra_resets.clear();
+</script>
+
+<table>
+<tr>
+<td colspan="4" style="vertical-align:top"><label hidden id="synctest_output_textarea_label" for="synctest_output_textarea" class="header3 ">Report:</label>
+<textarea readonly hidden id="synctest_output_textarea" rows="10" cols="60" class="help_link"></textarea>
+<span class="help">general textarea help</span>
+</td>
+</tr>
+</table>
+</form>
+

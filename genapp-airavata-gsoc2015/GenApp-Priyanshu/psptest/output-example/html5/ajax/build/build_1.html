@@ -1,0 +1,437 @@
+
+<form id="build_1">
+<span id="build_1_input_area"></span>
+<script>
+
+input_eval = "";
+input_html = "<table>";
+input_repeats = "";
+input_trees = [];
+skipped_row = 0;
+build_1_done_eval = "";
+_jmol_info = {};
+// jmol = "jmol";
+ga.pull.clearPull();
+$('#build_1').on("keyup keypress", function(e) { var code = e.keyCode || e.which;  if (code  == 13) { e.preventDefault(); return false; }});
+this_html = '<tr><td><label for="input1">Input value 1 </label></td><td><input type="number" name="input1" id="input1" value="0" min="0" max="1e+50" required><span id="input1_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 
+'ga.value.setLastValue( "build_1", "#input1" );'
+ + '$( "#input1" ).blur( function() { ga.valid.checkFloat( "#input1" ); });'
+ + '$( "#input1" ).keypress( function() { $( "#input1_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+ga.tmp.html = '';
+
+
+this_html = '<tr>' +
+'<td><label for="input2">Input value 2 </label></td>' + 
+'<td><input type="number" name="input2" id="input2" value="1" min="-10" max="10"' +
+'><span id="input2_msg" class="warning field_msg" > </span></td></tr>'
+
+;
+
+this_eval = 
+'ga.value.setLastValue( "build_1", "#input2" );'
+
++ '$( "#input2" ).on("change blur", function() { ga.valid.checkInt( "#input2" );'
+
+
++ '});'
+
++ '$( "#input2" ).keypress( function() { $( "#input2_msg" ).html( "" ); });'
+
+
+
+;
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input3" class="highlight">Input value 3 </label></td><td><input type="checkbox" name="input3" id="input3" checked></td></tr>'
+
+;
+this_eval = 
+'ga.value.setLastValue( "build_1", "#input3" );'
+
+
+
+
+
+
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input4">Input text 10 </label></td><td><input type="text" name="input4" id="input4" maxlength="10"><span id="input4_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 
+
+'ga.value.setLastValue( "build_1", "#input4" );$( "#input4" ).keypress( function() { $( "#input4_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+if( skipped_row == 1 ){ input_html += "</tr>"; }
+input_html += '</table>';
+$( '#build_1_input_area' ).html( input_html );
+eval( input_eval );
+</script>
+<p><button id="build_1_submit" class="help_link"><span class="buttontext">Submit</span></button>
+<span class="help">this is help for the submit button</span>
+<button id="build_1_reset" class="help_link"><span class="buttontext">Reset to default values</span></button>
+<span class="help">this is help for the reset to default values button</span>
+
+</p>
+<span id="build_1_progress"></span>
+<script>
+
+
+
+
+var build_1_output_msgs = $("#build_1_output_msgs");
+build_1_output_msgs.text( "" );
+
+var build_1_timeout_handler = "unset";
+
+function get_results_build_1( id, last_timeout, getlastmsg, getinput )
+{
+
+//             url:"ajax/get_results.php?_window=" +  window.name + "&_logon=" +$( "#_state" ).data( "_logon" ) + '&_uuid=' + id,
+    var job_status = "";
+    $.getJSON( 
+             "ajax/get_results.php",
+             {
+                tagmode: "any",
+                format: "json",
+                _window : window.name,
+                _logon : $( "#_state" ).data( "_logon" ),
+                _uuid : id,
+                _getlastmsg : getlastmsg,
+                _getinput : getinput ? true : false
+             } )
+    .done( function( data, status, xhr ) {
+
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( id );
+           }
+
+           job_status = ga.data.update( "build_1", data ).job_status;
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+              if ( build_1_timeout_handler != "unset" )
+              {
+                  clearTimeout( build_1_timeout_handler );
+                  build_1_timeout_handler = "unset";
+              }
+              unsubMsging( id, "build_1" );
+              eval( build_1_done_eval );
+           } else {
+               if ( !last_timeout || last_timeout < 2000 )
+               { 
+                  last_timeout = 2000;
+               } else {
+                  if ( last_timeout < 16000 )
+                  {
+                      last_timeout *= 2;
+                  } else {
+                      last_timeout = 16000;
+                  }
+               }
+
+               build_1_timeout_handler =  setTimeout( get_results_build_1, last_timeout, id, last_timeout, 0 );
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+           $( "#build_1_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/center.php </span>" );
+           $('#build_1_progress').html( "" );
+           if ( build_1_timeout_handler != "unset" )
+           {
+               clearTimeout( build_1_timeout_handler );
+               build_1_timeout_handler = "unset";
+           }
+           unsubMsging( id, "build_1" );
+           eval( build_1_done_eval );
+          } );
+    return false;
+};
+
+function msg_build_1 ( id, data )
+{
+   ga.data.update( "build_1", data, get_results_build_1, id );
+};
+
+$( "#build_1_submit" ).click( function( e ) {
+   e.preventDefault();
+   e.returnValue = false;
+
+   var $ok = 0;
+   
+   
+
+   ga.event( "", "build_1", "submit clicked" );
+
+   
+
+
+
+
+
+   if ( !ga.valid.checksubmit( "build_1" ) ) {
+       return false;
+   }
+
+   var $form = $(this);
+
+   $.ajax({
+       type: 'get'
+       ,url: "ajax/sys_config/sys_joblocked.php?_window=" +  window.name + "&_logon=" + $( "#_state" ).data( "_logon" )
+
+       ,context: $form
+       ,success: function( data ) { // your success handler
+
+          if ( !$ok )
+          {
+          switch ( data )
+          {
+             case "1" :
+             {
+                 messagebox( { icon:"warning.png", text:"This project directory is currently locked by another project.\nYou can wait until it completes, change the project in user configuration or clear the lock in the job manager." } );
+                 return;
+             } break;
+             case "2" :
+             {
+                 messagebox( { icon:"warning.png", text:"You must be logged in to submit this module." } );
+                 return;
+             } break;
+             default :
+             {
+
+                 $ok = 1;
+             }
+          }
+          }
+       }
+       ,error: function() { // your error handler
+          messagebox( { icon:"toast.png", text:"Checking the project lock failed. This is possibly a server or network issue" } );
+       }
+       ,complete: function() { 
+          this.off('submit');
+          if ( $ok )
+          {
+
+
+              $( "#build_1_results" ).text( "" );
+
+              ga.value.saveLastValues( "build_1" );
+              ga.value.resetDefaultValues( "build_1_output", true );
+
+              var found_errors = 0;
+              $("#build_1").find("input").each(function(i){
+                 if ( $(this).attr( 'required' ) && $(this).val().length == 0 )
+                 {
+                    var tag =  "#build_1 " + "#" + $(this).attr('id') + "_msg";
+
+                    $( tag ).html( "missing required field" );
+                    found_errors = 1;
+                 }
+              });
+              if ( found_errors ) {
+                  return;
+              }
+
+    var tree_html = "";
+    $( "._hidden_tree_selects" ).remove( );
+    $.each( input_trees, function( k, v ){
+
+        $( 'input[type=hidden][name="' + v + '[]"]' ).remove();
+        var selectedElms = $('#' + v).jstree("get_selected", true);
+        var i = 0;
+        $.each(selectedElms, function() {
+           tree_html += '<input type="hidden" name="' + v + '[]" value="' + this.id + '" class="_hidden_tree_selects"/>';
+
+        });
+    });
+
+    $( this ).append( tree_html );
+
+
+    var logonadd = $("<input>").attr("type", "hidden").attr("name", "_logon").val( $( "#_state" ).data( "_logon" ) );$( this ).append($(logonadd));
+    var projectadd = $("<input>").attr("type", "hidden").attr("name", "_project").val( $( "#_state" ).data( "_project" ) );$( this ).append($(projectadd));
+    var windowadd = $("<input>").attr("type", "hidden").attr("name", "_window").val( window.name );$( this ).append($(windowadd));
+    var vuuid = uuid.v1();
+
+
+
+
+
+
+    var uuidadd = $("<input>").attr("type", "hidden").attr("name", "_uuid").val( vuuid );$( this ).append($(uuidadd));
+//    ga.altfile.add( "build_1" );
+    ga.valuen.addhtml( "build_1" );
+
+    subMsging( vuuid, msg_build_1, "build_1" );
+
+    var formData = new FormData($('form')[0]);
+
+
+    $('#build_1_progress').html( "Uploading:<progress></progress>" );
+
+    var job_status = "";
+
+    ga.event( "", "build_1", "submit: passed submit checks, submitting" );
+
+    $.ajax( {
+             dataType: "json",
+             cache:false,
+//             timeout:3000,  // for testing
+             type:"POST",
+             url:"ajax/build/build_1.php",
+             data: formData,
+             xhr: function() {  // Custom XMLHttpRequest
+                 var myXhr = $.ajaxSettings.xhr();
+                 if(myXhr.upload){ // Check if upload property exists
+                     myXhr.upload.addEventListener('progress',
+                         function(e) {
+                         if(e.lengthComputable){
+                           $('#build_1_progress progress').attr({value:e.loaded,max:e.total});
+                         } }
+//                     progressHandlingFunction
+                    , false);
+                 }
+                 return myXhr;
+             },
+             contentType: false,
+             processData: false
+            } )
+    .done( function( data, status, xhr ) {
+
+
+
+
+// refresh cache for this project
+           $('#build_1_progress').html( "" );
+   
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( vuuid );
+           }
+           
+// loop through data pairs
+           build_1_output_msgs.text( "" );
+           job_status = ga.data.update( "build_1", data ).job_status;
+
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+               if ( build_1_timeout_handler != "unset" )
+               {
+                   clearTimeout( build_1_timeout_handler );
+                   build_1_timeout_handler = "unset";
+               }
+               unsubMsging( vuuid, "build_1" );
+               eval( build_1_done_eval );
+           } else {
+               build_1_timeout_handler = setTimeout( get_results_build_1, 2000, vuuid, 2000, 0 );
+
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+
+
+
+           $( "#build_1_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/build/build_1.php </span>" );
+           $('#build_1_progress').html( "" );
+           if ( build_1_timeout_handler != "unset" )
+           {
+               clearTimeout( build_1_timeout_handler );
+               build_1_timeout_handler = "unset";
+           }
+           unsubMsging( vuuid, "build_1" );
+           eval( build_1_done_eval );
+          } );
+          } else {
+
+          }
+       }
+   });
+}); 
+
+$( "#build_1_reset" ).click( function() {
+    
+    
+    ga.event( "", "build_1", "reset clicked" );
+    //    ga.value.resetDefaultValues( "build_1" );
+    ga.valuen.restore.dflt(  "build_1" );
+    ga.value.resetDefaultValues( "build_1_output", true );
+    
+    eval( input_repeats );
+    return false;
+});
+setHoverHelp();
+
+
+eval( input_repeats );
+ga.pull.doPull();
+</script>
+</form>
+<div id="build_1_results"></div>
+<script>
+ga.tmp.html = "<hr>";
+
+$("#build_1").append( ga.tmp.html );
+</script>
+<form id="build_1_output">
+<div id="build_1_output_msgs" class="warning" type="msgs"></div>
+<script>
+ga.value.setLastValueOutput( "build_1_output" );
+ga.value.extra_resets.clear();
+</script>
+
+<table>
+<tr>
+<td colspan="4" style="vertical-align:top"><label hidden id="build_1_output_textarea_label" for="build_1_output_textarea" class="header3 ">Report:</label>
+<textarea readonly hidden id="build_1_output_textarea" rows="10" cols="60" class="help_link"></textarea>
+<span class="help">general textarea help</span>
+</td>
+</tr>
+<tr><td><label for="output1">Output value 1 </label></td><td><input type="number" name="output1" id="output1" readonly></td></tr>
+<script>
+ga.value.setLastValue( "build_1_output", "#output1" );
+</script>
+</table>
+</form>
+

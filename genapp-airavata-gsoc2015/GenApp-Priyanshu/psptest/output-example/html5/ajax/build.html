@@ -1,0 +1,45 @@
+<style>
+#panel_build {
+    position: relative;
+    display: block;  
+}
+</style>
+<p>
+<center>
+
+    <button id="build_build_1" class="help_link">Build 1</button><span class="help">help for Build_1</span>
+<script>
+    $( "#build_build_1" ).click(function() {
+        var d=$( "#tab_docs > a" );
+        if ( d.length ) { d.attr( "href", "__docsbaseurl__/build/build_1/build_1.html" ); };
+    
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+
+        if ( ga.valuen.lastload != "build_1" || !$( "#" + ga.valuen.lastload ).is( ":visible" ) ) {
+            $( "#panel_build" ).load( "ajax/build/build_1.html", function() { ga.valuen.save( "build_1", true ); ga.valuen.restore( "build_1" ); ga.valuen.lastload = "build_1"; });
+        }
+    });
+</script>
+    <button id="build_build_2" class="help_link">Build 2</button><span class="help">help for Build_2</span>
+<script>
+    $( "#build_build_2" ).click(function() {
+        var d=$( "#tab_docs > a" );
+        if ( d.length ) { d.attr( "href", "__docsbaseurl__/build/build_2/build_2.html" ); };
+    
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+
+        if ( ga.valuen.lastload != "build_2" || !$( "#" + ga.valuen.lastload ).is( ":visible" ) ) {
+            $( "#panel_build" ).load( "ajax/build/build_2.html", function() { ga.valuen.save( "build_2", true ); ga.valuen.restore( "build_2" ); ga.valuen.lastload = "build_2"; });
+        }
+    });
+</script>
+</center>
+</p>
+
+<div id="panel_build">
+</div>
+
+
+<script>
+    $( "#panel_build" ).text("");
+</script>

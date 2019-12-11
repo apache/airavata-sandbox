@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+
+use JSON;
+use Data::Dumper;
+
+if ( !@ARGV )
+{
+    print "\{\"error\":\"simulate_1 called with no arguments\"\}\n";
+    exit;
+}
+
+$json = shift;
+$ref = decode_json( $json );
+$res = {};
+$$res{ "hi" } = "there";
+
+$$res{ "pwd" } = `pwd`;
+chomp $$res{ "pwd" };
+
+$path = ${ $$ref{ 'input4' } }[ 0 ];
+
+( $p, $f ) = $path =~ /^(.*)\/(.*)$/;
+
+$$res{ "input4_val" } = $path;
+$$res{ "path" } = $p;
+$$res{ "file" } = $f;
+
+open OUT, ">$p/logref.txt";
+print OUT Dumper($ref);
+close OUT;
+open OUT, ">$p/logres.txt";
+print OUT Dumper($res);
+close OUT;
+$$res{ "output1" } = 1.234;
+$$res{ "output2" } = "$p/logref.txt";
+$$res{ "output3" } = "$p/logres.txt";
+print encode_json( $res ) . "\n";
+

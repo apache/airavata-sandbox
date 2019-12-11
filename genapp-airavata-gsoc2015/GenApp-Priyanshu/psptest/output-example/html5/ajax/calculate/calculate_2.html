@@ -1,0 +1,658 @@
+
+<form id="calculate_2">
+<span id="calculate_2_input_area"></span>
+<script>
+
+input_eval = "";
+input_html = "<table>";
+input_repeats = "";
+input_trees = [];
+skipped_row = 0;
+calculate_2_done_eval = "";
+_jmol_info = {};
+// jmol = "jmol";
+ga.pull.clearPull();
+$('#calculate_2').on("keyup keypress", function(e) { var code = e.keyCode || e.which;  if (code  == 13) { e.preventDefault(); return false; }});
+this_html = '<tr><td><label for="input1">Input value 1 </label></td><td><input type="number" name="input1" id="input1" value="0" min="0" max="1e+50" required class="help_link"><span class="help">This field can have values from 0 to 1e50 and is of the float type and it will be the value of input1 in the executable received json</span><span id="input1_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = 
+'ga.value.setLastValue( "calculate_2", "#input1" );'
+ + '$( "#input1" ).blur( function() { ga.valid.checkFloat( "#input1" ); });'
+ + '$( "#input1" ).keypress( function() { $( "#input1_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+ga.tmp.html = '';
+
+
+this_html = '<tr>' +
+'<td><label for="input2">Input value 2 </label></td>' + 
+'<td><input type="number" name="input2" id="input2" value="1" min="-10" max="10"' +
+' class="help_link"><span class="help">This field can have values from -10 to 10 and is of the integer type  and it will be the value of input2 in the executable received json</span><span id="input2_msg" class="warning field_msg" > </span></td></tr>'
+
+;
+
+this_eval = 
+'ga.value.setLastValue( "calculate_2", "#input2" );'
+
++ '$( "#input2" ).on("change blur", function() { ga.valid.checkInt( "#input2" );'
+
+
++ '});'
+
++ '$( "#input2" ).keypress( function() { $( "#input2_msg" ).html( "" ); });'
+
+
+
+;
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input3" class="highlight">Input value 3 </label></td><td><input type="checkbox" name="input3" id="input3" checked class="help_link"><span class="help">This field can have values checked or not checked.  If checked, the executable json input will have an input3 with value on</span></td></tr>'
+
+;
+this_eval = 
+'ga.value.setLastValue( "calculate_2", "#input3" );'
+
+
+
+
+
+
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input4">1st listbox </label></td><td><select id="input4" name="input4" data-repeater="listbox" class="help_link"><option value="c1">choice 1</option><option value="c2">choice 2</option><option value="c3">choice 3</option><option value="c4">choice 4</option></select>'
++ '<span class="help">This field is a listbox and depending on the choice, different fields will display below</span>'
++ '</td></tr>'
++ '<tr><td></td><td colspan="4"><span id="input4-repeater"></span></td></tr>'
+;
+
+this_eval = 
+'ga.repeat.repeater( "calculate_2", "input4", "listbox" );' +
+'$( "#input4" ).attr( "value", $( "#input4" ).val() );' +
+'ga.value.setLastValue( "calculate_2", "#input4", "c2" );'
++ 'ga.repeat.change( "calculate_2", "input4" );$( "#input4" ).change( function() { ga.repeat.change( "calculate_2", "input4" ); } );'
+;
+
+ input_repeats += 'ga.repeat.change( "calculate_2", "input4", 1 );';
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input3c1" class="highlight">Input value 4 c1 </label></td><td><input type="checkbox" name="input3c1" id="input3c1" checked class="help_link"><span class="help">This field is a checkbox that only appears when input4 above is set to choice 1 or c1</span></td></tr>'
+
+;
+this_eval = 
+'ga.value.setLastValue( "calculate_2", "#input3c1" );'
+
+
+
+
+
+
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+this_html = ga.repeat.repeat( "calculate_2", "input3c1", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("calculate_2", "input3c1", "input4:c1" );';
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input3c2" class="highlight">Input value 4 c2 </label></td><td><input type="checkbox" name="input3c2" id="input3c2" checked class="help_link"><span class="help">This field is a checkbox that only appears when input4 above is set to choice 2 or c2</span></td></tr>'
+
+;
+this_eval = 
+'ga.value.setLastValue( "calculate_2", "#input3c2" );'
+
+
+
+
+
+
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+this_html = ga.repeat.repeat( "calculate_2", "input3c2", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("calculate_2", "input3c2", "input4:c2" );';
+
+input_html += this_html;
+input_eval += this_eval;
+ga.tmp.html = '';
+
+
+this_html = '<tr>' +
+'<td><label for="input3c2b">Input value 4 c2b </label></td>' + 
+'<td><input type="number" name="input3c2b" id="input3c2b"' +
+' class="help_link"><span class="help">This field is an integer that only appears when input4 above is set to choice 2 or c2</span><span id="input3c2b_msg" class="warning field_msg" > </span></td></tr>'
+
+;
+
+this_eval = 
+'ga.value.setLastValue( "calculate_2", "#input3c2b" );'
+
++ '$( "#input3c2b" ).on("change blur", function() { ga.valid.checkInt( "#input3c2b" );'
+
+
++ '});'
+
++ '$( "#input3c2b" ).keypress( function() { $( "#input3c2b_msg" ).html( "" ); });'
+
+
+
+;
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+this_html = ga.repeat.repeat( "calculate_2", "input3c2b", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("calculate_2", "input3c2b", "input4:c2" );';
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input3c3b">Input value 4 c3b </label></td><td><select id="input3c3b" name="input3c3b" class="help_link"><option value="c1">choice 1</option><option value="c2">choice 2</option><option value="c3">choice 3</option><option value="c4">choice 4</option></select>'
++ '<span class="help">This field is a listbox that only appears when input4 above is set to choice 3 or c3</span>'
++ '</td></tr>'
+
+;
+
+this_eval = 
+
+'$( "#input3c3b" ).attr( "value", $( "#input3c3b" ).val() );' +
+'ga.value.setLastValue( "calculate_2", "#input3c3b" );'
+
+;
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+this_html = ga.repeat.repeat( "calculate_2", "input3c3b", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("calculate_2", "input3c3b", "input4:c3" );';
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input3c3" class="highlight">Input value 4 c3 </label></td><td><input type="checkbox" name="input3c3" id="input3c3" checked class="help_link"><span class="help">This field is a checkbox that only appears when input4 above is set to choice 3 or c3</span></td></tr>'
+
+;
+this_eval = 
+'ga.value.setLastValue( "calculate_2", "#input3c3" );'
+
+
+
+
+
+
+
+;
+
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+this_html = ga.repeat.repeat( "calculate_2", "input3c3", this_html, this_eval );
+this_eval = 'ga.repeat.repeatOn("calculate_2", "input3c3", "input4:c3" );';
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input6">textarea </label></td><td><textarea name="input6" id="input6" rows="4" cols="40" class="help_link"></textarea>'
++ '<span class="help">enter some text</span>'
++ '<span id="input6_msg" class="warning field_msg" > </span></td></tr>';
+this_eval = '  if ( $( "#global_data" ).data( "calculate_2:input6:last_value" ) == undefined ) { $( "#input6" ).attr( "value", "this is a text areamultiline" ).val( "this is a text areamultiline" );  } ' +
+'ga.value.setLastValue( "calculate_2", "#input6" );' +
+'$( "#input6" ).keypress( function() { $( "#input6_msg" ).html( "" ); });';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input7a" class="highlight">Radiobutton a </label></td><td><input type="radio" name="input7" id="input7a" value="input7a" class="help_link"><span class="help">radio button a help</span></td></tr>';
+this_eval = 'ga.value.setLastValue( "calculate_2", "#input7a" );';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input7b" class="highlight">Radiobutton b </label></td><td><input type="radio" name="input7" id="input7b" value="input7b" class="help_link"><span class="help">radio button b help</span></td></tr>';
+this_eval = 'ga.value.setLastValue( "calculate_2", "#input7b" );';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="input7c" class="highlight">Radiobutton c </label></td><td><input type="radio" name="input7" id="input7c" value="input7c" checked class="help_link"><span class="help">radio button c help</span></td></tr>';
+this_eval = 'ga.value.setLastValue( "calculate_2", "#input7c" );';
+if ( skipped_row == 1 ){ this_html = this_html.replace(/^<tr>/, "" ); skipped_row=0;};
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+if( skipped_row == 1 ){ input_html += "</tr>"; }
+input_html += '</table>';
+$( '#calculate_2_input_area' ).html( input_html );
+eval( input_eval );
+</script>
+<p><button id="calculate_2_submit" class="help_link"><span class="buttontext">Submit</span></button>
+<span class="help">this is help for the submit button</span>
+<button id="calculate_2_reset" class="help_link"><span class="buttontext">Reset to default values</span></button>
+<span class="help">this is help for the reset to default values button</span>
+
+</p>
+<span id="calculate_2_progress"></span>
+<script>
+
+
+
+
+var calculate_2_output_msgs = $("#calculate_2_output_msgs");
+calculate_2_output_msgs.text( "" );
+
+var calculate_2_timeout_handler = "unset";
+
+function get_results_calculate_2( id, last_timeout, getlastmsg, getinput )
+{
+
+//             url:"ajax/get_results.php?_window=" +  window.name + "&_logon=" +$( "#_state" ).data( "_logon" ) + '&_uuid=' + id,
+    var job_status = "";
+    $.getJSON( 
+             "ajax/get_results.php",
+             {
+                tagmode: "any",
+                format: "json",
+                _window : window.name,
+                _logon : $( "#_state" ).data( "_logon" ),
+                _uuid : id,
+                _getlastmsg : getlastmsg,
+                _getinput : getinput ? true : false
+             } )
+    .done( function( data, status, xhr ) {
+
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( id );
+           }
+
+           job_status = ga.data.update( "calculate_2", data ).job_status;
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+              if ( calculate_2_timeout_handler != "unset" )
+              {
+                  clearTimeout( calculate_2_timeout_handler );
+                  calculate_2_timeout_handler = "unset";
+              }
+              unsubMsging( id, "calculate_2" );
+              eval( calculate_2_done_eval );
+           } else {
+               if ( !last_timeout || last_timeout < 2000 )
+               { 
+                  last_timeout = 2000;
+               } else {
+                  if ( last_timeout < 16000 )
+                  {
+                      last_timeout *= 2;
+                  } else {
+                      last_timeout = 16000;
+                  }
+               }
+
+               calculate_2_timeout_handler =  setTimeout( get_results_calculate_2, last_timeout, id, last_timeout, 0 );
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+           $( "#calculate_2_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/center.php </span>" );
+           $('#calculate_2_progress').html( "" );
+           if ( calculate_2_timeout_handler != "unset" )
+           {
+               clearTimeout( calculate_2_timeout_handler );
+               calculate_2_timeout_handler = "unset";
+           }
+           unsubMsging( id, "calculate_2" );
+           eval( calculate_2_done_eval );
+          } );
+    return false;
+};
+
+function msg_calculate_2 ( id, data )
+{
+   ga.data.update( "calculate_2", data, get_results_calculate_2, id );
+};
+
+$( "#calculate_2_submit" ).click( function( e ) {
+   e.preventDefault();
+   e.returnValue = false;
+
+   var $ok = 0;
+   
+   
+
+   ga.event( "", "calculate_2", "submit clicked" );
+
+   
+
+
+
+
+
+   if ( !ga.valid.checksubmit( "calculate_2" ) ) {
+       return false;
+   }
+
+   var $form = $(this);
+
+   $.ajax({
+       type: 'get'
+       ,url: "ajax/sys_config/sys_joblocked.php?_window=" +  window.name + "&_logon=" + $( "#_state" ).data( "_logon" )
+
+       ,context: $form
+       ,success: function( data ) { // your success handler
+
+          if ( !$ok )
+          {
+          switch ( data )
+          {
+             case "1" :
+             {
+                 messagebox( { icon:"warning.png", text:"This project directory is currently locked by another project.\nYou can wait until it completes, change the project in user configuration or clear the lock in the job manager." } );
+                 return;
+             } break;
+             case "2" :
+             {
+                 messagebox( { icon:"warning.png", text:"You must be logged in to submit this module." } );
+                 return;
+             } break;
+             default :
+             {
+
+                 $ok = 1;
+             }
+          }
+          }
+       }
+       ,error: function() { // your error handler
+          messagebox( { icon:"toast.png", text:"Checking the project lock failed. This is possibly a server or network issue" } );
+       }
+       ,complete: function() { 
+          this.off('submit');
+          if ( $ok )
+          {
+
+
+              $( "#calculate_2_results" ).text( "" );
+
+              ga.value.saveLastValues( "calculate_2" );
+              ga.value.resetDefaultValues( "calculate_2_output", true );
+
+              var found_errors = 0;
+              $("#calculate_2").find("input").each(function(i){
+                 if ( $(this).attr( 'required' ) && $(this).val().length == 0 )
+                 {
+                    var tag =  "#calculate_2 " + "#" + $(this).attr('id') + "_msg";
+
+                    $( tag ).html( "missing required field" );
+                    found_errors = 1;
+                 }
+              });
+              if ( found_errors ) {
+                  return;
+              }
+
+    var tree_html = "";
+    $( "._hidden_tree_selects" ).remove( );
+    $.each( input_trees, function( k, v ){
+
+        $( 'input[type=hidden][name="' + v + '[]"]' ).remove();
+        var selectedElms = $('#' + v).jstree("get_selected", true);
+        var i = 0;
+        $.each(selectedElms, function() {
+           tree_html += '<input type="hidden" name="' + v + '[]" value="' + this.id + '" class="_hidden_tree_selects"/>';
+
+        });
+    });
+
+    $( this ).append( tree_html );
+
+
+    var logonadd = $("<input>").attr("type", "hidden").attr("name", "_logon").val( $( "#_state" ).data( "_logon" ) );$( this ).append($(logonadd));
+    var projectadd = $("<input>").attr("type", "hidden").attr("name", "_project").val( $( "#_state" ).data( "_project" ) );$( this ).append($(projectadd));
+    var windowadd = $("<input>").attr("type", "hidden").attr("name", "_window").val( window.name );$( this ).append($(windowadd));
+    var vuuid = uuid.v1();
+
+
+
+
+
+
+    var uuidadd = $("<input>").attr("type", "hidden").attr("name", "_uuid").val( vuuid );$( this ).append($(uuidadd));
+//    ga.altfile.add( "calculate_2" );
+    ga.valuen.addhtml( "calculate_2" );
+
+    subMsging( vuuid, msg_calculate_2, "calculate_2" );
+
+    var formData = new FormData($('form')[0]);
+
+
+    $('#calculate_2_progress').html( "Uploading:<progress></progress>" );
+
+    var job_status = "";
+
+    ga.event( "", "calculate_2", "submit: passed submit checks, submitting" );
+
+    $.ajax( {
+             dataType: "json",
+             cache:false,
+//             timeout:3000,  // for testing
+             type:"POST",
+             url:"ajax/calculate/calculate_2.php",
+             data: formData,
+             xhr: function() {  // Custom XMLHttpRequest
+                 var myXhr = $.ajaxSettings.xhr();
+                 if(myXhr.upload){ // Check if upload property exists
+                     myXhr.upload.addEventListener('progress',
+                         function(e) {
+                         if(e.lengthComputable){
+                           $('#calculate_2_progress progress').attr({value:e.loaded,max:e.total});
+                         } }
+//                     progressHandlingFunction
+                    , false);
+                 }
+                 return myXhr;
+             },
+             contentType: false,
+             processData: false
+            } )
+    .done( function( data, status, xhr ) {
+
+
+
+
+// refresh cache for this project
+           $('#calculate_2_progress').html( "" );
+   
+           var do_refresh = 1;
+
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( vuuid );
+           }
+           
+// loop through data pairs
+           calculate_2_output_msgs.text( "" );
+           job_status = ga.data.update( "calculate_2", data ).job_status;
+
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+               if ( calculate_2_timeout_handler != "unset" )
+               {
+                   clearTimeout( calculate_2_timeout_handler );
+                   calculate_2_timeout_handler = "unset";
+               }
+               unsubMsging( vuuid, "calculate_2" );
+               eval( calculate_2_done_eval );
+           } else {
+               calculate_2_timeout_handler = setTimeout( get_results_calculate_2, 2000, vuuid, 2000, 0 );
+
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+
+
+
+           $( "#calculate_2_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/calculate/calculate_2.php </span>" );
+           $('#calculate_2_progress').html( "" );
+           if ( calculate_2_timeout_handler != "unset" )
+           {
+               clearTimeout( calculate_2_timeout_handler );
+               calculate_2_timeout_handler = "unset";
+           }
+           unsubMsging( vuuid, "calculate_2" );
+           eval( calculate_2_done_eval );
+          } );
+          } else {
+
+          }
+       }
+   });
+}); 
+
+$( "#calculate_2_reset" ).click( function() {
+    
+    
+    ga.event( "", "calculate_2", "reset clicked" );
+    //    ga.value.resetDefaultValues( "calculate_2" );
+    ga.valuen.restore.dflt(  "calculate_2" );
+    ga.value.resetDefaultValues( "calculate_2_output", true );
+    
+    eval( input_repeats );
+    return false;
+});
+setHoverHelp();
+
+
+eval( input_repeats );
+ga.pull.doPull();
+</script>
+</form>
+<div id="calculate_2_results"></div>
+<script>
+ga.tmp.html = "<hr>";
+
+$("#calculate_2").append( ga.tmp.html );
+</script>
+<form id="calculate_2_output">
+<div id="calculate_2_output_msgs" class="warning" type="msgs"></div>
+<script>
+ga.value.setLastValueOutput( "calculate_2_output" );
+ga.value.extra_resets.clear();
+</script>
+
+<table>
+<tr>
+<td colspan="4" style="vertical-align:top"><label hidden id="calculate_2_output_textarea_label" for="calculate_2_output_textarea" class="header3 ">Report:</label>
+<textarea readonly hidden id="calculate_2_output_textarea" rows="10" cols="60" class="help_link"></textarea>
+<span class="help">general textarea help</span>
+</td>
+</tr>
+<tr><td><label for="output1">Output value 1 </label></td><td><input type="number" name="output1" id="output1" readonly class="help_link"><span class="help">This field is a float value that is the result of the submission</span></td></tr>
+<script>
+ga.value.setLastValue( "calculate_2_output", "#output1" );
+</script>
+<tr><td><label for="outputref" class="help_link">input json reference </label>
+<span class="help">This field is a file link that holds the input json reference sent to the executable</span></td>
+<td><div id="outputref" type="filelink" readonly class="help_link"><span id="outputref_filelink"></span></div>
+<span class="help">This field is a file link that holds the input json reference sent to the executable</span></td></tr>
+<script>
+ga.value.setLastValue( "calculate_2_output", "#outputref" );
+ga.value.extra_resets( "outputref" );
+</script>
+<tr><td><label for="outputres" class="help_link">results json reference </label>
+<span class="help">This field is a file link that holds the output json retrieved from the executable</span></td>
+<td><div id="outputres" type="filelink" readonly class="help_link"><span id="outputres_filelink"></span></div>
+<span class="help">This field is a file link that holds the output json retrieved from the executable</span></td></tr>
+<script>
+ga.value.setLastValue( "calculate_2_output", "#outputres" );
+ga.value.extra_resets( "outputres" );
+</script>
+<tr><td><label for="output2a">Radio output 2a </label></td><td><input type="radio" name="output2" id="output2a" value="output2a" disabled class="help_link"><span class="help">output radio 2a</span></td></tr>
+<script>
+ga.value.setLastValue( "calculate_2_output", "#output2a" );
+</script>
+<tr><td><label for="output2b">Radio output 2b </label></td><td><input type="radio" name="output2" id="output2b" value="output2b" disabled class="help_link"><span class="help">output radio 2b</span></td></tr>
+<script>
+ga.value.setLastValue( "calculate_2_output", "#output2b" );
+</script>
+<tr><td><label for="output2c">Radio output 2c </label></td><td><input type="radio" name="output2" id="output2c" value="output2c" disabled class="help_link"><span class="help">output radio 2c</span></td></tr>
+<script>
+ga.value.setLastValue( "calculate_2_output", "#output2c" );
+</script>
+<tr><td><label for="output3">checkbox out 3 </label></td><td><input type="checkbox" name="output3" id="output3" disabled class="help_link"><span class="help">output checkbox 3</span></td></tr>
+<script>
+ga.value.setLastValue( "calculate_2_output", "#output3" );
+</script>
+<tr><td><label for="output4">checkbox out 4 </label></td><td><input type="checkbox" name="output4" id="output4" disabled class="help_link"><span class="help">output checkbox 4</span></td></tr>
+<script>
+ga.value.setLastValue( "calculate_2_output", "#output4" );
+</script>
+<tr><td><label for="output5">output textarea </label></td><td><textarea name="output5" id="output5" rows="6" cols="60" readonly class="help_link"></textarea>
+<span class="help">output textarea</span></td></tr>
+<script>
+
+ga.value.setLastValue( "calculate_2_output", "#output5" );
+</script>
+</table>
+</form>
+

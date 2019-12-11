@@ -1,0 +1,399 @@
+<div style="height:65vh; overflow:auto">
+<form id="rfile">
+<span id="rfile_input_area"></span>
+<script>
+
+input_eval = "";
+input_html = "<table>";
+input_repeats = "";
+input_trees = [];
+skipped_row = 0;
+rfile_done_eval = "";
+_jmol_info = {};
+// jmol = "jmol";
+ga.pull.clearPull();
+$('#rfile').on("keyup keypress", function(e) { var code = e.keyCode || e.which;  if (code  == 13) { e.preventDefault(); return false; }});
+this_html = '<tr><td colspan="4"><label id="rfiletext_label" class="header3 ">Choose a file</label>' + 
+'</td>' +
+'<td><div id="rfiletext"></div>' +
+'</td></tr><tr><td><hr></td></tr>';
+this_eval = '';
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label id="serverdate_label" class="help_link">Server date</label>' + 
+'<span class="help">This is the date and time from the file system on the server at the time you opened this window</span></td>' +
+'<td><div id="serverdate" class="help_link"></div>' +
+'<span class="help">This is the date and time from the file system on the server at the time you opened this window</span></td></tr>';
+this_eval = '';
+this_eval='ga.pull.toPull("rfile","#serverdate","label","datetime","#__fields:repeat__" );';input_eval+=this_eval;
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label for="selfiles" >Server files </label></td><td><div name="selfiles" id="selfiles"></div></td></tr>';
+this_eval = '$("#selfiles")' + 
+'.on("ready.jstree open_node.jstree",function(e){$("#selfiles .jstree-checkbox").css("display","none");$("#selfiles .jstree-leaf > a").children(".jstree-checkbox").css("display","inline-block");})' +
+
+'.on("changed.jstree",function(e,d){var i=0,j=d.selected.length,r=[],t;for(;i<j;i++){t=d.instance.get_node(d.selected[i]);if(!t.children.length){r.push($.base64.decode(t.id).substr(2));}}$("#selfile").html( j? "<i>Server</i>: " + r : " " );})' +
+
+
+'.jstree({plugins:["singleselect","checkbox","contextmenu"],' +
+'core:{"multiple":false,data:function(e,c){ga.fc(e.id,c)},check_callback:function(){return 0;}},contextmenu:{items:function(e){return{Refresh:{label:"Refresh",separator_after:!0,action:function(){ga.fc.clear(e.parent)}},Remove:{label:"Remove",action:function(e){var c=$.jstree.reference(e.reference),t=c.get_node(e.reference);console.log("remove");ga.fc.delete_warn_delete(c.is_selected(t)?c.get_selected():[t.id])}}}}}}),$("#selfiles").attr("type","div"),ga.fc.trees["#selfiles"]="file";';
+input_trees.push( "selfiles" );
+input_html += this_html;
+input_eval += this_eval;
+this_html = '<tr><td><label id="selfile_label" class="">Selected file</label>' + 
+'</td>' +
+'<td><div id="selfile"></div>' +
+'</td></tr>';
+this_eval = '';
+
+
+
+
+
+input_html += this_html;
+input_eval += this_eval;
+if( skipped_row == 1 ){ input_html += "</tr>"; }
+input_html += '</table>';
+$( '#rfile_input_area' ).html( input_html );
+eval( input_eval );
+</script>
+<p><button id="rfile_submit" class="help_link"><span class="buttontext">Submit</span></button>
+<span class="help">this is help for the submit button</span>
+<button id="rfile_reset" class="help_link"><span class="buttontext">Reset to default values</span></button>
+<span class="help">this is help for the reset to default values button</span>
+
+</p>
+<span id="rfile_progress"></span>
+<script>
+$( "#rfile_reset" ).remove();
+$( "#rfile_submit .buttontext" ).html( "OK" );
+
+
+var rfile_output_msgs = $("#rfile_output_msgs");
+rfile_output_msgs.text( "" );
+
+var rfile_timeout_handler = "unset";
+
+function get_results_rfile( id, last_timeout, getlastmsg, getinput )
+{
+
+//             url:"ajax/get_results.php?_window=" +  window.name + "&_logon=" +$( "#_state" ).data( "_logon" ) + '&_uuid=' + id,
+    var job_status = "";
+    $.getJSON( 
+             "ajax/get_results.php",
+             {
+                tagmode: "any",
+                format: "json",
+                _window : window.name,
+                _logon : $( "#_state" ).data( "_logon" ),
+                _uuid : id,
+                _getlastmsg : getlastmsg,
+                _getinput : getinput ? true : false
+             } )
+    .done( function( data, status, xhr ) {
+
+           var do_refresh = 1;
+           do_refresh = 0;
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( id );
+           }
+
+           job_status = ga.data.update( "rfile", data ).job_status;
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+              if ( rfile_timeout_handler != "unset" )
+              {
+                  clearTimeout( rfile_timeout_handler );
+                  rfile_timeout_handler = "unset";
+              }
+              unsubMsging( id, "rfile" );
+              eval( rfile_done_eval );
+           } else {
+               if ( !last_timeout || last_timeout < 2000 )
+               { 
+                  last_timeout = 2000;
+               } else {
+                  if ( last_timeout < 16000 )
+                  {
+                      last_timeout *= 2;
+                  } else {
+                      last_timeout = 16000;
+                  }
+               }
+
+               rfile_timeout_handler =  setTimeout( get_results_rfile, last_timeout, id, last_timeout, 0 );
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+           $( "#rfile_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/tools/center.php </span>" );
+           $('#rfile_progress').html( "" );
+           if ( rfile_timeout_handler != "unset" )
+           {
+               clearTimeout( rfile_timeout_handler );
+               rfile_timeout_handler = "unset";
+           }
+           unsubMsging( id, "rfile" );
+           eval( rfile_done_eval );
+          } );
+    return false;
+};
+
+function msg_rfile ( id, data )
+{
+   ga.data.update( "rfile", data, get_results_rfile, id );
+};
+
+$( "#rfile_submit" ).click( function( e ) {
+   e.preventDefault();
+   e.returnValue = false;
+
+   var $ok = 0;
+      $ok = 1;
+   
+
+   ga.event( "", "rfile", "submit clicked" );
+
+   
+
+   ga.altfile.bdata[ "rfile" ].cb("#selfiles"); ga.altfile.button.cb(); return false;
+
+
+
+   if ( !ga.valid.checksubmit( "rfile" ) ) {
+       return false;
+   }
+
+   var $form = $(this);
+
+   $.ajax({
+       type: 'get'
+       ,url: "ajax/sys_config/sys_joblocked.php?_window=" +  window.name + "&_logon=" + $( "#_state" ).data( "_logon" )
+
+       ,context: $form
+       ,success: function( data ) { // your success handler
+
+          if ( !$ok )
+          {
+          switch ( data )
+          {
+             case "1" :
+             {
+                 messagebox( { icon:"warning.png", text:"This project directory is currently locked by another project.\nYou can wait until it completes, change the project in user configuration or clear the lock in the job manager." } );
+                 return;
+             } break;
+             case "2" :
+             {
+                 messagebox( { icon:"warning.png", text:"You must be logged in to submit this module." } );
+                 return;
+             } break;
+             default :
+             {
+
+                 $ok = 1;
+             }
+          }
+          }
+       }
+       ,error: function() { // your error handler
+          messagebox( { icon:"toast.png", text:"Checking the project lock failed. This is possibly a server or network issue" } );
+       }
+       ,complete: function() { 
+          this.off('submit');
+          if ( $ok )
+          {
+
+
+              $( "#rfile_results" ).text( "" );
+
+              ga.value.saveLastValues( "rfile" );
+              ga.value.resetDefaultValues( "rfile_output", true );
+
+              var found_errors = 0;
+              $("#rfile").find("input").each(function(i){
+                 if ( $(this).attr( 'required' ) && $(this).val().length == 0 )
+                 {
+                    var tag =  "#rfile " + "#" + $(this).attr('id') + "_msg";
+
+                    $( tag ).html( "missing required field" );
+                    found_errors = 1;
+                 }
+              });
+              if ( found_errors ) {
+                  return;
+              }
+
+    var tree_html = "";
+    $( "._hidden_tree_selects" ).remove( );
+    $.each( input_trees, function( k, v ){
+
+        $( 'input[type=hidden][name="' + v + '[]"]' ).remove();
+        var selectedElms = $('#' + v).jstree("get_selected", true);
+        var i = 0;
+        $.each(selectedElms, function() {
+           tree_html += '<input type="hidden" name="' + v + '[]" value="' + this.id + '" class="_hidden_tree_selects"/>';
+
+        });
+    });
+
+    $( this ).append( tree_html );
+
+
+    var logonadd = $("<input>").attr("type", "hidden").attr("name", "_logon").val( $( "#_state" ).data( "_logon" ) );$( this ).append($(logonadd));
+    var projectadd = $("<input>").attr("type", "hidden").attr("name", "_project").val( $( "#_state" ).data( "_project" ) );$( this ).append($(projectadd));
+    var windowadd = $("<input>").attr("type", "hidden").attr("name", "_window").val( window.name );$( this ).append($(windowadd));
+    var vuuid = uuid.v1();
+
+
+
+
+
+
+    var uuidadd = $("<input>").attr("type", "hidden").attr("name", "_uuid").val( vuuid );$( this ).append($(uuidadd));
+//    ga.altfile.add( "rfile" );
+    ga.valuen.addhtml( "rfile" );
+
+    subMsging( vuuid, msg_rfile, "rfile" );
+
+    var formData = new FormData($('form')[0]);
+
+
+    $('#rfile_progress').html( "Uploading:<progress></progress>" );
+
+    var job_status = "";
+
+    ga.event( "", "rfile", "submit: passed submit checks, submitting" );
+
+    $.ajax( {
+             dataType: "json",
+             cache:false,
+//             timeout:3000,  // for testing
+             type:"POST",
+             url:"ajax/sys_config/rfile.php",
+             data: formData,
+             xhr: function() {  // Custom XMLHttpRequest
+                 var myXhr = $.ajaxSettings.xhr();
+                 if(myXhr.upload){ // Check if upload property exists
+                     myXhr.upload.addEventListener('progress',
+                         function(e) {
+                         if(e.lengthComputable){
+                           $('#rfile_progress progress').attr({value:e.loaded,max:e.total});
+                         } }
+//                     progressHandlingFunction
+                    , false);
+                 }
+                 return myXhr;
+             },
+             contentType: false,
+             processData: false
+            } )
+    .done( function( data, status, xhr ) {
+
+
+
+
+// refresh cache for this project
+           $('#rfile_progress').html( "" );
+   
+           var do_refresh = 1;
+           do_refresh = 0;
+           if ( do_refresh ) {
+              ga.fc.clear( $.base64.encode( "./" + $( "#_state" ).data( "_project" ) ) );
+              ga.jc.clear_leaf( vuuid );
+           }
+           
+// loop through data pairs
+           rfile_output_msgs.text( "" );
+           job_status = ga.data.update( "rfile", data ).job_status;
+
+           if ( job_status == "complete" ||
+                job_status == "cancelled" ||
+                job_status == "failed" )
+           {
+               if ( rfile_timeout_handler != "unset" )
+               {
+                   clearTimeout( rfile_timeout_handler );
+                   rfile_timeout_handler = "unset";
+               }
+               unsubMsging( vuuid, "rfile" );
+               eval( rfile_done_eval );
+           } else {
+               rfile_timeout_handler = setTimeout( get_results_rfile, 2000, vuuid, 2000, 0 );
+
+           }
+          } )
+    .fail( function( xhr, status, errorThrown ) {
+
+
+
+
+           $( "#rfile_results" ).html( "<span class=\"warning\"> Failed: " + status + " : '" + xhr.status + ":" + errorThrown + "' on URL ajax/sys_config/rfile.php </span>" );
+           $('#rfile_progress').html( "" );
+           if ( rfile_timeout_handler != "unset" )
+           {
+               clearTimeout( rfile_timeout_handler );
+               rfile_timeout_handler = "unset";
+           }
+           unsubMsging( vuuid, "rfile" );
+           eval( rfile_done_eval );
+          } );
+          } else {
+
+          }
+       }
+   });
+}); 
+
+$( "#rfile_reset" ).click( function() {
+    
+    
+    ga.event( "", "rfile", "reset clicked" );
+    //    ga.value.resetDefaultValues( "rfile" );
+    ga.valuen.restore.dflt(  "rfile" );
+    ga.value.resetDefaultValues( "rfile_output", true );
+    
+    eval( input_repeats );
+    return false;
+});
+setHoverHelp();
+
+
+eval( input_repeats );
+ga.pull.doPull();
+</script>
+</form>
+<div id="rfile_results"></div>
+<script>
+ga.tmp.html = "<hr>";
+ga.tmp.html = "";
+$("#rfile").append( ga.tmp.html );
+</script>
+<form id="rfile_output">
+<div id="rfile_output_msgs" class="warning" type="msgs"></div>
+<script>
+ga.value.setLastValueOutput( "rfile_output" );
+ga.value.extra_resets.clear();
+</script>
+
+<table>
+<tr>
+<td colspan="4" style="vertical-align:top"><label hidden id="rfile_output_textarea_label" for="rfile_output_textarea" class="header3 ">Report:</label>
+<textarea readonly hidden id="rfile_output_textarea" rows="10" cols="60" class="help_link"></textarea>
+<span class="help">general textarea help</span>
+</td>
+</tr>
+</table>
+</form>
+</div>

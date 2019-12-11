@@ -1,0 +1,32 @@
+<style>
+#panel_analyze {
+    position: relative;
+    display: block;  
+}
+</style>
+<p>
+<center>
+
+    <button id="analyze_synctest" class="help_link">Sync Test</button>
+<script>
+    $( "#analyze_synctest" ).click(function() {
+        var d=$( "#tab_docs > a" );
+        if ( d.length ) { d.attr( "href", "__docsbaseurl__/analyze/synctest/synctest.html" ); };
+    
+        if ( ga.valuen.lastload && $( "#" + ga.valuen.lastload ).is( ":visible" ) ) { ga.valuen.save( ga.valuen.lastload ); }
+
+        if ( ga.valuen.lastload != "synctest" || !$( "#" + ga.valuen.lastload ).is( ":visible" ) ) {
+            $( "#panel_analyze" ).load( "ajax/analyze/synctest.html", function() { ga.valuen.save( "synctest", true ); ga.valuen.restore( "synctest" ); ga.valuen.lastload = "synctest"; });
+        }
+    });
+</script>
+</center>
+</p>
+
+<div id="panel_analyze">
+</div>
+
+
+<script>
+    $( "#panel_analyze" ).text("");
+</script>

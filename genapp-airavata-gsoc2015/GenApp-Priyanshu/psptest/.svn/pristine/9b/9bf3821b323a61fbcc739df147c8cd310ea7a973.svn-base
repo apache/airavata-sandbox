@@ -1,0 +1,136 @@
+# this is a module file, any module specific info belongs here
+{
+    "moduleid" : "interact_1",
+    "label"    : "Interact_1",
+    "help"     : "help for Interact_1",
+    "fields"   : [
+                  {
+                   "role"       : "input",
+                   "id"       : "input1",
+                   "label"    : "Input value 1",
+                   "type"     : "float",
+                   "default"  : 0.0,
+                   "min"      : 0.0,
+                   "max"      : 1e50,
+                   "required" : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "input2",
+                   "label"   : "Input value 2",
+                   "type"    : "integer",
+                   "default" : 2,
+                   "min"     : 0,
+                   "max"     : 10,
+                   "required" : "false",
+                   "repeater" : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "input3",
+                   "label"   : "Input value 3",
+                   "type"    : "checkbox",
+                   "checked" : "true",
+                   "repeat"  : "input2",
+                   "norow"    : "true"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input8",
+                   "name"    : "input8",
+                   "label"   : "listbox",
+                   "type"    : "listbox",
+                   "values"  : "choice 1~c1~choice 2~c2~choice 3~c3",
+                   "default" : "c2",
+                   "repeat"  : "input2",
+                   "norow"    : "true"
+                   },
+                  {
+                   "role"      : "input",
+                   "id"      : "input4",
+                   "label"   : "Input value 4",
+                   "type"    : "integer",
+                   "default" : 1,
+                   "min"     : 1,
+                   "max"     : 10,
+                   "required" : "false",
+                   "repeat"  : "input2",
+                   "norow"    : "true"
+                   },
+                  {
+                   "role"     : "input",
+                   "id"       : "input5",
+                   "label"    : "Input file",
+                   "type"     : "file",
+                   "repeat"  : "input2",
+                   "norow"    : "true"
+                   },
+                  {
+                   "role"     : "input",
+                   "id"       : "input6",
+                   "label"    : "Input files",
+                   "type"     : "file",
+                   "multiple" : "true",
+                   "array"    : "true",
+                   "repeat"  : "input2"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input7a",
+                   "name"    : "input7",
+                   "label"   : "Radiobutton a",
+                   "type"    : "radio",
+                   "repeat"  : "input2",
+                   "norow"    : "true"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input7b",
+                   "name"    : "input7",
+                   "label"   : "Radiobutton b",
+                   "type"    : "radio",
+                   "repeat"  : "input2",
+                   "norow"    : "true"
+                   },
+                  {
+                   "role"    : "input",
+                   "id"      : "input7c",
+                   "name"    : "input7",
+                   "label"   : "Radiobutton c",
+                   "type"    : "radio",
+                   "checked" : "true",
+                   "repeat"  : "input2"
+#                   },
+#                  {
+#                   "role"    : "input",
+#                   "id"      : "input9",
+#                   "name"    : "input9",
+#                   "label"   : "textarea",
+#                   "type"    : "textarea",
+#                   "default" : "this is a text areamultiline",
+#                   "rows"    : 2,
+#                   "cols"    : 40,
+#                   "repeat"  : "input2"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "output1",
+                   "label" : "Output value 1",
+                   "type"  : "float"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "outputref",
+                   "label" : "input json reference",
+                   "type"  : "file"
+                   },
+                   {
+                   "role"    : "output",
+                   "id"    : "outputres",
+                   "label" : "results json reference",
+                   "type"  : "file"
+                   }
+                  ],
+# the executable will take inputs in order and produce output
+    "executable" : "interact_1"
+}

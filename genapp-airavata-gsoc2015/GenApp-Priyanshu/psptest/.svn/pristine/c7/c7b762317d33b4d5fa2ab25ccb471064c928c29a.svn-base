@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+
+use JSON;
+use Data::Dumper;
+
+if ( !@ARGV )
+{
+    print "\{\"error\":\"center called with no arguments\"\}\n";
+    exit;
+}
+
+$json = shift;
+$ref = decode_json( $json );
+$res = {};
+$$res{ "hi" } = "align executable";
+# print encode_json( $ref ) . "\n";
+
+$$res{ "output1" } = $$ref{ "input1" } * $$ref{ "input2" };
+$$res{ "computation" } = "input1 * input2";
+if ( $$ref{ "input3" } )
+{
+    $$res{ "output1" } = sqrt( abs( $$res{ "output1" } ) );
+    $$res{ "computation" } = "sqrt( abs( input1 * input2 ) )";
+}
+open OUT, ">/src/sassie2/log3";
+print OUT Dumper($ref);
+close OUT;
+print encode_json( $res ) . "\n";
+

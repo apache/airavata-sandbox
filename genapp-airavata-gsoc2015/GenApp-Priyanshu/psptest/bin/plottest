@@ -1,0 +1,125 @@
+#!/usr/bin/perl
+
+use JSON;
+use Data::Dumper;
+
+if ( !@ARGV )
+{
+    print "\{\"error\":\"plottest called with no arguments\"\}\n";
+    exit;
+}
+
+$json = shift;
+$ref = decode_json( $json );
+$res = {};
+# $$res{ "hi" } = "plottest executable";
+
+$p = $$ref{ "_base_directory" };
+
+$pos = 0;
+
+$startx = $$ref{ "startx" };
+$endx = $$ref{ "endx" };
+$deltax = $$ref{ "deltax" };
+
+sub mk_series {
+    my $options = $_[0];
+
+    my $out = "{$options,\"data\":[";
+
+    foreach my $pos ( @plot )
+    {
+        $out .= '[' . sprintf( "%.3f", $$pos[ 0 ] ) . "," . sprintf( "%.3f",$$pos[ 1 ] ) . '],';
+    }
+    $out =~ s/\,$//;
+    $out .= "]}";
+    $out;
+}
+
+undef @plot1;
+undef @plot2;
+
+
+
+if ( $startx <= $endx && $deltax > 0 ||
+     $endx >= $startx && $deltax < 0 )
+{
+
+    if ( $$ref{ "logy" } )
+    {
+        for ( $x = $$ref{ "startx" }; $x <= $$ref{ "endx" }; $x += $$ref{ "deltax" } )
+        {
+            $plot1[ $pos ] = [ $x, exp( $x ) ];
+            $plot2[ $pos ] = [ $x, exp( abs( sin( $x ) ) * $x ) ];
+            $pos++;
+        }
+    } else {
+        if ( $$ref{ "abs" } )
+        {
+            for ( $x = $$ref{ "startx" }; $x <= $$ref{ "endx" }; $x += $$ref{ "deltax" } )
+            {
+                $plot1[ $pos ] = [ $x, abs( sin( $x ) ) ];
+                $plot2[ $pos ] = [ $x, abs( cos( $x ) ) ];
+                $pos++;
+            }
+        } else {
+            for ( $x = $$ref{ "startx" }; $x <= $$ref{ "endx" }; $x += $$ref{ "deltax" } )
+            {
+                $plot1[ $pos ] = [ $x, sin( $x ) ];
+                $plot2[ $pos ] = [ $x, cos( $x ) ];
+                $pos++;
+            }
+        }
+    }
+
+    @plot = @plot1;
+    $pout = "[";
+    $pout .= mk_series('"lines":{"show":"true"},"label":"plot0"' );
+    $pout .= ",";
+    @plot = @plot2;
+    $pout .= mk_series('"points":{"show":"true"},"label":"plot1"' );
+    $pout .= "]";
+    $$res{ "outputref" } = "$p/logref.txt";
+    $$res{ "outputres" } = "$p/logres.txt";
+    
+#    $$res{ "p" } = $p;
+
+    $json = encode_json( $res );
+
+    $optstr = "";
+    if ( $$ref{"axislabels"} ) {
+        $optstr .= ',' if length( $optstr );
+        $optstr .= '"title":"example title","xlabel":"x label","ylabel":"y label"';
+    }
+    if ( $$ref{"logx"} ) {
+        $optstr .= "," if length( $optstr );
+        $optstr .= '"xscale":"log","xtics":20';
+    }
+    if ( $$ref{"logy"} ) {
+        $optstr .= "," if length( $optstr );
+        $optstr .= '"yscale":"log"';
+    }
+    if ( length( $optstr ) ) {
+        $json =~ s/\}$/,"plotout4":{"options":{$optstr},"data":$pout}}/;
+    } else {
+        $json =~ s/\}$/,"plotout4":$pout}/;
+    }        
+} else {
+    $$res{ "errors" } .= "Plot range error";
+    $json = encode_json( $res );
+}
+
+if ( $$ref{"logx"} && $startx <= 0 ) {
+    $$res{ "errors" } .= "Plot range error for log x";
+}
+
+open OUT, ">$p/logref.txt";
+print OUT Dumper($ref);
+close OUT;
+open OUT, ">$p/logres.txt";
+print OUT Dumper($res2);
+print OUT "--- as json output string ---\n";
+print OUT $json;
+close OUT;
+
+print "$json\n";
