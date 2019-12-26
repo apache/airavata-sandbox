@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="/home/abhishek/Desktop/airavata/modules/distribution/server/target/apache-airavata-server-0.15-SNAPSHOT/lib/airavata-api-stubs-0.15-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/abhishek/Desktop/airavata/modules/distribution/server/target/apache-airavata-server-0.15-SNAPSHOT/lib/airavata-data-models-0.15-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/abhishek/Desktop/airavata/modules/distribution/server/target/apache-airavata-server-0.15-SNAPSHOT/lib/airavata-model-utils-0.15-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/abhishek/Desktop/airavata/modules/distribution/server/target/apache-airavata-server-0.15-SNAPSHOT/lib/libthrift-0.9.1.jar"/>
+	<classpathentry kind="lib" path="/home/abhishek/Downloads/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/home/abhishek/Desktop/airavata/modules/distribution/server/target/apache-airavata-server-0.15-SNAPSHOT/lib/slf4j-api-1.7.6.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
