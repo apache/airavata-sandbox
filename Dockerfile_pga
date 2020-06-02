@@ -1,0 +1,53 @@
+#---------- set the base image to Ubuntu
+FROM ubuntu
+
+#---------- file Author / Maintainer
+MAINTAINER GSoC Pankaj Saha
+
+#---------- update the repository sources list
+RUN apt-get update
+
+#---------- setting the work directory as users home
+WORKDIR ~/
+
+#---------- installing prerequisites for PGA gateway
+RUN apt-get install apache2 -y
+RUN sudo apt-get install php5 -y
+
+#---------- installing necessary php extensions
+RUN apt-get install unzip -y
+RUN apt-get install curl -y
+RUN apt-get install openssl -y
+RUN apt-get install php5-mcrypt -y
+
+#--------- installing  composer
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+
+#--------- activate mod_rewrite
+RUN a2enmod rewrite
+#CMD service apache2 restart
+
+#--------- modifying the 000default file
+#ADD /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/
+WORKDIR /etc/apache2/sites-available/
+RUN sed -i 's/<\/VirtualHost>/<Directory "\/var\/www"> \n AllowOverride All \n <\/Directory> \n <\/VirtualHost>/g'  000-default.conf
+WORKDIR ~/
+
+#--------- installing git
+RUN apt-get install git -y
+
+#--------- downloading airavata PGA
+
+RUN git clone https://github.com/apache/airavata-php-gateway.git /var/www/airavata-php-gateway
+WORKDIR /var/www/airavata-php-gateway
+RUN git checkout airavata-php-gateway-0.15-release
+WORKDIR ~/
+#--------- making storage folder writable
+RUN chmod -R 777 /var/www/airavata-php-gateway/app/storage
+
+#--------- restarting the apache service
+CMD service apache2 restart
+
+#--------- exposing apache to default port
+EXPOSE 80
