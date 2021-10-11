@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.apache.airavata</groupId>
+    <artifactId>jupyter-container-magic</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>magic-api</module>
+        <module>magic-stubs</module>
+    </modules>
+
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <org.slf4j.version>1.7.25</org.slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <thrift.version>0.12.0</thrift.version>
+        <openjpa.version>2.4.3</openjpa.version>
+        <mysql.connector.version>5.1.34</mysql.connector.version>
+        <maven.assembly.plugin>3.3.0</maven.assembly.plugin>
+        <junit.version>4.8.1</junit.version>
+        <jmockit.version>1.8</jmockit.version>
+        <java.version>11</java.version>
+        <javax.annotation.version>1.3.2</javax.annotation.version>
+
+        <maven.compiler.plugin>3.8.1</maven.compiler.plugin>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+
+        <protobuf.maven.plugin>0.5.1</protobuf.maven.plugin>
+        <os.maven.plugin>1.5.0.Final</os.maven.plugin>
+        <javax.annotation>1.3.2</javax.annotation>
+        <consul.client>1.3.8</consul.client>
+        <h2>1.4.191</h2>
+        <protobuf.java>3.10.0</protobuf.java>
+        <grpc.spring.boot>3.5.1</grpc.spring.boot>
+        <spring.boot.data.jpa>2.2.1.RELEASE</spring.boot.data.jpa>
+        <log4j.over.slf4j>1.7.26</log4j.over.slf4j>
+        <dozer>5.5.1</dozer>
+        <jsch>0.1.55</jsch>
+        <sshj>0.27.0</sshj>
+        <mariadb.jdbc>2.5.1</mariadb.jdbc>
+        <custos.clients.version>1.1-SNAPSHOT</custos.clients.version>
+        <io.grpc.version>1.25.0</io.grpc.version>
+        <google.common.protos>1.17.0</google.common.protos>
+        <io.micrometer.version>1.3.1</io.micrometer.version>
+        <brave.version>5.9.1</brave.version>
+        <grpc.services>1.25.0</grpc.services>
+        <docker.image.prefix>apachecustos</docker.image.prefix>
+        <docker.image.repo>custos</docker.image.repo>
+        <docker.plugin.version>1.4.13</docker.plugin.version>
+
+        <helm.maven.plugin.version>2.8.0</helm.maven.plugin.version>
+        <maven.assembly.plugin.version>3.2.0</maven.assembly.plugin.version>
+
+        <mysql.connector.java>8.0.18</mysql.connector.java>
+        <javax.persistance>1.0.2</javax.persistance>
+
+        <keycloak.admin.version>7.0.0</keycloak.admin.version>
+
+        <reasteasy.client.version>3.0.14.Final</reasteasy.client.version>
+
+        <com.google.protobuf.util>3.11.3</com.google.protobuf.util>
+
+        <springfox.swagger.version>2.9.2</springfox.swagger.version>
+        <org.wso2.charon>3.3.16</org.wso2.charon>
+        <jaxb.version>2.1</jaxb.version>
+
+        <kube.java.client.version>5.0.0</kube.java.client.version>
+
+        <testng.version>6.8</testng.version>
+        <org.json.version>20190722</org.json.version>
+
+        <apache.rat.plugin.version>0.13</apache.rat.plugin.version>
+
+        <maven.surefile.plugin.version>3.0.0-M4</maven.surefile.plugin.version>
+
+        <log.back.version>1.2.5</log.back.version>
+
+        <com.jcraft.version>0.1.55</com.jcraft.version>
+
+        <io.commons.version>2.7</io.commons.version>
+
+        <com.codahale.version>0.7.0</com.codahale.version>
+
+        <neo4j.ogm.version>3.2.25</neo4j.ogm.version>
+        <neo4j.version>4.3.2</neo4j.version>
+        <io.grpc.version>1.25.0</io.grpc.version>
+        <spring-security.version>5.3.4.RELEASE</spring-security.version>
+        <kafka-clients.version>1.0.0</kafka-clients.version>
+        <snakeyaml.version>1.15</snakeyaml.version>
+
+        <yaml.version>1.15</yaml.version>
+        <spring.boot.version>2.4.5</spring.boot.version>
+        <commons.beanutils.version>1.9.4</commons.beanutils.version>
+        <docker.java.version>3.2.11</docker.java.version>
+        <jackson.version>2.11.4</jackson.version>
+        <commons.io.version>2.6</commons.io.version>
+    </properties>
+</project>
