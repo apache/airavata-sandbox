@@ -1,0 +1,98 @@
+{
+    "@context": {
+        "@vocab": "https://www.w3.org/2001/XMLSchema#",
+        "dc": "http://purl.org/dc/terms/",
+        "obo": "http://purl.obolibrary.org/obo/",
+        "ss": "https://semanticscience.org/ontology/sio.owl#",
+        "bao": "http://www.bioassayontology.org/bao#",
+        "sdo": "https://stuchalk.github.io/scidata/ontology/scidata.owl#",
+        "activity_comment": {
+            "@id": "obo:NCIT_C94169",
+            "@type": "string"
+        },
+        "activity_id": {
+            "@id": "obo:NCIT_C93704",
+            "@type": "integer"
+        },
+        "bao_endpoint": {
+            "@id": "bao:BAO_0002162",
+            "@type": "string"
+        },
+        "bei": {
+            "@id": "obo:NCIT_C20139",
+            "@type": "string"
+        },
+        "comments": {
+            "@id": "obo:OMIT_0016926",
+            "@type": "string"
+        },
+        "le": {
+            "@id": "obo:NCIT_C20139",
+            "@type": "string"
+        },
+        "lle": {
+            "@id": "obo:NCIT_C20139",
+            "@type": "string"
+        },
+        "pchembl_value": {
+            "@id": "bao:BAO_0000102",
+            "@type": "string"
+        },
+        "qudt_units": {
+            "@id": "sdo:unitOfMeasurement",
+            "@type": "@id"
+        },
+        "relation": {
+            "@id": "dc:relation",
+            "@type": "string"
+        },
+        "sei": {
+            "@id": "obo:NCIT_C20139",
+            "@type": "string"
+        },
+        "standard_flag": {
+            "@id": "obo:OBI_0302840",
+            "@type": "string"
+        },
+        "standard_relation": {
+            "@id": "dc:relation",
+            "@type": "string"
+        },
+        "standard_type": {
+            "@id": "obo:NCIT_C25284",
+            "@type": "string"
+        },
+        "standard_units": {
+            "@id": "sdo:unitOfMeasurement",
+            "@type": "string"
+        },
+        "standard_upper_value": {
+            "@id": "ss:SIO_001114",
+            "@type": "string"
+        },
+        "standard_value": {
+            "@id": "ss:SIO_000618",
+            "@type": "string"
+        },
+        "type": {
+            "@id": "obo:NCIT_C25284",
+            "@type": "string"
+        },
+        "unit": {
+            "@id": "sdo:unitOfMeasurement",
+            "@type": "string"
+        },
+        "units": {
+            "@id": "sdo:unitOfMeasurement",
+            "@type": "string"
+        },
+        "uo_units": {
+            "@id": "sdo:unitOfMeasurement",
+            "@type": "@id"
+        },
+        "value": {
+            "@id": "ss:SIO_000070",
+            "@type": "string"
+        }
+    }
+}
