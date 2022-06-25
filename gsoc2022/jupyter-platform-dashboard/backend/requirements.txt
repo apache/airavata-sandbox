@@ -1,1 +1,4 @@
-
+Flask
+Flask-SQLAlchemy
+SQLAlchemy
+flask-cors
