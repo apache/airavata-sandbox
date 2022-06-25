@@ -25,7 +25,7 @@ Step3: Run the backend application using flask run.
 Open [http://localhost:5000](http://localhost:5000) to view it in the browser.
 
 Step4:
-## Available Scripts
+Available Scripts
 
 Return to the base directory and run: `npm install` before running the scripts below.
 
