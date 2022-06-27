@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package com.smiles;
+
+message CalcInfo{
+  //QcSchema-Properties_Info
+  int64 nbasis = 1; //	The number of basis functions for the computation. 	number
+  int64 nmo = 2; //	The number of molecular orbitals for the computation. 	number
+  int64 nalpha = 3;//	The number of alpha electrons in the computation. 	number
+  int64 nbeta = 4;//	The number of beta electrons in the computation. 	number
+  int64 natom = 5; //	The number of atoms in the computation. 	number
+  double energy = 6;// 	The energy of the requested method, identical to return_value for energy computations. 	number
+  string SMILES =7;
+}
+
+message CalcInfoRequest {
+  string  calcInfoQuery=1;
+  CalcInfo calcInfo=2;
+}
+
+service CalcInfoService {
+  rpc GetCalcInfo(CalcInfoRequest) returns (CalcInfo) {}
+  rpc CreateCalcInfo(CalcInfoRequest) returns (CalcInfo){}
+  rpc UpdateCalcInfo(CalcInfoRequest) returns (CalcInfo){}
+  rpc DeleteCalcInfo(CalcInfoRequest) returns (CalcInfo){}
+}
+
+
+
+//python -m grpc_tools.protoc -I ./proto --python_out=. --grpc_python_out=. ./proto/calc_info.proto
+
+
+
+
+
+
+
+
+
+

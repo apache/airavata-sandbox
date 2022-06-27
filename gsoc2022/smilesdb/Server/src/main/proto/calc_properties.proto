@@ -1,0 +1,117 @@
+
+syntax = "proto3";
+
+package com.smiles;
+option java_multiple_files = true;
+
+message CalcProps{
+  //CCLib-Properties
+  string InChI = 1;
+  string InChIKey = 2;
+  string SMILES = 3;
+  string CanonicalSMILES = 4;
+  string PDB = 5;
+  string SDF = 6;
+  string ParsedBy = 7;
+  string Formula = 8;
+  int64 Charge = 9;
+  int64 Multiplicity = 10;
+  string Keywords = 11;
+  string CalcType = 12;
+  string Methods = 13;
+  string Basis = 14;
+  int64 NumBasis = 15;
+
+  int64 NumFC = 16;
+  int64 NumVirt = 17;
+  string JobStatus = 18;
+  string FinTime = 19;
+  string InitGeom = 20;
+  string FinalGeom = 21;
+  string PG = 22;
+  string ElecSym = 23;
+  int64 NImag = 24;
+  double Energy = 25;
+  double EnergyKcal = 26;
+  double ZPE = 27;
+  double ZPEKcal = 28;
+  double HF = 29;
+  double HFKcal = 30;
+  double Thermal = 31;
+  double ThermalKcal = 32;
+  double Enthalpy = 33;
+  double EnthalpyKcal = 34;
+  double Entropy = 35;
+  double EntropyKcal = 36;
+  double Gibbs = 37;
+  double GibbsKcal = 38;
+  string OrbSym = 39;
+  double Dipole = 40;
+  double Freq = 41;
+  double AtomWeigh = 42;
+
+  //  TODO: Fix the data types
+  //  Conditions;
+  //  ReacGeom;
+  //  ProdGeom;
+  //  MulCharge;
+  //  NatCharge;
+
+
+  double S2 = 43;
+  string CodeVersion = 44;
+  string CalcMachine = 45;
+  string CalcBy = 46;
+  string MemCost = 47;
+  string TimeCost = 48;
+  string CPUTime = 49;
+  string Convergenece = 50;
+
+  //  TODO: Fix the data types
+  //  FullPath;
+  //  InputButGeom;
+
+
+  string Otherinfo = 51;
+  string Comments = 52;
+  int64 NAtom = 53;
+
+  //  TODO: Confirm with the data type (the double array)
+  //  double[] Homos = 54;
+  repeated double Homos = 54 [packed = true];
+
+  //  TODO: Confirm with the data type (the double array)
+  //  double[] ScfEnergies;
+  repeated double ScfEnergies = 55 [packed = true];
+
+  //  TODO: Fix the data types
+  //  CoreElectrons;
+
+  //  TODO: Confirm with the data type (the double array)
+  //  double[] MoEnergies;
+  repeated double MoEnergies = 56[packed = true];
+
+  //  TODO: Confirm with the data type (the double array)
+  //  double[] AtomCoords;
+  repeated double AtomCoords = 57[packed = true];
+
+  //  TODO: Fix the data type
+  //  ScfTargets;
+
+  int64 Nmo = 58;
+  int64 NBasis = 59;
+
+  //  TODO: Fix the data type
+  //AtomNos;
+}
+message CalcPropsRequest {
+  string calcPropsQuery=1;
+  CalcProps calcProp = 2;
+}
+
+service CalcPropsService {
+  rpc GetCalcProps(CalcPropsRequest) returns (CalcProps) {}
+  rpc CreateCalcProps(CalcPropsRequest) returns (CalcProps){}
+  rpc UpdateCalcProps(CalcPropsRequest) returns (CalcProps) {}
+  rpc DeleteCalcProps(CalcPropsRequest) returns (CalcProps) {}
+}

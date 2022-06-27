@@ -1,0 +1,119 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ */
+//Complier: protoc --java_out=java/src/main/java proto_files\theater.proto
+
+
+
+
+syntax="proto3";
+package com.smiles;
+option java_multiple_files=true;
+//option java_multiple_files = true;
+//package org.apache.custos.user.profile.service;
+//option go_package = "./pb";
+
+message Molecule {
+  string  cas_nr = 1 ;                        //tinytext 
+  string  smiles = 2 ;                        //text. // Include
+  string  smiles_stereo = 3;                 // text 
+  string  inchi = 4 ;                  //text. // Include
+  //????  molfile_blob   ;                //medium-blob
+  //???  molecule_serialized ;            //mediumblob
+  string  molfile_blob_source = 6;           //tiny-text
+  string  emp_formula = 7;           //tinytext // Include
+  string  emp_formula_sort = 8;           //tinytext
+  string  emp_formula_source = 9;            //tinytext
+  double  mw = 10;           // double unsigned // Include
+  double  mw_monoiso = 11;           // double unsigned
+  double  rdb = 12;           // double unsigned
+  string  mw_source = 13   ;           // tinytext
+  string  validated_by = 14    ;           // text // Include
+  string  journal = 15   ;           // text
+  string  auth_of_intr = 16   ;           // text
+  string  jour_cit = 17   ;            //text // Include
+  string  year_publ = 18;           // text // Include
+  string  doi_link = 19 ;            //text
+  //??????  chemdraw           ;            //mediumblob
+  //???  xyz_coords            ;         //mediumblob
+  string  comp_class = 20 ;         //text // Include
+  string  cuniq = 21  ;         //text
+  string  calc_perf = 22   ;          //  text // Include //important link to comp db
+  string  org_met = 23  ;          //  text // Include
+  int64   mol_chrg = 24  ;         //int(11) // Include
+  string  state_ofmat = 25 ;         //   text // Include
+  string  color_white = 26  ;         //   text // Include
+  string  color_uv = 27;         //   text // Include
+  double  absorb_max = 28  ;         //   double 
+  string  solvent_ae = 29 ;         //   text. // Include
+  double  absorb = 30 ;         //   double
+  double  conc = 31 ;         //   double
+  double  extinc = 32 ;         //   double // Include
+  double  emis_max = 33  ;         //   double// Include
+  double  temp_abs = 34 ;         //   double // Include
+  double  emis_qy = 35 ;         //   double // Include
+  double  temp_ems = 36;         //   double // Include
+  double  lifetime = 37 ;         //   double // Include
+  double  temp_cv = 38 ;         //   double // Include
+  double  reduc_pot = 39 ;         //   double // Include
+  string  hw_or_pk_rp = 40 ;         // tinytext 
+  double  oxid_pot = 41;         //   double // Include
+  string  hw_or_pk_op = 42;         //   tinytext 
+  string  solvent_cv = 43;         //   text // Include
+  string  electrolyte = 44;         //   text // Include
+  string  ref_electrd = 45;         //   text // Include
+  string  inter_thngs = 46 ;         //   text 
+  double  density_20 = 47;         //   double
+  string  density_20_source = 48;         //   tinytext
+  double  default_warn_level = 49;           //double
+
+  double  n_20 = 50 ;          //double
+  string  n_20_source = 51;          // tinytext
+  double  mp_low = 52 ;           // double
+  double  mp_high = 53 ;           // double
+  string  mp_source = 54 ;           // tinytext
+  double  bp_low = 55 ;           // double
+  double  bp_high = 56 ;           // double
+  double  bp_press = 57 ;           // double
+  string  press_unit = 58  ;           // tinytext
+  string  bp_source = 59  ;           // tinytext
+  string  safety_r = 60 ;           // tinytext
+  string  safety_h = 61 ;           // tinytext
+  string  safety_s = 62 ;           // tinytext
+  string  safety_p = 63  ;           // tinytext
+  string  safety_text = 64 ;           // tinytext
+  string  safety_sym = 65 ;           // tinytext
+  string  safety_sym_ghs = 66 ;          //  tinytext
+  string  safety_source = 67;          //  tinytext
+  //???  gif_file              ;         //mediumblob
+  //??? svg_file               ;        //mediumblob
+  string  comment_mol = 68;       //     text
+}
+
+message MoleculeRequest{
+  string moleculeQuery = 1;
+  Molecule molecule=2;
+}
+
+service MoleculeService{
+  rpc GetMolecule(MoleculeRequest) returns (Molecule);
+  rpc CreateMolecule(MoleculeRequest) returns (Molecule);
+  rpc UpdateMolecule(MoleculeRequest) returns (Molecule);
+  rpc DeleteMolecule(MoleculeRequest) returns (Molecule);
+}
