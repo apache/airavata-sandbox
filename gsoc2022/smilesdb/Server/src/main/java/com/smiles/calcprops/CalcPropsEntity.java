@@ -1,11 +1,13 @@
 package com.smiles.calcprops;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+@Document("calcProps")
 public class CalcPropsEntity {
 
     @Id

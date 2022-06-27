@@ -77,7 +77,6 @@ public class CalcInfoImpl extends CalcInfoServiceGrpc.CalcInfoServiceImplBase {
         responseObserver.onCompleted();
     }
 
-
     @Override
     public void deleteCalcInfo(com.smiles.CalcInfoRequest request,
                                io.grpc.stub.StreamObserver<com.smiles.CalcInfo> responseObserver) {
@@ -87,5 +86,4 @@ public class CalcInfoImpl extends CalcInfoServiceGrpc.CalcInfoServiceImplBase {
         responseObserver.onNext(calcInfo);
         responseObserver.onCompleted();
     }
-
 }

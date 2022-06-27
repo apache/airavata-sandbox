@@ -87,11 +87,89 @@ public class MoleculeImpl extends MoleculeServiceGrpc.MoleculeServiceImplBase {
 
     @Override
     public void updateMolecule(MoleculeRequest request, StreamObserver<Molecule> responseObserver) {
-        super.updateMolecule(request, responseObserver);
+//        super.updateMolecule(request, responseObserver);
+        Molecule molecule = request.getMolecule();
+        System.out.println(request.getAllFields());
+        MoleculeEntity c4001 = (MoleculeEntity) repo.findBySmiles(molecule.getSmiles());
+        System.out.println(c4001.getId());
+        c4001.setCas_nr(molecule.getCasNr());
+        c4001.setSmiles(molecule.getSmiles());
+        c4001.setSmiles_stereo(molecule.getSmilesStereo());
+        c4001.setInchi(molecule.getInchi());
+        c4001.setMolfile_blob_source(molecule.getMolfileBlobSource());
+        c4001.setEmp_formula(molecule.getEmpFormula());
+        c4001.setEmp_formula_sort(molecule.getEmpFormulaSort());
+        c4001.setEmp_formula_source(molecule.getEmpFormulaSource());
+        c4001.setMw(molecule.getMw());
+        c4001.setMw_monoiso(molecule.getMwMonoiso());
+        c4001.setRdb(molecule.getRdb());
+        c4001.setMw_source(molecule.getMwSource());
+        c4001.setValidated_by(molecule.getValidatedBy());
+        c4001.setJournal(molecule.getJournal());
+        c4001.setAuth_of_intr(molecule.getAuthOfIntr());
+        c4001.setJour_cit(molecule.getJourCit());
+        c4001.setYear_publ(molecule.getYearPubl());
+        c4001.setDoi_link(molecule.getDoiLink());
+        c4001.setComp_class(molecule.getCompClass());
+        c4001.setCuniq(molecule.getCuniq());
+        c4001.setCalc_perf(molecule.getCalcPerf());
+        c4001.setOrg_met(molecule.getOrgMet());
+        c4001.setMol_chrg(molecule.getMolChrg());
+        c4001.setState_ofmat(molecule.getStateOfmat());
+        c4001.setColor_white(molecule.getColorWhite());
+        c4001.setColor_uv(molecule.getColorUv());
+        c4001.setAbsorb_max(molecule.getAbsorbMax());
+        c4001.setSolvent_ae(molecule.getSolventAe());
+        c4001.setAbsorb(molecule.getAbsorb());
+        c4001.setConc(molecule.getConc());
+        c4001.setExtinc(molecule.getExtinc());
+        c4001.setEmis_max(molecule.getEmisMax());
+        c4001.setTemp_abs(molecule.getTempAbs());
+        c4001.setEmis_qy(molecule.getEmisQy());
+        c4001.setTemp_ems(molecule.getTempEms());
+        c4001.setLifetime(molecule.getLifetime());
+        c4001.setTemp_cv(molecule.getTempCv());
+        c4001.setReduc_pot(molecule.getReducPot());
+        c4001.setHw_or_pk_rp(molecule.getHwOrPkRp());
+        c4001.setOxid_pot(molecule.getOxidPot());
+        c4001.setHw_or_pk_op(molecule.getHwOrPkOp());
+        c4001.setSolvent_cv(molecule.getSolventCv());
+        c4001.setElectrolyte(molecule.getElectrolyte());
+        c4001.setRef_electrd(molecule.getRefElectrd());
+        c4001.setInter_thngs(molecule.getInterThngs());
+        c4001.setDensity_20(molecule.getDensity20());
+        c4001.setDensity_20_source(molecule.getDensity20Source());
+        c4001.setDefault_warn_level(molecule.getDefaultWarnLevel());
+        c4001.setN_20(molecule.getN20());
+        c4001.setN_20_source(molecule.getN20Source());
+        c4001.setMp_low(molecule.getMpLow());
+        c4001.setMp_high(molecule.getMpHigh());
+        c4001.setMp_source(molecule.getMpSource());
+        c4001.setBp_low(molecule.getBpLow());
+        c4001.setBp_high(molecule.getBpHigh());
+        c4001.setBp_press(molecule.getBpPress());
+        c4001.setPress_unit(molecule.getPressUnit());
+        c4001.setBp_source(molecule.getBpSource());
+        c4001.setSafety_r(molecule.getSafetyR());
+        c4001.setSafety_h(molecule.getSafetyH());
+        c4001.setSafety_s(molecule.getSafetyS());
+        c4001.setSafety_p(molecule.getSafetyP());
+        c4001.setSafety_text(molecule.getSafetyText());
+        c4001.setSafety_sym(molecule.getSafetySym());
+        c4001.setSafety_sym_ghs(molecule.getSafetySymGhs());
+        c4001.setComment_mol(molecule.getCommentMol());
+        repo.save(c4001);
+        responseObserver.onNext(molecule);
+        responseObserver.onCompleted();
     }
 
     @Override
     public void deleteMolecule(MoleculeRequest request, StreamObserver<Molecule> responseObserver) {
-        super.deleteMolecule(request, responseObserver);
+//        super.deleteMolecule(request, responseObserver);
+        Molecule molecule = request.getMolecule();
+        MoleculeEntity c4001 = (MoleculeEntity) repo.findBySmiles(molecule.getSmiles());
+        repo.delete(c4001);
+        responseObserver.onNext(molecule);
+        responseObserver.onCompleted();
     }
 }

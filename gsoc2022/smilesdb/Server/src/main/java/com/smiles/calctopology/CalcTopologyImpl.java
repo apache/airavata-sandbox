@@ -16,7 +16,7 @@ public class CalcTopologyImpl extends CalcTopologyServiceGrpc.CalcTopologyServic
 //        super.getCalcTopology(request, responseObserver);
         System.out.println(request.getAllFields());
 
-        CalcTopologyEntity calcTopology = repo.findBySymbols(request.getCalcTopologyQuery());
+        CalcTopologyEntity calcTopology = repo.findBySymbols(request.getcalcTopologyQuery());
         System.out.println(calcTopology.toString());
 
         CalcTopology reply = CalcTopology.newBuilder()
@@ -37,7 +37,7 @@ public class CalcTopologyImpl extends CalcTopologyServiceGrpc.CalcTopologyServic
 //        super.createCalcTopology(request, responseObserver);
         CalcTopology calcTopology = request.getCalcTopology();
         System.out.println(request.getAllFields());
-        
+
     }
 
     @Override
