@@ -15,8 +15,8 @@ public class CalcPropsImpl extends CalcPropsServiceGrpc.CalcPropsServiceImplBase
     public void getCalcProps(CalcPropsRequest request, StreamObserver<CalcProps> responseObserver) {
 //        super.getCalcInfo(request, responseObserver);
 
-        CalcPropsEntity calcProps = repo1.findByPDB(request.getCalcPropsQuery());
-        System.out.println(calcProps);
+        CalcPropsEntity calcProps = repo1.findBySMILES(request.getCalcPropsQuery());
+        System.out.println(calcProps.toString());
 
         CalcProps reply = CalcProps.newBuilder()
                 .setInChI(calcProps.getInChI())
@@ -69,7 +69,9 @@ public class CalcPropsImpl extends CalcPropsServiceGrpc.CalcPropsServiceImplBase
                 calcProps.getOtherinfo(), calcProps.getComments(), calcProps.getNAtom(),
                 calcProps.getHomosList(), calcProps.getScfEnergiesList(), calcProps.getMoEnergiesList(),
                 calcProps.getAtomCoordsList(), calcProps.getNmo(), calcProps.getNBasis());
-
+        repo1.save(c2001);
+        responseObserver.onNext(calcProps);
+        responseObserver.onCompleted();
     }
 
     @Override
@@ -77,7 +79,7 @@ public class CalcPropsImpl extends CalcPropsServiceGrpc.CalcPropsServiceImplBase
 //        super.updateCalcProps(request, responseObserver);
         CalcProps calcProps = request.getCalcProp();
         System.out.println(request.getAllFields());
-        CalcPropsEntity c2001 = (CalcPropsEntity) repo1.findByPDB(calcProps.getPDB());
+        CalcPropsEntity c2001 = (CalcPropsEntity) repo1.findBySMILES(calcProps.getSMILES());
         System.out.println(c2001.getId());
         c2001.setInChI(calcProps.getInChI());
         c2001.setInChIKey(calcProps.getInChIKey());
@@ -134,13 +136,16 @@ public class CalcPropsImpl extends CalcPropsServiceGrpc.CalcPropsServiceImplBase
         c2001.setNAtom(calcProps.getNAtom());
         c2001.setNmo(calcProps.getNmo());
         c2001.setNBasis(calcProps.getNBasis());
+        repo1.save(c2001);
+        responseObserver.onNext(calcProps);
+        responseObserver.onCompleted();
     }
 
     @Override
     public void deleteCalcProps(CalcPropsRequest request, StreamObserver<CalcProps> responseObserver) {
 //        super.deleteCalcProps(request, responseObserver);
     CalcProps calcProps = request.getCalcProp();
-    CalcPropsEntity c2001 = (CalcPropsEntity) repo1.findByPDB(calcProps.getSDF());
+    CalcPropsEntity c2001 = (CalcPropsEntity) repo1.findBySMILES(calcProps.getSMILES());
     repo1.delete(c2001);
     responseObserver.onNext(calcProps);
     responseObserver.onCompleted();
