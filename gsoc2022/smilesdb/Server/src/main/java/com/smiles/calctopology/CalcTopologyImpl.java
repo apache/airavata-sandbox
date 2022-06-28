@@ -7,6 +7,7 @@ import com.smiles.SpringContext;
 import io.grpc.stub.StreamObserver;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class CalcTopologyImpl extends CalcTopologyServiceGrpc.CalcTopologyServiceImplBase {
 
@@ -16,20 +17,23 @@ public class CalcTopologyImpl extends CalcTopologyServiceGrpc.CalcTopologyServic
 //        super.getCalcTopology(request, responseObserver);
         System.out.println(request.getAllFields());
 
-        CalcTopologyEntity calcTopology = repo.findBySymbols(request.getcalcTopologyQuery());
+        ArrayList<String> input = new ArrayList<String>();
+        input.add(request.getCalcTopologyQuery());
+        CalcTopologyEntity calcTopology = repo.findBySymbols(input);
         System.out.println(calcTopology.toString());
 
         CalcTopology reply = CalcTopology.newBuilder()
-                .setSymbols(calcTopology.getSymbols())
-                .setGeometry(calcTopology.getGeometry())
+                .addAllSymbols(calcTopology.getSymbols())
+                .addAllGeometry(calcTopology.getGeometry())
                 .setMolCharge(calcTopology.getMol_charge())
                 .setMolMultiplicity(calcTopology.getMol_multiplicity())
                 .setName(calcTopology.getName())
                 .setComment(calcTopology.getComment())
-                .setMassNumbers(calcTopology.getMass_numbers())
-                .setMasses(calcTopology.getMasses())
-                .setAtomicNumber(calcTopology.getAtomic_number())
-                .setAtomLabels(calcTopology.getAtomic_labels()).build();
+                .addAllMassNumbers(calcTopology.getMass_numbers())
+                .addAllMasses(calcTopology.getMasses())
+                .addAllAtomicNumber(calcTopology.getAtomic_number())
+                .addAllAtomLabels(calcTopology.getAtomic_labels()).build();
+
     }
 
     @Override

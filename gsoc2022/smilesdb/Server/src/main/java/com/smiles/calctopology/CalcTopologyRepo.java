@@ -7,4 +7,5 @@ import java.util.List;
 public interface CalcTopologyRepo extends MongoRepository<CalcTopologyEntity, String> {
 
     public CalcTopologyEntity findBySymbols(List<String> symbols);
+
 }

@@ -14,11 +14,11 @@ message CalcTopology{
   string name = 5; //The name of the molecule.
   string comment = 6; //Any additional comment one would attach to the molecule.
   //  int[] mass_numbers; //(nat, ) mass numbers for atoms, if known isotope, else -1.
-  repeated int64 mass_numbers = 7;
+  repeated int64 mass_numbers = 7 [packed = true];
   //  double[] masses; //(nat, ) atom masses [u]; canonical weights assumed if not given.
-  repeated double masses = 8;
+  repeated double masses = 8 [packed = true];
   //  double[] atomic_numbers; //(nat, ) atomic numbers, nuclear charge for atoms. Ghostedness should be indicated through ‘real’ field, not zeros here.
-  repeated double atomic_number = 9;
+  repeated double atomic_number = 9 [packed = true];
   //  string[] atom_labels; //(nat, ) atom labels with any user tagging information.
   repeated string atom_labels = 10;
   //    atomic_numbers
