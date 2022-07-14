@@ -1,4 +1,11 @@
 <template>
+   <div class="navbar">
+    <ul>
+      <li><a href="../components/SEAGrid.vue">SEAGrid Data Catalog</a></li>
+      <li><a href="../components/SearchRoute.vue">Search</a></li>
+      <li><a href="../components/DirectoryBrowser.vue">Directory Browser</a></li>
+    </ul>
+  </div>
   <div class="container">
     <h1>Welcome to SEAGrid Data Catalog</h1>
     <p>SEAGrid Data Catalog provides a sleek web interface for you to browse and
@@ -21,6 +28,7 @@ export default {
 </script>
 
 <style scoped>
+
 
   .container{
     width: 70em;
@@ -45,5 +53,34 @@ export default {
   .sys-architect{
     height: 500px;
     width: 700px;
+  }
+    .navbar{
+    height: 3em;
+    width:100%;
+    background-color: #2C2C2C;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  li{
+    color: #edf0f1;
+    text-decoration: none;
+    font-size: 18px;
+  }
+
+  .navbar li{
+    display: inline-block;
+    padding: 0px 20px;
+  }
+
+  .navbar a{
+    color: #edf0f1;
+    text-decoration: none;
+    transition: all 0.3s ease 0s;
+  }
+
+  .navbar a:hover{
+    color: #0088a9;
   }
 </style>
