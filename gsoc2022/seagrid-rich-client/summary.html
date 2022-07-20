@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+</head>
+<body>
+
+
+<center><h2>Summary of Nanocad Commands</h2></center>
+
+<div class="row">
+  <div class="column" style="background-color:#aaa;">
+    <p>Rotate:  drag gray space</p>
+    <p>Move Atom:  drag atom</p>
+    <p>Add Bond: shift-drag atom to atom</p>
+    <p>Add Double Bond: Shift-drag between bonded atoms</p>
+  </div>
+  <div class="column" style="background-color:#bbb;">
+    <p>Translate: Shift-drag gray space</p>
+    <p>Add Atom: Shift-click gray space</p>
+    <p>Delete Bond: Ctrl-drag atom to atom</p>
+  </div>
+  <div class="column" style="background-color:#ccc;">
+    <p>Zoom: Ctrl-drag gray space</p>
+    <p>Delete Atom: Shift-click atom</p>
+    <p>Select Atom: Alt-click atom</p>
+    <p>Select Group: Cltr-Alt-click atom</p>
+  </div>
+</div>
+<br>
+<br>
+<button onclick="history.back()">Go Back</button>
+</body>
+</html>

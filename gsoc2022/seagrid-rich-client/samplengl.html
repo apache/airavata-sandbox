@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+  <script type="text/javascript" src="ngl.js"></script>
+  <script>
+    console.log("nglviewer");
+    document.addEventListener("DOMContentLoaded", function () {
+      // create a `stage` object
+      var stage = new NGL.Stage("viewport");
+      console.log("load a PDB structure and consume the returned ");
+      stage.loadFile("\\1aho.pdb").then(function (component) {
+      // add a "cartoon" representation to the structure component
+      component.addRepresentation("cartoon");
+      // provide a "good" view of the structure
+      component.autoView();
+      });
+    });
+    console.log("file loaded");
+  </script>
+  <div id="viewport" style="width:400px; height:300px;"></div>
+</body>
+</html>
