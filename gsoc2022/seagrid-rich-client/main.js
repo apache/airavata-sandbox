@@ -51,7 +51,7 @@ function createJSMolWindow () {
   })
 
   // and load the login page for app
-  JSMolWindow.loadFile("samplengl.html")
+  JSMolWindow.loadFile("C:\\Users\\aishw\\gsoc\\airavata-gsoc2022\\airavata-sandbox\\gsoc2022\\seagrid-rich-client\\ui\\samplemol.html")
   //editorWindow.loadURL("http://nglviewer.org/ngl/?script=showcase/ferredoxin")
 }
 // This method will be called when Electron has finished
@@ -70,16 +70,16 @@ app.whenReady().then(() => {
  
   // Add custom menu
   menu.splice(1,0,{
-    label: 'Molecule Editor',
+    label: 'Molecule Viewer',
     submenu: [
       {
-        label: 'nanocad',
+        label: 'NGLViewer',
         click: (item, focusedWindow) => {
           createMolWindow()
         }
       },
       {
-        label: 'JSMol Editor',
+        label: 'JSMol Viewer',
         click: (item, focusedWindow) => {
           createJSMolWindow()
         }
