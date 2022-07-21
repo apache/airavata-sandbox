@@ -15,15 +15,18 @@
    - https://nodejs.org/en/download/
    
    Check node.js installed 
-      - npm -v 
+   
+      - npm -v
       - node -v
 
 #### Now to install electronJS run below command. 
-- npm install --save-dev electron
+
+   - npm install --save-dev electron
 
 #### Run Application
 1. Clone the repository. 
 2. Run below command 
+   
    - npm start
 3. This will launch the application 
 4. You can login with your credentials and try to submit the experiment. Also you can view molecule structures using molecule viewer. 
