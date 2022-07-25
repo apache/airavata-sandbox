@@ -1,11 +1,12 @@
 import LoginPage from "./components/LoginPage";
 import CalcInfo from "./components/CalcInfo";
+import SEAGrid from "./components/SEAGrid";
 
 import {createRouter, createWebHistory} from 'vue-router';
 
 const routes = [
     {
-        name: 'Home',
+        name: 'Login',
         component: LoginPage,
         path:'/'
     },
@@ -13,7 +14,12 @@ const routes = [
         name: 'CalcInfo',
         component: CalcInfo,
         path:'/calcinfo'
-    }
+    },
+    {
+        name: 'Home',
+        component: SEAGrid,
+        path:'/SEAGrid'
+    },
 ];
 
 const router = createRouter(
@@ -22,5 +28,6 @@ const router = createRouter(
         routes
     }
 )
+
 
 export default router

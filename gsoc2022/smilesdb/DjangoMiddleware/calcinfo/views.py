@@ -4,8 +4,10 @@ from django.shortcuts import render
 from rest_framework.parsers import JSONParser
 # To bypass having a CSRF token
 from django.views.decorators.csrf import csrf_exempt
+
 # for sending response to the client
 from django.http import HttpResponse, JsonResponse
+
 import calc_info_pb2
 import calc_info_pb2_grpc
 import grpc
@@ -26,12 +28,13 @@ def getCalcInfo(channel) :
     return json.dumps(data)
 
 
+
 @csrf_exempt
 def calcinfo(request):
-    if(request.method == 'GET'):
+    if request.method == 'GET':
         print(request)
-        with grpc.insecure_channel('localhost:7593') as channel:
+        with grpc.insecure_channel('localhost:7594') as channel:
             return JsonResponse(getCalcInfo(channel), safe=False)
-    elif(request.method == 'POST'):
+    elif request.method == 'POST':
         # parse the incoming information
         return JsonResponse("errors", status=400)
