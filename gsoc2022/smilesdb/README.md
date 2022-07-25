@@ -1,7 +1,7 @@
 # Small Molecule Ionic Lattices (SMILES) Data Models
-
+![Local Build](https://img.shields.io/badge/local%20build-successful%20-green)
 ![GitHub last commit](https://img.shields.io/github/last-commit/bhavesh-asana/airavata-sandbox)
-![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/w/bhavesh-asana/airavata-sandbox/master)
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/bhavesh-asana/airavata-sandbox/master)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/bhavesh-asana/airavata-sandbox)
 
 
@@ -12,7 +12,7 @@ embedded with the new features and advanced data visualization techniques.
 **DEVELOPMENT GOALS**
 1. Create a robust database to reduce the latency.
 2. Redesigning the data models.
-3. Synchronising the data with a user dashboard.
+3. Synchronising the data with a user dashboard on performing experiment successfully.
 
 # Table of Contents
 
@@ -23,10 +23,9 @@ embedded with the new features and advanced data visualization techniques.
   * [Server Initialization](#server-initialization)
   * [Middleware (Django Application)](#middleware-django-application)
   * [Client Initialization](#client-initialization)
-  * [Database](#database)
+  * [Database Management](#database-management)
     * [Mongo Compass GUI](#visualize-the-data-with-mongo-compass-gui)
-    * [Mongo Shell](#visualize-with-mongo-shell)
-  * [Test Data](#test-data)
+    * [Mongo CLI](#visualize-with-mongo-cli)
 * [References](#references)
 * [The Team](#the-team)
 
@@ -54,7 +53,6 @@ embedded with the new features and advanced data visualization techniques.
    ```commandline
     git init
     git clone https://github.com/bhavesh-asana/airavata-sandbox.git
-    cd ~/airavata-sandbox/gsoc2022/smilesdb/
     ```
 
 # How to run the project
@@ -67,40 +65,51 @@ Google Remote Procedure Call (gRPC) stub is implemented in Java, which
 acts as a server and helps to transfer the data effectively with the
 connected clients across the distributed systems.
 
-Open the **Server** directory in IntelliJ and follow the steps to run the
-server application.
-
-1. Open the terminal in IntelliJ and ensure you are in the **Server** path.
-2. Run the following commands to build the maven project. <br />
+1. Before initializing the server, make sure the MongoDB is installed and the instance 
+   is running locally. 
    ```commandline
-   mvn clean compile install
-   ```
-3. In the target folder, make the following directories as a source root.
-    1. target/classes
-    2. target/generated-sources/protobuf/grpc-java
-    3. target/generated-sources/protobuf/java
-4. Run the **ServerApplication** to initialise the server.
-5. On successful build, you can find the following message in the terminal.<br/>
-   **message:** Server running successfully<br/>
-   This ensures that the server is listening at the local port 7594.
+   mongo --port 27017
+    ```
+   This command ensure the Mongo instance is running locally and connected the instance to the port 27017.
+2. Open a new terminal window (server_runner) and change the directory to the
+   server codebase
+   ```commandline
+   cd ~/airavata-sandbox/gsoc2022/smilesdb/Server/
+    ```
+3. Build the Maven project.
+   ```commandline
+   mvn package
+   mvn clean install
+    ```
+4. Run the Spring Boot application.
+   ```commandline
+   mvn spring-boot:run
+    ```
+   On successful running of the server application, it shows a message as
+   _"Server running successfully"_ and open connection with mongodb driver.
 
 ## Middleware (Django Application)
-Open the **DjangoMiddleware** directory in Pycharm and follow the steps to run the middleware.
-1. Create a virtual environment using the following command. <br/>
+Open a new terminal window and follow the steps to run the middleware application.
+1. Change the working directory to SMILES middleware.
+   ```commandline
+   cd ~/airavata-sandbox/gsoc2022/smilesdb/DjangoMiddleware
+   ```
+2. Create a virtual environment using the following command. <br/>
    Strictly recommended to use Python version 3.8.3 to build the **grpcio-wheel**.
       ```commandline
-      $ python -m venv <EnvironmentName>
-      $ source <EnvironmentName>/bin/activate
+      $ conda create -n <EnvironmentName> python=3.8.3
+      $ conda activate <EnvironmentName>
       ```
-2. Install the required dependencies using the **requirements.txt** file.
+3. Upgrade the PIP version and install the required dependencies using the **requirements.txt** file.
       ```commandline
-      $ pip install requirements.txt
+      pip install -U pip
+      pip install -r requirements
       ```
-3. Run the Django application.
+4. Run the Django application.
    ```commandline
-   $ python manage.py runserver
+   python manage.py runserver
    ```
-4. Open http://127.0.0.1:8000/api/calcinfo/ to check the data transmission from
+5. Open http://127.0.0.1:8000/api/calcinfo/ to check the data transmission from
    the server application. On successful transmission, the data can also be visualized 
    in the server terminal.
 
@@ -111,19 +120,22 @@ The vue.js is communicated with the Django application (Middleware)
 using REST api calls and the data is exchanged in between the server
 and client application.
 
-To run the client application, follow the below steps
-1. Open the **smiles_dashboard** directory in PyCharm (another window).
+To run the client application, open a new terminal window and follow the below steps
+1. Change the working directory to SMILES Dashboard.
+   ```commandline
+   cd ~/airavata-sandbox/gsoc2022/smilesdb/smiles_dashboard
+   ```
 2. Open the new terminal and run the following commands to build the project.
    ```commandline
    npm install
    npm run serve
    ```
 3. Open
-   - http://localhost:8081/ for Login page.
-   - http://localhost:8081/SEAGrid for SEAGrid Homepage.
-   - http://localhost:8081/calcinfo for the live data synchronization.
+   - http://localhost:8080/ for Login page.
+   - http://localhost:8080/SEAGrid for SEAGrid Homepage.
+   - http://localhost:8080/calcinfo for the live CalcInfo data synchronization.
 
-## Database
+## Database Management
 
 ### Visualize the data with Mongo Compass GUI
 The mongo instances are configured in the application.properties file (located 
@@ -132,7 +144,7 @@ to the respective port (27017). On execution of the **ServerApplication**,
 the **smiles** database is created and the test data of _calcinfo_ is sent 
 to the database, which can be viewed under the **calcInfo** collection.
 
-### Visualize with mongo shell
+### Visualize with Mongo CLI
 To view the data using Mongo shell, open the terminal and follow the commands
 mentioned below.
 ```mongo
@@ -142,10 +154,7 @@ mentioned below.
  show collections
  db.calcInfo.find()
 ```
-## Test Data
-- The instant test data for each parameter of the **calcInfo** proto buffer is defined in <br/>
-  Server/src/main/java/com/smiles/calcinfo/CalcInfoImpl.java from line 20 to 24.
-- Update the data or add new data to visualize the live data handling.
+
 # References
 
 1. **Jira Issue:** <br/>
@@ -154,6 +163,7 @@ mentioned below.
    https://cwiki.apache.org/confluence/display/AIRAVATA/SMILES+Data+Models
 3. **GitHub - Airavata sand-box:** <br/>
    Master branch: https://github.com/apache/airavata-sandbox
+4. [**DevDocs**](dev_docs.md)
 
 # The team
 
@@ -167,5 +177,4 @@ mentioned below.
 ## Contributor
 
 - Bhavesh Asanabada <br/>
-
   [<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=plastic&logo=linkedin&logoColor=white" />](https://www.linkedin.com/in/bhavesh-asana/)
