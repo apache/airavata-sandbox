@@ -54,6 +54,18 @@ function createJSMolWindow () {
   JSMolWindow.loadFile("C:\\Users\\aishw\\gsoc\\airavata-gsoc2022\\airavata-sandbox\\gsoc2022\\seagrid-rich-client\\ui\\samplemol.html")
   //editorWindow.loadURL("http://nglviewer.org/ngl/?script=showcase/ferredoxin")
 }
+function createJSMEWindow(){
+  const JSMEWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    }
+  })
+
+  // and load the login page for app
+  JSMEWindow.loadFile("C:\\Users\\aishw\\gsoc\\airavata-gsoc2022\\airavata-sandbox\\gsoc2022\\seagrid-rich-client\\JSME-webpack-example\\dist\\index.html")
+}
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -87,12 +99,12 @@ app.whenReady().then(() => {
     ]
   });
   menu.splice(2,0,{
-    label: 'Applicaion Editor',
+    label: 'Molecule Editor',
     submenu: [
       {
-        label: 'G09',
+        label: 'JSME Editor',
         click: (item, focusedWindow) => {
-          dialog.showMessageBox({message: 'Do something', buttons: ['OK'] });
+          createJSMEWindow()
         }
       }
     ]
