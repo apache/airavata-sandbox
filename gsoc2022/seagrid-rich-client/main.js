@@ -51,7 +51,7 @@ function createJSMolWindow () {
   })
 
   // and load the login page for app
-  JSMolWindow.loadFile("C:\\Users\\aishw\\gsoc\\airavata-gsoc2022\\airavata-sandbox\\gsoc2022\\seagrid-rich-client\\ui\\samplemol.html")
+  JSMolWindow.loadFile("C:\\Users\\aishw\\gsoc\\seagrid-client-electron\\airavata-sandbox\\gsoc2022\\seagrid-rich-client\\ui\\samplemol.html")
   //editorWindow.loadURL("http://nglviewer.org/ngl/?script=showcase/ferredoxin")
 }
 function createJSMEWindow(){
@@ -64,7 +64,7 @@ function createJSMEWindow(){
   })
 
   // and load the login page for app
-  JSMEWindow.loadFile("C:\\Users\\aishw\\gsoc\\airavata-gsoc2022\\airavata-sandbox\\gsoc2022\\seagrid-rich-client\\JSME-webpack-example\\dist\\index.html")
+  JSMEWindow.loadFile("C:\\Users\\aishw\\gsoc\\seagrid-client-electron\\airavata-sandbox\\gsoc2022\\seagrid-rich-client\\JSME\\dist\\index.html")
 }
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
