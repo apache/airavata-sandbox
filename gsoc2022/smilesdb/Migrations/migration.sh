@@ -1,24 +1,24 @@
 
-# echo 'b1h3a1v1e4s2h1' | openssl enc -aes-256-cbc -md sha512 -a -pbkdf2 -iter 100000 -salt -pass pass:'test@123'
+# echo '<ENTER PASSORD>' | openssl enc -aes-256-cbc -md sha512 -a -pbkdf2 -iter 100000 -salt -pass pass:'test@123'
 
 # chmod 600 ./secret.txt
 
-# echo 'mysecretpassword' | openssl enc -base64 -e -aes-256-cbc -md sha512 -a -pbkdf2 -iter 100000 -salt -pass pass:b1h3a1v1e4s2h1  > .secret.lck
+# echo 'mysecretpassword' | openssl enc -base64 -e -aes-256-cbc -md sha512 -a -pbkdf2 -iter 100000 -salt -pass pass:<ENTER PASSORD>  > .secret.lck
 
-# b1h3a1v1e4s2h1
+# <ENTER PASSORD> -> example: -pPass@123 
 
 
 echo creating database
-mysql -uroot -pb1h3a1v1e4s2h1 -e "create database OEstorage"
+mysql -uroot -p<ENTER PASSORD> -e "create database OEstorage"
 
 echo Restoring Database
-mysql -h 127.0.0.1 -uroot -pb1h3a1v1e4s2h1 OEstorage < ./data/dump_29july2022.sql
+mysql -h 127.0.0.1 -uroot -p<ENTER PASSORD> OEstorage < ./data/dump_29july2022.sql
 
 echo updating rows to replace double-quote
-mysql -h 127.0.0.1 -uroot -pb1h3a1v1e4s2h1 -DOEstorage < ./data/moleculesUpdate.sql
+mysql -h 127.0.0.1 -uroot -p<ENTER PASSORD> -DOEstorage < ./data/moleculesUpdate.sql
 
 echo Generating JSON
-mysql -h 127.0.0.1 -uroot -pb1h3a1v1e4s2h1 -DOEstorage < ./data/molecule.sql > ./data/molecule.temp1.json
+mysql -h 127.0.0.1 -uroot -p<ENTER PASSORD> -DOEstorage < ./data/molecule.sql > ./data/molecule.temp1.json
 # rm ./data/molecule.json
 
 echo Replacing 'NULL' with ""
