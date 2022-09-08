@@ -10,7 +10,8 @@ const {app, BrowserWindow, MenuItem} = require('electron')
 const path = require('path')
 const { Menu, dialog, shell } = require('electron')
 const defaultMenu = require('electron-default-menu')
-
+var {spawn} = require('child_process')
+var child = require('child_process').execFile;
 function createWindow () {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -51,8 +52,7 @@ function createJSMolWindow () {
   })
 
   // and load the login page for app
-  JSMolWindow.loadFile("C:\\Users\\aishw\\gsoc\\seagrid-client-electron\\airavata-sandbox\\gsoc2022\\seagrid-rich-client\\ui\\samplemol.html")
-  //editorWindow.loadURL("http://nglviewer.org/ngl/?script=showcase/ferredoxin")
+  JSMolWindow.loadFile("C:\\Users\\aishw\\gsoc\\seagrid-client\\airavata-sandbox\\gsoc2022\\seagrid-rich-client\\ui\\samplemol.html")
 }
 function createJSMEWindow(){
   const JSMEWindow = new BrowserWindow({
@@ -66,6 +66,29 @@ function createJSMEWindow(){
   // and load the login page for app
   JSMEWindow.loadFile("C:\\Users\\aishw\\gsoc\\seagrid-client-electron\\airavata-sandbox\\gsoc2022\\seagrid-rich-client\\JSME\\dist\\index.html")
 }
+function createMol3DWindow(){
+  const Mol3DWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js')
+    }
+  })
+
+  // and load the login page for app
+  
+  Mol3DWindow.loadURL("https://molview.org/")
+}
+function createAvogadro(){
+    
+        var executablePath = 'C:\\Program Files\\Avogadro2\\bin\\avogadro2.exe';
+        var parameters = ['Hai', 'Test', 'Dat'];
+        child(executablePath, function (err, data) {
+            console.log(err)
+            console.log(data.toString());
+        });
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -105,6 +128,23 @@ app.whenReady().then(() => {
         label: 'JSME Editor',
         click: (item, focusedWindow) => {
           createJSMEWindow()
+        }
+      },
+      {
+        label: 'Mol3DEditor',
+        click: (item, focusedWindow) => {
+          createMol3DWindow()
+        }
+      }
+    ]
+  });
+  menu.splice(2,0,{
+    label: 'Avogadro Application',
+    submenu: [
+      {
+        label: 'Avogadro Editor',
+        click: (item, focusedWindow) => {
+          createAvogadro()
         }
       }
     ]
