@@ -10,7 +10,8 @@ const {app, BrowserWindow, MenuItem} = require('electron')
 const path = require('path')
 const { Menu, dialog, shell } = require('electron')
 const defaultMenu = require('electron-default-menu')
-var {spawn} = require('child_process')
+var os = require('os');
+const { win32 } = require('path')
 var child = require('child_process').execFile;
 function createWindow () {
   // Create the browser window.
@@ -37,22 +38,7 @@ function createMolWindow () {
     }
   })
 
-  // and load the login page for app
-  //editorWindow.load("nanocad.html")
   editorWindow.loadURL("http://nglviewer.org/ngl/?script=showcase/ferredoxin")
-}
-function createJSMolWindow () {
-  // Create the browser window.
-  const JSMolWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
-
-  // and load the login page for app
-  JSMolWindow.loadFile("C:\\Users\\aishw\\gsoc\\seagrid-client\\airavata-sandbox\\gsoc2022\\seagrid-rich-client\\ui\\samplemol.html")
 }
 function createJSMEWindow(){
   const JSMEWindow = new BrowserWindow({
@@ -63,8 +49,10 @@ function createJSMEWindow(){
     }
   })
 
-  // and load the login page for app
-  JSMEWindow.loadFile("C:\\Users\\aishw\\gsoc\\seagrid-client-electron\\airavata-sandbox\\gsoc2022\\seagrid-rich-client\\JSME\\dist\\index.html")
+  if(process.platform == win32)
+    JSMEWindow.loadFile(".\\JSME\\dist\\index.html")
+  else
+    JSMEWindow.loadFile("./JSME/dist/index.html")
 }
 function createMol3DWindow(){
   const Mol3DWindow = new BrowserWindow({
@@ -74,19 +62,32 @@ function createMol3DWindow(){
       preload: path.join(__dirname, 'preload.js')
     }
   })
-
-  // and load the login page for app
   
   Mol3DWindow.loadURL("https://molview.org/")
 }
 function createAvogadro(){
     
-        var executablePath = 'C:\\Program Files\\Avogadro2\\bin\\avogadro2.exe';
-        var parameters = ['Hai', 'Test', 'Dat'];
-        child(executablePath, function (err, data) {
+    var homedir = process.env.HOME;
+    if(os.platform == 'win32')
+      var executablePath = 'C:\\Program Files\\Avogadro2\\bin\\avogadro2.exe';
+    else
+      var executablePath = homedir + '/Applications/avogadro2';
+    child(executablePath, function (err, data) {
             console.log(err)
             console.log(data.toString());
-        });
+    });
+}
+function createVMD(){
+  
+  var homedir = process.env.HOME;
+  if(os.platform == 'win32')
+    var executablePath = 'C:\\Program Files\\VMD\\vmd.exe';
+  else
+    var executablePath = homedir + '/Applications/vmd';
+  child(executablePath, function (err, data) {
+      console.log(err)
+      console.log(data.toString());
+  });
 }
 
 // This method will be called when Electron has finished
@@ -100,9 +101,8 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
-  const menu = defaultMenu(app, shell);
+  const menu = defaultMenu(app, shell);  
   
- 
   // Add custom menu
   menu.splice(1,0,{
     label: 'Molecule Viewer',
@@ -111,12 +111,6 @@ app.whenReady().then(() => {
         label: 'NGLViewer',
         click: (item, focusedWindow) => {
           createMolWindow()
-        }
-      },
-      {
-        label: 'JSMol Viewer',
-        click: (item, focusedWindow) => {
-          createJSMolWindow()
         }
       }
     ]
@@ -138,13 +132,19 @@ app.whenReady().then(() => {
       }
     ]
   });
-  menu.splice(2,0,{
-    label: 'Avogadro Application',
+  menu.splice(3,0,{
+    label: 'External Applications',
     submenu: [
       {
         label: 'Avogadro Editor',
         click: (item, focusedWindow) => {
           createAvogadro()
+        }
+      },
+      {
+        label: 'VMD',
+        click: (item, focusedWindow) => {
+          createVMD()
         }
       }
     ]
