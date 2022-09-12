@@ -1,0 +1,73 @@
+syntax = "proto3";
+package calcInfo;
+
+message CalcInfo{
+  // System generated key
+  string calcinfo_id = 1;
+  // Primary key
+  string smiles = 2;
+  //	The number of basis functions for the computation. 	number
+  int64 nbasis = 3;
+  //	The number of molecular orbitals for the computation. 	number
+  int64 nmo = 4;
+  //	The number of alpha electrons in the computation. 	number
+  int64 nalpha = 5;
+  //	The number of beta electrons in the computation. 	number
+  int64 nbeta = 6;
+  //	The number of atoms in the computation. 	number
+  int64 natom = 7;
+  // 	The energy of the requested method, identical to return_value for energy computations. number
+  double energy = 8;
+
+}
+
+message CreateInfoRequest {
+  CalcInfo calcInfo = 1;
+}
+
+message CreateInfoResponse {
+  CalcInfo calcInfo = 1;
+}
+
+message ReadInfoRequest {
+  string id = 1;
+}
+
+message ReadInfoResponse {
+  CalcInfo calcInfo = 1;
+}
+
+message UpdateInfoRequest {
+  CalcInfo calcInfo = 1;
+}
+
+message UpdateInfoResponse {
+  CalcInfo calcInfo = 1;
+}
+
+message DeleteInfoRequest {
+  string calcInfo_id = 1;
+}
+
+message DeleteInfoResponse {
+  string calcInfo_id = 1;
+}
+
+message ListInfoRequest {}
+
+message ListInfoResponse {
+  CalcInfo calcInfo = 1;
+}
+
+
+service CalcInfoService {
+  rpc CreateCalcinfo (CreateInfoRequest) returns (CreateInfoResponse) {};
+  rpc ReadCalcInfo (ReadInfoRequest) returns (ReadInfoResponse) {};
+  rpc UpdateCalcInfo (UpdateInfoRequest) returns (UpdateInfoResponse) {};
+  rpc DeleteCalcInfo (DeleteInfoRequest) returns (DeleteInfoResponse) {};
+  rpc ListCalcInfo (ListInfoRequest) returns (stream ListInfoResponse) {};
+}
+
+
+
+// python -m grpc_tools.protoc --proto_path=./ --python_out=../codegen --grpc_python_out=../codegen ./calc_info.proto
