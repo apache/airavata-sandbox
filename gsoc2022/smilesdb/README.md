@@ -88,11 +88,11 @@ connected clients across the distributed systems.
    On successful running of the server application, it shows a message as
    _"Server running successfully"_ and open connection with mongodb driver.
 
-## Middleware (Django Application)
+## RPC Handler (Django Application)
 Open a new terminal window and follow the steps to run the middleware application.
 1. Change the working directory to SMILES middleware.
    ```commandline
-   cd ~/airavata-sandbox/gsoc2022/smilesdb/DjangoMiddleware
+   cd ~/airavata-sandbox/gsoc2022/smilesdb/rpc_handler
    ```
 2. Create a virtual environment using the following command. <br/>
    Strictly recommended to use Python version 3.8.3 to build the **grpcio-wheel**.
@@ -109,7 +109,7 @@ Open a new terminal window and follow the steps to run the middleware applicatio
    ```commandline
    python manage.py runserver
    ```
-5. Open http://127.0.0.1:8000/api/calcinfo/ to check the data transmission from
+5. Open http://127.0.0.1:8000/api/molecule/ to check the data transmission from
    the server application. On successful transmission, the data can also be visualized 
    in the server terminal.
 
@@ -123,17 +123,17 @@ and client application.
 To run the client application, open a new terminal window and follow the below steps
 1. Change the working directory to SMILES Dashboard.
    ```commandline
-   cd ~/airavata-sandbox/gsoc2022/smilesdb/smiles_dashboard
+   cd ~/airavata-sandbox/gsoc2022/smilesdb/data-catalog
    ```
 2. Open the new terminal and run the following commands to build the project.
    ```commandline
-   npm install
-   npm run serve
+   yarn install
+   yarn run serve
    ```
 3. Open
    - http://localhost:8080/ for Login page.
-   - http://localhost:8080/SEAGrid for SEAGrid Homepage.
-   - http://localhost:8080/calcinfo for the live CalcInfo data synchronization.
+   - http://localhost:8080/home for SEAGrid Homepage.
+   - http://localhost:8080/search for the live data catalog.
 
 ## Database Management
 
@@ -152,7 +152,7 @@ mentioned below.
  show dbs
  use smiles
  show collections
- db.calcInfo.find()
+ db.molecule.find().pretty()
 ```
 
 # References
