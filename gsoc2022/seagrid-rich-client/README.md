@@ -4,7 +4,7 @@
 
 ## Architecture of system 
 
-![architecture](https://github.com/aishwaryasinhasane/airavata-sandbox/blob/master/gsoc2022/seagrid-rich-client/Modified_SeaGrid_Overview%20(2).png)
+![architecture](https://github.com/aishwaryasinhasane/airavata-sandbox/blob/master/gsoc2022/seagrid-rich-client/Images/Modified_SeaGrid_Overview%20(2).png)
 
 ## Steps to Run the Application
 ### Installation Steps:
@@ -21,7 +21,7 @@
 
 #### Now to install electronJS run below command. 
 
-   - npm install --save-dev electron
+   - npm install electron --save-dev
 
 #### Run Application
 1. Clone the repository. 
@@ -30,4 +30,19 @@
    - npm start
 3. This will launch the application 
 4. You can login with your credentials and try to submit the experiment. Also you can view molecule structures using molecule viewer. 
+
+### Features of Application 
+1. Molecule Viewer
+   ![NGL](https://github.com/aishwaryasinhasane/airavata-sandbox/blob/master/gsoc2022/seagrid-rich-client/Images/nglviewer.png)
+
+2. Molecule Editors 
+   
+   1. JSME Editor 
+
+   ![JSME](https://github.com/aishwaryasinhasane/airavata-sandbox/blob/master/gsoc2022/seagrid-rich-client/Images/jsme.png)
+
+   2. Mol3dEditor 
+
+   ![Mol3dEditor](https://github.com/aishwaryasinhasane/airavata-sandbox/blob/master/gsoc2022/seagrid-rich-client/Images/Mol3dEditor.png)
+
 
