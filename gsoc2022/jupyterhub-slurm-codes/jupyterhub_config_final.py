@@ -355,7 +355,7 @@ c.JupyterHub.bind_url = 'http://10.0.6.24:8000'
 #  differ, or `hub_bind_url` for setting the full bind URL.
 #  Default: '127.0.0.1'
 #jecoulte - this is the ip used by the singlespawner instance of a job to connect to the hub
-c.JupyterHub.hub_ip = '172.17.0.1' #'10.0.0.83' #JEC_HEADNODE_IP
+c.JupyterHub.hub_ip = '10.0.0.83' #'172.17.0.1' #JEC_HEADNODE_IP
 #c.JupyterHub.hub_ip = '127.0.0.1'
 
 ## The internal port for the Hub process.
