@@ -1,0 +1,116 @@
+syntax="proto3";
+package molecule;
+
+message Molecule {
+  string mol_id = 1;
+  string cas_nr = 2;
+  string smiles = 3;
+  string smiles_stereo = 4;
+  string inchi = 5;
+  string molfile_blob_source = 6;
+  string emp_formula = 7;
+  string emp_formula_sort = 8;
+  string emp_formula_source = 9;
+  double mw = 10;
+  double mw_monoiso = 11;
+  double rdb = 12;
+  string mw_source = 13;
+  string validated_by = 14;
+  string journal = 15;
+  string auth_of_intr = 16;
+  string jour_cit = 17;
+  string year_publ = 18;
+  string doi_link = 19;
+  string comp_class = 20;
+  string cuniq = 21;
+  string calc_perf = 22;
+  string org_met = 23;
+  int64 mol_chrg = 24;
+  string state_ofmat = 25;
+  string color_white = 26;
+  string color_uv = 27;
+  double absorb_max = 28;
+  string solvent_ae = 29;
+  double absorb = 30;
+  double conc = 31;
+  double extinc = 32;
+  double emis_max = 33;
+  double temp_abs = 34;
+  double emis_qy = 35;
+  double temp_ems = 36;
+  double lifetime = 37;
+  double temp_cv = 38;
+  double reduc_pot = 39;
+  string hw_or_pk_rp = 40;
+  double oxid_pot = 41;
+  string hw_or_pk_op = 42;
+  string solvent_cv = 43;
+  string electrolyte = 44;
+  string ref_electrd = 45;
+  string inter_thngs = 46;
+  double density_20 = 47;
+  string density_20_source = 48;
+  double default_warn_level = 49;
+  double n_20 = 50;
+  string n_20_source = 51;
+  double mp_low = 52;
+  double mp_high = 53;
+  string mp_source = 54;
+  double bp_low = 55;
+  double bp_high = 56;
+  double bp_press = 57;
+  string press_unit = 58;
+  string bp_source = 59;
+  string safety_r = 60;
+  string safety_h = 61;
+  string safety_s = 62;
+  string safety_p = 63;
+  string safety_text = 64;
+  string safety_sym = 65;
+  string safety_sym_ghs = 66;
+  string safety_source = 67;
+  string comment_mol = 68;
+}
+
+message CreateMoleculeRequest{
+  Molecule molecule = 1;
+}
+message CreateMoleculeResponse{
+  Molecule molecule = 1;
+}
+
+message ReadMoleculeRequest{
+  string id = 1;
+}
+message ReadMoleculeResponse{
+  Molecule molecule = 1;
+}
+
+message UpdateMoleculeRequest{
+  Molecule molecule = 1;
+}
+message UpdateMoleculeResponse{
+  Molecule molecule = 1;
+}
+
+message DeleteMoleculeRequest{
+  string molecule_id = 1;
+}
+message DeleteMoleculeResponse{
+  string molecule_id = 1;
+}
+
+message ListMoleculeRequest{
+}
+
+message ListMoleculeResponse{
+  Molecule molecule = 1;
+}
+
+service MoleculeService{
+  rpc CreateMolecule(CreateMoleculeRequest) returns (CreateMoleculeResponse){};
+  rpc ReadMolecule(ReadMoleculeRequest) returns (ReadMoleculeResponse){};
+  rpc UpdateMolecule(UpdateMoleculeRequest) returns (UpdateMoleculeResponse){};
+  rpc DeleteMolecule(DeleteMoleculeRequest) returns (DeleteMoleculeResponse){};
+  rpc ListMolecule(ListMoleculeRequest) returns (stream ListMoleculeResponse){};
+}
