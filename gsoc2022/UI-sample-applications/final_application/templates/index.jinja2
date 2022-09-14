@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=<<for>>, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+{% block content %}
+<form action="{{ url_for("index")}}" method="post">
+<label for="name">Name:</label>
+<input type="text" id="name" name="name" placeholder="notebookname">
+<label for="memory">Memory:</label>
+<input type="text" id="memory" name="memory" placeholder="lastname">
+<label for="cpu">CPU:</label>
+<input type="text" id="cpu" name="cpu" placeholder="cpu">
+<button class="submit"> submit</button>
+{% endblock %}
+</body>
+</html>
