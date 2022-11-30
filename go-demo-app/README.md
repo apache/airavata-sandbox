@@ -35,4 +35,8 @@ you should see the `frontend.app` executable in the `cmd/frontend` directory
 
 ## System Tray
 When started, the app also shows a System Tray Menu. 
+
 link: [System Tray](https://developer.fyne.io/explore/systray#adding-a-system-tray-menu)
+
+Example:
+![alt text](example.png)
