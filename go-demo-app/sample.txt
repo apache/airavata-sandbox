@@ -1,0 +1,7 @@
+go run ./cmd/jwt-issue keys/private.pem
+
+eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhcGkiLCJleHAiOjE2NjkzODY3MTQsImlhdCI6MTY2OTM4NTgxNCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgxIiwibmJmIjoxNjY5Mzg1ODE0LCJyb2xlcyI6WyJhZG1pbiIsImJhc2ljIl0sInVzZXIiOiJhZG1pbiJ9.NEkx7YoFZ32R3EXVE_MwQtOaQbOhCuPgxEleAOYEwTTuD-crbKmwWXRL1GGVafMb0LGOEzlBBZ6JQfInTJmNDQ
+
+go run ./cmd/jwt-validate keys/public.pem 
+
+go run ./cmd/auth-api keys/private.pem 
