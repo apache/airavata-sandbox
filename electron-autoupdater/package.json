@@ -1,0 +1,49 @@
+{
+  "name": "electron-explore",
+  "version": "1.0.2",
+  "description": "Electron JS AutoUpdater Module",
+  "main": "main.js",
+  "repository": "https://github.com/impiyush83/electron-autoupdater-poc",
+  "homepage": "https://github.com/impiyush83/electron-autoupdater-poc",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "build": "electron-builder -w",
+    "release": "electron-builder -m -p 'always'"
+  },
+  "build": {
+    "appId": "com.apache.electron-explore",
+    "productName": "ApacheAiravataElectronAutoUpdaterPoc",
+    "publish": [
+      {
+        "provider": "github",
+        "repo": "electron-autoupdater-poc",
+        "owner": "impiyush83"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "identity": null,
+      "target": [
+        "dmg",
+        "pkg"
+      ]
+    }
+  },
+  "author": "Piyush Nalawade",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^23.1.4",
+    "electron-builder": "^24.1.0",
+    "electron-is-dev": "^2.0.0",
+    "electron-log": "^5.0.0-beta.16",
+    "electron-updater": "^5.3.0"
+  },
+  "dependencies": {
+    "electron-is-dev": "^2.0.0",
+    "electron-log": "^5.0.0-beta.16",
+    "electron-updater": "^5.3.0"
+  }
+}
