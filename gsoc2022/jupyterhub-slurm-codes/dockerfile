@@ -1,0 +1,12 @@
+# rockylinux parent
+FROM rockylinux/rockylinux
+# install jupyter-notebook
+RUN dnf update -y
+RUN dnf install -y python3
+RUN pip3 install --upgrade pip
+RUN dnf install -y nodejs npm
+RUN pip3 install jupyterhub
+RUN npm install -g configurable-http-proxy
+RUN pip3 install jupyterlab notebook
+RUN pip3 install batchspawner
+RUN pip3 install wrapspawner
