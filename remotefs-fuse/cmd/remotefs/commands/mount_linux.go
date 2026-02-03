@@ -26,6 +26,7 @@ import (
 var (
 	mountPoint  string
 	mountServer string
+	allowOther  bool
 )
 
 func init() {
@@ -36,6 +37,7 @@ func init() {
 	}
 	mountCmd.Flags().StringVarP(&mountPoint, "mountpoint", "m", "", "Mount point directory")
 	mountCmd.Flags().StringVarP(&mountServer, "server", "s", "", "Server address (tunneled publish endpoint, e.g. localhost:50051)")
+	mountCmd.Flags().BoolVar(&allowOther, "allow-other", false, "allow other users to access the mount (requires user_allow_other in /etc/fuse.conf)")
 	_ = mountCmd.MarkFlagRequired("mountpoint")
 	_ = mountCmd.MarkFlagRequired("server")
 }
@@ -71,7 +73,7 @@ func runMount(cmd *cobra.Command, args []string) error {
 	opts := &fs.Options{
 		AttrTimeout:  &sec,
 		EntryTimeout: &sec,
-		MountOptions: fuse.MountOptions{AllowOther: true},
+		MountOptions: fuse.MountOptions{AllowOther: allowOther},
 	}
 	server, err := fs.Mount(mountPoint, root, opts)
 	if err != nil {
