@@ -1,3 +1,4 @@
+// Package fileproto provides the gRPC stream client for request/response file operations.
 package fileproto
 
 import (

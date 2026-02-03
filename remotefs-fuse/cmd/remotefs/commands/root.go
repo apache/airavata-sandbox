@@ -1,3 +1,4 @@
+// Package commands implements the remotefs CLI (publish, mount).
 package commands
 
 import (
@@ -6,7 +7,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "remotefs",
-	Short: "Publish a folder over gRPC (tunnel to remote) and mount it remotely via FUSE",
+	Short: "Publish a directory over gRPC and mount it remotely via FUSE",
 }
 
 func init() {

@@ -26,63 +26,56 @@ import (
 )
 
 var (
-	mountPoint   string
-	mountServer  string
-	mountID      string
-	mountSecret  string
-	mountFRPSrv  string
-	mountFRPToken string
-	allowOther   bool
+	mountAddr   string
+	mountToken  string
+	mountFRP    string
+	allowOther  bool
 )
 
 func init() {
 	mountCmd = &cobra.Command{
-		Use:   "mount",
-		Short: "Mount published folder at mountpoint (point -s at tunneled publish server or use --id for FRP)",
+		Use:   "mount <mountpoint>",
+		Short: "Mount published folder at mountpoint (use --addr for direct gRPC or --token for FRP)",
 		RunE:  runMount,
+		Args:  cobra.ExactArgs(1),
 	}
-	mountCmd.Flags().StringVarP(&mountPoint, "mountpoint", "m", "", "Mount point directory")
-	mountCmd.Flags().StringVarP(&mountServer, "server", "s", "", "Server address (tunneled publish endpoint, e.g. localhost:50051)")
-	mountCmd.Flags().StringVar(&mountID, "id", "", "Forwarding ID from publish --frp (or id:secret for both)")
-	mountCmd.Flags().StringVar(&mountSecret, "secret", "", "Secret from publish --frp (omit if using id:secret in --id)")
-	mountCmd.Flags().StringVar(&mountFRPSrv, "frp-server", "", "FRP server address when using --id. Env: REMOTEFS_FRP_SERVER")
-	mountCmd.Flags().StringVar(&mountFRPToken, "frp-token", "", "FRP server auth token when using --id. Env: REMOTEFS_FRP_TOKEN")
+	mountCmd.Flags().StringVarP(&mountAddr, "addr", "a", "", "gRPC server address (e.g. localhost:50051)")
+	mountCmd.Flags().StringVar(&mountToken, "token", "", "Forwarding token from publish --frp (id:secret)")
+	mountCmd.Flags().StringVar(&mountFRP, "frp", "", "FRP connection when using --token: hostname:port:password. Env: REMOTEFS_FRP")
 	mountCmd.Flags().BoolVar(&allowOther, "allow-other", false, "allow other users to access the mount (requires user_allow_other in /etc/fuse.conf)")
-	_ = mountCmd.MarkFlagRequired("mountpoint")
 }
 
 func runMount(cmd *cobra.Command, args []string) error {
-	if _, err := os.Stat(mountPoint); err != nil {
-		return fmt.Errorf("mountpoint %q: %w", mountPoint, err)
+	mp := args[0]
+	if _, err := os.Stat(mp); err != nil {
+		return fmt.Errorf("mountpoint %q: %w", mp, err)
 	}
 
-	// Resolve server address: either -s or --id (FRP visitor)
 	var serverAddr string
 	var frpCancel func()
-	if mountServer != "" && mountID != "" {
-		return fmt.Errorf("use either --server (-s) or --id, not both")
+	if mountAddr != "" && mountToken != "" {
+		return fmt.Errorf("use either --addr (-a) or --token, not both")
 	}
-	if mountServer != "" {
+	if mountAddr != "" {
 		var err error
-		serverAddr, err = resolver.ResolveServer(mountServer)
+		serverAddr, err = resolver.ResolveServer(mountAddr)
 		if err != nil {
 			return err
 		}
-	} else if mountID != "" {
-		id := mountID
-		secret := mountSecret
-		if strings.Contains(id, ":") {
-			parts := strings.SplitN(id, ":", 2)
-			id, secret = parts[0], parts[1]
+	} else if mountToken != "" {
+		parts := strings.SplitN(mountToken, ":", 2)
+		if len(parts) != 2 || parts[0] == "" || parts[1] == "" {
+			return fmt.Errorf("--token must be id:secret (from publish --frp output)")
 		}
-		if secret == "" {
-			return fmt.Errorf("--secret required when using --id (or use --id id:secret)")
+		id, secret := parts[0], parts[1]
+		server, authToken, err := frpclient.FRPConnection(mountFRP)
+		if err != nil {
+			return fmt.Errorf("frp connection: %w", err)
 		}
-		server, token := frpclient.FRPServerAndToken(mountFRPSrv, mountFRPToken)
 		if err := frpclient.CheckFRPServerReachable(server, 0); err != nil {
 			return err
 		}
-		common, err := frpclient.CommonConfig(server, token)
+		common, err := frpclient.CommonConfig(server, authToken)
 		if err != nil {
 			return fmt.Errorf("frp config: %w", err)
 		}
@@ -92,7 +85,7 @@ func runMount(cmd *cobra.Command, args []string) error {
 		}
 		defer frpCancel()
 	} else {
-		return fmt.Errorf("either --server (-s) or --id with --secret is required")
+		return fmt.Errorf("either --addr (-a) or --token is required")
 	}
 
 	conn, err := grpc.NewClient(serverAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -120,7 +113,7 @@ func runMount(cmd *cobra.Command, args []string) error {
 		EntryTimeout: &sec,
 		MountOptions: fuse.MountOptions{AllowOther: allowOther},
 	}
-	server, err := fs.Mount(mountPoint, root, opts)
+	server, err := fs.Mount(mp, root, opts)
 	if err != nil {
 		return err
 	}
@@ -131,7 +124,7 @@ func runMount(cmd *cobra.Command, args []string) error {
 		_ = server.Unmount()
 		fpClient.Close()
 	}()
-	log.Printf("Mounted at %s", mountPoint)
+	log.Printf("Mounted at %s", mp)
 	server.Wait()
 	return nil
 }

@@ -1,3 +1,4 @@
+// Package resolver resolves host:port to an IP for gRPC dialing (avoids resolver issues in some environments).
 package resolver
 
 import (

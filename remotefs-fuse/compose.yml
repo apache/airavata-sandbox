@@ -5,7 +5,7 @@ services:
       - "50051:50051"
     volumes:
       - ./testdata/export:/export/data
-    command: ["publish", "-f", "/export/data", "--addr", "0.0.0.0:50051"]
+    command: ["publish", "/export/data", "--addr", "0.0.0.0:50051"]
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "50051"]
       interval: 5s
@@ -19,4 +19,4 @@ services:
       - SYS_ADMIN
     devices:
       - /dev/fuse
-    command: ["mount", "-s", "publish:50051", "-m", "/mnt/remote"]
+    command: ["mount", "/mnt/remote", "--addr", "publish:50051"]

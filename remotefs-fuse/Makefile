@@ -15,8 +15,7 @@ all: build
 unit-test: proto
 	go test ./...
 
-# Docker integration: build, bring up stack (compose.yml), wait for mount, run verify script.
-# Updates STATUS.md with last run time, result (SUCCESS/FAILURE), and verify script output (for GitOps).
+# Docker integration: build, compose up, verify script; updates STATUS.md.
 verify: build
 	docker compose -f compose.yml build
 	docker compose -f compose.yml up -d

@@ -1,3 +1,4 @@
+// Package frpclient provides FRP (Fast Reverse Proxy) client helpers for registering proxies (publish) and visitors (mount).
 package frpclient
 
 import (
@@ -20,30 +21,38 @@ const (
 	DefaultFRPPort   = 17000
 	DefaultFRPToken  = "mysecret"
 
-	EnvFRPServer = "REMOTEFS_FRP_SERVER"
-	EnvFRPToken  = "REMOTEFS_FRP_TOKEN"
+	EnvFRP = "REMOTEFS_FRP"
 )
 
-// FRPServerAndToken returns server address and token from env or defaults.
-// Server can be "host" or "host:port".
-func FRPServerAndToken(serverFlag, tokenFlag string) (server, token string) {
-	token = tokenFlag
-	if token == "" {
-		token = os.Getenv(EnvFRPToken)
+// ParseFRPConnection parses "hostname:port:password" into server (host:port) and token. Splits from the right for IPv6.
+func ParseFRPConnection(s string) (serverAddr, token string, err error) {
+	s = strings.TrimSpace(s)
+	if s == "" {
+		return "", "", fmt.Errorf("FRP connection string is empty")
 	}
-	if token == "" {
-		token = DefaultFRPToken
+	idx := strings.LastIndex(s, ":")
+	if idx <= 0 || idx == len(s)-1 {
+		return "", "", fmt.Errorf("FRP connection must be hostname:port:password")
 	}
-	server = serverFlag
-	if server == "" {
-		server = os.Getenv(EnvFRPServer)
+	serverAddr = s[:idx]
+	token = s[idx+1:]
+	if _, _, parseErr := net.SplitHostPort(serverAddr); parseErr != nil {
+		return "", "", fmt.Errorf("invalid host:port in FRP connection: %w", parseErr)
 	}
-	if server == "" {
-		server = net.JoinHostPort(DefaultFRPServer, strconv.Itoa(DefaultFRPPort))
-	} else if !strings.Contains(server, ":") {
-		server = net.JoinHostPort(server, strconv.Itoa(DefaultFRPPort))
+	return serverAddr, token, nil
+}
+
+// FRPConnection returns server address and token from connectionFlag, or REMOTEFS_FRP env, or default.
+func FRPConnection(connectionFlag string) (serverAddr, token string, err error) {
+	s := connectionFlag
+	if s == "" {
+		s = os.Getenv(EnvFRP)
 	}
-	return server, token
+	if s == "" {
+		serverAddr = net.JoinHostPort(DefaultFRPServer, strconv.Itoa(DefaultFRPPort))
+		return serverAddr, DefaultFRPToken, nil
+	}
+	return ParseFRPConnection(s)
 }
 
 // GenerateIDSecret returns a short alphanumeric id and a hex secret (e.g. for one-time share).
@@ -61,10 +70,7 @@ func GenerateIDSecret() (id, secret string, err error) {
 	return id, secret, nil
 }
 
-// CheckFRPServerReachable tries to open a TCP connection to the FRP server.
-// Use this before starting FRP to fail fast with a clear error if the server is unreachable
-// (e.g. connection refused, timeout). The failure is then clearly a connectivity/server
-// issue, not a bug in remotefs.
+// CheckFRPServerReachable verifies the FRP server is reachable (TCP dial). Fails fast with a clear error if not.
 func CheckFRPServerReachable(serverAddr string, timeout time.Duration) error {
 	if timeout <= 0 {
 		timeout = 5 * time.Second
@@ -77,8 +83,7 @@ func CheckFRPServerReachable(serverAddr string, timeout time.Duration) error {
 	return nil
 }
 
-// CommonConfig builds ClientCommonConfig from server address and token.
-// serverAddr can be "host" or "host:port"; if port is missing, DefaultFRPPort is used.
+// CommonConfig builds FRP client config from server address and token.
 func CommonConfig(serverAddr, token string) (*v1.ClientCommonConfig, error) {
 	host, portStr, err := net.SplitHostPort(serverAddr)
 	if err != nil {
@@ -106,9 +111,7 @@ func CommonConfig(serverAddr, token string) (*v1.ClientCommonConfig, error) {
 	return cfg, nil
 }
 
-// RunPublishProxies registers XTCP and STCP proxies with the FRP server and runs the
-// client service in the background. The returned cancel function stops the service.
-// localPort is the local gRPC server port. id and secret identify the session.
+// RunPublishProxies registers XTCP and STCP proxies with the FRP server and runs the client in the background.
 func RunPublishProxies(ctx context.Context, common *v1.ClientCommonConfig, id, secret string, localPort int) (cancel func(), err error) {
 	xtcp := &v1.XTCPProxyConfig{
 		ProxyBaseConfig: v1.ProxyBaseConfig{
@@ -155,10 +158,8 @@ func RunPublishProxies(ctx context.Context, common *v1.ClientCommonConfig, id, s
 	}, nil
 }
 
-// RunMountVisitors starts XTCP visitor with STCP fallback and returns the local address
-// (e.g. "127.0.0.1:12345") to dial for gRPC. The returned cancel function stops the service.
+// RunMountVisitors starts XTCP visitor with STCP fallback and returns the local address to dial for gRPC.
 func RunMountVisitors(ctx context.Context, common *v1.ClientCommonConfig, id, secret string) (localAddr string, cancel func(), err error) {
-	// Reserve a port so we know what to dial
 	l, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		return "", nil, fmt.Errorf("listen for visitor port: %w", err)
@@ -188,7 +189,7 @@ func RunMountVisitors(ctx context.Context, common *v1.ClientCommonConfig, id, se
 			SecretKey:  secret,
 			ServerName: id + "-stcp",
 			BindAddr:   "127.0.0.1",
-			BindPort:   -1, // no physical port; fallback only
+			BindPort:   -1,
 		},
 	}
 	stcpVisitor.Complete(common)
@@ -207,8 +208,21 @@ func RunMountVisitors(ctx context.Context, common *v1.ClientCommonConfig, id, se
 	}()
 
 	localAddr = net.JoinHostPort("127.0.0.1", strconv.Itoa(port))
-	return localAddr, func() {
-		runCancel()
-		svc.Close()
-	}, nil
+	deadline := time.Now().Add(60 * time.Second)
+	const dialTimeout = 2 * time.Second
+	const retryInterval = 300 * time.Millisecond
+	for time.Now().Before(deadline) {
+		conn, err := net.DialTimeout("tcp", localAddr, dialTimeout)
+		if err == nil {
+			conn.Close()
+			return localAddr, func() {
+				runCancel()
+				svc.Close()
+			}, nil
+		}
+		time.Sleep(retryInterval)
+	}
+	runCancel()
+	svc.Close()
+	return "", nil, fmt.Errorf("FRP visitor did not become ready at %s within 60s", localAddr)
 }

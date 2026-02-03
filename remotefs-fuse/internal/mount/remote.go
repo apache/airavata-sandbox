@@ -1,5 +1,6 @@
 //go:build linux
 
+// Package mount implements the FUSE filesystem that proxies to a remote gRPC backend.
 package mount
 
 import (

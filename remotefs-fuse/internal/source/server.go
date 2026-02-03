@@ -1,3 +1,4 @@
+// Package source provides the gRPC server that serves a single export backend (ConnectSink only).
 package source
 
 import (

@@ -1,3 +1,4 @@
+// Package export implements the backend that serves file operations over the gRPC protocol.
 package export
 
 import (

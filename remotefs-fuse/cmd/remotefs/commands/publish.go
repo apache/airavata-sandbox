@@ -16,36 +16,24 @@ import (
 )
 
 var (
-	publishFolder  string
-	publishAddr    string
-	publishFRP     bool
-	publishFRPSrv  string
-	publishFRPToken string
+	publishAddr string
+	publishFRP  string
 )
 
 var publishCmd = &cobra.Command{
-	Use:   "publish [folder]",
+	Use:   "publish <folder>",
 	Short: "Publish a folder: start gRPC server in-process and serve it (tunnel the port to remote for mount)",
 	RunE:  runPublish,
+	Args:  cobra.ExactArgs(1),
 }
 
 func init() {
-	publishCmd.Flags().StringVarP(&publishFolder, "folder", "f", "", "Folder path to publish")
 	publishCmd.Flags().StringVarP(&publishAddr, "addr", "a", ":50051", "Listen address (e.g. :50051)")
-	publishCmd.Flags().BoolVar(&publishFRP, "frp", false, "Register with FRP server and print forwarding ID and secret for remote mount")
-	publishCmd.Flags().StringVar(&publishFRPSrv, "frp-server", "", "FRP server address (host or host:port). Env: REMOTEFS_FRP_SERVER")
-	publishCmd.Flags().StringVar(&publishFRPToken, "frp-token", "", "FRP server auth token. Env: REMOTEFS_FRP_TOKEN")
+	publishCmd.Flags().StringVar(&publishFRP, "frp", "", "Register with FRP server; value is hostname:port:password. Env: REMOTEFS_FRP")
 }
 
 func runPublish(cmd *cobra.Command, args []string) error {
-	folder := publishFolder
-	if folder == "" && len(args) > 0 {
-		folder = args[0]
-	}
-	if folder == "" {
-		return cmd.Usage()
-	}
-	folder = filepath.Clean(folder)
+	folder := filepath.Clean(args[0])
 	info, err := os.Stat(folder)
 	if err != nil {
 		return err
@@ -65,7 +53,7 @@ func runPublish(cmd *cobra.Command, args []string) error {
 	srv := source.NewServer(backend)
 
 	listenAddr := publishAddr
-	if publishFRP {
+	if publishFRP != "" {
 		listenAddr = "127.0.0.1:0"
 	}
 	host, portStr, err := net.SplitHostPort(listenAddr)
@@ -83,8 +71,11 @@ func runPublish(cmd *cobra.Command, args []string) error {
 	defer lis.Close()
 
 	var frpCancel func()
-	if publishFRP {
-		server, token := frpclient.FRPServerAndToken(publishFRPSrv, publishFRPToken)
+	if publishFRP != "" {
+		server, token, err := frpclient.FRPConnection(publishFRP)
+		if err != nil {
+			return fmt.Errorf("frp connection: %w", err)
+		}
 		if err := frpclient.CheckFRPServerReachable(server, 0); err != nil {
 			return err
 		}
@@ -102,9 +93,7 @@ func runPublish(cmd *cobra.Command, args []string) error {
 			return fmt.Errorf("frp proxies: %w", err)
 		}
 		defer frpCancel()
-		fmt.Fprintf(os.Stdout, "Forwarding ID: %s\n", id)
-		fmt.Fprintf(os.Stdout, "Secret: %s\n", secret)
-		fmt.Fprintf(os.Stdout, "Share for mount: %s:%s\n", id, secret)
+		fmt.Fprintf(os.Stdout, "Forwarding token: %s:%s\n", id, secret)
 	}
 
 	fmt.Fprintf(os.Stdout, "Listening on %s\n", lis.Addr().String())
