@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"os/signal"
 	"strings"
 	"syscall"
@@ -117,12 +118,38 @@ func runMount(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+	done := make(chan struct{})
 	go func() {
 		sig := make(chan os.Signal, 1)
 		signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 		<-sig
-		_ = server.Unmount()
+		signal.Stop(sig)
+		log.Printf("Unmounting %s...", mp)
+		// Close client first so in-flight FUSE ops fail and unmount can complete.
 		fpClient.Close()
+		_ = conn.Close()
+		go func() {
+			_ = server.Unmount()
+			close(done)
+		}()
+		unmountTimeout := 10 * time.Second
+		select {
+		case <-done:
+			// Unmount finished cleanly
+		case <-time.After(unmountTimeout):
+			log.Printf("Unmount timed out after %v; forcing unmount", unmountTimeout)
+			var forceErr error
+			for _, name := range []string{"fusermount", "fusermount3"} {
+				forceErr = exec.Command(name, "-u", mp).Run()
+				if forceErr == nil {
+					break
+				}
+			}
+			if forceErr != nil {
+				log.Printf("Force unmount failed: %v; run manually: fusermount -u %q", forceErr, mp)
+			}
+		}
+		os.Exit(0)
 	}()
 	log.Printf("Mounted at %s", mp)
 	server.Wait()
