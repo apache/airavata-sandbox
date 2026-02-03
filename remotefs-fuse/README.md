@@ -42,6 +42,42 @@ remotefs mount -s <tunnel_endpoint> -m /target/dir
 
 `<tunnel_endpoint>` is where the publish server is reachable (e.g. after `ssh -R 50051:localhost:50051 user@remote`, use `localhost:50051` on the remote). The mounted tree appears at `/target/dir/<virtualname>/...` (virtual name is the folder’s base name).
 
+### Using FRP (no direct tunnel)
+
+When local and remote have no direct network path, you can route through a public [FRP](https://github.com/fatedier/frp) server (XTCP with STCP fallback). The publish side registers with the FRP server and gets a unique **ID** and **secret**; the mount side uses that ID and secret to connect via the same FRP server.
+
+**1. On your machine: publish with FRP**
+
+```bash
+remotefs publish /path/to/folder --frp
+```
+
+This starts the gRPC server and registers it with the FRP server. It prints:
+
+- `Forwarding ID: <id>`
+- `Secret: <secret>`
+- `Share for mount: <id>:<secret>`
+
+Copy the ID and secret (or the single `id:secret` line) for the remote side.
+
+**2. On the remote machine: mount by ID**
+
+```bash
+remotefs mount --id <id> --secret <secret> -m /target/dir
+# Or in one flag: remotefs mount --id <id>:<secret> -m /target/dir
+```
+
+Only clients that know the secret can use that forwarding; the FRP server token (see below) controls who can talk to the FRP server at all.
+
+**FRP server configuration**
+
+Defaults: server `149.165.172.97:17000`, token `mysecret`. Override with:
+
+- **REMOTEFS_FRP_SERVER** — FRP server address (host or `host:port`)
+- **REMOTEFS_FRP_TOKEN** — FRP server auth token
+
+Or use flags: `--frp-server` and `--frp-token` on both `publish` and `mount`.
+
 ## Docker integration
 
 The repo includes a two-service setup: **publish** (gRPC server in-process) and **remote** (FUSE mount to publish). No separate coordinator or tunnel between them.
@@ -79,7 +115,7 @@ The verify script checks that the mount is ready, then runs file ops and checksu
 ├── Dockerfile           # Multi-stage: Go build, Ubuntu 22.04 runtime
 ├── Makefile             # proto, build, unit-test, verify
 ├── cmd/remotefs/        # CLI: publish, mount
-├── internal/             # export, fileproto, mount, resolver, source
+├── internal/             # export, fileproto, frpclient, mount, resolver, source
 ├── proto/                # remotefs.proto, gen/
 ├── scripts/verify.sh    # Integration test (checksums + file ops)
 ├── STATUS.md            # Last verify result (updated by make verify; for GitOps)
