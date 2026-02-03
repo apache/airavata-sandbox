@@ -1,0 +1,281 @@
+syntax = "proto3";
+
+package remotefs;
+
+option go_package = "github.com/you/remotefs/proto/gen/remotefs";
+
+// RemotefsCoordinator is the public coordinator for registration and relay.
+service RemotefsCoordinator {
+  // RegisterExport creates a session and returns id + token.
+  rpc RegisterExport(RegisterExportRequest) returns (RegisterExportResponse);
+  // ConnectSource is called by the laptop. First message from client must be ConnectSourceRequest; then bidirectional FileMessage stream.
+  rpc ConnectSource(stream FileMessage) returns (stream FileMessage);
+  // ConnectSink is called by the remote. First message from client must be ConnectSinkRequest; then bidirectional FileMessage stream.
+  rpc ConnectSink(stream FileMessage) returns (stream FileMessage);
+}
+
+message ExportPath {
+  string local_path = 1;
+  string virtual_name = 2;
+}
+
+message RegisterExportRequest {
+  repeated ExportPath paths = 1;
+}
+
+message RegisterExportResponse {
+  string session_id = 1;
+  string token = 2;
+}
+
+message ConnectSourceRequest {
+  string session_id = 1;
+  string token = 2;
+}
+
+message ConnectSinkRequest {
+  string session_id = 1;
+  string token = 2;
+}
+
+// FileMessage is control (first message), request (from sink), or response (from source), relayed by coordinator.
+message FileMessage {
+  oneof payload {
+    FileRequest request = 1;
+    FileResponse response = 2;
+    ConnectSourceRequest connect_source = 3;  // first message from laptop
+    ConnectSinkRequest connect_sink = 4;      // first message from remote
+  }
+}
+
+message FileRequest {
+  uint64 request_id = 1;
+  oneof op {
+    GetAttrRequest get_attr = 2;
+    LookupRequest lookup = 3;
+    OpenRequest open = 4;
+    ReadRequest read = 5;
+    WriteRequest write = 6;
+    ReleaseRequest release = 7;
+    OpendirRequest opendir = 8;
+    ReaddirRequest readdir = 9;
+    ReleasedirRequest releasedir = 10;
+    CreateRequest create = 11;
+    MkdirRequest mkdir = 12;
+    UnlinkRequest unlink = 13;
+    RmdirRequest rmdir = 14;
+    RenameRequest rename = 15;
+    SymlinkRequest symlink = 16;
+    ReadlinkRequest readlink = 17;
+    SetAttrRequest set_attr = 18;
+    StatfsRequest statfs = 19;
+    FlushRequest flush = 20;
+    FsyncRequest fsync = 21;
+  }
+}
+
+message FileResponse {
+  uint64 request_id = 1;
+  uint32 errno = 2;  // 0 = OK, syscall errno values
+  oneof result {
+    GetAttrResult get_attr = 3;
+    LookupResult lookup = 4;
+    OpenResult open = 5;
+    ReadResult read = 6;
+    WriteResult write = 7;
+    ReaddirResult readdir = 8;
+    CreateResult create = 9;
+    MkdirResult mkdir = 10;
+    SymlinkResult symlink = 11;
+    ReadlinkResult readlink = 12;
+    SetAttrResult set_attr = 13;
+    StatfsResult statfs = 14;
+  }
+}
+
+// Attr encodes fuse-like attributes.
+message Attr {
+  uint64 ino = 1;
+  uint64 size = 2;
+  uint32 mode = 3;
+  uint32 uid = 4;
+  uint32 gid = 5;
+  uint64 atime = 6;
+  uint64 mtime = 7;
+  uint64 ctime = 8;
+  uint64 blksize = 9;
+  uint64 blocks = 10;
+}
+
+message GetAttrRequest {
+  string path = 1;
+}
+
+message GetAttrResult {
+  Attr attr = 1;
+}
+
+message LookupRequest {
+  string path = 1;
+  string name = 2;
+}
+
+message LookupResult {
+  Attr attr = 1;
+}
+
+message OpenRequest {
+  string path = 1;
+  uint32 flags = 2;
+}
+
+message OpenResult {
+  uint64 handle_id = 1;
+}
+
+message ReadRequest {
+  string path = 1;
+  uint64 handle_id = 2;
+  int64 offset = 3;
+  uint32 size = 4;
+}
+
+message ReadResult {
+  bytes data = 1;
+}
+
+message WriteRequest {
+  string path = 1;
+  uint64 handle_id = 2;
+  int64 offset = 3;
+  bytes data = 4;
+}
+
+message WriteResult {
+  uint32 written = 1;
+}
+
+message ReleaseRequest {
+  string path = 1;
+  uint64 handle_id = 2;
+}
+
+message OpendirRequest {
+  string path = 1;
+}
+
+message ReaddirRequest {
+  string path = 1;
+  uint64 handle_id = 2;
+}
+
+message DirEntry {
+  string name = 1;
+  uint32 mode = 2;
+  uint64 ino = 3;
+}
+
+message ReaddirResult {
+  repeated DirEntry entries = 1;
+}
+
+message ReleasedirRequest {
+  string path = 1;
+  uint64 handle_id = 2;
+}
+
+message CreateRequest {
+  string path = 1;
+  string name = 2;
+  uint32 flags = 3;
+  uint32 mode = 4;
+}
+
+message CreateResult {
+  uint64 handle_id = 1;
+  Attr attr = 2;
+}
+
+message MkdirRequest {
+  string path = 1;
+  string name = 2;
+  uint32 mode = 3;
+}
+
+message MkdirResult {
+  Attr attr = 1;
+}
+
+message UnlinkRequest {
+  string path = 1;
+  string name = 2;
+}
+
+message RmdirRequest {
+  string path = 1;
+  string name = 2;
+}
+
+message RenameRequest {
+  string path = 1;
+  string old_name = 2;
+  string new_path = 3;
+  string new_name = 4;
+}
+
+message SymlinkRequest {
+  string path = 1;
+  string name = 2;
+  string target = 3;
+}
+
+message SymlinkResult {
+  Attr attr = 1;
+}
+
+message ReadlinkRequest {
+  string path = 1;
+}
+
+message ReadlinkResult {
+  string target = 1;
+}
+
+message SetAttrRequest {
+  string path = 1;
+  optional uint64 size = 2;
+  optional uint64 mtime = 3;
+  optional uint64 atime = 4;
+  optional uint32 mode = 5;
+  optional uint32 uid = 6;
+  optional uint32 gid = 7;
+}
+
+message SetAttrResult {
+  Attr attr = 1;
+}
+
+message StatfsRequest {
+  string path = 1;
+}
+
+message StatfsResult {
+  uint64 blocks = 1;
+  uint64 bfree = 2;
+  uint64 bavail = 3;
+  uint64 files = 4;
+  uint64 ffree = 5;
+  uint64 bsize = 6;
+  uint64 namelen = 7;
+}
+
+message FlushRequest {
+  string path = 1;
+  uint64 handle_id = 2;
+}
+
+message FsyncRequest {
+  string path = 1;
+  uint64 handle_id = 2;
+  uint32 flags = 3;
+}
