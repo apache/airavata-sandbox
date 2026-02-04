@@ -1,4 +1,4 @@
-.PHONY: proto build all test unit-test verify
+.PHONY: proto build build-darwin build-linux build-all all test unit-test verify
 
 proto:
 	mkdir -p proto/gen/remotefs
@@ -8,6 +8,17 @@ proto:
 
 build: proto
 	go build -o bin/remotefs ./cmd/remotefs
+
+# macOS (darwin) and Linux binaries for amd64 and arm64
+build-darwin: proto
+	GOOS=darwin GOARCH=amd64 go build -o bin/remotefs-darwin-amd64 ./cmd/remotefs
+	GOOS=darwin GOARCH=arm64 go build -o bin/remotefs-darwin-arm64 ./cmd/remotefs
+
+build-linux: proto
+	GOOS=linux GOARCH=amd64 go build -o bin/remotefs-linux-amd64 ./cmd/remotefs
+	GOOS=linux GOARCH=arm64 go build -o bin/remotefs-linux-arm64 ./cmd/remotefs
+
+build-all: build-darwin build-linux
 
 all: build
 

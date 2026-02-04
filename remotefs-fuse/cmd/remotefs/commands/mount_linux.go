@@ -135,19 +135,21 @@ func runMount(cmd *cobra.Command, args []string) error {
 		unmountTimeout := 10 * time.Second
 		select {
 		case <-done:
-			// Unmount finished cleanly
+			// Unmount finished
 		case <-time.After(unmountTimeout):
-			log.Printf("Unmount timed out after %v; forcing unmount", unmountTimeout)
-			var forceErr error
-			for _, name := range []string{"fusermount", "fusermount3"} {
-				forceErr = exec.Command(name, "-u", mp).Run()
-				if forceErr == nil {
-					break
-				}
+			log.Printf("Unmount timed out after %v", unmountTimeout)
+		}
+		// Always run fusermount -u so the kernel mount is cleared and the directory
+		// is not left as d????????? / "Transport endpoint is not connected".
+		var forceErr error
+		for _, name := range []string{"fusermount", "fusermount3"} {
+			forceErr = exec.Command(name, "-u", mp).Run()
+			if forceErr == nil {
+				break
 			}
-			if forceErr != nil {
-				log.Printf("Force unmount failed: %v; run manually: fusermount -u %q", forceErr, mp)
-			}
+		}
+		if forceErr != nil {
+			log.Printf("Unmount failed: %v; run manually: fusermount -u %q", forceErr, mp)
 		}
 		os.Exit(0)
 	}()
