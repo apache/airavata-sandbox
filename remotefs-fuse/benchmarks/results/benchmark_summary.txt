@@ -1,0 +1,33 @@
+======================================================================
+  BENCHMARK SUMMARY
+======================================================================
+
+--- login02 ---
+
+Size     SCP (s)      RemoteFS (s)   Ratio      Winner      
+------------------------------------------------------------
+128K     2.246        0.236          0.10       RemoteFS (9.5x faster)
+256K     2.447        0.265          0.11       RemoteFS (9.2x faster)
+512K     2.419        0.336          0.14       RemoteFS (7.2x faster)
+1M       2.468        0.475          0.19       RemoteFS (5.2x faster)
+2M       2.550        0.756          0.30       RemoteFS (3.4x faster)
+8M       3.229        2.240          0.69       RemoteFS (1.4x faster)
+16M      3.956        3.865          0.98       RemoteFS (1.0x faster)
+32M      5.322        7.305          1.37       SCP (1.4x faster)
+64M      8.245        12.103         1.47       SCP (1.5x faster)
+128M     14.647       24.743         1.69       SCP (1.7x faster)
+
+--- nsworkshopcpuvc1.novalocal ---
+
+Size     SCP (s)      RemoteFS (s)   Ratio      Winner      
+------------------------------------------------------------
+128K     2.068        0.225          0.11       RemoteFS (9.2x faster)
+256K     2.089        0.225          0.11       RemoteFS (9.3x faster)
+512K     2.100        0.226          0.11       RemoteFS (9.3x faster)
+1M       2.148        0.295          0.14       RemoteFS (7.3x faster)
+2M       2.281        0.449          0.20       RemoteFS (5.1x faster)
+8M       3.021        1.439          0.48       RemoteFS (2.1x faster)
+16M      3.610        2.876          0.80       RemoteFS (1.3x faster)
+32M      4.985        5.532          1.11       SCP (1.1x faster)
+64M      8.041        10.540         1.31       SCP (1.3x faster)
+128M     14.055       20.907         1.49       SCP (1.5x faster)
