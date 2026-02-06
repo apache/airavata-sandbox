@@ -10,9 +10,9 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/you/remotefs/internal/export"
-	"github.com/you/remotefs/internal/fileproto"
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/export"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/fileproto"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
 // testServer wraps a gRPC server for testing
@@ -77,10 +77,6 @@ func (m *mockStream) Recv() (*pb.FileMessage, error) {
 	}
 	return nil, nil
 }
-
-// ============================================================================
-// Integration Tests for Distributed FS Semantics
-// ============================================================================
 
 func TestIntegration_CloseToOpenConsistency(t *testing.T) {
 	// Setup: Create temp directory with test file
@@ -252,10 +248,7 @@ func TestIntegration_WriteInvalidatesCache(t *testing.T) {
 }
 
 func TestIntegration_LargeFileMultipleBlocks(t *testing.T) {
-	// TODO: This test has issues with the mock stream implementation
-	// The mock stream doesn't properly handle open/read sequences in all cases
-	// causing "bad file descriptor" errors. Needs investigation of mockStream.
-	t.Skip("Skipping: mock stream implementation issue - needs investigation")
+	t.Skip("mock stream does not handle concurrent open/read sequences correctly")
 
 	dir := t.TempDir()
 	testFile := filepath.Join(dir, "large.bin")
@@ -339,10 +332,7 @@ func TestIntegration_LargeFileMultipleBlocks(t *testing.T) {
 }
 
 func TestIntegration_TruncationInvalidation(t *testing.T) {
-	// TODO: This test has issues with the mock stream implementation
-	// The cache doesn't get populated correctly through the mock, causing
-	// block count to be 0 before and after truncation. Needs investigation.
-	t.Skip("Skipping: mock stream implementation issue - needs investigation")
+	t.Skip("mock stream does not populate cache correctly for truncation test")
 
 	dir := t.TempDir()
 	testFile := filepath.Join(dir, "truncate.txt")

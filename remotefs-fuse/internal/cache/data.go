@@ -81,9 +81,6 @@ func (c *DataCache) Read(path string, offset, size int64) ([]byte, bool) {
 // If mtime > 0 and differs from cached mtime, returns cache miss.
 // This enables stale detection when source files change.
 func (c *DataCache) ReadWithMtime(path string, offset, size, mtime int64) ([]byte, bool) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-
 	if size <= 0 {
 		return nil, true
 	}
@@ -92,33 +89,43 @@ func (c *DataCache) ReadWithMtime(path string, offset, size, mtime int64) ([]byt
 	startBlock := offset / c.blockSize
 	endBlock := (offset + size - 1) / c.blockSize
 
+	// Phase 1: Try read-only check first (fast path for cache hits)
+	c.mu.RLock()
+	needsWrite := false
+	needsInvalidation := false
+	var blocksToUpdate []blockKey
+
 	result := make([]byte, 0, size)
 	currentOffset := offset
+	allHit := true
 
 	for blockIdx := startBlock; blockIdx <= endBlock; blockIdx++ {
 		key := blockKey{path: path, blockIndex: blockIdx}
 		block, ok := c.blocks[key]
 		if !ok {
 			// Cache miss for this block
-			return nil, false
+			allHit = false
+			break
 		}
 
 		// Check TTL expiration
 		if now.After(block.expiresAt) {
-			// Block has expired - remove it and return cache miss
-			c.removeBlock(key)
-			return nil, false
+			// Block has expired - need write lock to remove
+			needsWrite = true
+			allHit = false
+			break
 		}
 
 		// Check mtime if provided (stale detection)
 		if mtime > 0 && block.mtime != mtime {
-			// Source file has changed - invalidate all blocks for this path
-			c.invalidateAllLocked(path)
-			return nil, false
+			// Source file has changed - need write lock to invalidate
+			needsInvalidation = true
+			allHit = false
+			break
 		}
 
-		// Move to front of LRU
-		c.lru.MoveToFront(block.elem)
+		// Track blocks to update LRU
+		blocksToUpdate = append(blocksToUpdate, key)
 
 		// Calculate how much of this block we need
 		blockStart := blockIdx * c.blockSize
@@ -138,21 +145,52 @@ func (c *DataCache) ReadWithMtime(path string, offset, size, mtime int64) ([]byt
 
 		if readStart >= int64(len(block.data)) {
 			// This block doesn't have the data we need
-			// This is NOT a complete cache hit - we need to fetch from remote
-			return nil, false
+			allHit = false
+			break
 		}
 
 		result = append(result, block.data[readStart:readEnd]...)
 		currentOffset = blockEnd
 	}
+	c.mu.RUnlock()
 
-	// We got data from the cache
-	// A "complete" read means we found all blocks in cache (even if some were partial due to EOF)
-	// If result is empty but we requested data, that's a cache miss
+	// If complete cache hit, update LRU with write lock (can be batched)
+	if allHit && len(result) > 0 {
+		// Only update LRU if we have blocks to update
+		if len(blocksToUpdate) > 0 {
+			c.mu.Lock()
+			for _, key := range blocksToUpdate {
+				if block, ok := c.blocks[key]; ok {
+					c.lru.MoveToFront(block.elem)
+				}
+			}
+			c.mu.Unlock()
+		}
+		return result, true
+	}
+
+	// Phase 2: Handle cache misses requiring write lock
+	if needsWrite || needsInvalidation {
+		c.mu.Lock()
+		if needsInvalidation {
+			c.invalidateAllLocked(path)
+		} else {
+			// Remove expired blocks
+			for blockIdx := startBlock; blockIdx <= endBlock; blockIdx++ {
+				key := blockKey{path: path, blockIndex: blockIdx}
+				if block, ok := c.blocks[key]; ok && now.After(block.expiresAt) {
+					c.removeBlock(key)
+				}
+			}
+		}
+		c.mu.Unlock()
+	}
+
+	// Cache miss
 	if len(result) == 0 && size > 0 {
 		return nil, false
 	}
-	return result, true
+	return nil, false
 }
 
 // Write caches data for the given path and offset.

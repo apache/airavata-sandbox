@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
 func errToErrno(e error) uint32 {

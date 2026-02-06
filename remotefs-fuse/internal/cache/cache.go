@@ -9,8 +9,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/you/remotefs/internal/fileproto"
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/fileproto"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
 // BlockCache defines the interface for block-level data caching.
@@ -59,16 +59,17 @@ type BlockCache interface {
 	BlockCount() int
 }
 
-// DefaultConfig returns a CacheConfig with sensible defaults.
+// DefaultConfig returns a Config with sensible defaults.
 func DefaultConfig() *Config {
 	return &Config{
 		MaxDataCacheSize:    256 * 1024 * 1024, // 256 MB
-		BlockSize:           256 * 1024,         // 256 KB (increased from 64KB for better throughput)
+		BlockSize:           256 * 1024,         // 256 KB
+		DataTTL:             5 * time.Minute,
 		MetadataTTL:         30 * time.Second,
 		DirectoryTTL:        30 * time.Second,
 		Enabled:             true,
-		PrefetchBlocks:      4,   // Prefetch 4 blocks ahead (1MB with 256KB blocks)
-		MaxParallelFetches:  8,   // Max concurrent block fetches
+		PrefetchBlocks:      4,
+		MaxParallelFetches:  8,
 		EnablePrefetch:      true,
 		EnableParallelFetch: true,
 		UseMmapCache:        false,
@@ -84,34 +85,16 @@ type Config struct {
 	// BlockSize is the size of each cached block in bytes.
 	BlockSize int64
 
-	// MetadataTTL is how long metadata entries remain valid.
-	MetadataTTL time.Duration
-
-	// DirectoryTTL is how long directory entries remain valid.
-	DirectoryTTL time.Duration
-
-	// Enabled controls whether caching is active.
-	Enabled bool
-
-	// PrefetchBlocks is how many blocks to prefetch ahead during sequential reads.
-	PrefetchBlocks int
-
-	// MaxParallelFetches is the maximum number of concurrent block fetches.
-	MaxParallelFetches int
-
-	// EnablePrefetch enables read-ahead prefetching.
-	EnablePrefetch bool
-
-	// EnableParallelFetch enables parallel fetching of multiple blocks.
-	EnableParallelFetch bool
-
-	// UseMmapCache enables file-backed memory-mapped block cache instead of in-memory.
-	// This prevents heap memory bloat for large caches.
-	UseMmapCache bool
-
-	// MmapCacheDir is the directory for mmap cache block files.
-	// Required when UseMmapCache is true.
-	MmapCacheDir string
+	DataTTL             time.Duration // How long data blocks remain valid (default: 5m).
+	MetadataTTL         time.Duration // How long metadata entries remain valid (default: 30s).
+	DirectoryTTL        time.Duration // How long directory entries remain valid (default: 30s).
+	Enabled             bool
+	PrefetchBlocks      int  // Blocks to prefetch ahead during sequential reads.
+	MaxParallelFetches  int  // Max concurrent block fetches.
+	EnablePrefetch      bool // Enable read-ahead prefetching.
+	EnableParallelFetch bool // Enable parallel fetching of multiple blocks.
+	UseMmapCache        bool   // Use file-backed mmap block cache instead of in-memory.
+	MmapCacheDir        string // Directory for mmap cache files (required when UseMmapCache is true).
 }
 
 // readTracker tracks sequential read patterns for prefetching.
@@ -160,18 +143,24 @@ func NewCachedClient(client *fileproto.Client, config *Config) *CachedClient {
 		config = DefaultConfig()
 	}
 
+	// Use DataTTL for data cache; fall back to MetadataTTL for backward compatibility
+	dataTTL := config.DataTTL
+	if dataTTL <= 0 {
+		dataTTL = 5 * time.Minute
+	}
+
 	// Create the appropriate block cache based on config
 	var dataCache BlockCache
 	if config.UseMmapCache && config.MmapCacheDir != "" {
 		mmapCache, err := NewMmapDataCache(config.MmapCacheDir, config.MaxDataCacheSize, config.BlockSize)
 		if err != nil {
 			// Fall back to in-memory cache on error
-			dataCache = NewDataCacheWithTTL(config.MaxDataCacheSize, config.BlockSize, config.MetadataTTL)
+			dataCache = NewDataCacheWithTTL(config.MaxDataCacheSize, config.BlockSize, dataTTL)
 		} else {
 			dataCache = mmapCache
 		}
 	} else {
-		dataCache = NewDataCacheWithTTL(config.MaxDataCacheSize, config.BlockSize, config.MetadataTTL)
+		dataCache = NewDataCacheWithTTL(config.MaxDataCacheSize, config.BlockSize, dataTTL)
 	}
 
 	cc := &CachedClient{
@@ -256,7 +245,6 @@ func (c *CachedClient) prefetchWorker() {
 }
 
 // doPrefetch fetches blocks in the background.
-// CONSISTENCY: Uses mtime to ensure prefetched data matches current file state.
 func (c *CachedClient) doPrefetch(req prefetchRequest) {
 	// Use a short-lived context with timeout to prevent prefetches from running indefinitely
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -277,7 +265,6 @@ func (c *CachedClient) doPrefetch(req prefetchRequest) {
 		blockIdx := req.blockStart + int64(i)
 		offset := blockIdx * blockSize
 
-		// CONSISTENCY: Check if already cached with valid mtime
 		if _, complete := c.dataCache.ReadWithMtime(req.path, offset, blockSize, req.mtime); complete {
 			continue
 		}
@@ -294,7 +281,6 @@ func (c *CachedClient) doPrefetch(req prefetchRequest) {
 			continue
 		}
 
-		// CONSISTENCY: Write with mtime for future validation
 		if rr := resp.GetRead(); rr != nil && len(rr.Data) > 0 {
 			c.dataCache.WriteWithMtime(req.path, offset, rr.Data, req.mtime)
 		}
@@ -309,8 +295,7 @@ func (c *CachedClient) Close() {
 	close(c.cleanupDone)
 }
 
-// Do sends a request, potentially using cached data or invalidating caches.
-// This is the main entry point that intercepts all file operations.
+// Do routes a file request through the cache layer.
 func (c *CachedClient) Do(ctx context.Context, req *pb.FileRequest) (*pb.FileResponse, error) {
 	if !c.config.Enabled {
 		return c.client.Do(ctx, req)
@@ -407,21 +392,34 @@ func (c *CachedClient) handleLookup(ctx context.Context, req *pb.FileRequest, r 
 }
 
 // handleRead returns cached data blocks if valid, otherwise fetches and caches.
-// Implements parallel fetching for large reads and triggers prefetching.
-// CONSISTENCY: Always validates cache against current file mtime to ensure
-// stale data is never returned when source files change.
+// Uses parallel fetching for large reads and triggers prefetching.
 func (c *CachedClient) handleRead(ctx context.Context, req *pb.FileRequest, r *pb.ReadRequest) (*pb.FileResponse, error) {
 	blockSize := c.config.BlockSize
 	size := int64(r.Size)
 
-	// CONSISTENCY: Get current file metadata to validate cache freshness.
-	// This ensures we never return stale data if the source file changed.
+	// Fast path: serve from data cache if metadata cache confirms mtime is still valid.
+	// If metadata has expired, fall through to re-validate from server.
+	cachedMtime := c.dataCache.GetMtime(r.Path)
+	if cachedMtime > 0 {
+		if attr, ok := c.metaCache.Get(r.Path); ok && int64(attr.Mtime) == cachedMtime {
+			data, complete := c.dataCache.ReadWithMtime(r.Path, r.Offset, size, cachedMtime)
+			if complete {
+				c.triggerPrefetch(r.Path, r.Offset, size, cachedMtime)
+				return &pb.FileResponse{
+					RequestId: req.RequestId,
+					Result: &pb.FileResponse_Read{
+						Read: &pb.ReadResult{Data: data},
+					},
+				}, nil
+			}
+		}
+	}
+
+	// Slow path: fetch current mtime from server (or metadata cache) and validate.
 	mtime := c.getCurrentMtime(ctx, r.Path)
 
-	// Try to read from cache first, validating against current mtime
 	data, complete := c.dataCache.ReadWithMtime(r.Path, r.Offset, size, mtime)
 	if complete {
-		// Trigger prefetch for sequential reads
 		c.triggerPrefetch(r.Path, r.Offset, size, mtime)
 		return &pb.FileResponse{
 			RequestId: req.RequestId,
@@ -445,9 +443,7 @@ func (c *CachedClient) handleRead(ctx context.Context, req *pb.FileRequest, r *p
 
 		if resp.Errno == 0 {
 			if rr := resp.GetRead(); rr != nil {
-				// CONSISTENCY: Cache with mtime so future reads can validate
 				c.dataCache.WriteWithMtime(r.Path, r.Offset, rr.Data, mtime)
-				// Trigger prefetch
 				c.triggerPrefetch(r.Path, r.Offset, size, mtime)
 			}
 		}
@@ -493,8 +489,7 @@ func (c *CachedClient) handleRead(ctx context.Context, req *pb.FileRequest, r *p
 			}
 			_ = readStart // Used below
 
-			// CONSISTENCY: Check cache with mtime validation
-			if cached, ok := c.dataCache.ReadWithMtime(r.Path, blockOffset, blockReadSize, mtime); ok {
+		if cached, ok := c.dataCache.ReadWithMtime(r.Path, blockOffset, blockReadSize, mtime); ok {
 				results <- blockResult{blockIdx: idx, data: cached}
 				return
 			}
@@ -524,8 +519,7 @@ func (c *CachedClient) handleRead(ctx context.Context, req *pb.FileRequest, r *p
 				return
 			}
 
-			// CONSISTENCY: Cache with mtime for future validation
-			c.dataCache.WriteWithMtime(r.Path, blockOffset, rr.Data, mtime)
+		c.dataCache.WriteWithMtime(r.Path, blockOffset, rr.Data, mtime)
 			results <- blockResult{blockIdx: idx, data: rr.Data}
 		}(blockIdx)
 	}
@@ -584,9 +578,8 @@ func (c *CachedClient) handleRead(ctx context.Context, req *pb.FileRequest, r *p
 	}, nil
 }
 
-// getCurrentMtime fetches the current mtime for a file path.
-// Uses metadata cache if valid, otherwise fetches fresh from remote.
-// This is critical for cache consistency - ensures we validate against current state.
+// getCurrentMtime returns the current mtime for a file path.
+// Uses metadata cache if valid, otherwise fetches from remote.
 func (c *CachedClient) getCurrentMtime(ctx context.Context, path string) int64 {
 	// Try metadata cache first
 	if attr, ok := c.metaCache.Get(path); ok {
@@ -612,7 +605,6 @@ func (c *CachedClient) getCurrentMtime(ctx context.Context, path string) int64 {
 }
 
 // triggerPrefetch queues prefetch requests for sequential read patterns.
-// CONSISTENCY: Includes mtime so prefetched data can be validated.
 func (c *CachedClient) triggerPrefetch(path string, offset, size, mtime int64) {
 	if !c.config.EnablePrefetch || c.config.PrefetchBlocks <= 0 {
 		return
@@ -658,7 +650,7 @@ func (c *CachedClient) triggerPrefetch(path string, offset, size, mtime int64) {
 			path:       path,
 			blockStart: nextBlockStart,
 			blockCount: c.config.PrefetchBlocks,
-			mtime:      mtime, // CONSISTENCY: Include mtime for validation
+			mtime:      mtime,
 		}:
 		default:
 			// Queue full, skip prefetch

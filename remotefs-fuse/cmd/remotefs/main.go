@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/you/remotefs/cmd/remotefs/commands"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/cmd/remotefs/commands"
 )
 
 func main() {

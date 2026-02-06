@@ -8,14 +8,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/you/remotefs/internal/export"
-	"github.com/you/remotefs/internal/fileproto"
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/export"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/fileproto"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
-// ============================================================================
 // Data Cache Benchmarks
-// ============================================================================
 
 func BenchmarkDataCache_Write(b *testing.B) {
 	cache := NewDataCache(256*1024*1024, 64*1024) // 256MB, 64KB blocks
@@ -110,9 +108,7 @@ func BenchmarkDataCache_LRUEviction(b *testing.B) {
 	}
 }
 
-// ============================================================================
 // Metadata Cache Benchmarks
-// ============================================================================
 
 func BenchmarkMetadataCache_Set(b *testing.B) {
 	cache := NewMetadataCache(time.Hour)
@@ -166,9 +162,7 @@ func BenchmarkMetadataCache_Invalidate(b *testing.B) {
 	}
 }
 
-// ============================================================================
 // Directory Cache Benchmarks
-// ============================================================================
 
 func BenchmarkDirectoryCache_Set(b *testing.B) {
 	cache := NewDirectoryCache(time.Hour)
@@ -218,9 +212,7 @@ func BenchmarkDirectoryCache_LargeDirectory(b *testing.B) {
 	}
 }
 
-// ============================================================================
 // CachedClient Benchmarks (with mock backend)
-// ============================================================================
 
 func BenchmarkCachedClient_ReadCacheHit(b *testing.B) {
 	dir := b.TempDir()
@@ -365,9 +357,7 @@ func BenchmarkCachedClient_LookupHit(b *testing.B) {
 	}
 }
 
-// ============================================================================
 // Comparison Benchmarks (Cached vs Uncached)
-// ============================================================================
 
 func BenchmarkComparison_UncachedRead(b *testing.B) {
 	dir := b.TempDir()
@@ -450,9 +440,7 @@ func BenchmarkComparison_CachedRead(b *testing.B) {
 	}
 }
 
-// ============================================================================
 // Parallel Benchmarks
-// ============================================================================
 
 func BenchmarkDataCache_ParallelReads(b *testing.B) {
 	cache := NewDataCache(256*1024*1024, 64*1024)

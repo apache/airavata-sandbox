@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
 func TestBackendReadWriteChecksum(t *testing.T) {

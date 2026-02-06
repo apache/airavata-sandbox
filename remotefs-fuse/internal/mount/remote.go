@@ -11,9 +11,9 @@ import (
 
 	"github.com/hanwen/go-fuse/v2/fs"
 	"github.com/hanwen/go-fuse/v2/fuse"
-	"github.com/you/remotefs/internal/cache"
-	"github.com/you/remotefs/internal/fileproto"
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/cache"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/fileproto"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
 func pbAttrToFuse(a *pb.Attr) fuse.Attr {

@@ -5,12 +5,10 @@ import (
 	"testing"
 	"time"
 
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
-// ============================================================================
 // Data Cache Concurrency Tests
-// ============================================================================
 
 func TestDataCache_ConcurrentReads(t *testing.T) {
 	cache := NewDataCache(1024*1024, 64)
@@ -215,9 +213,7 @@ func TestDataCache_ConcurrentInvalidate(t *testing.T) {
 	wg.Wait()
 }
 
-// ============================================================================
 // Metadata Cache Concurrency Tests
-// ============================================================================
 
 func TestMetadataCache_ConcurrentReads(t *testing.T) {
 	cache := NewMetadataCache(time.Hour)
@@ -370,9 +366,7 @@ func TestMetadataCache_ConcurrentExpiration(t *testing.T) {
 	wg.Wait()
 }
 
-// ============================================================================
 // Directory Cache Concurrency Tests
-// ============================================================================
 
 func TestDirectoryCache_ConcurrentReads(t *testing.T) {
 	cache := NewDirectoryCache(time.Hour)
@@ -482,9 +476,7 @@ func TestDirectoryCache_ConcurrentModifications(t *testing.T) {
 	wg.Wait()
 }
 
-// ============================================================================
 // Cross-Cache Concurrency Tests
-// ============================================================================
 
 func TestAllCaches_ConcurrentOperations(t *testing.T) {
 	dataCache := NewDataCache(1024*1024, 64)
@@ -558,9 +550,7 @@ func TestAllCaches_ConcurrentOperations(t *testing.T) {
 	wg.Wait()
 }
 
-// ============================================================================
 // Race Detection Tests (run with -race flag)
-// ============================================================================
 
 func TestDataCache_RaceCondition(t *testing.T) {
 	cache := NewDataCache(1024, 64)

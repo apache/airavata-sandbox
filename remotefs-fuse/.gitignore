@@ -26,8 +26,9 @@ Thumbs.db
 *.log
 .verify.log
 
-# Benchmark generated data (keep results, ignore generated test files)
+# Benchmark temp files (results are kept)
 /tmp/remotefs-benchmark-*
+benchmarks/results/*.tmp
 
-# Local/test (optional: uncomment if testdata is generated)
-# testdata/
+# Proto generated files are checked in for distribution.
+# Run `make proto` to regenerate after editing proto/remotefs.proto.

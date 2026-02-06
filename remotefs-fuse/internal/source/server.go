@@ -12,8 +12,8 @@ import (
 	_ "google.golang.org/grpc/encoding/gzip" // Register gzip compressor
 	"google.golang.org/grpc/status"
 
-	"github.com/you/remotefs/internal/export"
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/export"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
 // Server is an in-process gRPC server that serves a single export (one backend).

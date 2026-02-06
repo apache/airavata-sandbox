@@ -2,19 +2,18 @@
 
 proto:
 	mkdir -p proto/gen/remotefs
-	protoc --go_out=. --go_opt=module=github.com/you/remotefs \
-		--go-grpc_out=. --go-grpc_opt=module=github.com/you/remotefs \
+	protoc --go_out=. --go_opt=module=github.com/apache/airavata-sandbox/remotefs-fuse \
+		--go-grpc_out=. --go-grpc_opt=module=github.com/apache/airavata-sandbox/remotefs-fuse \
 		proto/remotefs.proto
 
-build: proto
+build:
 	go build -o bin/remotefs ./cmd/remotefs
 
-# macOS (darwin) and Linux binaries for amd64 and arm64
-build-darwin: proto
+build-darwin:
 	GOOS=darwin GOARCH=amd64 go build -o bin/remotefs-darwin-amd64 ./cmd/remotefs
 	GOOS=darwin GOARCH=arm64 go build -o bin/remotefs-darwin-arm64 ./cmd/remotefs
 
-build-linux: proto
+build-linux:
 	GOOS=linux GOARCH=amd64 go build -o bin/remotefs-linux-amd64 ./cmd/remotefs
 	GOOS=linux GOARCH=arm64 go build -o bin/remotefs-linux-arm64 ./cmd/remotefs
 
@@ -22,8 +21,7 @@ build-all: build-darwin build-linux
 
 all: build
 
-# Unit/integration tests (no Docker)
-unit-test: proto
+unit-test:
 	go test ./...
 
 # Docker integration: build, compose up, verify script; updates STATUS.md.

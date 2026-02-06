@@ -9,10 +9,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/you/remotefs/internal/export"
-	"github.com/you/remotefs/internal/frpclient"
-	"github.com/you/remotefs/internal/source"
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/export"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/frpclient"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/source"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
 var (

@@ -14,15 +14,8 @@ import (
 	"syscall"
 )
 
-// FileCache implements a file-backed cache that stores downloaded files on disk.
-// This enables FUSE passthrough mode where the kernel can read directly from
-// the cached file, bypassing the FUSE daemon for significantly improved performance.
-//
-// Architecture:
-//   - Files are stored in cacheDir with hashed names to avoid path conflicts
-//   - Each cached file tracks its source mtime for invalidation
-//   - LRU eviction ensures cache size stays within bounds
-//   - File descriptors are kept open for passthrough until the file is evicted
+// FileCache stores downloaded files on disk for FUSE passthrough mode.
+// Files are stored with hashed names, tracked by mtime, and evicted via LRU.
 type FileCache struct {
 	mu       sync.RWMutex
 	cacheDir string                  // directory to store cached files

@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
 // directoryEntry holds cached directory entries with expiration time.
@@ -38,22 +38,30 @@ func NewDirectoryCache(ttl time.Duration) *DirectoryCache {
 // Get retrieves cached directory entries for the given path.
 // Returns the entries and true if found and not expired, otherwise nil and false.
 func (c *DirectoryCache) Get(path string) ([]*pb.DirEntry, bool) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-
+	c.mu.RLock()
 	entry, ok := c.entries[path]
 	if !ok {
+		c.mu.RUnlock()
 		return nil, false
 	}
 
-	if c.now().After(entry.expiresAt) {
-		// Expired - remove it
+	expired := c.now().After(entry.expiresAt)
+	if !expired {
+		result := cloneDirEntries(entry.entries)
+		c.mu.RUnlock()
+		return result, true
+	}
+	c.mu.RUnlock()
+
+	// Upgrade to write lock to remove expired entry.
+	c.mu.Lock()
+	entry, ok = c.entries[path]
+	if ok && c.now().After(entry.expiresAt) {
 		delete(c.entries, path)
-		return nil, false
 	}
+	c.mu.Unlock()
 
-	// Return a copy to prevent modification (clone while holding lock)
-	return cloneDirEntries(entry.entries), true
+	return nil, false
 }
 
 // Set stores directory entries for the given path with the configured TTL.
@@ -187,8 +195,8 @@ func (c *DirectoryCache) RemoveEntry(dirPath, name string) bool {
 // HasEntry checks if a directory has a specific entry cached.
 // Returns true if the entry exists in the cache.
 func (c *DirectoryCache) HasEntry(dirPath, name string) bool {
-	c.mu.Lock()
-	defer c.mu.Unlock()
+	c.mu.RLock()
+	defer c.mu.RUnlock()
 
 	dirEntry, ok := c.entries[dirPath]
 	if !ok || c.now().After(dirEntry.expiresAt) {

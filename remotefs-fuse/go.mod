@@ -1,4 +1,4 @@
-module github.com/you/remotefs
+module github.com/apache/airavata-sandbox/remotefs-fuse
 
 go 1.24.0
 

@@ -20,12 +20,12 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/encoding/gzip"
 
-	"github.com/you/remotefs/internal/cache"
-	"github.com/you/remotefs/internal/fileproto"
-	"github.com/you/remotefs/internal/frpclient"
-	"github.com/you/remotefs/internal/mount"
-	"github.com/you/remotefs/internal/resolver"
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/cache"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/fileproto"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/frpclient"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/mount"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/resolver"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
 var (
@@ -133,27 +133,25 @@ func runMount(cmd *cobra.Command, args []string) error {
 	fpClient := fileproto.NewClient(stream)
 	go fpClient.Run()
 
-	// Validate mmap-cache requires cache-dir
 	if mmapCache && fileCacheDir == "" {
 		return fmt.Errorf("--mmap-cache requires --cache-dir to be set")
 	}
 
-	// Create cache configuration with optimizations enabled
 	cacheConfig := &cache.Config{
-		MaxDataCacheSize:    cacheSize * 1024 * 1024,        // Convert MB to bytes
-		BlockSize:           cacheBlockSize * 1024,          // Convert KB to bytes
+		MaxDataCacheSize:    cacheSize * 1024 * 1024,
+		BlockSize:           cacheBlockSize * 1024,
+		DataTTL:             5 * time.Minute,
 		MetadataTTL:         time.Duration(cacheTTL) * time.Second,
 		DirectoryTTL:        time.Duration(cacheTTL) * time.Second,
 		Enabled:             !noCache,
-		PrefetchBlocks:      4,    // Prefetch 4 blocks ahead (1MB with 256KB blocks)
-		MaxParallelFetches:  8,    // Max concurrent block fetches
-		EnablePrefetch:      true, // Enable read-ahead
-		EnableParallelFetch: true, // Enable parallel fetching
+		PrefetchBlocks:      4,
+		MaxParallelFetches:  8,
+		EnablePrefetch:      true,
+		EnableParallelFetch: true,
 		UseMmapCache:        mmapCache,
 		MmapCacheDir:        fileCacheDir,
 	}
 
-	// Create cached client
 	cachedClient := cache.NewCachedClient(fpClient, cacheConfig)
 
 	root := &mount.RemoteRoot{Client: fpClient, CachedClient: cachedClient}

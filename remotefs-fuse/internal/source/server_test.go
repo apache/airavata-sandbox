@@ -11,9 +11,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/you/remotefs/internal/export"
-	"github.com/you/remotefs/internal/fileproto"
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/export"
+	"github.com/apache/airavata-sandbox/remotefs-fuse/internal/fileproto"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
 func TestSourceServerConnectSinkAndRead(t *testing.T) {

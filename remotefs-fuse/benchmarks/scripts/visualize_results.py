@@ -234,7 +234,7 @@ def create_summary_table(df, output_dir):
     summary_lines.append("")
     summary_lines.append("Notes:")
     summary_lines.append("  - All tests use fresh mounts for each file size to ensure fair comparison")
-    summary_lines.append("  - 3 iterations per configuration, results show mean values")
+    summary_lines.append("  - Multiple iterations per configuration, results show mean values")
     summary_lines.append("  - Cached variants include warm-cache performance from repeated reads")
     summary_lines.append("=" * 120)
     

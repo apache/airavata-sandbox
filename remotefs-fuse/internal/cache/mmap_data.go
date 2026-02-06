@@ -14,19 +14,9 @@ import (
 )
 
 // MmapDataCache implements a file-backed, memory-mapped block cache.
-// Unlike the in-memory DataCache, this stores blocks as files on disk and
-// uses mmap to access them, preventing heap memory bloat for large caches.
-//
-// Consistency Model:
-//   - NO TTL expiration - blocks never expire based on time
-//   - Mtime validation on every read - if source mtime changed, invalidate all blocks
-//   - LRU eviction - when cache is full, evict least recently used blocks
-//   - Explicit invalidation - writes/truncates invalidate affected blocks
-//
-// Architecture:
-//   - Each block is stored as a separate file: cacheDir/blocks/{pathHash}/{blockIdx}.blk
-//   - Blocks are memory-mapped for zero-copy reads
-//   - SHA256 hash of path ensures safe directory names
+// Blocks are stored as individual files under cacheDir/blocks/{pathHash}/{blockIdx}.blk
+// and accessed via mmap for zero-copy reads. Consistency is maintained through
+// mtime validation on every read (no TTL expiration).
 type MmapDataCache struct {
 	mu        sync.RWMutex
 	cacheDir  string                   // directory for block files

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package remotefs;
 
-option go_package = "github.com/you/remotefs/proto/gen/remotefs";
+option go_package = "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs";
 
 // RemotefsCoordinator is the public coordinator for registration and relay.
 service RemotefsCoordinator {

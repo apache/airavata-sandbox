@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
 // mockFileprotoClient simulates a remote server for testing cache consistency.

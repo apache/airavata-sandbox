@@ -5,7 +5,7 @@ import (
 	"context"
 	"sync"
 
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 	"google.golang.org/grpc"
 )
 

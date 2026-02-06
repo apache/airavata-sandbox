@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
 // metadataEntry holds a cached file attribute with expiration time.

@@ -4,12 +4,10 @@ import (
 	"testing"
 	"time"
 
-	pb "github.com/you/remotefs/proto/gen/remotefs"
+	pb "github.com/apache/airavata-sandbox/remotefs-fuse/proto/gen/remotefs"
 )
 
-// ============================================================================
 // Data Cache Tests
-// ============================================================================
 
 func TestDataCache_WriteAndRead(t *testing.T) {
 	cache := NewDataCache(1024*1024, 64) // 1MB cache, 64 byte blocks
@@ -225,12 +223,10 @@ func TestDataCache_Clear(t *testing.T) {
 	}
 }
 
-// ============================================================================
 // Data Cache Offset Bug Tests
 // These tests verify the fix for the bug where Read() incorrectly returned
 // complete=true even when it had no data to return for non-zero offsets.
 // This caused files to appear truncated (only first 64KB readable).
-// ============================================================================
 
 func TestDataCache_ReadAtOffsetZero(t *testing.T) {
 	// Test reading at offset 0 - should work correctly
@@ -573,9 +569,7 @@ func TestDataCache_ZeroSizeRead(t *testing.T) {
 	}
 }
 
-// ============================================================================
 // Metadata Cache Tests
-// ============================================================================
 
 func TestMetadataCache_SetAndGet(t *testing.T) {
 	cache := NewMetadataCache(time.Hour)
@@ -726,9 +720,7 @@ func TestMetadataCache_ImmutableReturn(t *testing.T) {
 	}
 }
 
-// ============================================================================
 // Directory Cache Tests
-// ============================================================================
 
 func TestDirectoryCache_SetAndGet(t *testing.T) {
 	cache := NewDirectoryCache(time.Hour)
@@ -883,9 +875,7 @@ func TestDirectoryCache_Clear(t *testing.T) {
 	}
 }
 
-// ============================================================================
 // Data Cache Eviction Policy Tests (with TTL)
-// ============================================================================
 
 func TestDataCache_LRUEvictionWithTTL(t *testing.T) {
 	// Create a small cache that can only hold 2 blocks of 16 bytes each
@@ -982,9 +972,7 @@ func TestDataCache_MaxSizeEnforced(t *testing.T) {
 	}
 }
 
-// ============================================================================
 // Data Cache TTL Expiration Tests
-// ============================================================================
 
 func TestDataCache_TTLExpiration(t *testing.T) {
 	cache := NewDataCacheWithTTL(1024*1024, 64, 100*time.Millisecond)
@@ -1072,9 +1060,7 @@ func TestDataCache_Cleanup(t *testing.T) {
 	}
 }
 
-// ============================================================================
 // Data Cache Mtime-based Stale Detection Tests
-// ============================================================================
 
 func TestDataCache_MtimeStaleDetection(t *testing.T) {
 	cache := NewDataCacheWithTTL(1024*1024, 64, time.Hour)
@@ -1193,9 +1179,7 @@ func TestDataCache_SourceFileChangesInvalidateCache(t *testing.T) {
 	}
 }
 
-// ============================================================================
 // Read Tracker Cleanup Tests
-// ============================================================================
 
 func TestReadTrackerCleanup(t *testing.T) {
 	// This test verifies that stale read trackers are cleaned up
@@ -1242,9 +1226,7 @@ func TestReadTrackerCleanup(t *testing.T) {
 	}
 }
 
-// ============================================================================
 // Integration Tests: Cache Behavior on Source File Changes
-// ============================================================================
 
 func TestDataCache_MultipleFilesWithDifferentMtimes(t *testing.T) {
 	cache := NewDataCacheWithTTL(1024*1024, 64, time.Hour)

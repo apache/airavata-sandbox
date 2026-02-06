@@ -7,12 +7,13 @@ REPO_ROOT="$SCRIPT_DIR/../.."
 DATA_DIR="${DATA_DIR:-/tmp/remotefs-benchmark-data}"
 RESULTS_DIR="${RESULTS_DIR:-$SCRIPT_DIR/../results}"
 ITERATIONS="${ITERATIONS:-3}"
-FRP_SERVER="${FRP_SERVER:-hub.dev.cybershuttle.org:7000:mysecret}"
+FRP_SERVER="${FRP_SERVER:?Set FRP_SERVER=host:port:password}"
 SIZES="128K 256K 512K 1M 2M 8M 16M 32M 64M 128M"
 
-# Remote hosts to benchmark
-# gateway.dev.cybershuttle.org supports FUSE passthrough (kernel 6.11)
-REMOTE_HOSTS="${REMOTE_HOSTS:-scigap@expanse exouser@vc-airavata-cpu exouser@gateway.dev.cybershuttle.org}"
+# Remote hosts to benchmark (space-separated user@host list).
+# Hosts matching PASSTHROUGH_HOST_PATTERN will also run the passthrough test case.
+REMOTE_HOSTS="${REMOTE_HOSTS:?Set REMOTE_HOSTS='user@host1 user@host2 ...'}"
+PASSTHROUGH_HOST_PATTERN="${PASSTHROUGH_HOST_PATTERN:-gateway}"
 
 # Local SSH settings for SSHFS reverse tunnel
 LOCAL_USER="${LOCAL_USER:-$(whoami)}"
@@ -157,9 +158,9 @@ for host in "${HOSTS[@]}"; do
     echo ""
     echo "--- Benchmarking: $host ---"
     
-    # Extract hostname for result file (handle gateway.dev.cybershuttle.org specially)
-    if echo "$host" | grep -q "gateway.dev.cybershuttle.org"; then
-        hostname="gateway"
+    # Extract hostname for result file
+    if echo "$host" | grep -q "$PASSTHROUGH_HOST_PATTERN"; then
+        hostname="${PASSTHROUGH_HOST_PATTERN}"
     else
         hostname=$(echo "$host" | cut -d'@' -f2 | cut -d'.' -f1)
     fi
@@ -303,9 +304,18 @@ for host in "${HOSTS[@]}"; do
                 continue
             fi
             
-            start_time=$(echo "$read_result" | awk '{print $1}')
-            end_time=$(echo "$read_result" | awk '{print $2}')
-            actual_size=$(echo "$read_result" | awk '{print $3}')
+            # Parse the last line (which should have "start end size") - skip any noise from Lmod etc.
+            timing_line=$(echo "$read_result" | grep -E '^[0-9]+\.[0-9]+ [0-9]+\.[0-9]+ [0-9]+' | tail -1)
+            
+            if [ -z "$timing_line" ]; then
+                echo "      Warning: Could not parse timing for SSHFS $size, skipping" >&2
+                $SSH_CMD "$host" "fusermount -u $REMOTE_SSHFS_MOUNT 2>/dev/null || true"
+                continue
+            fi
+            
+            start_time=$(echo "$timing_line" | awk '{print $1}')
+            end_time=$(echo "$timing_line" | awk '{print $2}')
+            actual_size=$(echo "$timing_line" | awk '{print $3}')
             duration=$(echo "$end_time - $start_time" | bc)
             throughput=$(calc_throughput "$file_bytes" "$duration")
             echo "$ts,$ACTUAL_HOSTNAME,sshfs,cat,$size,$iter,$duration,$throughput" >> "$RESULT_FILE"
@@ -359,9 +369,9 @@ for host in "${HOSTS[@]}"; do
     rm -f "/tmp/results_remotefs_nocache_${hostname}.csv"
     
     # ============================================================
-    # Case E: RemoteFS with passthrough (only on gateway.dev.cybershuttle.org)
+    # Case E: RemoteFS with passthrough (only on hosts matching PASSTHROUGH_HOST_PATTERN)
     # ============================================================
-    if echo "$host" | grep -q "gateway.dev.cybershuttle.org"; then
+    if echo "$host" | grep -q "$PASSTHROUGH_HOST_PATTERN"; then
         echo ""
         echo "  === Case E: RemoteFS Benchmark (Passthrough) ==="
         
