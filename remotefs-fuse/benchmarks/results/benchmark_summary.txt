@@ -16,62 +16,74 @@ Notes:
 ========================================================================================================================
 
 ==================================================
-  HOST: nsworkshopcpuvc1.novalocal
-  Available methods: scp, sshfs, sshfs_nocache, remotefs, remotefs_nocache
+  HOST: dev-cs-portal
+  Available methods: scp
 ==================================================
 
 THROUGHPUT COMPARISON (MB/s):
-Size     SCP            SSHFS          SSHFS          RemoteFS       RemoteFS       Best            vs SCP      
-----------------------------------------------------------------------------------------------------------------
-128K     0.05           0.45           0.50           0.99           0.55           RemoteFS        19.7x
-256K     0.12           0.83           0.71           2.10           1.09           RemoteFS        18.0x
-512K     0.22           1.13           0.98           3.92           2.20           RemoteFS        17.8x
-1M       0.46           1.97           1.15           7.45           2.99           RemoteFS        16.2x
-2M       0.86           2.41           1.26           14.52          4.66           RemoteFS        16.8x
-8M       2.62           3.26           1.35           51.84          6.30           RemoteFS        19.8x
-16M      4.54           3.43           1.37           91.76          6.32           RemoteFS        20.2x
-32M      6.36           3.51           1.37           158.81         6.00           RemoteFS        25.0x
-64M      7.98           3.04           1.21           339.79         6.34           RemoteFS        42.6x
-128M     9.33           3.55           1.39           554.10         5.85           RemoteFS        59.4x
+Size     SCP            Best            vs SCP      
+----------------------------------------------------
+128K     0.22           SCP             1.0x
+256K     0.50           SCP             1.0x
+512K     0.99           SCP             1.0x
+1M       1.79           SCP             1.0x
+2M       2.95           SCP             1.0x
+8M       6.39           SCP             1.0x
+16M      8.14           SCP             1.0x
+32M      9.51           SCP             1.0x
+64M      10.09          SCP             1.0x
+128M     10.43          SCP             1.0x
 
-SSHFS CACHE EFFECTIVENESS:
-Size     Cached (MB/s)   No-cache (MB/s)    Speedup   
--------------------------------------------------------
-128K     0.45            0.50               0.9       x
-256K     0.83            0.71               1.2       x
-512K     1.13            0.98               1.2       x
-1M       1.97            1.15               1.7       x
-2M       2.41            1.26               1.9       x
-8M       3.26            1.35               2.4       x
-16M      3.43            1.37               2.5       x
-32M      3.51            1.37               2.6       x
-64M      3.04            1.21               2.5       x
-128M     3.55            1.39               2.5       x
+
+==================================================
+  HOST: login02
+  Available methods: remotefs
+==================================================
+
+THROUGHPUT COMPARISON (MB/s):
+Size     RemoteFS       Best            vs SCP      
+----------------------------------------------------
+128K     0.47           RemoteFS        N/A         
+256K     0.91           RemoteFS        N/A         
+512K     1.28           RemoteFS        N/A         
+1M       1.91           RemoteFS        N/A         
+2M       2.40           RemoteFS        N/A         
+8M       2.98           RemoteFS        N/A         
+16M      3.72           RemoteFS        N/A         
+32M      4.26           RemoteFS        N/A         
+64M      3.52           RemoteFS        N/A         
+128M     3.76           RemoteFS        N/A         
+
+
+==================================================
+  HOST: nsworkshopcpuvc1.novalocal
+  Available methods: sshfs, remotefs, remotefs_nocache
+==================================================
+
+THROUGHPUT COMPARISON (MB/s):
+Size     SSHFS          RemoteFS       RemoteFS       Best            vs SCP      
+----------------------------------------------------------------------------------
+128K     nan            0.96           0.51           RemoteFS        N/A         
+256K     nan            1.99           1.08           RemoteFS        N/A         
+512K     nan            3.88           1.56           RemoteFS        N/A         
+1M       nan            7.07           2.17           RemoteFS        N/A         
+2M       nan            14.52          2.36           RemoteFS        N/A         
+8M       nan            50.83          3.29           RemoteFS        N/A         
+16M      nan            96.32          3.59           RemoteFS        N/A         
+32M      nan            167.26         3.74           RemoteFS        N/A         
+64M      nan            301.45         3.67           RemoteFS        N/A         
+128M     nan            569.75         4.04           RemoteFS        N/A         
 
 REMOTEFS CACHE EFFECTIVENESS:
 Size     Cached (MB/s)   No-cache (MB/s)    Speedup   
 -------------------------------------------------------
-128K     0.99            0.55               1.8       x
-256K     2.10            1.09               1.9       x
-512K     3.92            2.20               1.8       x
-1M       7.45            2.99               2.5       x
-2M       14.52           4.66               3.1       x
-8M       51.84           6.30               8.2       x
-16M      91.76           6.32               14.5      x
-32M      158.81          6.00               26.5      x
-64M      339.79          6.34               53.6      x
-128M     554.10          5.85               94.7      x
-
-FAIR COMPARISON (No-cache vs No-cache):
-Size     SSHFS nocache   RemoteFS nocache   RemoteFS Advantage  
------------------------------------------------------------------
-128K     0.50            0.55               1.1                 x faster
-256K     0.71            1.09               1.5                 x faster
-512K     0.98            2.20               2.3                 x faster
-1M       1.15            2.99               2.6                 x faster
-2M       1.26            4.66               3.7                 x faster
-8M       1.35            6.30               4.7                 x faster
-16M      1.37            6.32               4.6                 x faster
-32M      1.37            6.00               4.4                 x faster
-64M      1.21            6.34               5.3                 x faster
-128M     1.39            5.85               4.2                 x faster
+128K     0.96            0.51               1.9       x
+256K     1.99            1.08               1.8       x
+512K     3.88            1.56               2.5       x
+1M       7.07            2.17               3.3       x
+2M       14.52           2.36               6.2       x
+8M       50.83           3.29               15.5      x
+16M      96.32           3.59               26.9      x
+32M      167.26          3.74               44.7      x
+64M      301.45          3.67               82.1      x
+128M     569.75          4.04               141.0     x

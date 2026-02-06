@@ -10,6 +10,9 @@ ITERATIONS="${ITERATIONS:-3}"
 OUTPUT="${OUTPUT:-results.csv}"
 MOUNT_POINT="/tmp/remotefs-benchmark-mount"
 SIZES="128K 256K 512K 1M 2M 8M 16M 32M 64M 128M"
+PASSTHROUGH="false"
+CACHE_DIR=""
+NO_CACHE="false"
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -34,6 +37,18 @@ while [[ $# -gt 0 ]]; do
             MOUNT_POINT="$2"
             shift 2
             ;;
+        --passthrough)
+            PASSTHROUGH="true"
+            shift
+            ;;
+        --cache-dir)
+            CACHE_DIR="$2"
+            shift 2
+            ;;
+        --no-cache)
+            NO_CACHE="true"
+            shift
+            ;;
         --help)
             echo "Usage: run_remote_benchmark.sh [options]"
             echo ""
@@ -43,6 +58,9 @@ while [[ $# -gt 0 ]]; do
             echo "  --iterations N      Number of iterations (default: 3)"
             echo "  --output FILE       Output CSV file (default: results.csv)"
             echo "  --mount-point DIR   Mount point for remotefs"
+            echo "  --passthrough       Enable FUSE passthrough mode (requires kernel 6.9+)"
+            echo "  --cache-dir DIR     Directory for file-backed cache"
+            echo "  --no-cache          Disable caching entirely"
             exit 0
             ;;
         *)
@@ -134,8 +152,32 @@ echo "Using binary: $REMOTEFS_BIN"
 # This is needed for HPC systems like Expanse where ~/.local/bin may have a non-setuid fusermount
 export PATH=/usr/local/bin:/usr/bin:/bin:$PATH
 
+# Build mount command with options
+MOUNT_ARGS=("$MOUNT_POINT" --token "$TOKEN" --frp "$FRP_SERVER")
+
+# Determine case name based on options
+CASE_NAME="remotefs"
+if [ "$NO_CACHE" = "true" ]; then
+    MOUNT_ARGS+=(--no-cache)
+    CASE_NAME="remotefs_nocache"
+elif [ "$PASSTHROUGH" = "true" ]; then
+    if [ -z "$CACHE_DIR" ]; then
+        # Use /dev/shm for fast RAM-based cache (best passthrough performance)
+        CACHE_DIR="/dev/shm/remotefs-cache"
+    fi
+    mkdir -p "$CACHE_DIR"
+    MOUNT_ARGS+=(--cache-dir "$CACHE_DIR" --passthrough)
+    CASE_NAME="remotefs_passthrough"
+elif [ -n "$CACHE_DIR" ]; then
+    MOUNT_ARGS+=(--cache-dir "$CACHE_DIR")
+    CASE_NAME="remotefs_filecache"
+fi
+
+echo "Mode: $CASE_NAME"
+echo "Mount args: ${MOUNT_ARGS[*]}"
+
 # Start mount in background
-"$REMOTEFS_BIN" mount "$MOUNT_POINT" --token "$TOKEN" --frp "$FRP_SERVER" &
+"$REMOTEFS_BIN" mount "${MOUNT_ARGS[@]}" &
 MOUNT_PID=$!
 
 # Wait for mount to be ready
@@ -187,7 +229,7 @@ for iter in $(seq 1 $ITERATIONS); do
         
         duration=$(echo "$end - $start" | bc)
         throughput=$(calc_throughput "$file_bytes" "$duration")
-        echo "$ts,$HOSTNAME,remotefs,cat,$size,$iter,$duration,$throughput" >> "$OUTPUT"
+        echo "$ts,$HOSTNAME,$CASE_NAME,cat,$size,$iter,$duration,$throughput" >> "$OUTPUT"
     done
 done
 

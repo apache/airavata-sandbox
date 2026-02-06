@@ -37,6 +37,10 @@ var (
 	cacheTTL       int
 	cacheBlockSize int64
 	noCache        bool
+	fileCacheDir   string
+	fileCacheSize  int64
+	passthrough    bool
+	mmapCache      bool
 )
 
 func init() {
@@ -56,6 +60,12 @@ func init() {
 	mountCmd.Flags().IntVar(&cacheTTL, "cache-ttl", 30, "Metadata/directory cache TTL in seconds (default: 30)")
 	mountCmd.Flags().Int64Var(&cacheBlockSize, "cache-block-size", 256, "Data cache block size in KB (default: 256)")
 	mountCmd.Flags().BoolVar(&noCache, "no-cache", false, "Disable caching entirely")
+	
+	// File-backed cache and passthrough flags
+	mountCmd.Flags().StringVar(&fileCacheDir, "cache-dir", "", "Directory for file-backed cache (enables passthrough support and mmap-cache)")
+	mountCmd.Flags().Int64Var(&fileCacheSize, "file-cache-size", 1024, "Maximum file cache size in MB (default: 1024)")
+	mountCmd.Flags().BoolVar(&passthrough, "passthrough", false, "Enable FUSE passthrough mode (requires Linux 6.9+ and --cache-dir)")
+	mountCmd.Flags().BoolVar(&mmapCache, "mmap-cache", false, "Use file-backed memory-mapped block cache (requires --cache-dir)")
 }
 
 func runMount(cmd *cobra.Command, args []string) error {
@@ -123,6 +133,11 @@ func runMount(cmd *cobra.Command, args []string) error {
 	fpClient := fileproto.NewClient(stream)
 	go fpClient.Run()
 
+	// Validate mmap-cache requires cache-dir
+	if mmapCache && fileCacheDir == "" {
+		return fmt.Errorf("--mmap-cache requires --cache-dir to be set")
+	}
+
 	// Create cache configuration with optimizations enabled
 	cacheConfig := &cache.Config{
 		MaxDataCacheSize:    cacheSize * 1024 * 1024,        // Convert MB to bytes
@@ -134,6 +149,8 @@ func runMount(cmd *cobra.Command, args []string) error {
 		MaxParallelFetches:  8,    // Max concurrent block fetches
 		EnablePrefetch:      true, // Enable read-ahead
 		EnableParallelFetch: true, // Enable parallel fetching
+		UseMmapCache:        mmapCache,
+		MmapCacheDir:        fileCacheDir,
 	}
 
 	// Create cached client
@@ -141,8 +158,32 @@ func runMount(cmd *cobra.Command, args []string) error {
 
 	root := &mount.RemoteRoot{Client: fpClient, CachedClient: cachedClient}
 	if !noCache {
-		log.Printf("Caching enabled: size=%dMB, TTL=%ds, block=%dKB", cacheSize, cacheTTL, cacheBlockSize)
+		if mmapCache {
+			log.Printf("Mmap cache enabled: size=%dMB, TTL=%ds, block=%dKB, dir=%s", cacheSize, cacheTTL, cacheBlockSize, fileCacheDir)
+		} else {
+			log.Printf("In-memory cache enabled: size=%dMB, TTL=%ds, block=%dKB", cacheSize, cacheTTL, cacheBlockSize)
+		}
 	}
+	
+	// Set up file-backed cache for passthrough
+	if fileCacheDir != "" {
+		fileCache, err := cache.NewFileCache(fileCacheDir, fileCacheSize*1024*1024)
+		if err != nil {
+			return fmt.Errorf("file cache: %w", err)
+		}
+		root.FileCache = fileCache
+		defer fileCache.Close()
+		
+		if passthrough {
+			root.Passthrough = true
+			log.Printf("FUSE passthrough enabled: cache-dir=%s, file-cache-size=%dMB", fileCacheDir, fileCacheSize)
+		} else {
+			log.Printf("File cache enabled (no passthrough): cache-dir=%s, file-cache-size=%dMB", fileCacheDir, fileCacheSize)
+		}
+	} else if passthrough {
+		return fmt.Errorf("--passthrough requires --cache-dir to be set")
+	}
+	
 	sec := time.Second
 	opts := &fs.Options{
 		AttrTimeout:  &sec,

@@ -43,6 +43,8 @@ type RemoteRoot struct {
 	fs.Inode
 	Client       *fileproto.Client
 	CachedClient *cache.CachedClient
+	FileCache    *cache.FileCache // file-backed cache for passthrough
+	Passthrough  bool             // enable FUSE passthrough mode
 }
 
 var _ fs.NodeLookuper = (*RemoteRoot)(nil)
@@ -253,7 +255,60 @@ func (n *remoteNode) Open(ctx context.Context, flags uint32) (fs.FileHandle, uin
 	if or == nil {
 		return nil, 0, syscall.EIO
 	}
-	return &remoteFileHandle{path: n.path, handleID: or.HandleId, client: n.getClient(), cachedClient: n.root.CachedClient}, 0, 0
+	
+	fh := &remoteFileHandle{
+		path:         n.path,
+		handleID:     or.HandleId,
+		client:       n.getClient(),
+		cachedClient: n.root.CachedClient,
+		fileCache:    n.root.FileCache,
+	}
+	
+	// Try to enable passthrough if file cache is available and passthrough is enabled
+	var fuseFlags uint32 = 0
+	if n.root.Passthrough && n.root.FileCache != nil && n.root.FileCache.Enabled() {
+		// Get file attributes to know size and mtime
+		attrResp, err := n.do(ctx, &pb.FileRequest{
+			Op: &pb.FileRequest_GetAttr{GetAttr: &pb.GetAttrRequest{Path: n.path}},
+		})
+		if err == nil && attrResp.Errno == 0 {
+			ga := attrResp.GetGetAttr()
+			if ga != nil && ga.Attr != nil {
+				size := int64(ga.Attr.Size)
+				mtime := int64(ga.Attr.Mtime)
+				
+				// Try to get or create cached file
+				downloadFn := func(offset, length int64) ([]byte, error) {
+					readResp, err := fh.do(ctx, &pb.FileRequest{
+						Op: &pb.FileRequest_Read{Read: &pb.ReadRequest{
+							Path: fh.path, HandleId: fh.handleID, Offset: offset, Size: uint32(length),
+						}},
+					})
+					if err != nil {
+						return nil, err
+					}
+					if readResp.Errno != 0 {
+						return nil, syscall.Errno(readResp.Errno)
+					}
+					rr := readResp.GetRead()
+					if rr == nil {
+						return nil, syscall.EIO
+					}
+					return rr.Data, nil
+				}
+				
+				cachedFile, err := n.root.FileCache.GetOrCreate(n.path, size, mtime, downloadFn)
+				if err == nil && cachedFile != nil {
+					fh.cachedFile = cachedFile
+					fh.passthroughFd = cachedFile.Fd()
+					// Set FOPEN_PASSTHROUGH flag (bit 1 << 11 = 2048)
+					fuseFlags |= 1 << 11
+				}
+			}
+		}
+	}
+	
+	return fh, fuseFlags, 0
 }
 
 func (n *remoteNode) Readdir(ctx context.Context) (fs.DirStream, syscall.Errno) {
@@ -314,7 +369,13 @@ func (n *remoteNode) Create(ctx context.Context, name string, flags uint32, mode
 	out.SetAttrTimeout(time.Second)
 	stable := fs.StableAttr{Mode: cr.Attr.Mode, Ino: cr.Attr.Ino}
 	child := n.NewInode(ctx, &remoteNode{path: childPath, root: n.root}, stable)
-	fh := &remoteFileHandle{path: childPath, handleID: cr.HandleId, client: n.getClient(), cachedClient: n.root.CachedClient}
+	fh := &remoteFileHandle{
+		path:         childPath,
+		handleID:     cr.HandleId,
+		client:       n.getClient(),
+		cachedClient: n.root.CachedClient,
+		fileCache:    n.root.FileCache,
+	}
 	return child, fh, 0, 0
 }
 
@@ -469,11 +530,15 @@ func (n *remoteNode) Statfs(ctx context.Context, out *fuse.StatfsOut) syscall.Er
 }
 
 // remoteFileHandle implements fs.FileHandle for open files.
+// It optionally implements fs.FilePassthroughFder for FUSE passthrough.
 type remoteFileHandle struct {
-	path         string
-	handleID     uint64
-	client       *fileproto.Client
-	cachedClient *cache.CachedClient
+	path          string
+	handleID      uint64
+	client        *fileproto.Client
+	cachedClient  *cache.CachedClient
+	fileCache     *cache.FileCache // file-backed cache for passthrough
+	cachedFile    *cache.CachedFile // the cached file, if passthrough is enabled
+	passthroughFd int               // file descriptor for passthrough (>0 if enabled)
 }
 
 // do sends a request through the cached client if available, otherwise directly.
@@ -489,6 +554,17 @@ var _ fs.FileWriter = (*remoteFileHandle)(nil)
 var _ fs.FileReleaser = (*remoteFileHandle)(nil)
 var _ fs.FileFlusher = (*remoteFileHandle)(nil)
 var _ fs.FileFsyncer = (*remoteFileHandle)(nil)
+var _ fs.FilePassthroughFder = (*remoteFileHandle)(nil)
+
+// PassthroughFd implements fs.FilePassthroughFder for FUSE passthrough.
+// When passthrough is enabled, the kernel reads directly from the cached file,
+// bypassing the FUSE daemon for significantly improved performance.
+func (f *remoteFileHandle) PassthroughFd() (int, bool) {
+	if f.passthroughFd > 0 && f.cachedFile != nil && f.cachedFile.IsComplete() {
+		return f.passthroughFd, true
+	}
+	return 0, false
+}
 
 func (f *remoteFileHandle) Read(ctx context.Context, dest []byte, off int64) (fuse.ReadResult, syscall.Errno) {
 	resp, err := f.do(ctx, &pb.FileRequest{
@@ -532,6 +608,10 @@ func (f *remoteFileHandle) Release(ctx context.Context) syscall.Errno {
 	_, _ = f.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Release{Release: &pb.ReleaseRequest{Path: f.path, HandleId: f.handleID}},
 	})
+	// Release the cached file reference
+	if f.fileCache != nil && f.cachedFile != nil {
+		f.fileCache.Release(f.path)
+	}
 	return 0
 }
 

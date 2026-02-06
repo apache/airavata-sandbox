@@ -28,6 +28,7 @@ COLORS = {
     'sshfs_nocache': '#85c1e9', # Light blue
     'remotefs': '#e74c3c',      # Red
     'remotefs_nocache': '#f1948a', # Light red
+    'remotefs_passthrough': '#9b59b6', # Purple - FUSE passthrough
 }
 
 LABELS = {
@@ -36,6 +37,7 @@ LABELS = {
     'sshfs_nocache': 'SSHFS (no cache)',
     'remotefs': 'RemoteFS (cached)',
     'remotefs_nocache': 'RemoteFS (no cache)',
+    'remotefs_passthrough': 'RemoteFS (passthrough)',
 }
 
 def parse_size_to_bytes(size_str):
@@ -77,7 +79,7 @@ def create_host_visualization(df, host, output_dir):
     size_order = ['128K', '256K', '512K', '1M', '2M', '8M', '16M', '32M', '64M', '128M']
     
     # Define case order for consistent display
-    all_cases = ['scp', 'sshfs', 'sshfs_nocache', 'remotefs', 'remotefs_nocache']
+    all_cases = ['scp', 'sshfs', 'sshfs_nocache', 'remotefs', 'remotefs_nocache', 'remotefs_passthrough']
     available_cases = [c for c in all_cases if c in host_df['case'].unique()]
     num_cases = len(available_cases)
     
@@ -182,8 +184,8 @@ def create_host_visualization(df, host, output_dir):
     # ===== Plot 4: Throughput Line Chart =====
     ax4 = fig.add_subplot(2, 2, 4)
     
-    markers = {'scp': 'o', 'sshfs': '^', 'sshfs_nocache': 'v', 'remotefs': 's', 'remotefs_nocache': 'd'}
-    linestyles = {'scp': '-', 'sshfs': '-', 'sshfs_nocache': '--', 'remotefs': '-', 'remotefs_nocache': '--'}
+    markers = {'scp': 'o', 'sshfs': '^', 'sshfs_nocache': 'v', 'remotefs': 's', 'remotefs_nocache': 'd', 'remotefs_passthrough': 'p'}
+    linestyles = {'scp': '-', 'sshfs': '-', 'sshfs_nocache': '--', 'remotefs': '-', 'remotefs_nocache': '--', 'remotefs_passthrough': '-.'}
     
     for case in available_cases:
         throughputs = throughput_means[case].values if case in throughput_means.columns else np.zeros(len(size_order))
@@ -216,7 +218,7 @@ def create_summary_table(df, output_dir):
     size_order = ['128K', '256K', '512K', '1M', '2M', '8M', '16M', '32M', '64M', '128M']
     hosts = df['host'].unique()
     
-    all_cases = ['scp', 'sshfs', 'sshfs_nocache', 'remotefs', 'remotefs_nocache']
+    all_cases = ['scp', 'sshfs', 'sshfs_nocache', 'remotefs', 'remotefs_nocache', 'remotefs_passthrough']
     
     summary_lines = []
     summary_lines.append("=" * 120)
@@ -327,6 +329,20 @@ def create_summary_table(df, output_dir):
                 rfs_tp = rfs_data['throughput_mbps'].mean() if len(rfs_data) > 0 else 0
                 advantage = rfs_tp / sshfs_tp if sshfs_tp > 0 else 0
                 summary_lines.append(f"{size:<8} {sshfs_tp:<15.2f} {rfs_tp:<18.2f} {advantage:<20.1f}x faster")
+            summary_lines.append("")
+        
+        # FUSE Passthrough comparison
+        if 'remotefs' in available and 'remotefs_passthrough' in available:
+            summary_lines.append("FUSE PASSTHROUGH COMPARISON (kernel 6.9+ feature):")
+            summary_lines.append(f"{'Size':<8} {'RemoteFS (cached)':<20} {'RemoteFS (passthrough)':<25} {'Passthrough Speedup':<20}")
+            summary_lines.append("-" * 75)
+            for size in size_order:
+                cached_data = host_df[(host_df['file_size'] == size) & (host_df['case'] == 'remotefs')]
+                passthrough_data = host_df[(host_df['file_size'] == size) & (host_df['case'] == 'remotefs_passthrough')]
+                cached_tp = cached_data['throughput_mbps'].mean() if len(cached_data) > 0 else 0
+                passthrough_tp = passthrough_data['throughput_mbps'].mean() if len(passthrough_data) > 0 else 0
+                speedup = passthrough_tp / cached_tp if cached_tp > 0 else 0
+                summary_lines.append(f"{size:<8} {cached_tp:<20.2f} {passthrough_tp:<25.2f} {speedup:<20.1f}x")
             summary_lines.append("")
     
     summary_text = "\n".join(summary_lines)

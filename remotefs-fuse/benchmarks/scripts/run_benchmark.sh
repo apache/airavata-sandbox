@@ -11,7 +11,8 @@ FRP_SERVER="${FRP_SERVER:-hub.dev.cybershuttle.org:7000:mysecret}"
 SIZES="128K 256K 512K 1M 2M 8M 16M 32M 64M 128M"
 
 # Remote hosts to benchmark
-REMOTE_HOSTS="${REMOTE_HOSTS:-scigap@expanse exouser@vc-airavata-cpu}"
+# gateway.dev.cybershuttle.org supports FUSE passthrough (kernel 6.11)
+REMOTE_HOSTS="${REMOTE_HOSTS:-scigap@expanse exouser@vc-airavata-cpu exouser@gateway.dev.cybershuttle.org}"
 
 # Local SSH settings for SSHFS reverse tunnel
 LOCAL_USER="${LOCAL_USER:-$(whoami)}"
@@ -156,8 +157,12 @@ for host in "${HOSTS[@]}"; do
     echo ""
     echo "--- Benchmarking: $host ---"
     
-    # Extract hostname for result file
-    hostname=$(echo "$host" | cut -d'@' -f2 | cut -d'.' -f1)
+    # Extract hostname for result file (handle gateway.dev.cybershuttle.org specially)
+    if echo "$host" | grep -q "gateway.dev.cybershuttle.org"; then
+        hostname="gateway"
+    else
+        hostname=$(echo "$host" | cut -d'@' -f2 | cut -d'.' -f1)
+    fi
     
     # SSH control socket for multiplexing
     SSH_SOCKET="/tmp/ssh-benchmark-${hostname}"
@@ -317,10 +322,10 @@ for host in "${HOSTS[@]}"; do
     sleep 1
     
     # ============================================================
-    # Case C: RemoteFS benchmark (run on remote host)
+    # Case C: RemoteFS benchmark with caching (run on remote host)
     # ============================================================
     echo ""
-    echo "  === Case C: RemoteFS Benchmark ==="
+    echo "  === Case C: RemoteFS Benchmark (Cached) ==="
     
     # Run remote benchmark for RemoteFS (new SSH connection)
     ssh "$host" "~/run_remote_benchmark.sh \
@@ -334,6 +339,44 @@ for host in "${HOSTS[@]}"; do
     scp -q "$host:~/results_remotefs.csv" "/tmp/results_remotefs_${hostname}.csv"
     tail -n +2 "/tmp/results_remotefs_${hostname}.csv" >> "$RESULT_FILE"
     rm -f "/tmp/results_remotefs_${hostname}.csv"
+    
+    # ============================================================
+    # Case D: RemoteFS without caching (run on remote host)
+    # ============================================================
+    echo ""
+    echo "  === Case D: RemoteFS Benchmark (No Cache) ==="
+    
+    ssh "$host" "~/run_remote_benchmark.sh \
+        --token '$TOKEN' \
+        --frp '$FRP_SERVER' \
+        --iterations $ITERATIONS \
+        --output ~/results_remotefs_nocache.csv \
+        --mount-point $REMOTE_MOUNT_DIR \
+        --no-cache"
+    
+    scp -q "$host:~/results_remotefs_nocache.csv" "/tmp/results_remotefs_nocache_${hostname}.csv"
+    tail -n +2 "/tmp/results_remotefs_nocache_${hostname}.csv" >> "$RESULT_FILE"
+    rm -f "/tmp/results_remotefs_nocache_${hostname}.csv"
+    
+    # ============================================================
+    # Case E: RemoteFS with passthrough (only on gateway.dev.cybershuttle.org)
+    # ============================================================
+    if echo "$host" | grep -q "gateway.dev.cybershuttle.org"; then
+        echo ""
+        echo "  === Case E: RemoteFS Benchmark (Passthrough) ==="
+        
+        ssh "$host" "~/run_remote_benchmark.sh \
+            --token '$TOKEN' \
+            --frp '$FRP_SERVER' \
+            --iterations $ITERATIONS \
+            --output ~/results_remotefs_passthrough.csv \
+            --mount-point $REMOTE_MOUNT_DIR \
+            --passthrough"
+        
+        scp -q "$host:~/results_remotefs_passthrough.csv" "/tmp/results_remotefs_passthrough_${hostname}.csv"
+        tail -n +2 "/tmp/results_remotefs_passthrough_${hostname}.csv" >> "$RESULT_FILE"
+        rm -f "/tmp/results_remotefs_passthrough_${hostname}.csv"
+    fi
     
     echo "  Done with $host"
     echo "  Results: $RESULT_FILE"
