@@ -9,6 +9,7 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	_ "google.golang.org/grpc/encoding/gzip" // Register gzip compressor
 	"google.golang.org/grpc/status"
 
 	"github.com/you/remotefs/internal/export"

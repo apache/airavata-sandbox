@@ -1,6 +1,6 @@
 #!/bin/bash
 # Main benchmark orchestrator - runs on local machine
-# Compares SCP (transfer+read) vs RemoteFS (on-demand read) performance
+# Compares SCP vs SSHFS vs RemoteFS performance
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$SCRIPT_DIR/../.."
@@ -12,6 +12,10 @@ SIZES="128K 256K 512K 1M 2M 8M 16M 32M 64M 128M"
 
 # Remote hosts to benchmark
 REMOTE_HOSTS="${REMOTE_HOSTS:-scigap@expanse exouser@vc-airavata-cpu}"
+
+# Local SSH settings for SSHFS reverse tunnel
+LOCAL_USER="${LOCAL_USER:-$(whoami)}"
+LOCAL_SSH_PORT="${LOCAL_SSH_PORT:-22}"
 
 # Convert to array
 read -ra HOSTS <<< "$REMOTE_HOSTS"
@@ -234,15 +238,89 @@ for host in "${HOSTS[@]}"; do
     
     echo "  Case A (SCP) complete."
     
-    # Close the ControlMaster for SCP (will reopen for RemoteFS)
+    # ============================================================
+    # Case B: SSHFS benchmark (reverse tunnel + SSHFS mount)
+    # ============================================================
+    echo ""
+    echo "  === Case B: SSHFS Benchmark ==="
+    
+    # Find an available port for reverse tunnel
+    REVERSE_PORT=$((10000 + RANDOM % 50000))
+    
+    # Create reverse SSH tunnel: remote can connect to localhost:$REVERSE_PORT -> local:22
+    echo "    Setting up reverse SSH tunnel (port $REVERSE_PORT)..."
+    $SSH_CMD -R ${REVERSE_PORT}:localhost:${LOCAL_SSH_PORT} -fN "$host"
+    sleep 2
+    
+    REMOTE_SSHFS_MOUNT="~/sshfs-benchmark-mount"
+    
+    for iter in $(seq 1 $ITERATIONS); do
+        echo "    Iteration $iter/$ITERATIONS (SSHFS)"
+        ts=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+        
+        for size in $SIZES; do
+            file="$REMOTE_SSHFS_MOUNT/$size/file_${size}.bin"
+            file_bytes=$(size_to_bytes "$size")
+            
+            # Mount fresh for each file to avoid kernel page caching
+            # Use direct_io,cache=no to bypass caching
+            $SSH_CMD "$host" "
+                fusermount -u $REMOTE_SSHFS_MOUNT 2>/dev/null || true
+                mkdir -p $REMOTE_SSHFS_MOUNT
+                sshfs -o StrictHostKeyChecking=no,UserKnownHostsFile=/dev/null,direct_io,cache=no -p $REVERSE_PORT ${LOCAL_USER}@localhost:$DATA_DIR $REMOTE_SSHFS_MOUNT 2>/dev/null
+            "
+            
+            # Wait for mount and verify it works
+            sleep 1
+            
+            # Verify mount and time the read operation
+            read_result=$($SSH_CMD "$host" "
+                # Verify file exists and is readable
+                if [ ! -f $file ]; then
+                    echo 'ERROR: File not found'
+                    exit 1
+                fi
+                
+                # Get actual file size to verify we read the whole thing
+                actual_size=\$(stat -c%s $file 2>/dev/null || stat -f%z $file 2>/dev/null)
+                
+                # Time the read
+                start=\$(date +%s.%N)
+                cat $file > /dev/null
+                end=\$(date +%s.%N)
+                echo \"\$start \$end \$actual_size\"
+            " 2>&1)
+            
+            if echo "$read_result" | grep -q "ERROR"; then
+                echo "      Warning: SSHFS mount failed for $size, skipping" >&2
+                # Unmount and continue
+                $SSH_CMD "$host" "fusermount -u $REMOTE_SSHFS_MOUNT 2>/dev/null || true"
+                continue
+            fi
+            
+            start_time=$(echo "$read_result" | awk '{print $1}')
+            end_time=$(echo "$read_result" | awk '{print $2}')
+            actual_size=$(echo "$read_result" | awk '{print $3}')
+            duration=$(echo "$end_time - $start_time" | bc)
+            throughput=$(calc_throughput "$file_bytes" "$duration")
+            echo "$ts,$ACTUAL_HOSTNAME,sshfs,cat,$size,$iter,$duration,$throughput" >> "$RESULT_FILE"
+            
+            # Unmount after each read
+            $SSH_CMD "$host" "fusermount -u $REMOTE_SSHFS_MOUNT 2>/dev/null || true"
+        done
+    done
+    
+    echo "  Case B (SSHFS) complete."
+    
+    # Close the ControlMaster for SSHFS (will reopen for RemoteFS)
     ssh -S "$SSH_SOCKET" -O exit "$host" 2>/dev/null || true
     sleep 1
     
     # ============================================================
-    # Case B: RemoteFS benchmark (run on remote host)
+    # Case C: RemoteFS benchmark (run on remote host)
     # ============================================================
     echo ""
-    echo "  === Case B: RemoteFS Benchmark ==="
+    echo "  === Case C: RemoteFS Benchmark ==="
     
     # Run remote benchmark for RemoteFS (new SSH connection)
     ssh "$host" "~/run_remote_benchmark.sh \

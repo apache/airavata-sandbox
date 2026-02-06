@@ -6,12 +6,12 @@ package mount
 import (
 	"context"
 	"path"
-	"sync"
 	"syscall"
 	"time"
 
 	"github.com/hanwen/go-fuse/v2/fs"
 	"github.com/hanwen/go-fuse/v2/fuse"
+	"github.com/you/remotefs/internal/cache"
 	"github.com/you/remotefs/internal/fileproto"
 	pb "github.com/you/remotefs/proto/gen/remotefs"
 )
@@ -41,7 +41,8 @@ func errnoFromU32(e uint32) syscall.Errno {
 // RemoteRoot is the root of the remote FUSE filesystem.
 type RemoteRoot struct {
 	fs.Inode
-	Client *fileproto.Client
+	Client       *fileproto.Client
+	CachedClient *cache.CachedClient
 }
 
 var _ fs.NodeLookuper = (*RemoteRoot)(nil)
@@ -51,8 +52,16 @@ var _ fs.NodeStatfser = (*RemoteRoot)(nil)
 
 func (r *RemoteRoot) getClient() *fileproto.Client { return r.Client }
 
+// do sends a request through the cached client if available, otherwise directly.
+func (r *RemoteRoot) do(ctx context.Context, req *pb.FileRequest) (*pb.FileResponse, error) {
+	if r.CachedClient != nil {
+		return r.CachedClient.Do(ctx, req)
+	}
+	return r.Client.Do(ctx, req)
+}
+
 func (r *RemoteRoot) Lookup(ctx context.Context, name string, out *fuse.EntryOut) (*fs.Inode, syscall.Errno) {
-	resp, err := r.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := r.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Lookup{Lookup: &pb.LookupRequest{Path: "", Name: name}},
 	})
 	if err != nil {
@@ -76,7 +85,7 @@ func (r *RemoteRoot) Lookup(ctx context.Context, name string, out *fuse.EntryOut
 }
 
 func (r *RemoteRoot) Getattr(ctx context.Context, fh fs.FileHandle, out *fuse.AttrOut) syscall.Errno {
-	resp, err := r.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := r.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_GetAttr{GetAttr: &pb.GetAttrRequest{Path: ""}},
 	})
 	if err != nil {
@@ -95,7 +104,7 @@ func (r *RemoteRoot) Getattr(ctx context.Context, fh fs.FileHandle, out *fuse.At
 }
 
 func (r *RemoteRoot) Readdir(ctx context.Context) (fs.DirStream, syscall.Errno) {
-	resp, err := r.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := r.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Opendir{Opendir: &pb.OpendirRequest{Path: ""}},
 	})
 	if err != nil {
@@ -109,10 +118,10 @@ func (r *RemoteRoot) Readdir(ctx context.Context) (fs.DirStream, syscall.Errno) 
 		return nil, syscall.EIO
 	}
 	handleID := openResp.HandleId
-	resp2, err := r.getClient().Do(ctx, &pb.FileRequest{
+	resp2, err := r.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Readdir{Readdir: &pb.ReaddirRequest{Path: "", HandleId: handleID}},
 	})
-	_, _ = r.getClient().Do(ctx, &pb.FileRequest{
+	_, _ = r.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Releasedir{Releasedir: &pb.ReleasedirRequest{Path: "", HandleId: handleID}},
 	})
 	if err != nil {
@@ -133,7 +142,7 @@ func (r *RemoteRoot) Readdir(ctx context.Context) (fs.DirStream, syscall.Errno) 
 }
 
 func (r *RemoteRoot) Statfs(ctx context.Context, out *fuse.StatfsOut) syscall.Errno {
-	resp, err := r.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := r.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Statfs{Statfs: &pb.StatfsRequest{Path: ""}},
 	})
 	if err != nil {
@@ -165,6 +174,14 @@ type remoteNode struct {
 
 func (n *remoteNode) getClient() *fileproto.Client { return n.root.Client }
 
+// do sends a request through the cached client if available, otherwise directly.
+func (n *remoteNode) do(ctx context.Context, req *pb.FileRequest) (*pb.FileResponse, error) {
+	if n.root.CachedClient != nil {
+		return n.root.CachedClient.Do(ctx, req)
+	}
+	return n.root.Client.Do(ctx, req)
+}
+
 var _ fs.NodeLookuper = (*remoteNode)(nil)
 var _ fs.NodeGetattrer = (*remoteNode)(nil)
 var _ fs.NodeOpener = (*remoteNode)(nil)
@@ -180,7 +197,7 @@ var _ fs.NodeSetattrer = (*remoteNode)(nil)
 var _ fs.NodeStatfser = (*remoteNode)(nil)
 
 func (n *remoteNode) Lookup(ctx context.Context, name string, out *fuse.EntryOut) (*fs.Inode, syscall.Errno) {
-	resp, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Lookup{Lookup: &pb.LookupRequest{Path: n.path, Name: name}},
 	})
 	if err != nil {
@@ -204,7 +221,7 @@ func (n *remoteNode) Lookup(ctx context.Context, name string, out *fuse.EntryOut
 }
 
 func (n *remoteNode) Getattr(ctx context.Context, fh fs.FileHandle, out *fuse.AttrOut) syscall.Errno {
-	resp, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_GetAttr{GetAttr: &pb.GetAttrRequest{Path: n.path}},
 	})
 	if err != nil {
@@ -223,7 +240,7 @@ func (n *remoteNode) Getattr(ctx context.Context, fh fs.FileHandle, out *fuse.At
 }
 
 func (n *remoteNode) Open(ctx context.Context, flags uint32) (fs.FileHandle, uint32, syscall.Errno) {
-	resp, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Open{Open: &pb.OpenRequest{Path: n.path, Flags: flags}},
 	})
 	if err != nil {
@@ -236,11 +253,11 @@ func (n *remoteNode) Open(ctx context.Context, flags uint32) (fs.FileHandle, uin
 	if or == nil {
 		return nil, 0, syscall.EIO
 	}
-	return &remoteFileHandle{path: n.path, handleID: or.HandleId, client: n.getClient()}, 0, 0
+	return &remoteFileHandle{path: n.path, handleID: or.HandleId, client: n.getClient(), cachedClient: n.root.CachedClient}, 0, 0
 }
 
 func (n *remoteNode) Readdir(ctx context.Context) (fs.DirStream, syscall.Errno) {
-	resp, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Opendir{Opendir: &pb.OpendirRequest{Path: n.path}},
 	})
 	if err != nil {
@@ -254,10 +271,10 @@ func (n *remoteNode) Readdir(ctx context.Context) (fs.DirStream, syscall.Errno) 
 		return nil, syscall.EIO
 	}
 	handleID := openResp.HandleId
-	resp2, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp2, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Readdir{Readdir: &pb.ReaddirRequest{Path: n.path, HandleId: handleID}},
 	})
-	_, _ = n.getClient().Do(ctx, &pb.FileRequest{
+	_, _ = n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Releasedir{Releasedir: &pb.ReleasedirRequest{Path: n.path, HandleId: handleID}},
 	})
 	if err != nil {
@@ -278,7 +295,7 @@ func (n *remoteNode) Readdir(ctx context.Context) (fs.DirStream, syscall.Errno) 
 }
 
 func (n *remoteNode) Create(ctx context.Context, name string, flags uint32, mode uint32, out *fuse.EntryOut) (*fs.Inode, fs.FileHandle, uint32, syscall.Errno) {
-	resp, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Create{Create: &pb.CreateRequest{Path: n.path, Name: name, Flags: flags, Mode: mode}},
 	})
 	if err != nil {
@@ -297,12 +314,12 @@ func (n *remoteNode) Create(ctx context.Context, name string, flags uint32, mode
 	out.SetAttrTimeout(time.Second)
 	stable := fs.StableAttr{Mode: cr.Attr.Mode, Ino: cr.Attr.Ino}
 	child := n.NewInode(ctx, &remoteNode{path: childPath, root: n.root}, stable)
-	fh := &remoteFileHandle{path: childPath, handleID: cr.HandleId, client: n.getClient()}
+	fh := &remoteFileHandle{path: childPath, handleID: cr.HandleId, client: n.getClient(), cachedClient: n.root.CachedClient}
 	return child, fh, 0, 0
 }
 
 func (n *remoteNode) Mkdir(ctx context.Context, name string, mode uint32, out *fuse.EntryOut) (*fs.Inode, syscall.Errno) {
-	resp, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Mkdir{Mkdir: &pb.MkdirRequest{Path: n.path, Name: name, Mode: mode}},
 	})
 	if err != nil {
@@ -325,7 +342,7 @@ func (n *remoteNode) Mkdir(ctx context.Context, name string, mode uint32, out *f
 }
 
 func (n *remoteNode) Unlink(ctx context.Context, name string) syscall.Errno {
-	resp, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Unlink{Unlink: &pb.UnlinkRequest{Path: n.path, Name: name}},
 	})
 	if err != nil {
@@ -335,7 +352,7 @@ func (n *remoteNode) Unlink(ctx context.Context, name string) syscall.Errno {
 }
 
 func (n *remoteNode) Rmdir(ctx context.Context, name string) syscall.Errno {
-	resp, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Rmdir{Rmdir: &pb.RmdirRequest{Path: n.path, Name: name}},
 	})
 	if err != nil {
@@ -351,7 +368,7 @@ func (n *remoteNode) Rename(ctx context.Context, name string, newParent fs.Inode
 	} else if _, ok := newParent.(*RemoteRoot); ok {
 		newPath = ""
 	}
-	resp, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Rename{Rename: &pb.RenameRequest{Path: n.path, OldName: name, NewPath: newPath, NewName: newName}},
 	})
 	if err != nil {
@@ -361,7 +378,7 @@ func (n *remoteNode) Rename(ctx context.Context, name string, newParent fs.Inode
 }
 
 func (n *remoteNode) Symlink(ctx context.Context, target, name string, out *fuse.EntryOut) (*fs.Inode, syscall.Errno) {
-	resp, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Symlink{Symlink: &pb.SymlinkRequest{Path: n.path, Name: name, Target: target}},
 	})
 	if err != nil {
@@ -384,7 +401,7 @@ func (n *remoteNode) Symlink(ctx context.Context, target, name string, out *fuse
 }
 
 func (n *remoteNode) Readlink(ctx context.Context) ([]byte, syscall.Errno) {
-	resp, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Readlink{Readlink: &pb.ReadlinkRequest{Path: n.path}},
 	})
 	if err != nil {
@@ -409,7 +426,7 @@ func (n *remoteNode) Setattr(ctx context.Context, fh fs.FileHandle, in *fuse.Set
 		mt := uint64(mtime.Unix())
 		req.Mtime = &mt
 	}
-	resp, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_SetAttr{SetAttr: req},
 	})
 	if err != nil {
@@ -428,7 +445,7 @@ func (n *remoteNode) Setattr(ctx context.Context, fh fs.FileHandle, in *fuse.Set
 }
 
 func (n *remoteNode) Statfs(ctx context.Context, out *fuse.StatfsOut) syscall.Errno {
-	resp, err := n.getClient().Do(ctx, &pb.FileRequest{
+	resp, err := n.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Statfs{Statfs: &pb.StatfsRequest{Path: n.path}},
 	})
 	if err != nil {
@@ -453,10 +470,18 @@ func (n *remoteNode) Statfs(ctx context.Context, out *fuse.StatfsOut) syscall.Er
 
 // remoteFileHandle implements fs.FileHandle for open files.
 type remoteFileHandle struct {
-	path     string
-	handleID uint64
-	client   *fileproto.Client
-	mu       sync.Mutex
+	path         string
+	handleID     uint64
+	client       *fileproto.Client
+	cachedClient *cache.CachedClient
+}
+
+// do sends a request through the cached client if available, otherwise directly.
+func (f *remoteFileHandle) do(ctx context.Context, req *pb.FileRequest) (*pb.FileResponse, error) {
+	if f.cachedClient != nil {
+		return f.cachedClient.Do(ctx, req)
+	}
+	return f.client.Do(ctx, req)
 }
 
 var _ fs.FileReader = (*remoteFileHandle)(nil)
@@ -466,7 +491,7 @@ var _ fs.FileFlusher = (*remoteFileHandle)(nil)
 var _ fs.FileFsyncer = (*remoteFileHandle)(nil)
 
 func (f *remoteFileHandle) Read(ctx context.Context, dest []byte, off int64) (fuse.ReadResult, syscall.Errno) {
-	resp, err := f.client.Do(ctx, &pb.FileRequest{
+	resp, err := f.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Read{Read: &pb.ReadRequest{
 			Path: f.path, HandleId: f.handleID, Offset: off, Size: uint32(len(dest)),
 		}},
@@ -485,7 +510,7 @@ func (f *remoteFileHandle) Read(ctx context.Context, dest []byte, off int64) (fu
 }
 
 func (f *remoteFileHandle) Write(ctx context.Context, data []byte, off int64) (uint32, syscall.Errno) {
-	resp, err := f.client.Do(ctx, &pb.FileRequest{
+	resp, err := f.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Write{Write: &pb.WriteRequest{
 			Path: f.path, HandleId: f.handleID, Offset: off, Data: data,
 		}},
@@ -504,21 +529,21 @@ func (f *remoteFileHandle) Write(ctx context.Context, data []byte, off int64) (u
 }
 
 func (f *remoteFileHandle) Release(ctx context.Context) syscall.Errno {
-	_, _ = f.client.Do(ctx, &pb.FileRequest{
+	_, _ = f.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Release{Release: &pb.ReleaseRequest{Path: f.path, HandleId: f.handleID}},
 	})
 	return 0
 }
 
 func (f *remoteFileHandle) Flush(ctx context.Context) syscall.Errno {
-	_, _ = f.client.Do(ctx, &pb.FileRequest{
+	_, _ = f.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Flush{Flush: &pb.FlushRequest{Path: f.path, HandleId: f.handleID}},
 	})
 	return 0
 }
 
 func (f *remoteFileHandle) Fsync(ctx context.Context, flags uint32) syscall.Errno {
-	_, err := f.client.Do(ctx, &pb.FileRequest{
+	_, err := f.do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_Fsync{Fsync: &pb.FsyncRequest{Path: f.path, HandleId: f.handleID, Flags: flags}},
 	})
 	if err != nil {

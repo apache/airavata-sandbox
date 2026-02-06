@@ -159,6 +159,7 @@ func RunPublishProxies(ctx context.Context, common *v1.ClientCommonConfig, id, s
 }
 
 // RunMountVisitors starts XTCP visitor with STCP fallback and returns the local address to dial for gRPC.
+// It waits until the NAT tunnel is fully established and data can flow through.
 func RunMountVisitors(ctx context.Context, common *v1.ClientCommonConfig, id, secret string) (localAddr string, cancel func(), err error) {
 	l, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
@@ -177,7 +178,7 @@ func RunMountVisitors(ctx context.Context, common *v1.ClientCommonConfig, id, se
 			BindAddr:   "127.0.0.1",
 			BindPort:   port,
 		},
-		FallbackTo:        fallbackName,
+		FallbackTo:         fallbackName,
 		FallbackTimeoutMs:  5000,
 	}
 	xtcpVisitor.Complete(common)
@@ -208,21 +209,83 @@ func RunMountVisitors(ctx context.Context, common *v1.ClientCommonConfig, id, se
 	}()
 
 	localAddr = net.JoinHostPort("127.0.0.1", strconv.Itoa(port))
-	deadline := time.Now().Add(60 * time.Second)
-	const dialTimeout = 2 * time.Second
-	const retryInterval = 300 * time.Millisecond
+
+	// Wait for the NAT tunnel to be fully established.
+	// The local port may accept connections before the NAT hole-punching completes,
+	// so we need to verify data can actually flow through the tunnel.
+	deadline := time.Now().Add(90 * time.Second) // Extended timeout for NAT hole-punching
+	const dialTimeout = 5 * time.Second
+	const retryInterval = 1 * time.Second
+
+	var lastErr error
 	for time.Now().Before(deadline) {
+		// Check if context was cancelled
+		select {
+		case <-ctx.Done():
+			runCancel()
+			svc.Close()
+			return "", nil, fmt.Errorf("context cancelled while waiting for NAT tunnel: %w", ctx.Err())
+		default:
+		}
+
+		// Try to establish a connection and verify it works
 		conn, err := net.DialTimeout("tcp", localAddr, dialTimeout)
-		if err == nil {
+		if err != nil {
+			lastErr = err
+			time.Sleep(retryInterval)
+			continue
+		}
+
+		// Connection established - now verify the tunnel is working by
+		// setting a deadline and trying to read/write. If NAT isn't ready,
+		// this will timeout or error.
+		conn.SetDeadline(time.Now().Add(10 * time.Second))
+
+		// Send HTTP/2 preface to trigger gRPC server response.
+		// If the tunnel isn't ready, this will fail with a timeout or connection reset.
+		preface := []byte("PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n")
+		_, writeErr := conn.Write(preface)
+		if writeErr != nil {
 			conn.Close()
+			lastErr = fmt.Errorf("tunnel write test failed: %w", writeErr)
+			time.Sleep(retryInterval)
+			continue
+		}
+
+		// Try to read something back - gRPC server should respond
+		buf := make([]byte, 1024)
+		conn.SetReadDeadline(time.Now().Add(5 * time.Second))
+		n, readErr := conn.Read(buf)
+		conn.Close()
+
+		if readErr != nil {
+			// Check if it's a timeout vs connection error
+			if netErr, ok := readErr.(net.Error); ok && netErr.Timeout() {
+				lastErr = fmt.Errorf("tunnel read timeout - NAT may not be established yet")
+				time.Sleep(retryInterval)
+				continue
+			}
+			// Connection reset or other error - NAT likely not ready
+			lastErr = fmt.Errorf("tunnel read failed: %w", readErr)
+			time.Sleep(retryInterval)
+			continue
+		}
+
+		// We got a response! Tunnel is working.
+		if n > 0 {
 			return localAddr, func() {
 				runCancel()
 				svc.Close()
 			}, nil
 		}
+
 		time.Sleep(retryInterval)
 	}
+
 	runCancel()
 	svc.Close()
-	return "", nil, fmt.Errorf("FRP visitor did not become ready at %s within 60s", localAddr)
+	if lastErr != nil {
+		return "", nil, fmt.Errorf("FRP NAT tunnel not established at %s within 90s: %v", localAddr, lastErr)
+	}
+	return "", nil, fmt.Errorf("FRP NAT tunnel not established at %s within 90s", localAddr)
 }

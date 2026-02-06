@@ -5,7 +5,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 DATA_DIR="${DATA_DIR:-/tmp/remotefs-benchmark-data}"
-FRP_SERVER="${FRP_SERVER:-149.165.172.97:17000:mysecret}"
+FRP_SERVER="${FRP_SERVER:-hub.dev.cybershuttle.org:7000:mysecret}"
 REMOTEFS_BIN="${REMOTEFS_BIN:-$SCRIPT_DIR/../../bin/remotefs}"
 
 # Check if data directory exists

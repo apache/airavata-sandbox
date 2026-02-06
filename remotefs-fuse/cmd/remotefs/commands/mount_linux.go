@@ -18,7 +18,9 @@ import (
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/encoding/gzip"
 
+	"github.com/you/remotefs/internal/cache"
 	"github.com/you/remotefs/internal/fileproto"
 	"github.com/you/remotefs/internal/frpclient"
 	"github.com/you/remotefs/internal/mount"
@@ -27,10 +29,14 @@ import (
 )
 
 var (
-	mountAddr   string
-	mountToken  string
-	mountFRP    string
-	allowOther  bool
+	mountAddr      string
+	mountToken     string
+	mountFRP       string
+	allowOther     bool
+	cacheSize      int64
+	cacheTTL       int
+	cacheBlockSize int64
+	noCache        bool
 )
 
 func init() {
@@ -44,6 +50,12 @@ func init() {
 	mountCmd.Flags().StringVar(&mountToken, "token", "", "Forwarding token from publish --frp (id:secret)")
 	mountCmd.Flags().StringVar(&mountFRP, "frp", "", "FRP connection when using --token: hostname:port:password. Env: REMOTEFS_FRP")
 	mountCmd.Flags().BoolVar(&allowOther, "allow-other", false, "allow other users to access the mount (requires user_allow_other in /etc/fuse.conf)")
+
+	// Cache configuration flags
+	mountCmd.Flags().Int64Var(&cacheSize, "cache-size", 256, "Maximum cache size in MB (default: 256)")
+	mountCmd.Flags().IntVar(&cacheTTL, "cache-ttl", 30, "Metadata/directory cache TTL in seconds (default: 30)")
+	mountCmd.Flags().Int64Var(&cacheBlockSize, "cache-block-size", 256, "Data cache block size in KB (default: 256)")
+	mountCmd.Flags().BoolVar(&noCache, "no-cache", false, "Disable caching entirely")
 }
 
 func runMount(cmd *cobra.Command, args []string) error {
@@ -89,7 +101,10 @@ func runMount(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("either --addr (-a) or --token is required")
 	}
 
-	conn, err := grpc.NewClient(serverAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(serverAddr,
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultCallOptions(grpc.UseCompressor(gzip.Name)), // Enable gzip compression
+	)
 	if err != nil {
 		return err
 	}
@@ -107,7 +122,27 @@ func runMount(cmd *cobra.Command, args []string) error {
 	}
 	fpClient := fileproto.NewClient(stream)
 	go fpClient.Run()
-	root := &mount.RemoteRoot{Client: fpClient}
+
+	// Create cache configuration with optimizations enabled
+	cacheConfig := &cache.Config{
+		MaxDataCacheSize:    cacheSize * 1024 * 1024,        // Convert MB to bytes
+		BlockSize:           cacheBlockSize * 1024,          // Convert KB to bytes
+		MetadataTTL:         time.Duration(cacheTTL) * time.Second,
+		DirectoryTTL:        time.Duration(cacheTTL) * time.Second,
+		Enabled:             !noCache,
+		PrefetchBlocks:      4,    // Prefetch 4 blocks ahead (1MB with 256KB blocks)
+		MaxParallelFetches:  8,    // Max concurrent block fetches
+		EnablePrefetch:      true, // Enable read-ahead
+		EnableParallelFetch: true, // Enable parallel fetching
+	}
+
+	// Create cached client
+	cachedClient := cache.NewCachedClient(fpClient, cacheConfig)
+
+	root := &mount.RemoteRoot{Client: fpClient, CachedClient: cachedClient}
+	if !noCache {
+		log.Printf("Caching enabled: size=%dMB, TTL=%ds, block=%dKB", cacheSize, cacheTTL, cacheBlockSize)
+	}
 	sec := time.Second
 	opts := &fs.Options{
 		AttrTimeout:  &sec,

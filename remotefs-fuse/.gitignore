@@ -1,0 +1,33 @@
+# Build outputs
+bin/
+remotefs
+*.exe
+
+# Go
+*.test
+coverage.out
+vendor/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.orig
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary and backup files
+*.tmp
+*.bak
+*.log
+.verify.log
+
+# Benchmark generated data (keep results, ignore generated test files)
+/tmp/remotefs-benchmark-*
+
+# Local/test (optional: uncomment if testdata is generated)
+# testdata/

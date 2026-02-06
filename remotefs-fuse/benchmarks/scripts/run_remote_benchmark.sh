@@ -114,6 +114,9 @@ echo "Token: ${TOKEN:0:8}..."
 echo "FRP Server: $FRP_SERVER"
 echo "Mount point: $MOUNT_POINT"
 
+# Ensure we use system fusermount for cleanup too
+export PATH=/usr/local/bin:/usr/bin:/bin:$PATH
+
 # Cleanup any existing mount
 fusermount -u "$MOUNT_POINT" 2>/dev/null || true
 mkdir -p "$MOUNT_POINT"
@@ -126,6 +129,10 @@ if [ ! -x "$REMOTEFS_BIN" ]; then
 fi
 
 echo "Using binary: $REMOTEFS_BIN"
+
+# Ensure we use system fusermount (not user-installed versions without setuid)
+# This is needed for HPC systems like Expanse where ~/.local/bin may have a non-setuid fusermount
+export PATH=/usr/local/bin:/usr/bin:/bin:$PATH
 
 # Start mount in background
 "$REMOTEFS_BIN" mount "$MOUNT_POINT" --token "$TOKEN" --frp "$FRP_SERVER" &
