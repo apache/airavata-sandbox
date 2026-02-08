@@ -166,9 +166,9 @@ def create_staleness_summary(df, output_dir):
     
     summary_lines.append("")
     summary_lines.append("Recommendations:")
-    summary_lines.append("- Use RemoteFS for data consistency (always 100% correct)")
-    summary_lines.append("- SSHFS default is faster but may return stale data")
-    summary_lines.append("- SSHFS nocache is consistent but has high latency")
+    summary_lines.append("- Use RemoteFS for data consistency (bounded staleness ~1s in production)")
+    summary_lines.append("- SSHFS default is faster but may return stale data indefinitely")
+    summary_lines.append("- SSHFS nocache is consistent but has high per-read latency")
     
     summary_text = "\n".join(summary_lines)
     print(summary_text)

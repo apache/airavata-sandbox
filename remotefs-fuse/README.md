@@ -10,7 +10,7 @@ A high-performance remote filesystem over gRPC with intelligent caching. Publish
 - **Memory-mapped file cache** option for large workloads (Linux)
 - **FUSE passthrough** support for kernel-level performance (Linux 6.9+)
 - **FRP integration** for NAT traversal without direct network paths
-- **100% data consistency** - never returns stale data
+- **Bounded-staleness consistency** - mtime validated from server every ~1 second
 
 ## Performance
 
@@ -18,9 +18,9 @@ Benchmarked against SCP and SSHFS across three HPC environments (SDSC Expanse, J
 
 | Metric | Result |
 |--------|--------|
-| Throughput vs SCP | Up to **60x** faster (128MB, warm cache) |
-| Cache vs no-cache | Up to **79x** faster (128MB, repeated reads) |
-| Data consistency | **100%** at all staleness rates (SSHFS default drops to 10%) |
+| Throughput vs SCP | Up to **43x** faster (128MB, warm cache) |
+| Cache vs no-cache | Up to **111x** faster (128MB, repeated reads) |
+| Staleness bound | **~1 second** (server-validated mtime; SSHFS default: unbounded) |
 
 See [benchmarks/results/BENCHMARK_REPORT.md](benchmarks/results/BENCHMARK_REPORT.md) for detailed results.
 
@@ -185,14 +185,14 @@ Makefile             proto, build, test, verify targets
 
 ## Cache Consistency
 
-RemoteFS validates cached data using file modification times (mtime):
+RemoteFS uses **bounded-staleness** consistency, validated via file modification times (mtime):
 
-1. Metadata is revalidated from the server every 30 seconds (configurable via `--cache-ttl`)
-2. On every read, the cached mtime is checked against the latest known metadata
-3. If the source file changed, cached blocks are invalidated and re-fetched
-4. Data blocks are cached for up to 5 minutes, but are never served without a recent mtime check
+1. On every read, the file's mtime is fetched from the server (coalesced: at most one round-trip per file per second)
+2. If the server mtime differs from the cached mtime, all cached blocks for that file are invalidated and re-fetched
+3. Data blocks remain cached for up to 5 minutes but are only served when the server-validated mtime matches
+4. Writes and truncations immediately invalidate both the data and mtime caches
 
-This ensures RemoteFS does not return stale data, unlike SSHFS default caching which can serve outdated content indefinitely.
+The maximum staleness window is ~1 second (the mtime check coalescing interval). By contrast, SSHFS default caching can serve indefinitely stale data from the kernel page cache.
 
 ## License
 

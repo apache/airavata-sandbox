@@ -1,6 +1,7 @@
 // Package cache implements a caching layer for the remotefs FUSE client.
 // It provides data caching, metadata caching, and directory entry caching
-// with distributed filesystem semantics (close-to-open consistency).
+// with bounded-staleness consistency: every read validates the file's mtime
+// from the server (coalesced within ~1 second) before serving cached data.
 package cache
 
 import (
@@ -103,8 +104,21 @@ type readTracker struct {
 	lastOffset int64
 	lastSize   int64
 	sequential bool
-	lastAccess time.Time // for cleanup of stale entries
+	lastAccess time.Time
 }
+
+// mtimeCheck records the result of a server mtime validation.
+// Used to coalesce many FUSE block reads for the same file into
+// a single server round-trip.
+type mtimeCheck struct {
+	mtime     int64
+	checkedAt time.Time
+}
+
+// mtimeCheckInterval controls how often handleRead re-validates a file's mtime
+// from the server. Between checks, burst reads reuse the cached result.
+// This bounds the staleness window for read operations.
+const mtimeCheckInterval = 1 * time.Second
 
 // CachedClient wraps a fileproto.Client with caching capabilities.
 // It intercepts operations to provide cached responses where appropriate
@@ -120,6 +134,12 @@ type CachedClient struct {
 	// Read pattern tracking for prefetching
 	readTrackers   map[string]*readTracker
 	readTrackersMu sync.Mutex
+
+	// Mtime validation tracking for read consistency.
+	// Ensures reads always see fresh data by periodically checking
+	// the server, while coalescing checks within mtimeCheckInterval.
+	mtimeChecks   map[string]mtimeCheck
+	mtimeChecksMu sync.RWMutex
 
 	// Prefetch coordination
 	prefetchQueue chan prefetchRequest
@@ -170,6 +190,7 @@ func NewCachedClient(client *fileproto.Client, config *Config) *CachedClient {
 		metaCache:     NewMetadataCache(config.MetadataTTL),
 		dirCache:      NewDirectoryCache(config.DirectoryTTL),
 		readTrackers:  make(map[string]*readTracker),
+		mtimeChecks:   make(map[string]mtimeCheck),
 		prefetchQueue: make(chan prefetchRequest, 100),
 		prefetchDone:  make(chan struct{}),
 		cleanupDone:   make(chan struct{}),
@@ -213,8 +234,30 @@ func (c *CachedClient) runCleanup() {
 	// Cleanup directory cache (expired entries)
 	c.dirCache.Cleanup()
 
-	// Cleanup stale read trackers
+	// Cleanup stale read trackers and mtime check entries
 	c.cleanupReadTrackers()
+	c.cleanupMtimeChecks()
+}
+
+// invalidateMtimeCheck removes the mtime check entry for a path, forcing
+// the next read to re-validate from the server.
+func (c *CachedClient) invalidateMtimeCheck(path string) {
+	c.mtimeChecksMu.Lock()
+	delete(c.mtimeChecks, path)
+	c.mtimeChecksMu.Unlock()
+}
+
+// cleanupMtimeChecks removes mtime check entries that haven't been used recently.
+func (c *CachedClient) cleanupMtimeChecks() {
+	c.mtimeChecksMu.Lock()
+	defer c.mtimeChecksMu.Unlock()
+
+	threshold := time.Now().Add(-5 * time.Minute)
+	for path, check := range c.mtimeChecks {
+		if check.checkedAt.Before(threshold) {
+			delete(c.mtimeChecks, path)
+		}
+	}
 }
 
 // cleanupReadTrackers removes stale read tracker entries.
@@ -393,30 +436,17 @@ func (c *CachedClient) handleLookup(ctx context.Context, req *pb.FileRequest, r 
 
 // handleRead returns cached data blocks if valid, otherwise fetches and caches.
 // Uses parallel fetching for large reads and triggers prefetching.
+//
+// Consistency: mtime is always validated from the server (coalesced within
+// mtimeCheckInterval to avoid per-block round-trips). This ensures stale
+// data is never served beyond the check interval.
 func (c *CachedClient) handleRead(ctx context.Context, req *pb.FileRequest, r *pb.ReadRequest) (*pb.FileResponse, error) {
 	blockSize := c.config.BlockSize
 	size := int64(r.Size)
 
-	// Fast path: serve from data cache if metadata cache confirms mtime is still valid.
-	// If metadata has expired, fall through to re-validate from server.
-	cachedMtime := c.dataCache.GetMtime(r.Path)
-	if cachedMtime > 0 {
-		if attr, ok := c.metaCache.Get(r.Path); ok && int64(attr.Mtime) == cachedMtime {
-			data, complete := c.dataCache.ReadWithMtime(r.Path, r.Offset, size, cachedMtime)
-			if complete {
-				c.triggerPrefetch(r.Path, r.Offset, size, cachedMtime)
-				return &pb.FileResponse{
-					RequestId: req.RequestId,
-					Result: &pb.FileResponse_Read{
-						Read: &pb.ReadResult{Data: data},
-					},
-				}, nil
-			}
-		}
-	}
-
-	// Slow path: fetch current mtime from server (or metadata cache) and validate.
-	mtime := c.getCurrentMtime(ctx, r.Path)
+	// Validate mtime from server. Checks are coalesced within mtimeCheckInterval
+	// so burst reads (many FUSE blocks for one file) share a single round-trip.
+	mtime := c.getValidatedMtime(ctx, r.Path)
 
 	data, complete := c.dataCache.ReadWithMtime(r.Path, r.Offset, size, mtime)
 	if complete {
@@ -578,30 +608,49 @@ func (c *CachedClient) handleRead(ctx context.Context, req *pb.FileRequest, r *p
 	}, nil
 }
 
-// getCurrentMtime returns the current mtime for a file path.
-// Uses metadata cache if valid, otherwise fetches from remote.
-func (c *CachedClient) getCurrentMtime(ctx context.Context, path string) int64 {
-	// Try metadata cache first
-	if attr, ok := c.metaCache.Get(path); ok {
-		return int64(attr.Mtime)
-	}
+// getValidatedMtime returns a server-validated mtime for the given path.
+// Within mtimeCheckInterval of the last check, returns the cached result to
+// coalesce burst FUSE reads. After the interval, fetches fresh mtime from
+// the server. If the server mtime differs from the data cache's mtime,
+// stale data blocks are proactively evicted.
+func (c *CachedClient) getValidatedMtime(ctx context.Context, path string) int64 {
+	now := time.Now()
 
-	// Fetch fresh metadata
+	c.mtimeChecksMu.RLock()
+	if check, ok := c.mtimeChecks[path]; ok && now.Sub(check.checkedAt) < mtimeCheckInterval {
+		c.mtimeChecksMu.RUnlock()
+		return check.mtime
+	}
+	c.mtimeChecksMu.RUnlock()
+
+	// Fetch fresh mtime from server.
 	resp, err := c.client.Do(ctx, &pb.FileRequest{
 		Op: &pb.FileRequest_GetAttr{GetAttr: &pb.GetAttrRequest{Path: path}},
 	})
 	if err != nil || resp.Errno != 0 {
 		return 0
 	}
-
 	ga := resp.GetGetAttr()
 	if ga == nil || ga.Attr == nil {
 		return 0
 	}
 
-	// Cache the fresh metadata
+	mtime := int64(ga.Attr.Mtime)
+
+	// If mtime changed, proactively evict stale data blocks.
+	if oldMtime := c.dataCache.GetMtime(path); oldMtime > 0 && oldMtime != mtime {
+		c.dataCache.InvalidateAll(path)
+	}
+
+	// Record the check result.
+	c.mtimeChecksMu.Lock()
+	c.mtimeChecks[path] = mtimeCheck{mtime: mtime, checkedAt: now}
+	c.mtimeChecksMu.Unlock()
+
+	// Also refresh metadata cache (benefits getattr/lookup).
 	c.metaCache.Set(path, ga.Attr)
-	return int64(ga.Attr.Mtime)
+
+	return mtime
 }
 
 // triggerPrefetch queues prefetch requests for sequential read patterns.
@@ -674,11 +723,10 @@ func (c *CachedClient) handleWrite(ctx context.Context, req *pb.FileRequest, r *
 		return nil, err
 	}
 
-	// Invalidate cached data blocks for this path
 	if resp.Errno == 0 {
 		c.dataCache.Invalidate(r.Path, r.Offset, int64(len(r.Data)))
-		// Also invalidate metadata since size/mtime may have changed
 		c.metaCache.Invalidate(r.Path)
+		c.invalidateMtimeCheck(r.Path)
 	}
 
 	return resp, nil
@@ -827,10 +875,9 @@ func (c *CachedClient) handleSetAttr(ctx context.Context, req *pb.FileRequest, r
 	}
 
 	if resp.Errno == 0 {
-		// Invalidate metadata cache
 		c.metaCache.Invalidate(r.Path)
+		c.invalidateMtimeCheck(r.Path)
 
-		// If size was changed (truncate), invalidate data blocks beyond new size
 		if r.Size != nil {
 			c.dataCache.InvalidateBeyond(r.Path, int64(*r.Size))
 		}
@@ -850,6 +897,10 @@ func (c *CachedClient) InvalidateAll() {
 	c.dataCache.Clear()
 	c.metaCache.Clear()
 	c.dirCache.Clear()
+
+	c.mtimeChecksMu.Lock()
+	c.mtimeChecks = make(map[string]mtimeCheck)
+	c.mtimeChecksMu.Unlock()
 }
 
 // Stats returns current cache statistics.

@@ -79,8 +79,9 @@ func TestCacheStaleness_MtimeValidation(t *testing.T) {
 	}
 }
 
-// TestCacheStaleness_ConsistencyGuarantee verifies that the cache NEVER returns stale data.
-// This is the critical invariant that distinguishes RemoteFS from SSHFS default caching.
+// TestCacheStaleness_ConsistencyGuarantee verifies that the cache never serves data
+// whose mtime differs from the requested mtime. Combined with getValidatedMtime
+// (which re-checks the server every ~1 second), this bounds read staleness.
 func TestCacheStaleness_ConsistencyGuarantee(t *testing.T) {
 	rates := []float64{0.0, 0.25, 0.50, 0.75, 1.0}
 
