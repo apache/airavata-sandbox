@@ -1,0 +1,34 @@
+# Build outputs
+bin/
+remotefs
+*.exe
+
+# Go
+*.test
+coverage.out
+vendor/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.orig
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary and backup files
+*.tmp
+*.bak
+*.log
+.verify.log
+
+# Benchmark temp files (results are kept)
+/tmp/remotefs-benchmark-*
+benchmarks/results/*.tmp
+
+# Proto generated files are checked in for distribution.
+# Run `make proto` to regenerate after editing proto/remotefs.proto.

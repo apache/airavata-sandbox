@@ -1,0 +1,22 @@
+services:
+  publish:
+    build: .
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./testdata/export:/export/data
+    command: ["publish", "/export/data", "--addr", "0.0.0.0:50051"]
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "50051"]
+      interval: 5s
+      retries: 5
+  remote:
+    build: .
+    depends_on:
+      publish:
+        condition: service_healthy
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse
+    command: ["mount", "/mnt/remote", "--addr", "publish:50051"]

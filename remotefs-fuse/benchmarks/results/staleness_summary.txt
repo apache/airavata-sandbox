@@ -1,0 +1,48 @@
+================================================================================
+  STALENESS BENCHMARK SUMMARY
+================================================================================
+
+This benchmark measures cache behavior under file modification scenarios.
+Staleness rate = probability a file is modified between consecutive reads.
+
+Key findings:
+--------------------------------------------------------------------------------
+
+System               Staleness    Throughput      Consistency    
+--------------------------------------------------------------
+Direct Access             0%          121.85 MB/s       100.0%
+Direct Access            25%          124.04 MB/s       100.0%
+Direct Access            50%          107.75 MB/s       100.0%
+Direct Access            75%          108.21 MB/s       100.0%
+Direct Access           100%          124.45 MB/s       100.0%
+
+RemoteFS (cached)         0%          641.56 MB/s       100.0%
+RemoteFS (cached)        25%          204.71 MB/s       100.0%
+RemoteFS (cached)        50%          163.88 MB/s       100.0%
+RemoteFS (cached)        75%          122.65 MB/s       100.0%
+RemoteFS (cached)       100%           91.56 MB/s       100.0%
+
+SSHFS (default)           0%          450.19 MB/s       100.0%
+SSHFS (default)          25%          831.34 MB/s        78.0%
+SSHFS (default)          50%          479.38 MB/s        56.8%
+SSHFS (default)          75%         1330.31 MB/s        33.8%
+SSHFS (default)         100%          748.35 MB/s        10.0%
+
+SSHFS (no-cache)          0%           69.82 MB/s       100.0%
+SSHFS (no-cache)         25%           75.68 MB/s       100.0%
+SSHFS (no-cache)         50%           70.40 MB/s       100.0%
+SSHFS (no-cache)         75%           71.46 MB/s       100.0%
+SSHFS (no-cache)        100%           75.86 MB/s       100.0%
+
+
+Key Insights:
+--------------------------------------------------------------------------------
+- At 50% staleness: RemoteFS consistency = 100.0%, SSHFS default = 56.8%
+  -> RemoteFS maintains data consistency while SSHFS default returns stale data
+- At 0% staleness: RemoteFS cached (641.56 MB/s) >= Direct (121.85 MB/s)
+  -> Cache provides performance benefit for stable files
+
+Recommendations:
+- Use RemoteFS for data consistency (bounded staleness ~1s in production)
+- SSHFS default is faster but may return stale data indefinitely
+- SSHFS nocache is consistent but has high per-read latency
